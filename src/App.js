@@ -1,7 +1,5 @@
 import './App.css';
 import React from "react";
-import {Exhibition} from "./comps/Exhibition";
-import {api} from './config/api'
 
 function App() {
   return (
