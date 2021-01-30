@@ -1,7 +1,7 @@
 import React from "react";
 import { Layout, Menu } from "antd";
 import { Route, NavLink, Switch,Redirect } from "react-router-dom";
-import NormalTrain from './pages/NormalTrain'
+import {NormalTrain} from './pages/NormalTrain/NormalTrain'
 import FederalTrain from './pages/FederalTrain'
 
 import "./App.css";
@@ -27,9 +27,9 @@ function App() {
         <Content style={{ padding: "50px 50px" }}>
           <div className="site-layout-content">
             <Switch>
-              <Route path="/normal" component={NormalTrain}></Route>
-              <Route path="/federal" component={FederalTrain}></Route>
-            <Redirect to="normal"></Redirect>
+              <Route path="/normal" component={NormalTrain}/>
+              <Route path="/federal" component={FederalTrain}/>
+            <Redirect to="normal"/>
             </Switch>
           </div>
         </Content>
@@ -37,6 +37,7 @@ function App() {
           AI Demo ©2021 Created by Hrbust Science and Technology University
         </Footer>
       </Layout>
+      ,
     </div>
   );
 }
