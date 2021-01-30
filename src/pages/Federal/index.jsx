@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import FederalTrainForm from "../../components/FederalTrainForm";
+import FederalTrainForm from "./Form";
 
-export default class FederalTrain extends Component {
+export default class Federal extends Component {
   render() {
     return (
       <div>
