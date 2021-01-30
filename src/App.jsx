@@ -1,7 +1,7 @@
 import React from "react";
 import { Layout, Menu } from "antd";
 import { Route, NavLink, Switch,Redirect } from "react-router-dom";
-import {NormalTrain} from './pages/NormalTrain/NormalTrain'
+import NormalTrain from './pages/NormalTrain'
 import FederalTrain from './pages/FederalTrain'
 
 import "./App.css";
