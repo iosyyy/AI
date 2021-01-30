@@ -8,7 +8,7 @@ let openListenByNormal = (reqData, fun) => {
   //绑定接口
   let socket
   try {
-    socket = io(host);
+    socket = io(host).t;
   } catch (error) {
     console.log("链接失败:", error.message);
   }

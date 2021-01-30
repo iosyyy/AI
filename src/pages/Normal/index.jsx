@@ -10,7 +10,7 @@ export default class Normal extends Component {
       <div>
       <h1>普通学习</h1>
         <Switch>
-          <Route path="/normal/form" component={Form}></Route>
+          <Route exact path="/normal/form" component={Form}></Route>
           <Route path="/normal/result" component={Result}></Route>
           <Redirect to="/normal/form" />
         </Switch>

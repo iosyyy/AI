@@ -5,18 +5,24 @@ import Show from "../../../components/Show";
 export default class Result extends Component {
 
     state={
-        info:{}
+        info:{},
+        epochs:0
     }
     componentDidMount(){
         PubSubJS.subscribe('result',(msg,data)=>{
             this.setState({info:data})
             console.log(this.state);
         })
+
+        PubSubJS.subscribe('epochs',(msg,data)=>{
+            this.setState({epochs:data})
+            console.log(this.state);
+        })
     }
     render() {
         return (
             <div>
-                <Show info={this.state.info}/>
+                <Show info={this.state.info} epochs={this.state.epochs}/>
             </div>
         )
     }

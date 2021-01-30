@@ -11,22 +11,13 @@ let arr = []
 export default class Show extends Component {
     constructor(props) {
         super(props);
-        let num=10
-        this.state = {arr: []}
-        let number = setInterval(() => {
-            arr.push({acc: num+"%", time: "28s"})
-            num+=7
-            if (arr.length > 10) {
-                clearInterval(number)
-            }
-            this.setState({arr})
-
-        }, 1000);
+        arr.push({acc:props.info.acc,time:props.info.time,epochs:props.epochs})
+        this.state = {arr: arr}
     }
 
     drew() {
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('show'));
+        let myChart = echarts.init(document.getElementById('show'));
         // 绘制图表
         myChart.setOption({
             title: {
