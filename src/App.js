@@ -7,7 +7,7 @@ function App() {
   return (
     <div>
       Hello World
-        <Exhibition source={api['train']}/>
+        <Exhibition source={api['ip']}/>
     </div>
   );
 }

@@ -8,14 +8,15 @@ export class Exhibition extends React.Component{
 
     constructor(props) {
         super(props);
-        this.state={posts:{}}
+        this.state={data:{}}
     }
 
     componentDidMount() {
-        let socket = io('http://localhost');
+        let socket = io(this.props.source);
+        let that=this
         socket.on('news', function (data) {
-            console.log(data);
-            socket.emit('my other event', { my: 'data' });
+            that.setState({data})
+            socket.emit('getSuccess', { success: 0 });
         });
     }
 
