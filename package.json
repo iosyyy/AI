@@ -43,6 +43,9 @@
     ]
   },
   "devDependencies": {
-    "antd": "^4.11.2"
+    "antd": "^4.11.2",
+    "echarts": "^5.0.1",
+    "echarts-for-react": "^2.0.16",
+    "ngx-echarts": "^6.0.0"
   }
 }
