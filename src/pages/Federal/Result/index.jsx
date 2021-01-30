@@ -8,7 +8,7 @@ export default class Result extends Component {
         info:{}
     }
     componentDidMount(){
-        PubSubJS.subscribe('result',(msg,data)=>{
+        PubSubJS.subscribe('result2',(msg,data)=>{
             this.setState({info:data})
             console.log(this.state);
         })
@@ -16,7 +16,7 @@ export default class Result extends Component {
     render() {
         return (
             <div>
-                <Show info={this.state.info}/>
+                联邦学习的结果图
             </div>
         )
     }
