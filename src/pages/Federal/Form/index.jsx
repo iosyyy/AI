@@ -23,6 +23,7 @@ export default class MyForm extends Component {
           layout="horizontal"
           onFinish={this.onFinish}
         >
+
           <Form.Item name="model" label="模型类型：">
             <Select placeholder="请选择模型">
               <Select.Option value="cnn">cnn</Select.Option>
@@ -46,6 +47,15 @@ export default class MyForm extends Component {
           </Form.Item>
 
           <Form.Item
+              name="local_ep"
+              label="客户端学习："
+              rules={[{ type: "number", min: 1, max: 1000 }]}
+              initialValue={10}
+          >
+            <InputNumber />
+          </Form.Item>
+
+          <Form.Item
             name="epochs"
             label="训练次数："
             rules={[{ type: "number", min: 1, max: 10 }]}
@@ -58,9 +68,7 @@ export default class MyForm extends Component {
             <InputNumber min={0} max={1} step={0.01} />
           </Form.Item>
 
-            <h1>这里应该有个客户端学习</h1>
-
-          <Form.Item label="提交：">
+          <Form.Item label="提交">
             <Button type="primary" htmlType="submit">
               Submit
             </Button>
