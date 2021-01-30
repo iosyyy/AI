@@ -15,12 +15,12 @@ function App() {
       <Layout className="layout">
         <Header>
           <div className="logo" />
-          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
+          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["1"]}>
             <Menu.Item key="1">
-              <NavLink to="/normal">普通訓練</NavLink>
+              <NavLink to="/normal">普通训练</NavLink>
             </Menu.Item>
             <Menu.Item key="2">
-              <NavLink to="/federal">聯邦訓練</NavLink>
+              <NavLink to="/federal">联邦训练</NavLink>
             </Menu.Item>
           </Menu>
         </Header>
@@ -34,7 +34,7 @@ function App() {
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>
-          AI Demo ©2021 Created by Hrbust
+          AI Demo ©2021 Created by Hrbust Science and Technology University
         </Footer>
       </Layout>
     </div>
