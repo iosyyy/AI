@@ -1,11 +1,12 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
+import FederalTrainForm from "../../components/FederalTrainForm";
 
-export default class index extends Component {
-    render() {
-        return (
-            <div>
-                联邦训练
-            </div>
-        )
-    }
+export default class FederalTrain extends Component {
+  render() {
+    return (
+      <div>
+        <FederalTrainForm />
+      </div>
+    );
+  }
 }

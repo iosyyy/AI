@@ -12,12 +12,7 @@ import {
     Switch,} from 'antd';
 
 
-export class FederalTrain extends React.Component{
-    constructor(props) {
-        super(props);
-
-    }
-
+export default class FederalTrainForm extends React.Component{
     render() {
         return (
             <div>

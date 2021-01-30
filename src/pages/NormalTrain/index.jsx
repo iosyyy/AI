@@ -1,11 +1,12 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
+import NormalTrainForm from "../../components/NormalTrainForm";
 
-export default class index extends Component {
-    render() {
-        return (
-            <div>
-                普通训练
-            </div>
-        )
-    }
+export default class NormalTrain extends Component {
+  render() {
+    return (
+      <div>
+        <NormalTrainForm />
+      </div>
+    );
+  }
 }
