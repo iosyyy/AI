@@ -3,7 +3,7 @@
   padding: 24px;
   background: #fff;
 }
-#components-layout-demo-top .logo {
+.layout .logo {
   float: left;
   width: 120px;
   height: 31px;
@@ -14,3 +14,4 @@
   float: right;
   margin: 16px 0 16px 24px;
 }
+

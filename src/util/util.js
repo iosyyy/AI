@@ -4,7 +4,7 @@ import api from "../config/api";
 const { host,_normalTrain,_federalTrain } = api;
 
 // 普通训练
-openListenByNormal = (data) => {
+let openListenByNormal = (data) => {
   //绑定接口
   let socket = io(host);
   //提交开始训练信号
@@ -16,7 +16,7 @@ openListenByNormal = (data) => {
 };
 
 // 联邦训练
-openListenByFederal = (data) => {
+let openListenByFederal = (data) => {
      //绑定接口
   let socket = io(host);
   //提交开始训练信号
@@ -26,3 +26,8 @@ openListenByFederal = (data) => {
     //这里用得到的数据来绑定数据修改页面
   });
 };
+
+exports = {
+    openListenByNormal,
+    openListenByFederal
+}
