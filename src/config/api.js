@@ -1,8 +1,11 @@
-let apiRoot="http://127.0.0.1:8080";
+let apiRoot = "http://127.0.0.1:8080";
 
+export var api = {
+  normalTrain: apiRoot + "/base/train/",
+  _normalTrain: "/base/train/",
 
-export var api= {
-    train:apiRoot+'/base/train/',
-    federal:apiRoot+'/fed/service/',
-    host:apiRoot
-}
+  federalTrain: apiRoot + "/fed/service/",
+  _federalTrain: "/fed/service/",
+  
+  host: apiRoot,
+};
