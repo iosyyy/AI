@@ -1,7 +1,7 @@
 import '../config/api'
 import React from 'react';
 import axios from 'axios';
-
+import io from "socket.io-client"
 
 
 export class Exhibition extends React.Component{
@@ -12,9 +12,10 @@ export class Exhibition extends React.Component{
     }
 
     componentDidMount() {
-        axios.get(this.props.source).then(res=>{
-            console.log(res)
-            this.setState({posts: {...res.data}});
+        let socket = io('http://localhost');
+        socket.on('news', function (data) {
+            console.log(data);
+            socket.emit('my other event', { my: 'data' });
         });
     }
 
