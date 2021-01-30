@@ -64,7 +64,7 @@ export class NormalTrain extends React.Component
                         <InputNumber />
                     </Form.Item>
 
-                    <Form.Item  label="提交:">
+                    <Form.Item  label="提交">
                         <Button type="primary" htmlType="submit">Submit</Button>
                     </Form.Item>
                 </Form>
