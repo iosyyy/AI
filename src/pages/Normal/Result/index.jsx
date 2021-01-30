@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PubSubJS from 'pubsub-js'
+import Show from "../../../components/Show";
 
 export default class NormalTrainResult extends Component {
 
@@ -15,8 +16,7 @@ export default class NormalTrainResult extends Component {
     render() {
         return (
             <div>
-                这是结果页面
-                {this.state.info.id}
+                <Show info={this.state.info}/>
             </div>
         )
     }

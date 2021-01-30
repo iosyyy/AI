@@ -8,7 +8,7 @@ import 'echarts/lib/component/title';
 let echarts = require('echarts');
 let arr = []
 
-export class Show extends Component {
+export default class Show extends Component {
     constructor(props) {
         super(props);
         let num=10
