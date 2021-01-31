@@ -10,6 +10,7 @@ export default class Result extends Component {
     componentDidMount(){
         PubSubJS.subscribe('result',(msg,data)=>{
             this.setState({info:data})
+            console.log(this.state);
         })
     }
     render() {
