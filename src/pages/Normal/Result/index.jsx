@@ -4,14 +4,11 @@ import Show from "../../../components/Show";
 
 export default class Result extends Component {
 
-    state={
-        info:{}
+    constructor(props) {
+        super(props);
+        this.state={info:{}}
     }
-    componentDidMount(){
-        PubSubJS.subscribe('result',(msg,data)=>{
-            this.setState({info:data})
-        })
-    }
+
     render() {
         return (
             <div>

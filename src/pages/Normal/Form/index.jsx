@@ -9,6 +9,7 @@ export default class MyForm extends Component {
     //开始监听服务器
     openListenByNormal(values,(data)=>{
       //将从服务器得到的数据传递到result组件
+      console.log(data)
       PubSubJS.publish('result',{...data,epochs:values['epochs']})
     })
     //跳转到结果页面

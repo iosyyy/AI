@@ -4,23 +4,30 @@ import 'echarts/lib/chart/bar';
 // 引入提示框和标题组件
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
+import PubSubJS from "pubsub-js";
+import {Spin} from 'antd';
+
 
 let echarts = require('echarts');
 let arrX = []
 let arrY = []
-
+let myChart
 export default class Show extends Component {
     constructor(props) {
         super(props);
-        arrX.push(props.info.acc)
-        arrY.push(Number.parseInt(props.info.time.slice(0, props.info.time.length - 1)))
-        this.state = {arrX: arrX,arrY:arrY}
+        PubSubJS.subscribe('result', (msg, data) => {
+            this.setState({info: data})
+            let acc = data.acc
+            let time = data.time
+            arrX.push(Number.parseInt(time.slice(0, data.time.length - 1)))
+            arrY.push(Number.parseInt(acc.slice(0, data.acc.length - 1)))
+            this.setState({arrX, arrY, hidden: false})
+        })
+        this.state = {arrX: arrX, arrY: arrY, hidden: true}
     }
 
     drew() {
-        // 基于准备好的dom，初始化echarts实例
-        let myChart = echarts.init(document.getElementById('show'));
-        // 绘制图表
+         // 基于准备好的dom，初始化echarts实例
         myChart.setOption({
             title: {
                 text: '攻防展示',
@@ -31,28 +38,35 @@ export default class Show extends Component {
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                    type: 'line'        // 默认为直线，可选为：'line' | 'shadow'
+                    type: 'line'      // 默认为直线，可选为：'line' | 'shadow'
+
                 },
-                formatter: '{b}<br />{a0}: {c0}%'
+                formatter: '{b}s时<br />{a0}: {c0}%',
             },
             xAxis: {
-                data: this.state.arrX,
+                data: arrX,
                 axisLabel: {
+                    show: true,
+                    interval:0,
+                    textStyle: {
+                        color: '#333'
+                    },
                     formatter: '{value}s'
-                }
+                },
             },
             yAxis: {
-                min: 0,
-                max: 100,
+                min:arrY[0]-10,
                 type: 'value',
                 axisLabel: {
                     formatter: '{value}%'
                 }
             },
+
+
             series: [{
                 name: '通过率',
                 type: 'line',
-                data: this.state.arrY,
+                data: arrY,
                 label: {
                     normal: {
                         show: true,
@@ -75,10 +89,13 @@ export default class Show extends Component {
                     }
                 },
             }]
-        });
+        })
+
+
     }
 
     componentDidMount() {
+        myChart = echarts.init(document.getElementById('show'))
         this.drew()
     }
 
@@ -87,8 +104,10 @@ export default class Show extends Component {
     }
 
     render() {
-        return (
-            <div id="show" style={{width: 'auto', height: 400}}/>
-        );
+            return(
+                <Spin tip="Loading..." spinning={this.state.hidden} delay={10}>
+                    <div id="show" style={{width: 'auto', height: 400}}/>
+                </Spin>
+            )
     }
 }
