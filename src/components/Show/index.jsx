@@ -6,13 +6,15 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 
 let echarts = require('echarts');
-let arr = []
+let arrX = []
+let arrY = []
 
 export default class Show extends Component {
     constructor(props) {
         super(props);
-        arr.push({acc:props.info.acc,time:props.info.time,epochs:props.epochs})
-        this.state = {arr: arr}
+        arrX.push(props.info.acc)
+        arrY.push(Number.parseInt(props.info.time.slice(0, props.info.time.length - 1)))
+        this.state = {arrX: arrX,arrY:arrY}
     }
 
     drew() {
@@ -34,9 +36,10 @@ export default class Show extends Component {
                 formatter: '{b}<br />{a0}: {c0}%'
             },
             xAxis: {
-                data: arr.map((value, index, array) => {
-                    return "第" + index + "次耗费"+value.time
-                })
+                data: this.state.arrX,
+                axisLabel: {
+                    formatter: '{value}s'
+                }
             },
             yAxis: {
                 min: 0,
@@ -49,10 +52,7 @@ export default class Show extends Component {
             series: [{
                 name: '通过率',
                 type: 'line',
-                data: arr.map((value, index, array) => {
-                    let str = value.acc;
-                    return Number.parseInt(str.slice(0, str.length - 1))
-                }),
+                data: this.state.arrY,
                 label: {
                     normal: {
                         show: true,
