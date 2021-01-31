@@ -6,6 +6,7 @@ import PubSubJS from 'pubsub-js'
 export default class MyForm extends Component {
 
   onFinish = (values) => {
+    PubSubJS.publish('epochs',values['epochs'])
     //开始监听服务器
     openListenByNormal(values,(data)=>{
       //将从服务器得到的数据传递到result组件

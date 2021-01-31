@@ -6,27 +6,20 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 
 let echarts = require('echarts');
-let arr = []
+let arrX = []
+let arrY = []
 
 export default class Show extends Component {
     constructor(props) {
         super(props);
-        let num=10
-        this.state = {arr: []}
-        let number = setInterval(() => {
-            arr.push({acc: num+"%", time: "28s"})
-            num+=7
-            if (arr.length > 10) {
-                clearInterval(number)
-            }
-            this.setState({arr})
-
-        }, 1000);
+        arrX.push(props.info.acc)
+        arrY.push(Number.parseInt(props.info.time.slice(0, props.info.time.length - 1)))
+        this.state = {arrX: arrX,arrY:arrY}
     }
 
     drew() {
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('show'));
+        let myChart = echarts.init(document.getElementById('show'));
         // 绘制图表
         myChart.setOption({
             title: {
@@ -43,9 +36,10 @@ export default class Show extends Component {
                 formatter: '{b}<br />{a0}: {c0}%'
             },
             xAxis: {
-                data: arr.map((value, index, array) => {
-                    return "第" + index + "次耗费"+value.time
-                })
+                data: this.state.arrX,
+                axisLabel: {
+                    formatter: '{value}s'
+                }
             },
             yAxis: {
                 min: 0,
@@ -58,10 +52,7 @@ export default class Show extends Component {
             series: [{
                 name: '通过率',
                 type: 'line',
-                data: arr.map((value, index, array) => {
-                    let str = value.acc;
-                    return Number.parseInt(str.slice(0, str.length - 1))
-                }),
+                data: this.state.arrY,
                 label: {
                     normal: {
                         show: true,
