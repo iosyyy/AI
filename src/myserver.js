@@ -1,11 +1,28 @@
-var app = require('http').createServer()
-var io = require('socket.io')(app);
+const { send } = require("process");
 
-app.listen(8080);
+var app = require("http").createServer();
+var io = require("socket.io")(app,{ cors: true });
 
-io.on('connection', function (socket) {
-  socket.emit('/base/train/', { hello: 'world' });
-  socket.on('/base/train/', function (data) {
-    console.log(data);
+let sendMessage = (socket) => {
+  let acc = 65;
+  let now = new Date().getTime();
+  let id = setInterval(()=>{
+    acc = acc + Math.random()
+    let res = (acc + '').slice(0,5) + '%';
+    setTimeout(() => {}, 1000);
+    let interval = (((new Date().getTime() - now) / 1000)+'').slice(0,5);
+
+    if(acc>=100) clearInterval(id)
+    socket.emit("by normal", { code: 0, acc:res, time: `${interval}s` });
+  },2000)
+};
+
+io.on("connection", function (socket) {
+  console.log("有一个客户端连接上了服务器");
+  socket.on("by normal", function (data) {
+    console.log("得到来自客户端的数据", data);
+    sendMessage(socket);
   });
 });
+
+app.listen(8080);

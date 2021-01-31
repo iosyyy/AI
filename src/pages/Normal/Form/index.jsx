@@ -7,10 +7,10 @@ export default class MyForm extends Component {
 
   onFinish = (values) => {
     //开始监听服务器
-    // openListenByNormal(values,(data)=>{
-    //   //将从服务器得到的数据传递到result组件
-    //   PubSubJS.publish('result',data)
-    // })
+    openListenByNormal(values,(data)=>{
+      //将从服务器得到的数据传递到result组件
+      PubSubJS.publish('result',data)
+    })
     //跳转到结果页面
     this.props.history.push('/normal/result')
   };

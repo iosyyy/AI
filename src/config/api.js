@@ -1,12 +1,12 @@
-//本地代理
-let apiRoot = "http://127.0.0.1:3000";
-let api1 = '/api1'
-export default {
-  normalTrain: apiRoot + api1 +"/base/train/",
-  _normalTrain: "/base/train/",
+//本地代理（代理需要在setupProxy.js中配置）
+const host = "http://localhost:3000";
+const api1 = "/api1";
 
-  federalTrain: apiRoot + api1+ "/fed/service/",
-  _federalTrain: "/fed/service/",
-
-  host: apiRoot,
+const e = {
+  normalTrain: host + api1 + "/base/train/",
+  federalTrain: host + api1 + "/fed/service/",
+  host,
+  serverSocketIp: 'http://localhost:8080',
 };
+
+export default e

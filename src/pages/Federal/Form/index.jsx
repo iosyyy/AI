@@ -7,10 +7,10 @@ export default class MyForm extends Component {
 
   onFinish = (values) => {
     //开始监听服务器
-    // openListenByFederal(values,(data)=>{
-    //   //将从服务器得到的数据传递到result组件
-    //   PubSubJS.publish('result2',data)
-    // })
+    openListenByFederal(values,(data)=>{
+      //将从服务器得到的数据传递到result组件
+      PubSubJS.publish('result2',data)
+    })
     //跳转到结果页面
     this.props.history.push('/federal/result')
   };
