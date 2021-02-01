@@ -1,0 +1,5 @@
+.colorWhite{
+    background-image: -webkit-linear-gradient(bottom, rgb(0, 0, 0), rgb(255, 255, 255));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

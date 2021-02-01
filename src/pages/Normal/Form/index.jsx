@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Form, Button, Select, InputNumber } from "antd";
+import {Form, Button, Select, InputNumber} from "antd";
 import {openListenByNormal} from "../../../util/util";
 import PubSubJS from 'pubsub-js'
+
 
 export default class MyForm extends Component {
 

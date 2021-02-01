@@ -11,23 +11,45 @@ import {Spin} from 'antd';
 let echarts = require('echarts');
 let arrX = []
 let arrY = []
+let status = false//false代表result true代表result2
 let myChart
 export default class Show extends Component {
     constructor(props) {
         super(props);
+        let that=this
         PubSubJS.subscribe('result', (msg, data) => {
-            this.setState({info: data})
-            let acc = data.acc
-            let time = data.time
-            arrX.push(Number.parseFloat(time.slice(0, data.time.length - 1)))
-            arrY.push(Number.parseFloat(acc.slice(0, data.acc.length - 1)))
-            this.setState({arrX, arrY, hidden: false})
+            if (status) {
+                status = false
+                //清空数组
+                arrX.length = 0
+                arrY.length = 0
+            }
+            that.setData(data)
+        })
+        PubSubJS.subscribe('result2', (msg, data) => {
+            if (!status) {
+                status = true
+                //清空数组
+                arrX.length = 0
+                arrY.length = 0
+            }
+            that.setData(data)
         })
         this.state = {arrX: arrX, arrY: arrY, hidden: true}
     }
 
+    setData(data) {
+        console.log(data)
+        this.setState({info: data})
+        let acc = data.acc
+        let time = data.time
+        arrX.push(Number.parseFloat(time.slice(0, data.time.length - 1)))
+        arrY.push(Number.parseFloat(acc.slice(0, data.acc.length - 1)))
+        this.setState({arrX, arrY, hidden: false})
+    }
+
     drew() {
-         // 基于准备好的dom，初始化echarts实例
+        // 基于准备好的dom，初始化echarts实例
         myChart.setOption({
             title: {
                 text: '攻防展示',
@@ -47,7 +69,7 @@ export default class Show extends Component {
                 data: arrX,
                 axisLabel: {
                     show: true,
-                    interval:0,
+                    interval: 0,
                     textStyle: {
                         color: '#333'
                     },
@@ -55,7 +77,7 @@ export default class Show extends Component {
                 },
             },
             yAxis: {
-                min:arrY[0]-10,
+                min: Math.round(arrY[0] - 10),
                 type: 'value',
                 axisLabel: {
                     formatter: '{value}%'
@@ -91,12 +113,12 @@ export default class Show extends Component {
             }]
         })
 
-        setTimeout(function (){
+        // 在改变窗口长宽时,重置echarts的大小
+        setTimeout(function () {
             window.onresize = function () {
                 myChart.resize();
             }
-        },200)
-
+        }, 200)
 
 
     }
@@ -111,10 +133,10 @@ export default class Show extends Component {
     }
 
     render() {
-            return(
-                <Spin tip="Loading..." spinning={this.state.hidden} delay={10}>
-                    <div id="show" style={{width: 'auto', height: 400}}/>
-                </Spin>
-            )
+        return (
+            <Spin size="large" tip="正在模拟攻防请稍候..." spinning={this.state.hidden} delay={10}>
+                <div id="show" style={{width: 'auto', height: 400}}/>
+            </Spin>
+        )
     }
 }

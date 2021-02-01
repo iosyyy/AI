@@ -8,10 +8,7 @@ export default class Result extends Component {
         info:{}
     }
     componentDidMount(){
-        PubSubJS.subscribe('result2',(msg,data)=>{
-            this.setState({info:data})
-            console.log('从服务器得到数据',this.state);
-        })
+
     }
     render() {
         return (
