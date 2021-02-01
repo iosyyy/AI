@@ -19,8 +19,8 @@ export default class Show extends Component {
             this.setState({info: data})
             let acc = data.acc
             let time = data.time
-            arrX.push(Number.parseInt(time.slice(0, data.time.length - 1)))
-            arrY.push(Number.parseInt(acc.slice(0, data.acc.length - 1)))
+            arrX.push(Number.parseFloat(time.slice(0, data.time.length - 1)))
+            arrY.push(Number.parseFloat(acc.slice(0, data.acc.length - 1)))
             this.setState({arrX, arrY, hidden: false})
         })
         this.state = {arrX: arrX, arrY: arrY, hidden: true}
@@ -90,6 +90,13 @@ export default class Show extends Component {
                 },
             }]
         })
+
+        setTimeout(function (){
+            window.onresize = function () {
+                myChart.resize();
+            }
+        },200)
+
 
 
     }
