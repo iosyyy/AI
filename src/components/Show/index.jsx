@@ -16,7 +16,7 @@ let myChart
 export default class Show extends Component {
     constructor(props) {
         super(props);
-        let that=this
+        let that = this
         PubSubJS.subscribe('result', (msg, data) => {
             if (status) {
                 status = false
@@ -36,6 +36,12 @@ export default class Show extends Component {
             that.setData(data)
         })
         this.state = {arrX: arrX, arrY: arrY, hidden: true}
+        // 设置10s种超时则退回
+        setTimeout(() => {
+            if (this.state.hidden) {
+                this.props.back()
+            }
+        }, 5000)
     }
 
     setData(data) {
