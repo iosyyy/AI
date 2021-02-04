@@ -11,8 +11,9 @@ export default class Result extends Component {
             duration:2.5,
             placement:'topLeft'
         });
+
         setTimeout(() => {
-            this.props.history.push('/normal/from')
+            this.props.history.push('/federal')
         },1000)
     }
 
