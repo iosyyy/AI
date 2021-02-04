@@ -8,7 +8,8 @@ export default class Result extends Component {
         notification['error']({
             message: '联邦训练失败',
             description:'数据获取失败即将跳转到表单界面',
-            duration:2.5
+            duration:2.5,
+            placement:'topLeft'
         });
         setTimeout(() => {
             this.props.history.push('/normal/from')
