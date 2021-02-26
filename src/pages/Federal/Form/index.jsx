@@ -16,13 +16,19 @@ export default class MyForm extends Component {
     };
 
     render() {
+        const tailLayout = {
+            wrapperCol: { offset: 5, span: 10 },
+        };
+        const layout = {
+            labelCol: { span: 5 },
+            wrapperCol: { span: 10 },
+        };
         return (
             <div>
                 <Form
-                    labelCol={{span: 5}}
-                    wrapperCol={{span: 10}}
                     layout="horizontal"
                     onFinish={this.onFinish}
+                    {...layout}
                 >
 
                     <Tooltip placement="topLeft" title="cnm:普通训练 mlp:多层感知器" color="#517fa4" arrowPointAtCenter={true}>
@@ -76,9 +82,9 @@ export default class MyForm extends Component {
                         <InputNumber min={0} max={1} step={0.01}/>
                     </Form.Item>
 
-                    <Form.Item label="提交">
+                    <Form.Item  {...tailLayout}>
                         <Button type="primary" htmlType="submit">
-                            Submit
+                            提交
                         </Button>
                     </Form.Item>
                 </Form>
