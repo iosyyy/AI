@@ -7,7 +7,6 @@ import 'echarts/lib/component/title';
 import PubSubJS from "pubsub-js";
 import {Spin} from 'antd';
 
-
 let echarts = require('echarts');
 let arrX = []
 let arrY = []

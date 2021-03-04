@@ -3,6 +3,7 @@ import {Button, Form, InputNumber, Select, Tooltip} from "antd";
 import {openListenByFederal} from "../../../util/util";
 import PubSubJS from 'pubsub-js'
 
+
 export default class MyForm extends Component {
 
     onFinish = (values) => {
@@ -14,6 +15,8 @@ export default class MyForm extends Component {
         //跳转到结果页面
         this.props.history.push('/federal/result')
     };
+
+
 
     render() {
         const tailLayout = {
