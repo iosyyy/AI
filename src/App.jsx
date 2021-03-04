@@ -32,11 +32,8 @@ function App() {
 
             <Switch>
               <Route path="/federalTrain" component={FederalIndex} />
-              <div className="site-layout-content">
-                <Route path="/normal" component={Normal} />
-                <Route path="/federal" component={Federal} />
-              </div>
-
+              <Route path="/normal" component={Normal} />
+              <Route path="/federal" component={Federal} /> 
               <Redirect to="/federalTrain" />
             </Switch>
         </Content>

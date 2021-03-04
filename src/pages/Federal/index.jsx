@@ -7,7 +7,7 @@ export default class Normal extends Component {
 
   render() {
     return (
-      <div>
+      <div className="site-layout-content">
       <h1 className={"colorWhite"}>联邦学习</h1>
         <Switch>
           <Route path="/federal/form" component={Form}/>
