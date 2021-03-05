@@ -1,17 +1,20 @@
 import React, {Component} from 'react';
 import {Button, Col, Image, Row, Select} from "antd";
 import fileImg from '../../../img/file.png'
+import FederalView from "../View";
 
 class FederalResult extends Component {
     constructor(props) {
         super(props);
         console.log(this.props.location.state.status);
-        this.state = {type: true,choice:true}
+        this.state = {type: true, choice: true, isViewing: false}
     }
 
-    onView=(e)=>{
+    onView = (e) => {
         console.log(e)
-
+        this.setState({
+            isViewing: true
+        })
     }
 
     render() {
@@ -41,7 +44,7 @@ class FederalResult extends Component {
                                 })
                             }
 
-                        }} defaultValue="option1">
+                        }} value={this.state.type?"option1":"option2"}>
                             <Select.Option value="option1">横向联邦数据集</Select.Option>
                             <Select.Option value="option2">纵向联邦数据集</Select.Option>
                         </Select>
@@ -56,9 +59,10 @@ class FederalResult extends Component {
                                         <div style={{marginTop: '15px', marginBottom: '15px'}}>数据浏览器</div>
                                     </Col>
                                     <Col offset={1} span={24}>
-                                        <Button onClick={(e)=>{
+                                        <Button onClick={(e) => {
                                             this.setState({
-                                                choice:true
+                                                choice: true,
+                                                isViewing:false
                                             })
                                         }} type="text">
                                             <Image height={15} width={15} src={fileImg} preview={false}/>
@@ -66,9 +70,10 @@ class FederalResult extends Component {
                                         </Button>
                                     </Col>
                                     <Col offset={1} span={24}>
-                                        <Button onClick={(e)=>{
+                                        <Button onClick={(e) => {
                                             this.setState({
-                                                choice:false
+                                                choice: false,
+                                                isViewing:false
                                             })
                                         }} type="text">
                                             <Image height={15} width={15} src={fileImg} preview={false}/>
@@ -84,10 +89,19 @@ class FederalResult extends Component {
                                         > {this.state.choice ? "train.csv" : "test.csv"}
                                     </div>
                                     <div onClick={this.onView}
-                                        style={{border:"1px solid",height:"85%", display: 'flex'
-                                        ,alignItems:'center',justifyContent:'center',marginBottom: '10px',marginRight: '30px'
-                                    }}>
-                                        预览{this.state.choice ? "train.csv" : "test.csv"}
+                                         style={{
+                                             border: "1px solid",
+                                             height: "85%",
+                                             display: 'flex',
+                                             alignItems: 'center',
+                                             justifyContent: 'center',
+                                             marginBottom: '10px',
+                                             marginRight: '30px'
+                                         }}>
+                                        {
+                                            this.state.isViewing ?
+                                                <FederalView/> : "预览" + this.state.choice ? "train.csv" : "test.csv"
+                                        }
                                     </div>
                                 </Col>
                             </Row>

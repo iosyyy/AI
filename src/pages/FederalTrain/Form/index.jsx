@@ -34,7 +34,7 @@ class FederalTrain extends Component {
                                     })
                                 }
 
-                            }} defaultValue="option1">
+                            }} value={this.state.type?"option1":"option2"}>
                                 <Select.Option value="option1">横向联邦</Select.Option>
                                 <Select.Option value="option2">纵向联邦</Select.Option>
                             </Select>
