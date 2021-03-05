@@ -1,23 +1,157 @@
 import React, {Component} from 'react';
-import {Button, Col, Image, Row, Select} from "antd";
+import {Modal, Button, Col, Image, Row, Select, Table} from "antd";
 import fileImg from '../../../img/file.png'
 import FederalView from "../View";
+import bigImg from "../../../img/big.png";
 
 class FederalResult extends Component {
     constructor(props) {
         super(props);
         console.log(this.props.location.state.status);
-        this.state = {type: true, choice: true, isViewing: false}
+        this.state = {type: true, choice: true, isViewing: false,isBig:false}
     }
 
     onView = (e) => {
-        console.log(e)
         this.setState({
             isViewing: true
         })
     }
 
+    onEnlarge = (e)=>{
+        console.log("be large")
+    }
+
     render() {
+        const dataSource1 = [
+            {
+                key: '1',
+                name: '胡彦斌',
+                age: 32,
+                address: '西湖区湖底公园1号',
+            },
+            {
+                key: '2',
+                name: '胡彦祖',
+                age: 33,
+                address: '西湖区湖底公园1号',
+            },
+            {
+                key: '3',
+                name: '胡彦斌',
+                age: 34,
+                address: '西湖区湖底公园1号',
+            },
+            {
+                key: '4',
+                name: '胡彦祖',
+                age: 35,
+                address: '西湖区湖底公园1号',
+            }]
+        const dataSource2 = [
+            {
+                key: '1',
+                name: 'ddd',
+                age: 32,
+                address: '西湖区湖底公园1号',
+            },
+            {
+                key: '2',
+                name: 'aaa',
+                age: 33,
+                address: '西湖区湖底公园1号',
+            },
+            {
+                key: '3',
+                name: 'ccc',
+                age: 34,
+                address: '西湖区湖底公园1号',
+            },
+            {
+                key: '4',
+                name: 'bbb',
+                age: 35,
+                address: '西湖区湖底公园1号',
+            },
+            {
+                key: '2',
+                name: 'aaa',
+                age: 33,
+                address: '西湖区湖底公园1号',
+            },
+            {
+                key: '2',
+                name: 'aaa',
+                age: 33,
+                address: '西湖区湖底公园1号',
+            },
+            {
+                key: '2',
+                name: 'aaa',
+                age: 33,
+                address: '西湖区湖底公园1号',
+            },
+            {
+                key: '2',
+                name: 'aaa',
+                age: 33,
+                address: '西湖区湖底公园1号',
+            },
+            {
+                key: '2',
+                name: 'aaa',
+                age: 33,
+                address: '西湖区湖底公园1号',
+            },
+            {
+                key: '2',
+                name: 'aaa',
+                age: 33,
+                address: '西湖区湖底公园1号',
+            },
+            {
+                key: '2',
+                name: 'aaa',
+                age: 33,
+                address: '西湖区湖底公园1号',
+            }
+        ];
+
+        const columns = [
+            {
+                title: <div><Image height={15} width={15} src={fileImg} preview={false}/>姓名</div>,
+                dataIndex: 'name',
+                key: 'name',
+            },
+            {
+                title: <div><Image height={15} width={15} src={fileImg} preview={false}/>年龄</div>,
+                dataIndex: 'age',
+                key: 'age',
+                defaultSortOrder: 'descend',
+                sorter: (a, b) => a.age - b.age,
+            },
+            {
+                title: <div><Image height={15} width={15} src={fileImg} preview={false}/>地址</div>,
+                dataIndex: 'address',
+                key: 'address',
+
+            },
+        ];
+        const showModal = () => {
+           this.setState({
+               isBig:true
+           })
+        };
+        const handleOk = () => {
+            this.setState({
+                isBig:false
+            })
+        };
+
+        const handleCancel = () => {
+            this.setState({
+                isBig:false
+            })
+        };
         return (
             <div className="site-card-wrapper site-layout-content">
                 <h1 className={"colorWhite"}>联邦学习</h1>
@@ -42,7 +176,7 @@ class FederalResult extends Component {
                                 })
                             }
 
-                        }} value={this.state.type?"option1":"option2"}>
+                        }} value={this.state.type ? "option1" : "option2"}>
                             <Select.Option value="option1">横向联邦数据集</Select.Option>
                             <Select.Option value="option2">纵向联邦数据集</Select.Option>
                         </Select>
@@ -60,7 +194,7 @@ class FederalResult extends Component {
                                         <Button onClick={(e) => {
                                             this.setState({
                                                 choice: true,
-                                                isViewing:false
+                                                isViewing: false
                                             })
                                         }} type="text">
                                             <Image height={15} width={15} src={fileImg} preview={false}/>
@@ -71,7 +205,7 @@ class FederalResult extends Component {
                                         <Button onClick={(e) => {
                                             this.setState({
                                                 choice: false,
-                                                isViewing:false
+                                                isViewing: false
                                             })
                                         }} type="text">
                                             <Image height={15} width={15} src={fileImg} preview={false}/>
@@ -85,6 +219,17 @@ class FederalResult extends Component {
                                 <Col span={18}>
                                     <div style={{marginTop: '2vh', marginBottom: '15px'}}>
                                         > {this.state.choice ? "train.csv" : "test.csv"}
+                                        {this.state.isViewing ? <div style={{float: 'right', marginRight: '4vh'}}>
+                                            <Button onClick={this.onEnlarge} type="text" size="small">
+                                                <Image preview={false}
+                                                       onClick={showModal}
+                                                       src={bigImg} style={{
+                                                    width: 20,
+                                                    height: 20,
+                                                    display: ''
+                                                }}/>
+                                            </Button>
+                                        </div> : <></>}
                                     </div>
                                     <div onClick={this.onView}
                                          style={{
@@ -94,12 +239,13 @@ class FederalResult extends Component {
                                              alignItems: 'center',
                                              justifyContent: 'center',
                                              marginBottom: '10px',
-                                             marginRight: '30px',
-                                             padding:0
+                                             marginRight: '4vh',
+                                             padding: 0
                                          }}>
                                         {
                                             this.state.isViewing ?
-                                                <FederalView choice={this.state.choice}/> : this.state.choice ? "预览train.csv" : "预览test.csv"
+                                                <FederalView  dataSource1={dataSource1} dataSource2={dataSource2} columns={columns}
+                                                    choice={this.state.choice}/> : this.state.choice ? "预览train.csv" : "预览test.csv"
                                         }
                                     </div>
                                 </Col>
@@ -108,6 +254,16 @@ class FederalResult extends Component {
                     </Col>
 
                 </Row>
+                <Modal width="180vh" title={this.state.choice?'train.csv':'test.csv'} visible={this.state.isBig} onOk={handleOk} onCancel={handleCancel} footer={
+                    [] // 设置footer为空，去掉 取消 确定默认按钮
+                }>
+                    <Table
+                        scroll={{y: "50vh"}}
+                           bordered={false} dataSource={this.state.choice ? dataSource1 : dataSource2}
+                           columns={columns}
+                           pagination={false}
+                    />
+                </Modal>
             </div>
         );
     }
