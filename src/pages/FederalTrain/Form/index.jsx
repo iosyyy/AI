@@ -13,7 +13,7 @@ class FederalTrain extends Component {
     render() {
         return (
             <div>
-
+                <h1 className={"colorWhite"}>联邦学习</h1>
                 <div className="site-card-wrapper">
                     <Row gutter={[0, 30]}>
                         <Col offset={8} span={12}>
@@ -80,7 +80,7 @@ class FederalTrain extends Component {
                             <Button onClick={() => {
                                 this.props.history.push({pathname:'/federalTrain/result',state:{status:this.state.type}})
                             }} type="primary" htmlType="submit">
-                                提交
+                                下一步
                             </Button>
                         </Col>
                     </Row>

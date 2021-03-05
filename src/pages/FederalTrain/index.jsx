@@ -9,7 +9,6 @@ class FederalIndex extends Component {
     render() {
         return (
             <div>
-                <h1 className={"colorWhite"}>联邦学习</h1>
                 <Switch>
                     <Route exact path="/federalTrain/form" component={FederalTrain}/>
                     <Route path="/federalTrain/result" component={FederalResult}/>

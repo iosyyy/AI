@@ -26,6 +26,13 @@ function App() {
             <Menu.Item key="3">
               <NavLink to="/federal">联邦攻击</NavLink>
             </Menu.Item>
+            <Menu.Item style={{float:'right'}} key="4">
+              <NavLink to="/federal">正在训练</NavLink>
+            </Menu.Item>
+            <Menu.Item style={{float:'right'}} key="5">
+              <NavLink to="/federal">训练记录</NavLink>
+            </Menu.Item>
+
           </Menu>
         </Header>
         <Content style={{ padding: "50px 50px" }}>
@@ -33,7 +40,7 @@ function App() {
             <Switch>
               <Route path="/federalTrain" component={FederalIndex} />
               <Route path="/normal" component={Normal} />
-              <Route path="/federal" component={Federal} /> 
+              <Route path="/federal" component={Federal} />
               <Redirect to="/federalTrain" />
             </Switch>
         </Content>
