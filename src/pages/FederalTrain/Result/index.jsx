@@ -21,9 +21,7 @@ class FederalResult extends Component {
         return (
             <div className="site-card-wrapper site-layout-content">
                 <h1 className={"colorWhite"}>联邦学习</h1>
-                <Row gutter={[0, 30]}>
-                    <Col/>
-                </Row>
+
                 <Row gutter={[0, 30]}>
                     <Col offset={8} span={12}>
                         <div>
@@ -52,11 +50,11 @@ class FederalResult extends Component {
                 </Row>
                 <Row justify="center" gutter={[0, 30]}>
                     <Col span={14}>
-                        <div style={{border: "1px solid", height: '250px'}}>
+                        <div style={{border: "1px solid", height: '38vh'}}>
                             <Row gutter={[48, 1]}>
                                 <Col span={6}>
                                     <Col offset={1} span={24}>
-                                        <div style={{marginTop: '15px', marginBottom: '15px'}}>数据浏览器</div>
+                                        <div style={{marginTop: '2vh', marginBottom: '15px'}}>数据浏览器</div>
                                     </Col>
                                     <Col offset={1} span={24}>
                                         <Button onClick={(e) => {
@@ -81,22 +79,23 @@ class FederalResult extends Component {
                                         </Button>
                                     </Col>
                                     <Col offset={1} span={24}>
-                                        <Button style={{marginTop: '80px'}} size="small">下载</Button>
+                                        <Button style={{marginTop: '13vh'}} size="small">下载</Button>
                                     </Col>
                                 </Col>
                                 <Col span={18}>
-                                    <div style={{marginTop: '15px', marginBottom: '5px'}}>
+                                    <div style={{marginTop: '2vh', marginBottom: '15px'}}>
                                         > {this.state.choice ? "train.csv" : "test.csv"}
                                     </div>
                                     <div onClick={this.onView}
                                          style={{
                                              border: "1px solid",
-                                             height: "85%",
+                                             height: "26vh",
                                              display: 'flex',
                                              alignItems: 'center',
                                              justifyContent: 'center',
                                              marginBottom: '10px',
-                                             marginRight: '30px'
+                                             marginRight: '30px',
+                                             padding:0
                                          }}>
                                         {
                                             this.state.isViewing ?

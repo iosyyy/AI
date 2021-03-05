@@ -86,7 +86,7 @@ class FederalView extends Component {
             },
         ];
         return (
-                <Table scroll={{ y: "120px" }}
+                <Table scroll={{ y: "18vh" }}
                     bordered={false} dataSource={this.state.choice?dataSource1:dataSource2}
                        columns={columns}
                        pagination={false}
