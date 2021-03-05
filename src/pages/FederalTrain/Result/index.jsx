@@ -9,6 +9,11 @@ class FederalResult extends Component {
         this.state = {type: true,choice:true}
     }
 
+    onView=(e)=>{
+        console.log(e)
+
+    }
+
     render() {
         return (
             <div className="site-card-wrapper site-layout-content">
@@ -78,7 +83,8 @@ class FederalResult extends Component {
                                     <div style={{marginTop: '15px', marginBottom: '5px'}}>
                                         > {this.state.choice ? "train.csv" : "test.csv"}
                                     </div>
-                                    <div style={{border:"1px solid",height:"85%", display: 'flex'
+                                    <div onClick={this.onView}
+                                        style={{border:"1px solid",height:"85%", display: 'flex'
                                         ,alignItems:'center',justifyContent:'center',marginBottom: '10px',marginRight: '30px'
                                     }}>
                                         预览{this.state.choice ? "train.csv" : "test.csv"}
