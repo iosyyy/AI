@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import {Col, Image, Row, Select} from "antd";
+import {Button, Col, Image, Row, Select} from "antd";
 import fileImg from '../../../img/file.png'
 
 class FederalResult extends Component {
     constructor(props) {
         super(props);
         console.log(this.props.location.state.status);
-        this.state = {type: true}
+        this.state = {type: true,choice:true}
     }
 
     render() {
@@ -44,27 +44,45 @@ class FederalResult extends Component {
                 </Row>
                 <Row justify="center" gutter={[0, 30]}>
                     <Col span={14}>
-                        <div style={{border: "1px solid", height: '210px'}}>
-                            <Row gutter={[48, 14]}>
+                        <div style={{border: "1px solid", height: '250px'}}>
+                            <Row gutter={[48, 1]}>
                                 <Col span={6}>
                                     <Col offset={1} span={24}>
+                                        <div style={{marginTop: '15px', marginBottom: '15px'}}>数据浏览器</div>
                                     </Col>
                                     <Col offset={1} span={24}>
-                                        数据浏览器
+                                        <Button onClick={(e)=>{
+                                            this.setState({
+                                                choice:true
+                                            })
+                                        }} type="text">
+                                            <Image height={15} width={15} src={fileImg} preview={false}/>
+                                            train.csv
+                                        </Button>
                                     </Col>
                                     <Col offset={1} span={24}>
-                                        <Image height={15} width={15} src={fileImg} preview={false}/>
-                                        &nbsp;
-                                        <span>train.csv</span>
+                                        <Button onClick={(e)=>{
+                                            this.setState({
+                                                choice:false
+                                            })
+                                        }} type="text">
+                                            <Image height={15} width={15} src={fileImg} preview={false}/>
+                                            test.csv
+                                        </Button>
                                     </Col>
                                     <Col offset={1} span={24}>
-                                        <Image height={15} width={15} src={fileImg} preview={false}/>
-                                        &nbsp;
-                                        <span>test.csv</span>
+                                        <Button style={{marginTop: '80px'}} size="small">下载</Button>
                                     </Col>
                                 </Col>
                                 <Col span={18}>
-                                    hello world
+                                    <div style={{marginTop: '15px', marginBottom: '5px'}}>
+                                        > {this.state.choice ? "train.csv" : "test.csv"}
+                                    </div>
+                                    <div style={{border:"1px solid",height:"85%", display: 'flex'
+                                        ,alignItems:'center',justifyContent:'center',marginBottom: '10px',marginRight: '30px'
+                                    }}>
+                                        预览{this.state.choice ? "train.csv" : "test.csv"}
+                                    </div>
                                 </Col>
                             </Row>
                         </div>
