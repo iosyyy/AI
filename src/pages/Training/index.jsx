@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+//TODO training页面还没有实现
 class Training extends Component {
     render() {
         return (
