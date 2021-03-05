@@ -100,7 +100,7 @@ class FederalResult extends Component {
                                          }}>
                                         {
                                             this.state.isViewing ?
-                                                <FederalView/> : "预览" + this.state.choice ? "train.csv" : "test.csv"
+                                                <FederalView choice={this.state.choice}/> : this.state.choice ? "预览train.csv" : "预览test.csv"
                                         }
                                     </div>
                                 </Col>
