@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Modal, Button, Col, Image, Row, Select, Table} from "antd";
 import fileImg from '../../../img/file.png'
-import FederalView from "../View";
 import bigImg from "../../../img/big.png";
 
 class FederalResult extends Component {
@@ -244,8 +243,11 @@ class FederalResult extends Component {
                                          }}>
                                         {
                                             this.state.isViewing ?
-                                                <FederalView  dataSource1={dataSource1} dataSource2={dataSource2} columns={columns}
-                                                    choice={this.state.choice}/> : this.state.choice ? "预览train.csv" : "预览test.csv"
+                                                <Table scroll={{y: "18vh"}}
+                                                       bordered={false} dataSource={this.state.choice ? dataSource1 : dataSource2}
+                                                       columns={columns}
+                                                       pagination={false}
+                                                />: this.state.choice ? "预览train.csv" : "预览test.csv"
                                         }
                                     </div>
                                 </Col>
@@ -253,6 +255,11 @@ class FederalResult extends Component {
                         </div>
                     </Col>
 
+                </Row>
+                <Row justify={'center'}>
+                    <Col><Button onClick={() => {
+                        this.props.history.push('/federalTrain/choice')
+                    }} type="primary" htmlType="submit">下一步</Button></Col>
                 </Row>
                 <Modal width="180vh" title={this.state.choice?'train.csv':'test.csv'} visible={this.state.isBig} onOk={handleOk} onCancel={handleCancel} footer={
                     [] // 设置footer为空，去掉 取消 确定默认按钮

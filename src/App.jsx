@@ -7,6 +7,8 @@ import Federal from "./pages/Federal";
 import "./App.css";
 import "antd/dist/antd.css";
 import FederalIndex from "./pages/FederalTrain";
+import TrainingRecord from "./pages/TrainingRecord";
+import Training from "./pages/Training";
 
 const { Header, Content, Footer } = Layout;
 
@@ -27,12 +29,11 @@ function App() {
               <NavLink to="/federal">联邦攻击</NavLink>
             </Menu.Item>
             <Menu.Item style={{float:'right'}} key="4">
-              <NavLink to="/federal">正在训练</NavLink>
+              <NavLink to="/trainingRecord">训练记录</NavLink>
             </Menu.Item>
             <Menu.Item style={{float:'right'}} key="5">
-              <NavLink to="/federal">训练记录</NavLink>
+              <NavLink to="/training">正在训练</NavLink>
             </Menu.Item>
-
           </Menu>
         </Header>
         <Content style={{ padding: "50px 50px" }}>
@@ -41,6 +42,10 @@ function App() {
               <Route path="/federalTrain" component={FederalIndex} />
               <Route path="/normal" component={Normal} />
               <Route path="/federal" component={Federal} />
+              <Route path="/training" component={Training} />
+              <Route path="/trainingRecord" component={TrainingRecord} />
+
+
               <Redirect to="/federalTrain" />
             </Switch>
         </Content>
