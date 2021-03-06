@@ -40,7 +40,7 @@ class FederalTrain extends Component {
                             </Select>
                         </Col>
                     </Row>
-                    <Row gutter={[48, 15]}>
+                    <Row gutter={[48, 20]}>
                         <Col onClick={() => {
                             this.setState({
                                 type: true

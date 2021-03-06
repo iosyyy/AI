@@ -1,10 +1,16 @@
 import React, {Component} from "react";
-import {Button, Form, InputNumber, Select, Tooltip} from "antd";
+import {Button, Card, Col, Row, Select} from "antd";
 import {openListenByFederal} from "../../../util/util";
 import PubSubJS from 'pubsub-js'
 
 
 export default class MyForm extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            type: 0
+        }
+    }
 
     onFinish = (values) => {
         //开始监听服务器
@@ -17,80 +23,112 @@ export default class MyForm extends Component {
     };
 
 
-
     render() {
-        const tailLayout = {
-            wrapperCol: { offset: 5, span: 10 },
-        };
-        const layout = {
-            labelCol: { span: 5 },
-            wrapperCol: { span: 10 },
-        };
+
         return (
             <div>
-                <Form
-                    layout="horizontal"
-                    onFinish={this.onFinish}
-                    {...layout}
-                >
+                <h1 className={"colorWhite"}>联邦攻击</h1>
+                <div className="site-card-wrapper">
+                    <Row gutter={[0, 30]}>
+                        <Col offset={8} span={12}>
+                            <div>联邦类型:
+                            </div>
+                        </Col>
+                    </Row>
+                    <Row gutter={[0, 24]}>
+                        <Col offset={8} span={8}>
+                            <Select style={{width: '100%'}} onChange={(e) => {
+                                if (e === "option1") {
+                                    this.setState({
+                                        type: 0
+                                    })
+                                } else if (e === "option2") {
+                                    this.setState({
+                                        type: 1
+                                    })
+                                } else {
+                                    this.setState({
+                                        type: 2
+                                    })
+                                }
 
-                    <Tooltip placement="topLeft" title="cnm:普通训练 mlp:多层感知器" color="#517fa4" arrowPointAtCenter={true}>
-                        <Form.Item name="model" label="模型类型：">
-                            <Select placeholder="请选择模型">
-                                <Select.Option value="cnn">cnn</Select.Option>
-                                <Select.Option value="mlp">mlp</Select.Option>
+                            }}
+                                    value={this.state.type === 0 ? "option1" : this.state.type === 1 ? "option2" : "option3"}>
+                                <Select.Option value="option1">free-rider攻击</Select.Option>
+                                <Select.Option value="option2">分布式投毒攻击</Select.Option>
+                                <Select.Option value="option3">推断攻击</Select.Option>
                             </Select>
-                        </Form.Item>
-                    </Tooltip>
-
-                    <Tooltip placement="topLeft" title="选择不同的数据集使用不同的算法" color="#FCDCC8" arrowPointAtCenter={true}>
-                        <Form.Item name="dataset" label="数据集类型：" initialValue="mnist">
-                            <Select>
-                                <Select.Option value="mnist">mnist</Select.Option>
-                                <Select.Option value="cifar">cifar</Select.Option>
-                                <Select.Option value="fmnist">fmnist</Select.Option>
-                            </Select>
-                        </Form.Item>
-                    </Tooltip>
-
-                    <Tooltip placement="topLeft" title="选择不同的优化器" color="#95DDDA" arrowPointAtCenter={true}>
-                        <Form.Item name="optimizer" label="优化器类型：" initialValue="sgd">
-                            <Select>
-                                <Select.Option value="sgd">sgd</Select.Option>
-                                <Select.Option value="adam">adam</Select.Option>
-                            </Select>
-                        </Form.Item>
-                    </Tooltip>
-
-
-                    <Form.Item
-                        name="local_ep"
-                        label="客户端学习："
-                        rules={[{type: "number", min: 1, max: 1000}]}
-                        initialValue={10}
-                    >
-                        <InputNumber/>
-                    </Form.Item>
-
-                    <Form.Item
-                        name="epochs"
-                        label="训练次数："
-                        rules={[{type: "number", min: 1, max: 10}]}
-                        initialValue={5}
-                    >
-                        <InputNumber/>
-                    </Form.Item>
-
-                    <Form.Item name="lr" label="学习率：" initialValue={0.01}>
-                        <InputNumber min={0} max={1} step={0.01}/>
-                    </Form.Item>
-
-                    <Form.Item  {...tailLayout}>
-                        <Button type="primary" htmlType="submit">
-                            提交
-                        </Button>
-                    </Form.Item>
-                </Form>
+                        </Col>
+                    </Row>
+                    <Row justify="space-around" gutter={[10, 48]}>
+                        <Col onClick={() => {
+                            this.setState({
+                                type: 0
+                            })
+                        }} span={6}>
+                            <Card style={{backgroundColor: this.state.type === 0 ? 'RGB(96,185,234)' : '#FFF'}}
+                                  headStyle={{
+                                      border: 0,
+                                      textAlign: 'center',
+                                      color: this.state.type === 0 ? "white" : "black"
+                                  }}
+                                  title="free-rider攻击"
+                                  bordered={false} hoverable={true}>
+                                <div style={{height: '150px', color: this.state.type === 0 ? "white" : "black"}}>
+                                    参与者不使用本地数据进行训练，而是提供伪造的模型参数以获取全局模型
+                                    <br/>
+                                    类型：横向联邦学习
+                                </div>
+                            </Card>
+                        </Col>
+                        <Col onClick={() => this.setState({
+                            type: 1
+                        })} span={6} offset={2}>
+                            <Card style={{backgroundColor: this.state.type === 1 ? 'RGB(96,185,234)' : '#FFF'}}
+                                  headStyle={{
+                                      border: 0,
+                                      textAlign: 'center',
+                                      color: this.state.type === 1 ? "white" : "black"
+                                  }}
+                                  title="分布式投毒攻击" bordered={false} hoverable={true}>
+                                <div style={{height: '150px', color: this.state.type === 1 ? "white" : "black"}}>
+                                    多个攻击者修改训练数据集的标签或样本数据以降低训练的收敛速度和模型准确率
+                                    <br/>
+                                    类型：横向联邦学习
+                                </div>
+                            </Card>
+                        </Col>
+                        <Col onClick={() => this.setState({
+                            type: 2
+                        })} span={6} offset={2}>
+                            <Card style={{backgroundColor: this.state.type === 2 ? 'RGB(96,185,234)' : '#FFF'}}
+                                  headStyle={{
+                                      border: 0,
+                                      textAlign: 'center',
+                                      color: this.state.type === 2 ? "white" : "black"
+                                  }}
+                                  title="推断攻击" bordered={false} hoverable={true}>
+                                <div style={{height: '150px', color: this.state.type === 2 ? "white" : "black"}}>
+                                    当训练者为2时，攻击者通过每轮训练返回的全局模型参数和自己的模型参数反推出另一位参与者的模型参数，推断出其样本数据
+                                    <br/>
+                                    类型：横向/纵向联邦学习
+                                </div>
+                            </Card>
+                        </Col>
+                    </Row>
+                    <Row gutter={48}>
+                        <Col offset={11} span={12}>
+                            <Button onClick={() => {
+                                this.props.history.push({
+                                    pathname: '/federalTrain/result',
+                                    state: {status: this.state.type}
+                                })
+                            }} type="primary" htmlType="submit">
+                                下一步
+                            </Button>
+                        </Col>
+                    </Row>
+                </div>
             </div>
         );
     }
