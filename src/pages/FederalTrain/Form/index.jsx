@@ -4,14 +4,14 @@ import {Button, Card, Col, Row, Select} from 'antd';
 class FederalTrain extends Component {
     constructor(props) {
         super(props);
-        this.state = {type: true};
+        this.state = {type: 0};
     }
 
 
     render() {
         return (
             <div>
-                <h1 className={"colorWhite"}>联邦学习</h1>
+                <h1 className={"colorWhite"}>联邦训练</h1>
                 <div className="site-card-wrapper">
                     <Row gutter={[0, 30]}>
                         <Col offset={8} span={12}>
@@ -24,15 +24,15 @@ class FederalTrain extends Component {
                             <Select style={{width: '100%'}} onChange={(e) => {
                                 if (e === "option1") {
                                     this.setState({
-                                        type: true
+                                        type: 0
                                     })
                                 } else {
                                     this.setState({
-                                        type: false
+                                        type: 1
                                     })
                                 }
 
-                            }} value={this.state.type ? "option1" : "option2"}>
+                            }} value={this.state.type === 0 ? "option1" : "option2"}>
                                 <Select.Option value="option1">横向联邦</Select.Option>
                                 <Select.Option value="option2">纵向联邦</Select.Option>
                             </Select>
@@ -41,33 +41,33 @@ class FederalTrain extends Component {
                     <Row gutter={[48, 20]}>
                         <Col onClick={() => {
                             this.setState({
-                                type: true
+                                type: 0
                             })
                         }} span={6} offset={5}>
-                            <Card style={{backgroundColor: this.state.type ? 'RGB(96,185,234)' : '#FFF'}}
+                            <Card style={{backgroundColor: this.state.type === 0 ? 'RGB(96,185,234)' : '#FFF'}}
                                   headStyle={{
                                       border: 0,
                                       textAlign: 'center',
-                                      color: this.state.type ? "white" : "black"
+                                      color: this.state.type === 0 ? "white" : "black"
                                   }}
                                   title="横向联邦"
                                   bordered={false} hoverable={true}>
-                                <div style={{height: '150px', color: this.state.type ? "white" : "black"}}>
+                                <div style={{height: '150px', color: this.state.type === 0 ? "white" : "black"}}>
                                     适用于参与者的数据特征维度重叠较多的情形
                                 </div>
                             </Card>
                         </Col>
                         <Col onClick={() => this.setState({
-                            type: false
+                            type: 1
                         })} span={6} offset={2}>
-                            <Card style={{backgroundColor: !this.state.type ? 'RGB(96,185,234)' : '#FFF'}}
+                            <Card style={{backgroundColor: this.state.type === 1 ? 'RGB(96,185,234)' : '#FFF'}}
                                   headStyle={{
                                       border: 0,
                                       textAlign: 'center',
-                                      color: !this.state.type ? "white" : "black"
+                                      color: this.state.type===1 ? "white" : "black"
                                   }}
                                   title="纵向联邦" bordered={false} hoverable={true}>
-                                <div style={{height: '150px', color: !this.state.type ? "white" : "black"}}>
+                                <div style={{height: '150px', color: this.state.type === 1 ? "white" : "black"}}>
                                     适用于参与者数据ID特征重叠较多的情形
                                 </div>
                             </Card>
@@ -77,7 +77,7 @@ class FederalTrain extends Component {
                         <Col offset={11} span={12}>
                             <Button onClick={() => {
                                 this.props.history.push({
-                                    pathname: '/federalTrain/result',
+                                    pathname: '/federalTrain/result/',
                                     state: {status: this.state.type}
                                 })
                             }} type="primary" htmlType="submit">
