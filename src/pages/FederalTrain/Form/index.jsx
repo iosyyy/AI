@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Card, Col, Row, Select} from 'antd';
 
-const {Meta} = Card;
-
 class FederalTrain extends Component {
     constructor(props) {
         super(props);
@@ -34,7 +32,7 @@ class FederalTrain extends Component {
                                     })
                                 }
 
-                            }} value={this.state.type?"option1":"option2"}>
+                            }} value={this.state.type ? "option1" : "option2"}>
                                 <Select.Option value="option1">横向联邦</Select.Option>
                                 <Select.Option value="option2">纵向联邦</Select.Option>
                             </Select>
@@ -78,7 +76,10 @@ class FederalTrain extends Component {
                     <Row gutter={48}>
                         <Col offset={11} span={12}>
                             <Button onClick={() => {
-                                this.props.history.push({pathname:'/federalTrain/result',state:{status:this.state.type}})
+                                this.props.history.push({
+                                    pathname: '/federalTrain/result',
+                                    state: {status: this.state.type}
+                                })
                             }} type="primary" htmlType="submit">
                                 下一步
                             </Button>
