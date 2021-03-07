@@ -10,6 +10,7 @@ import FederalIndex from "./pages/FederalTrain";
 import TrainingRecord from "./pages/TrainingRecord";
 import Training from "./pages/Training";
 import PubSubJS from "pubsub-js";
+import FederalDetailAll from "./pages/FederalDetail";
 
 const { Header, Content, Footer } = Layout;
 class App extends Component {
@@ -58,7 +59,7 @@ class App extends Component {
                             <Route path="/federal" component={Federal}/>
                             <Route path="/training" component={Training}/>
                             <Route path="/trainingRecord" component={TrainingRecord}/>
-
+                            <Route path="/federalDetail" component={FederalDetailAll}/>
 
                             <Redirect to="/federalTrain"/>
                         </Switch>
@@ -74,7 +75,7 @@ class App extends Component {
         <p>AI Demo ©2021 Created by Hrbust Science and Technology University</p>
       </div>
                 </Layout>
-                
+
             </div>
         );
     }
