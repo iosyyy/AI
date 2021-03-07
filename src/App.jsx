@@ -1,6 +1,6 @@
-import React from "react";
-import { Layout, Menu } from "antd";
-import { Route, NavLink, Switch, Redirect } from "react-router-dom";
+import React, {Component} from "react";
+import {Layout, Menu} from "antd";
+import {NavLink, Redirect, Route, Switch} from "react-router-dom";
 import Normal from "./pages/Normal";
 import Federal from "./pages/Federal";
 
@@ -9,46 +9,61 @@ import "antd/dist/antd.css";
 import FederalIndex from "./pages/FederalTrain";
 import TrainingRecord from "./pages/TrainingRecord";
 import Training from "./pages/Training";
+import PubSubJS from "pubsub-js";
 
 const { Header, Content, Footer } = Layout;
+class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state={page:"1"}
+        PubSubJS.subscribe('isRunning', (msg, data) => {
+          console.log(data)
+          this.setState({page: data.page})
+        })
+    }
 
-function App() {
-  return (
-    <div>
-      <Layout className="layout">
-        <Header>
-          <div className="logo" />
-          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["1"]}>
-            <Menu.Item key="1">
-              <NavLink to="/federalTrain">联邦训练</NavLink>
-            </Menu.Item>
-            <Menu.Item key="2">
-              <NavLink to="/normal">联邦防御</NavLink>
-            </Menu.Item>
-            <Menu.Item key="3">
-              <NavLink to="/federal">联邦攻击</NavLink>
-            </Menu.Item>
-            <Menu.Item style={{ float: "right" }} key="4">
-              <NavLink to="/trainingRecord">训练记录</NavLink>
-            </Menu.Item>
-            <Menu.Item style={{ float: "right" }} key="5">
-              <NavLink to="/training">正在训练</NavLink>
-            </Menu.Item>
-          </Menu>
-        </Header>
-        <Content style={{ padding: "50px 50px" }}>
-          <Switch>
-            <Route path="/federalTrain" component={FederalIndex} />
-            <Route path="/normal" component={Normal} />
-            <Route path="/federal" component={Federal} />
-            <Route path="/training" component={Training} />
-            <Route path="/trainingRecord" component={TrainingRecord} />
+    render() {
+        return (
+            <div>
+                <Layout className="layout">
+                    <Header>
+                        <div className="logo"/>
+                        <Menu theme="dark" mode="horizontal" selectedKeys={[this.state.page]} onSelect={(info)=>{
+                            this.setState({
+                              page:info.key
+                            })
+                        }}>
+                            <Menu.Item key="1">
+                                <NavLink to="/federalTrain">联邦训练</NavLink>
+                            </Menu.Item>
+                            <Menu.Item key="2">
+                                <NavLink to="/normal">联邦防御</NavLink>
+                            </Menu.Item>
+                            <Menu.Item key="3">
+                                <NavLink to="/federal">联邦攻击</NavLink>
+                            </Menu.Item>
+                            <Menu.Item style={{float: 'right'}} key="4">
+                                <NavLink to="/trainingRecord">训练记录</NavLink>
+                            </Menu.Item>
+                            <Menu.Item style={{float: 'right'}} key="5">
+                                <NavLink to="/training">正在训练</NavLink>
+                            </Menu.Item>
+                        </Menu>
+                    </Header>
+                    <Content style={{padding: "50px 50px"}}>
 
-            <Redirect to="/federalTrain" />
-          </Switch>
-        </Content>
-      </Layout>
-      <div
+                        <Switch>
+                            <Route path="/federalTrain" component={FederalIndex}/>
+                            <Route path="/normal" component={Normal}/>
+                            <Route path="/federal" component={Federal}/>
+                            <Route path="/training" component={Training}/>
+                            <Route path="/trainingRecord" component={TrainingRecord}/>
+
+
+                            <Redirect to="/federalTrain"/>
+                        </Switch>
+                    </Content>
+                    <div
         style={{
           width: "100%",
           textAlign: "center",
@@ -58,7 +73,11 @@ function App() {
       >
         <p>AI Demo ©2021 Created by Hrbust Science and Technology University</p>
       </div>
-    </div>
-  );
+                </Layout>
+                
+            </div>
+        );
+    }
 }
+
 export default App;

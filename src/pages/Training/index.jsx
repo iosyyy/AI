@@ -3,6 +3,11 @@ import "./index.css";
 import { Card, Progress } from "antd";
 
 class Training extends Component {
+  componentDidMount(){
+    PubSubJS.subscribe('trainChoice',(msg, data) => {
+      PubSubJS.publish('isRunning', {page:"5"})
+  })
+  }
   state = {
     trainInfo: [
       { id: "1234567891111", percent: 100 },
@@ -35,6 +40,7 @@ class Training extends Component {
       </div>
     );
   }
+
 }
 
 export default Training;

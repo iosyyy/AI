@@ -2,25 +2,11 @@ import React, {Component} from 'react';
 import {Modal, Button, Col, Image, Row, Select, Table} from "antd";
 import fileImg from '../../../img/file.png'
 import bigImg from "../../../img/big.png";
+import FileSaver from 'file-saver'
 
 class FederalResult extends Component {
     constructor(props) {
         super(props);
-        console.log(this.props.location.state.status);
-        this.state = {type: true, choice: true, isViewing: false,isBig:false}
-    }
-
-    onView = (e) => {
-        this.setState({
-            isViewing: true
-        })
-    }
-
-    onEnlarge = (e)=>{
-        console.log("be large")
-    }
-
-    render() {
         const dataSource1 = [
             {
                 key: '1',
@@ -114,7 +100,6 @@ class FederalResult extends Component {
                 address: '西湖区湖底公园1号',
             }
         ];
-
         const columns = [
             {
                 title: <div><Image height={15} width={15} src={fileImg} preview={false}/>姓名</div>,
@@ -135,6 +120,47 @@ class FederalResult extends Component {
 
             },
         ];
+        this.state = {columns,dataSource1,dataSource2,type: true, choice: true, isViewing: false,isBig:false,status:this.props.location.state.status}
+
+    }
+
+    onView = (e) => {
+        this.setState({
+            isViewing: true
+        })
+    }
+
+    onEnlarge = (e)=>{
+        console.log("be large")
+    }
+
+    //点击批量导出数据生成csv文件
+    exportList= ()=>{
+        //拿到所有的数据
+        let data=this.state.choice?this.state.dataSource1:this.state.dataSource2
+        //定义数据拼接
+        //str:table的每一列的标题，即为导出后的csv文件的每一列的标题
+        let str='';
+        str+='name'+','
+            +'age'+','+'address'
+        for (const i in data) {
+            str+='\n'
+            str+=data[i].name+','+data[i].age+","+data[i].address
+        }
+        //Excel打开后中文乱码添加如下字符串解决
+        let exportContent = "\uFEFF";
+        let blob = new Blob([exportContent + str], {
+            type: "text/plain;charset=utf-8"
+        });
+        //根据数据生成生成文件
+        FileSaver.saveAs(blob, this.state.choice?"train.csv":"test.csv");
+    }
+
+    render() {
+
+        const dataSource1=this.state.dataSource1
+        const dataSource2=this.state.dataSource2
+        const columns=this.state.columns
         const showModal = () => {
            this.setState({
                isBig:true
@@ -153,7 +179,7 @@ class FederalResult extends Component {
         };
         return (
             <div className="site-card-wrapper site-layout-content">
-                <h1 className={"colorWhite"}>联邦学习</h1>
+                <h1 className={"colorWhite"}>联邦训练</h1>
 
                 <Row gutter={[0, 30]}>
                     <Col offset={8} span={12}>
@@ -212,7 +238,7 @@ class FederalResult extends Component {
                                         </Button>
                                     </Col>
                                     <Col offset={1} span={24}>
-                                        <Button style={{marginTop: '13vh'}} size="small">下载</Button>
+                                        <Button onClick={this.exportList} style={{marginTop: '13vh'}} size="small">下载</Button>
                                     </Col>
                                 </Col>
                                 <Col span={18}>
@@ -258,7 +284,10 @@ class FederalResult extends Component {
                 </Row>
                 <Row justify={'center'}>
                     <Col><Button onClick={() => {
-                        this.props.history.push('/federalTrain/choice')
+                        this.props.history.push({
+                            pathname:'/federalTrain/choice',
+                            state: {type:this.state.type,status:this.state.status}
+                        })
                     }} type="primary" htmlType="submit">下一步</Button></Col>
                 </Row>
                 <Modal width="180vh" title={this.state.choice?'train.csv':'test.csv'} visible={this.state.isBig} onOk={handleOk} onCancel={handleCancel} footer={
@@ -266,7 +295,7 @@ class FederalResult extends Component {
                 }>
                     <Table
                         scroll={{y: "50vh"}}
-                           bordered={false} dataSource={this.state.choice ? dataSource1 : dataSource2}
+                           dataSource={this.state.choice ? dataSource1 : dataSource2}
                            columns={columns}
                            pagination={false}
                     />

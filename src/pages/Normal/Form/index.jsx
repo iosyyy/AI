@@ -120,7 +120,7 @@ export default class MyForm extends Component {
                         <Col offset={11} span={12}>
                             <Button onClick={() => {
                                 this.props.history.push({
-                                    pathname: '/federalTrain/result',
+                                    pathname: '/normal/result',
                                     state: {status: this.state.type}
                                 })
                             }} type="primary" htmlType="submit">
