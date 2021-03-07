@@ -10,7 +10,7 @@ class FederalChoice extends Component {
 
 
     onFinish = (values) => {
-        this.props.history.push('/training')
+        this.props.history.push('/federalDetail')
         PubSubJS.publish('trainChoice', {...values,type:this.state.type,status:this.state.status})
     };
 
