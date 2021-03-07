@@ -50,7 +50,7 @@
     ]
   },
   "devDependencies": {
-    "@ant-design/icons": "^4.4.0",
+    "@ant-design/icons": "^4.5.0",
     "antd": "^4.11.2",
     "echarts": "^5.0.1",
     "echarts-for-react": "^2.0.16",
