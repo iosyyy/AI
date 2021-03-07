@@ -1,12 +1,13 @@
 .training-list{
     display: flex;
     flex-direction: column;
-
+    overflow: auto;
     align-items: center;
     padding:  10px 5px;
+    height: 70vh;
 }
 .training-list-item{
     margin: 5px;
     width: 80%;
-    height: 15%;
+    height: 15vh;
 }

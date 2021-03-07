@@ -1,0 +1,26 @@
+.training-details{
+    width: 70vw;
+    height: 100%;
+    flex-direction: column;
+    display: flex;
+    flex-wrap:wrap;
+    margin: auto;
+}
+.trainning-details-card1-continer{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.trainning-details-card1{
+    margin: 0;
+    width: 32%;
+    height: 30vh;
+}
+.trainning-details-card2{
+    margin-top: 2vh;
+    width: 100%;
+    flex-grow: 1;
+}
+.trainning-details-info{
+    padding-left: 2vh;
+}

@@ -9,6 +9,7 @@ import "antd/dist/antd.css";
 import FederalIndex from "./pages/FederalTrain";
 import TrainingRecord from "./pages/TrainingRecord";
 import Training from "./pages/Training";
+import TrainingDetails from './pages/Training/Detail'
 import PubSubJS from "pubsub-js";
 
 const { Header, Content, Footer } = Layout;
@@ -58,7 +59,7 @@ class App extends Component {
                             <Route path="/federal" component={Federal}/>
                             <Route path="/training" component={Training}/>
                             <Route path="/trainingRecord" component={TrainingRecord}/>
-
+                            <Route path="/trainingDetails" component={TrainingDetails}/>
 
                             <Redirect to="/federalTrain"/>
                         </Switch>
