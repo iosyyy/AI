@@ -17,7 +17,12 @@ class TrainingRecord extends Component {
                 title: <div>ID</div>,
                 dataIndex: 'id',
                 key: 'id',
-                render: (name) => <Link to="/training">{name}</Link>,
+                render: (id) => <Button onClick={()=>{
+                    this.props.history.push({
+                        pathname: '/federalDetail/show',
+                        state: {id: id}
+                    })
+                }} type="link">{id}</Button>,
                 ...this.getColumnSearchProps('id'),
 
             },

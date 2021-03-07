@@ -74,12 +74,15 @@ class federalDetailOutput extends Component {
 }
 
 function federalDetailLog() {
+    let log="[INFO][2021-03-0707:34:18,020]\n" +
+        "        [1103:140127953299264] run task[INFO] [2021-03-07 07:34:18,020][1103:140127953299264] read data[INFO][2021-03-07\n" +
+        "        07:34:18,020][1103:140127953299264] check ......[INFO][2021-03-0707:34:18,020][1103:140127953299264] save data[\n" +
+        "        INFo] [2021-03-07 07:34:18,020] [1103:140127953299264] successful\n" +
+        "        ![INFO][2021-03-0707:34:18,020][1103:140127953299264] finished"
+
     return (<div
-        style={{marginTop: "3vh", border: "1px solid", height: "55vh", overflow: "auto"}}>[INFO][2021-03-0707:34:18,020]
-        [1103:140127953299264] run task[INFO] [2021-03-07 07:34:18,020][1103:140127953299264] read data[INFO][2021-03-07
-        07:34:18,020][1103:140127953299264] check ......[INFO][2021-03-0707:34:18,020][1103:140127953299264] save data[
-        INFo] [2021-03-07 07:34:18,020] [1103:140127953299264] successful
-        ![INFO][2021-03-0707:34:18,020][1103:140127953299264] finished
+        style={{marginTop: "3vh", border: "1px solid", height: "55vh", overflow: "auto"}}>
+        {log}
     </div>)
 
 }
@@ -98,12 +101,10 @@ class FederalDetailShow extends Component {
                 <h1>Input</h1>
                 <Button onClick={() => {
                     this.setState({change: true})
-                }} type={this.state.change ? "primary" : "text"}><Link to="/federalDetail/detail/output">Text
-                    Button</Link></Button>
+                }} type={this.state.change ? "primary" : "text"}><Link to="/federalDetail/detail/output">data output</Link></Button>
                 <Button onClick={() => {
                     this.setState({change: false})
-                }} type={!this.state.change ? "primary" : "text"}><Link to="/federalDetail/detail/log">Text
-                    Button</Link></Button>
+                }} type={!this.state.change ? "primary" : "text"}><Link to="/federalDetail/detail/log">log</Link></Button>
                 <Switch>
                     <Route path="/federalDetail/detail/output" component={federalDetailOutput}/>
                     <Route path="/federalDetail/detail/log" component={federalDetailLog}/>

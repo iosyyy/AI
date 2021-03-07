@@ -5,8 +5,9 @@ import Show from "../../../components/Show";
 class FederalDetail extends Component {
     constructor(props) {
         super(props);
+        console.log()
         this.state = {
-            id: '20200314056743567',
+            id: this.props.location.state.id,
             status: 'success',
             type: 'FEDERAL DEFENCE',
             startTime: '2021-03-14  18:30:00',
@@ -66,7 +67,7 @@ class FederalDetail extends Component {
                                 backgroundColor: "rgb(240,240,240)",
                                 height: "57vh"
                             }}>
-                                <Show change={this.onChange} style={{width: "100%", height: "100%"}}/>
+                                <Show symbolSize={60} id="show" change={this.onChange} style={{width: "100%", height: "100%"}}/>
                             </div>
                         </Col>
                         <Col className="gutter-row" span={9}>
