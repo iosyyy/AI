@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./index.css";
 import { Card, Progress } from "antd";
+import PubSubJS from "pubsub-js";
 
 class Training extends Component {
   componentDidMount(){
