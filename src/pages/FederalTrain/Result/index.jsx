@@ -295,7 +295,7 @@ class FederalResult extends Component {
                 }>
                     <Table
                         scroll={{y: "50vh"}}
-                           bordered={false} dataSource={this.state.choice ? dataSource1 : dataSource2}
+                           dataSource={this.state.choice ? dataSource1 : dataSource2}
                            columns={columns}
                            pagination={false}
                     />
