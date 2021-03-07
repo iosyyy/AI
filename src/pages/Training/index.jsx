@@ -17,7 +17,7 @@ class Training extends Component {
   };
   render() {
     let trainList = this.state.trainInfo.map((item, index) => (
-      <Card className="training-list-item" key={index}>
+      <Card hoverable className="training-list-item" key={index}>
         <h1 style={{ margin: 0 }}>{item.id}</h1>
         <div style={{marginTop:'10px'}}>
           进度
