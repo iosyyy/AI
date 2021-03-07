@@ -28,32 +28,36 @@ function App() {
             <Menu.Item key="3">
               <NavLink to="/federal">联邦攻击</NavLink>
             </Menu.Item>
-            <Menu.Item style={{float:'right'}} key="4">
+            <Menu.Item style={{ float: "right" }} key="4">
               <NavLink to="/trainingRecord">训练记录</NavLink>
             </Menu.Item>
-            <Menu.Item style={{float:'right'}} key="5">
+            <Menu.Item style={{ float: "right" }} key="5">
               <NavLink to="/training">正在训练</NavLink>
             </Menu.Item>
           </Menu>
         </Header>
         <Content style={{ padding: "50px 50px" }}>
+          <Switch>
+            <Route path="/federalTrain" component={FederalIndex} />
+            <Route path="/normal" component={Normal} />
+            <Route path="/federal" component={Federal} />
+            <Route path="/training" component={Training} />
+            <Route path="/trainingRecord" component={TrainingRecord} />
 
-            <Switch>
-              <Route path="/federalTrain" component={FederalIndex} />
-              <Route path="/normal" component={Normal} />
-              <Route path="/federal" component={Federal} />
-              <Route path="/training" component={Training} />
-              <Route path="/trainingRecord" component={TrainingRecord} />
-
-
-              <Redirect to="/federalTrain" />
-            </Switch>
+            <Redirect to="/federalTrain" />
+          </Switch>
         </Content>
-        <Footer style={{ textAlign: "center" }}>
-          AI Demo ©2021 Created by Hrbust Science and Technology University
-        </Footer>
       </Layout>
-      ,
+      <div
+        style={{
+          width: "100%",
+          textAlign: "center",
+          position: "fixed",
+          bottom: 0,
+        }}
+      >
+        <p>AI Demo ©2021 Created by Hrbust Science and Technology University</p>
+      </div>
     </div>
   );
 }

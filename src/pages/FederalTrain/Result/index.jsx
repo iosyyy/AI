@@ -217,7 +217,7 @@ class FederalResult extends Component {
                                 </Col>
                                 <Col span={18}>
                                     <div style={{marginTop: '2vh', marginBottom: '15px'}}>
-                                        > {this.state.choice ? "train.csv" : "test.csv"}
+                                    {this.state.choice ? "train.csv" : "test.csv"}
                                         {this.state.isViewing ? <div style={{float: 'right', marginRight: '4vh'}}>
                                             <Button onClick={this.onEnlarge} type="text" size="small">
                                                 <Image preview={false}
