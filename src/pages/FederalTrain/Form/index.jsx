@@ -103,27 +103,7 @@ class FederalTrain extends Component {
                 >
                   适用于参与者数据ID特征重叠较多的情形
                 </div>
-              </Card>
-            </Col>
-          </Row>
-          <Row gutter={48}>
-            <Col offset={11} span={12}>
-              <Button
-                onClick={() => {
-                  this.props.history.push({
-                    pathname: "/federalTrain/result",
-                    state: { status: this.state.type },
-                  });
-                }}
-                type="primary"
-                htmlType="submit"
-              >
-                下一步
-              </Button>
-            </Col>
-          </Row>
-        </div>
-      </div>
+            </div>
     );
   }
 }
