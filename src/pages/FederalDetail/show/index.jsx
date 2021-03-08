@@ -28,7 +28,7 @@ class FederalDetail extends Component {
     render() {
         return (
             <div className="site-layout-content" style={{height: "75vh", width: "100%"}}>
-                <div style={{display: "inline-block", width: "40vh", height: "75vh"}}>
+                <div style={{display: "inline-block", width: "20%", height: "75vh"}}>
                     <div style={{marginRight: "1vh", paddingBottom: "2vh", borderBottom: "1px solid"}}>
                         <h1>Task Summary</h1>
                         <div style={{marginTop: "4vh"}}>task ID:</div>
@@ -56,7 +56,7 @@ class FederalDetail extends Component {
                         </div>
                     </div>
                 </div>
-                <div style={{borderLeft: "1px solid", height: "70vh", width: "147vh", float: "right"}}>
+                <div style={{borderLeft: "1px solid", height: "70vh", width: "80%", float: "right"}}>
                     <Row gutter={16}>
                         <Col className="gutter-row" span={15}>
                             <h1 style={{marginLeft: "3vh"}}>Outputs From Task</h1>
