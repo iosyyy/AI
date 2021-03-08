@@ -27,7 +27,7 @@ export default class MyForm extends Component {
 
         return (
             <div>
-                <h1 className={"colorWhite"}>联邦防御</h1>
+                <h1 className={"colorWhite"}>联邦攻防</h1>
                 <div className="site-card-wrapper">
                     <Row gutter={[0, 30]}>
                         <Col offset={8} span={12}>

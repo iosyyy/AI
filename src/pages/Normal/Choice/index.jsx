@@ -27,7 +27,7 @@ class Choice extends Component {
         };
         return (
             <div className="site-layout-content">
-                <h1 className={"colorWhite"}>联邦防御</h1>
+                <h1 className={"colorWhite"}>联邦攻防</h1>
                 <div style={{textAlign:'center',marginBottom:'5vh',marginTop:'3vh'}} >模型参数选择</div>
                 <Form
                     layout="horizontal"

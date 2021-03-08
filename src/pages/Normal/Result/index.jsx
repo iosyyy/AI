@@ -182,7 +182,7 @@ export default class Result extends Component {
         };
         return (
             <div className="site-card-wrapper site-layout-content">
-                <h1 className={"colorWhite"}>联邦防御</h1>
+                <h1 className={"colorWhite"}>联邦攻防</h1>
 
                 <Row gutter={[0, 30]}>
                     <Col offset={8} span={12}>
