@@ -17,7 +17,13 @@ class TrainingRecord extends Component {
                 title: <div>ID</div>,
                 dataIndex: 'id',
                 key: 'id',
-                render: (name) => <Link to="/training">{name}</Link>,
+                render: (id) => <Button onClick={()=>{
+                    console.log(123)
+                    this.props.history.push({
+                        pathname: '/federalDetail/show',
+                        state: {id: id}
+                    })
+                }} type="link">{id}</Button>,
                 ...this.getColumnSearchProps('id'),
 
             },
@@ -144,14 +150,24 @@ class TrainingRecord extends Component {
         filterIcon: filtered => <SearchOutlined style={{color: filtered ? '#1890ff' : undefined}}/>,
         render: text =>
             this.state.searchedColumn === dataIndex ? (
-                <Link to="/training"><Highlighter
+                <Button type="link" onClick={()=>{
+                    this.props.history.push({
+                        pathname: '/federalDetail/show',
+                        state: {id: text}
+                    })
+                }}><Highlighter
                     highlightStyle={{backgroundColor: '#faf8ed', padding: 0}}
                     searchWords={[this.state.searchText]}
                     autoEscape
                     textToHighlight={text ? text.toString() : ''}
-                /></Link>
+                /></Button>
             ) : (
-                <Link to="/training">{text}</Link>
+                <Button type="link" onClick={()=>{
+                    this.props.history.push({
+                        pathname: '/federalDetail/show',
+                        state: {id: text}
+                    })
+                }}>{text}</Button>
             ),
     });
 
