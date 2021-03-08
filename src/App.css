@@ -8,9 +8,19 @@
   width: 120px;
   height: 31px;
   margin: 16px 24px 16px 0;
-  background:linear-gradient(#243949,#517fa4);
-
+  padding: 0;
 }
+.logo{
+  -webkit-background-clip:text;
+  color: transparent;
+  width: 150px;
+  font-weight: bolder;
+  border-radius:25px;
+
+  text-align: center;
+  background-image:-webkit-linear-gradient(45deg, #00a0e9, #10d39d, #00a0e9, #10d39d) ;
+}
+
 .ant-row-rtl #components-layout-demo-top .logo {
   float: right;
   margin: 16px 0 16px 24px;
