@@ -102,7 +102,7 @@ export default class Show extends Component {
         myChart = echarts.init(document.getElementById(this.state.id))
         myChart.on('click', function (handler, context) {
             let arr = [...that.state.colors]
-            arr[handler.dataIndex] = "rgb(56,217,148)"
+            arr[handler.dataIndex] = "rgb(128,244,61)"
             that.setState({
                 colorType: [...arr]
             })
