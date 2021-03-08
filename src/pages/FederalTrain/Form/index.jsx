@@ -103,7 +103,11 @@ class FederalTrain extends Component {
                 >
                   适用于参与者数据ID特征重叠较多的情形
                 </div>
-            </div>
+              </Card>
+            </Col>
+          </Row>
+        </div>
+      </div>
     );
   }
 }

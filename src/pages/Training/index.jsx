@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import "./index.css";
 import PubSubJS from "pubsub-js";
 import { Card, Progress } from "antd";
-import PubSubJS from "pubsub-js";
 
 class Training extends Component {
   componentDidMount() {
@@ -14,16 +13,16 @@ class Training extends Component {
     trainInfo: [
       { id: "1234567891111", percent: 100 },
       { id: "5432167891111", percent: 45 },
+      { id: "1234567891111", percent: 60 },
+      { id: "5432167891111", percent: 11 },
+      { id: "1234567891111", percent: 43 },
+      { id: "5432167891111", percent: 72 },
+      { id: "1234567891111", percent: 65 },
+      { id: "5432167891111", percent: 97 },
+      { id: "1234567891111", percent: 34 },
+      { id: "5432167891111", percent: 77 },
       { id: "1234567891111", percent: 100 },
-      { id: "5432167891111", percent: 45 },
-      { id: "1234567891111", percent: 100 },
-      { id: "5432167891111", percent: 45 },
-      { id: "1234567891111", percent: 100 },
-      { id: "5432167891111", percent: 45 },
-      { id: "1234567891111", percent: 100 },
-      { id: "5432167891111", percent: 45 },
-      { id: "1234567891111", percent: 100 },
-      { id: "5432167891111", percent: 45 },
+      { id: "5432167891111", percent: 49 },
     ],
   };
   render() {
