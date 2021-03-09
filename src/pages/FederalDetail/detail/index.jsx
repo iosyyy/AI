@@ -240,7 +240,8 @@ class Evaluation extends Component {
                 data: [[0,0.24], [0.01,0.45], [0.02,0.76], [0.04,0.79], [0.05,0.8], [0.07,0.9],[0.1,0.95],[0.13,1],[1,1]],
                 type: 'line',
                 areaStyle: {},
-                smooth: true
+                smooth: true,
+                symbol: 'none',  //取消折点圆圈
 
             }]
         };
@@ -394,7 +395,6 @@ class Compare extends Component {
                 data: [0.95, 0.955, 0.96, 0.964, 0.966, 0.971],
                 type: 'line',
                 lineStyle: {
-                    color: 'rgb(221,205,205)',
                     width: 5
 
                 }
@@ -403,7 +403,6 @@ class Compare extends Component {
                 data: [0.52, 0.55, 0.6, 0.64, 0.66, 0.98],
                 type: 'line',
                 lineStyle: {
-                    color: 'red',
                     width: 5
                 }
             }]
@@ -429,7 +428,6 @@ class Compare extends Component {
                 data: [-0.15, 0.955, 0.96, 0.964, 0.966, 0.971],
                 type: 'line',
                 lineStyle: {
-                    color: 'rgb(128,244,61)',
                     width: 5
                 }
             }, {
@@ -437,7 +435,6 @@ class Compare extends Component {
                 data: [0.52, 0.55, 0.6, 0.64, 0.66, 0.98],
                 type: 'line',
                 lineStyle: {
-                    color: 'red',
                     width: 5
                 }
             }]
