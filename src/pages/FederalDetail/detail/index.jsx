@@ -153,6 +153,7 @@ function federalDetailLog() {
 
 }
 
+let myChart3
 
 class Evaluation extends Component {
     constructor(props) {
@@ -212,12 +213,118 @@ class Evaluation extends Component {
         this.state = {
             columns,
             dataSource,
-            current:'ROC'
+            current:'0'
         }
     }
 
+    drew(){
+        let options=[]
+        let option1 = {
+            xAxis: {
+                name:'tpr',
+                type: 'value',
+                boundaryGap: false,
+                show:true,
+                min:0, // 设置y轴刻度的最小值
+                max:1,  // 设置y轴刻度的最大值
+                splitNumber:5,  // 设置y轴刻度间隔个数
+            },
+            yAxis: {
+                name:'tpr',
+                type: 'value',
+                min:0, // 设置y轴刻度的最小值
+                max:1,  // 设置y轴刻度的最大值
+                splitNumber:5,  // 设置y轴刻度间隔个数
+            },
+            series: [{
+                data: [[0,0.24], [0.01,0.45], [0.02,0.76], [0.04,0.79], [0.05,0.8], [0.07,0.9],[0.1,0.95],[0.13,1],[1,1]],
+                type: 'line',
+                areaStyle: {},
+                smooth: true
+
+            }]
+        };
+        let option2 = {
+            xAxis: {
+                name:'tpr',
+                type: 'value',
+                boundaryGap: false,
+                show:true,
+                min:0, // 设置y轴刻度的最小值
+                max:1,  // 设置y轴刻度的最大值
+                splitNumber:5,  // 设置y轴刻度间隔个数
+            },
+            yAxis: {
+                name:'tpr',
+                type: 'value',
+                min:0, // 设置y轴刻度的最小值
+                max:1,  // 设置y轴刻度的最大值
+                splitNumber:5,  // 设置y轴刻度间隔个数
+            },
+            series: [{
+                data: [[0,0.24], [0.01,0.45], [0.02,0.76], [0.04,0.79], [0.05,0.8], [0.07,0.9],[0.1,0.95],[0.13,1],[1,1]],
+                type: 'line',
+
+                symbol: 'none',  //取消折点圆圈
+
+                smooth: true
+            },{
+                data: [[0,0.38], [0.2,0.53], [0.4,0.7], [0.6,0.91], [0.62,0.87], [0.64,0.95],[0.66,0.84],[0.68,0.91],[1,0.62]],
+                type: 'line',
+
+                symbol: 'none',  //取消折点圆圈
+
+                smooth: true
+            }]
+        };
+        let option3 = {
+            xAxis: {
+                name:'tpr',
+                type: 'value',
+                boundaryGap: false,
+                show:true,
+                min:0, // 设置y轴刻度的最小值
+                max:1,  // 设置y轴刻度的最大值
+                splitNumber:5,  // 设置y轴刻度间隔个数
+            },
+            yAxis: {
+                name:'tpr',
+                type: 'value',
+                min:0, // 设置y轴刻度的最小值
+                max:1,  // 设置y轴刻度的最大值
+                splitNumber:5,  // 设置y轴刻度间隔个数
+            },
+            series: [{
+                data: [[0,0.38], [0.2,0.53], [0.4,0.7], [0.6,0.91], [0.62,0.87], [0.64,0.95],[0.66,0.84],[0.68,0.91],[1,0.62]],
+                type: 'line',
+
+                symbol: 'none',  //取消折点圆圈
+
+                smooth: true
+            }]
+        };
+        options.push(option1)
+        options.push(option2)
+        options.push(option3)
+        myChart3.setOption({
+            ...options[parseInt(this.state.current)]
+        }, 200)
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        this.drew()
+
+    }
+
+
+    componentDidMount() {
+        myChart3=echarts.init(document.getElementById("evaluation"))
+        this.drew()
+    }
+
+
     handleClick = e => {
-        console.log('click ', e);
+        console.log( e.key)
         this.setState({ current: e.key });
     };
     render() {
@@ -226,22 +333,28 @@ class Evaluation extends Component {
             <div>
                 <div style={{marginTop: "20px", marginLeft: "10px"}}>
                     <h2 style={{marginBottom: "20px"}}>Evaluation scores</h2>
+                    <div >
                     <Table
                         bordered={true} dataSource={this.state.dataSource}
                         columns={this.state.columns}
                         pagination={false}
+                        size="small"
                     />
+                    </div>
                     <Menu onClick={this.handleClick} selectedKeys={[current]} mode="horizontal">
-                        <Menu.Item key="ROC">
+                        <Menu.Item key="0">
                             ROC
                         </Menu.Item>
-                        <Menu.Item key="KS">
+                        <Menu.Item key="1">
                             K-S
                         </Menu.Item>
-                        <Menu.Item key="Accuracy">
+                        <Menu.Item key="2">
                             Accuracy
                         </Menu.Item>
                     </Menu>
+                    <div style={{padding:0,width:"100%"}}>
+                        <div style={{width:"100%",height:"38vh"}} id='evaluation'/>
+                    </div>
                 </div>
             </div>
         );
@@ -369,6 +482,9 @@ class FederalDetailShow extends Component {
             names = ["model output", "data output", "log"]
         } else if (name == "Attack Test") {
             names = ["Evaluation", "compare", "log"]
+        }else{
+            names = ["Evaluation", "compare", "log"]
+
         }
         this.state = {change: 0, name, names}
     }
