@@ -52,7 +52,7 @@ class App extends Component {
                                 <NavLink to="/federalTrain">联邦训练</NavLink>
                             </Menu.Item>
                             <Menu.Item key="2">
-                                <NavLink to="/normal">联邦防御</NavLink>
+                                <NavLink to="/normal">联邦攻防</NavLink>
                             </Menu.Item>
                             <Menu.Item key="3">
                                 <NavLink to="/federal">联邦攻击</NavLink>
