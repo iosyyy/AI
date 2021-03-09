@@ -13,12 +13,14 @@ let myChart
 export default class Show extends Component {
     constructor(props) {
         super(props);
+        console.log(this.props)
         this.state = {
             colors: ['#386db3', '#386db3', '#386db3'],
             colorType: ['#386db3', '#386db3', '#386db3'],
             style: this.props.style,
             id:this.props.id,
-            symbolSize:this.props.symbolSize
+            symbolSize:this.props.symbolSize,
+            names:this.props.names
         }
 
     }
@@ -56,18 +58,18 @@ export default class Show extends Component {
                     },
                     data: [
                         {
-                            name: 'Input',
+                            name: this.state.names[0],
                             x: 620,
                             y: 0,
                             colors: this.state.colorType[0],
                         }, {
-                            name: 'CNN',
+                            name: this.state.names[1],
                             x: 650,
                             y: 30,
                             colors: this.state.colorType[1],
 
                         }, {
-                            name: 'Evaluation',
+                            name: this.state.names[2],
                             x: 600,
                             y: 60,
                             colors: this.state.colorType[2],//折线点的颜色

@@ -1,6 +1,57 @@
 import React, {Component} from 'react';
-import {Button, Table} from 'antd';
+import {Menu, Button, Table} from 'antd';
 import {Link, Redirect, Route, Switch} from "react-router-dom";
+import './change.css'
+class federalModelOutput extends Component {
+    constructor(props) {
+        super(props);
+        const columns = [
+            {
+                title: <div>index</div>,
+                dataIndex: 'index',
+                key: 'index',
+                align: "center"
+
+            },
+            {
+                title: <div>variable</div>,
+                dataIndex: 'variable',
+                key: 'variable',
+                align: "center"
+
+            },
+            {
+                title: <div>weight</div>,
+                dataIndex: 'weight',
+                key: 'weight',
+                align: "center"
+            }
+        ];
+        let dataSource = []
+        for (let i = 0; i < 3; i++) {
+            dataSource.push({
+                index: i,
+                variable: 'x' + i,
+                weight: 0.0693
+            })
+        }
+        this.state = {
+            columns,
+            dataSource
+        }
+    }
+
+    render() {
+        return (
+            <div style={{marginTop: "3vh", height: "55vh", overflow: "auto"}}><Table
+                scroll={{y: "55vh"}}
+                bordered={true} dataSource={this.state.dataSource}
+                columns={this.state.columns}
+                pagination={false}
+            /></div>
+        );
+    }
+}
 
 class federalDetailOutput extends Component {
 
@@ -11,36 +62,50 @@ class federalDetailOutput extends Component {
                 title: <div>index</div>,
                 dataIndex: 'index',
                 key: 'index',
+                align:'center',
+
             },
             {
                 title: <div>id</div>,
                 dataIndex: 'id',
                 key: 'id',
+                align:'center',
+
             },
             {
                 title: <div>y</div>,
                 dataIndex: 'y',
                 key: 'y',
+                align:'center',
+
             },
             {
                 title: <div>x0</div>,
                 dataIndex: 'x0',
                 key: 'x0',
+                align:'center',
+
             },
             {
                 title: <div>x1</div>,
                 dataIndex: 'x1',
                 key: 'x1',
+                align:'center',
+
             },
             {
                 title: <div>x2</div>,
                 dataIndex: 'x2',
                 key: 'x2',
+                align:'center',
+
             },
             {
                 title: <div>x0</div>,
                 dataIndex: 'x3',
                 key: 'x3',
+                align:'center',
+
             }
         ];
         let dataSource = []
@@ -82,36 +147,253 @@ function federalDetailLog() {
     return (<div
         style={{marginTop: "3vh", border: "1px solid", height: "55vh", overflow: "auto"}}>
         {logArr.map(value => {
-            return <div style={{marginLeft:"1vh",marginTop:"0.2vh"}}>{value}</div>
+            return <div style={{marginLeft: "1vh", marginTop: "0.2vh"}}>{value}</div>
         })}
     </div>)
 
 }
 
 
+class Evaluation extends Component {
+    constructor(props) {
+        super(props);
+        const columns = [
+            {
+                title: <div style={{background: "rgb(173,211,244)"}}/>,
+                dataIndex: 'index',
+                key: 'index',
+                align:'center',
+
+            },
+            {
+                title: <div style={{background: "rgb(173,211,244)"}}>dataset</div>,
+                dataIndex: 'dataset',
+                key: 'dataset',
+                align:'center',
+
+            },
+            {
+                title: <div style={{background: "rgb(173,211,244)"}}>acc</div>,
+                dataIndex: 'acc',
+                key: 'acc',
+                align:'center'
+
+            },
+            {
+                title: <div style={{background: "rgb(173,211,244)"}}>ks</div>,
+                dataIndex: 'ks',
+                key: 'ks',
+                align:'center'
+            },
+            {
+                title: <div style={{background: "rgb(173,211,244)"}}>precision</div>,
+                dataIndex: 'precision',
+                key: 'precision',
+                align:'center'
+
+            },
+            {
+                title: <div style={{background: "rgb(173,211,244)"}}>recall</div>,
+                dataIndex: 'recall',
+                key: 'recall',
+                align:'center',
+            }
+        ];
+        let dataSource = []
+        dataSource.push({
+            index: 0,
+            dataset: 'train',
+            acc: 0.936090,
+            precision: 1,
+            recall: 0,
+            ks:0.936090,
+
+        })
+        this.state = {
+            columns,
+            dataSource,
+            current:'ROC'
+        }
+    }
+
+    handleClick = e => {
+        console.log('click ', e);
+        this.setState({ current: e.key });
+    };
+    render() {
+        const current=this.state.current
+        return (
+            <div>
+                <div style={{marginTop: "20px", marginLeft: "10px"}}>
+                    <h2 style={{marginBottom: "20px"}}>Evaluation scores</h2>
+                    <Table
+                        bordered={true} dataSource={this.state.dataSource}
+                        columns={this.state.columns}
+                        pagination={false}
+                    />
+                    <Menu onClick={this.handleClick} selectedKeys={[current]} mode="horizontal">
+                        <Menu.Item key="ROC">
+                            ROC
+                        </Menu.Item>
+                        <Menu.Item key="KS">
+                            K-S
+                        </Menu.Item>
+                        <Menu.Item key="Accuracy">
+                            Accuracy
+                        </Menu.Item>
+                    </Menu>
+                </div>
+            </div>
+        );
+    }
+}
+
+let echarts = require('echarts');
+
+let myChart1
+let myChart2
+
+class Compare extends Component {
+    constructor(props) {
+        super(props);
+
+    }
+
+    drew() {
+        let options = {
+            title: {
+                text: 'acc',
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: [2, 4, 6, 8, 10, '最终测试']
+            },
+            yAxis: {
+                type: 'value',
+                max: 1,  // 设置y轴刻度的最大值
+            },
+            legend: {
+                data: ['联邦攻防', '加入攻击的联邦攻防']
+            },
+            series: [{
+                name: "联邦攻防",
+                data: [0.95, 0.955, 0.96, 0.964, 0.966, 0.971],
+                type: 'line',
+                lineStyle: {
+                    color: 'rgb(221,205,205)',
+                    width: 5
+
+                }
+            }, {
+                name: "加入攻击的联邦攻防",
+                data: [0.52, 0.55, 0.6, 0.64, 0.66, 0.98],
+                type: 'line',
+                lineStyle: {
+                    color: 'red',
+                    width: 5
+                }
+            }]
+        }
+        let optionsFail = {
+            title: {
+                text: 'fail',
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: [2, 4, 6, 8, 10, '最终测试']
+            },
+            yAxis: {
+                type: 'value',
+                max: 1,  // 设置y轴刻度的最大值
+            },
+            legend: {
+                data: ['联邦攻防', '加入攻击的联邦攻防']
+            },
+            series: [{
+                name: "联邦攻防",
+                data: [-0.15, 0.955, 0.96, 0.964, 0.966, 0.971],
+                type: 'line',
+                lineStyle: {
+                    color: 'rgb(128,244,61)',
+                    width: 5
+                }
+            }, {
+                name: "加入攻击的联邦攻防",
+                data: [0.52, 0.55, 0.6, 0.64, 0.66, 0.98],
+                type: 'line',
+                lineStyle: {
+                    color: 'red',
+                    width: 5
+                }
+            }]
+        }
+        myChart1.setOption({
+            ...options
+        }, 200)
+        myChart2.setOption({
+            ...optionsFail
+        }, 200)
+    }
+
+    componentDidMount() {
+        myChart1 = echarts.init(document.getElementById("acc"))
+        myChart2 = echarts.init(document.getElementById("fail"))
+
+        this.drew()
+    }
+
+    render() {
+        return (
+            <div style={{border: "1px solid", display: "flex", justifyContent: "space-between"}}>
+                <div style={{display: "inline-block", marginTop: "5px", width: "45%"}}>
+                    <div id="acc" style={{width: "100%", height: "60vh"}}/>
+                </div>
+                <div style={{display: "inline-block", marginTop: "5px", width: "45%"}}>
+                    <div id="fail" style={{width: "100%", height: "60vh"}}/>
+                </div>
+            </div>
+        );
+    }
+}
+
 class FederalDetailShow extends Component {
     constructor(props) {
         super(props);
-        this.state = {change: true}
+        let names = []
+        let name = this.props.location.state.name
+        if (name == "Input") {
+            names = ["data output", "log"]
+        } else if (name == "HeteroLR") {
+            names = ["model output", "data output", "log"]
+        } else if (name == "Attack Test") {
+            names = ["Evaluation", "compare", "log"]
+        }
+        this.state = {change: 0, name, names}
     }
 
 
     render() {
+        let xr = this.state.names.map((values, index) => {
+            return (<Button onClick={() => {
+                this.setState({change: index})
+            }} type={index == this.state.change ? "primary" : "text"}><Link to={"/federalDetail/detail/" + values}>
+                {values}</Link></Button>)
+        })
         return (
             <div className="site-layout-content">
-                <h1>Input</h1>
-                <Button onClick={() => {
-                    this.setState({change: true})
-                }} type={this.state.change ? "primary" : "text"}><Link to="/federalDetail/detail/output">data
-                    output</Link></Button>
-                <Button onClick={() => {
-                    this.setState({change: false})
-                }} type={!this.state.change ? "primary" : "text"}><Link
-                    to="/federalDetail/detail/log">log</Link></Button>
+                <h1>{this.state.name}</h1>
+                {xr}
                 <Switch>
-                    <Route path="/federalDetail/detail/output" component={federalDetailOutput}/>
+                    <Route path="/federalDetail/detail/data output" component={federalDetailOutput}/>
                     <Route path="/federalDetail/detail/log" component={federalDetailLog}/>
-                    <Redirect to="/federalDetail/detail/output"/>
+                    <Route path="/federalDetail/detail/model output" component={federalModelOutput}/>
+                    <Route path="/federalDetail/detail/Evaluation" component={Evaluation}/>
+                    <Route path="/federalDetail/detail/compare" component={Compare}/>
+
+
+                    <Redirect to={"/federalDetail/detail/" + this.state.names[0]}/>
                 </Switch>
             </div>
         );

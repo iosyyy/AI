@@ -13,7 +13,8 @@ class FederalDetail extends Component {
             startTime: '2021-03-14  18:30:00',
             endTime: '2021-03-14  18:30:50',
             duration: '00:00:50',
-            dataIndex:-1
+            dataIndex:-1,
+            names:["Input","HeteroLR","Attack Test"]
         }
 
     }
@@ -67,7 +68,7 @@ class FederalDetail extends Component {
                                 backgroundColor: "rgb(240,240,240)",
                                 height: "57vh"
                             }}>
-                                <Show symbolSize={60} id="show" change={this.onChange} style={{width: "100%", height: "100%"}}/>
+                                <Show names={this.state.names} symbolSize={60} id="show" change={this.onChange} style={{width: "100%", height: "100%"}}/>
                             </div>
                         </Col>
                         <Col className="gutter-row" span={9}>
@@ -85,7 +86,7 @@ class FederalDetail extends Component {
                                 {
                                     this.props.history.push({
                                         pathname: '/federalDetail/detail',
-                                        state: {status: this.state.dataIndex}
+                                        state: {name: this.state.names[this.state.dataIndex]}
                                     })
                                 }
 

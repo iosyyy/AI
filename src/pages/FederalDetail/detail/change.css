@@ -1,0 +1,4 @@
+.ant-table-thead > tr >th{
+    color: white;
+    background: rgb(173,211,244) !important;
+}

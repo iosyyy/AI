@@ -10,7 +10,7 @@ const {TextArea} = Input;
 
 export default class index extends Component {
     state = {
-        id:this.props.location.state.id,
+        id: this.props.location.state.id,
         info: {
             dataset: "train.csv",
             epoch: 5,
@@ -47,8 +47,10 @@ export default class index extends Component {
             algorithmDebug: true,
             scheduleError: false,
             scheduleInfo: true,
-            isBig:false
-        },
+            isBig: false,
+
+        }, names: ["Input", "HeteroLR", "Attack Test"]
+
     };
     readNew1 = (key) => {
         let newData;
@@ -92,13 +94,13 @@ export default class index extends Component {
     render() {
         const handleOk = () => {
             this.setState({
-                isBig:false
+                isBig: false
             })
         };
 
         const handleCancel = () => {
             this.setState({
-                isBig:false
+                isBig: false
             })
         };
         return (
@@ -124,7 +126,7 @@ export default class index extends Component {
                             status={this.state.percent === 100 ? "success" : "active"}
                         />
                         <h6>duration:00:00:56</h6>
-                        <Button onClick={()=>{
+                        <Button onClick={() => {
                             console.log(this.state.id)
                             this.props.history.push({
                                 pathname: '/federalDetail/show',
@@ -144,7 +146,7 @@ export default class index extends Component {
                                     <Image preview={false}
                                            onClick={() => {
                                                console.log(123)
-                                               this.setState({isBig:true})
+                                               this.setState({isBig: true})
                                            }}
                                            src={bigImg} style={{
                                         width: 20,
@@ -155,7 +157,7 @@ export default class index extends Component {
                             </div>
                         </div>
 
-                        <Show symbolSize={32} id="show" change={(index) => {
+                        <Show names={this.state.names} symbolSize={32} id="show" change={(index) => {
                             this.setState()
                         }} style={{width: "100%", height: "22vh"}}/>
                     </Card>
@@ -297,10 +299,11 @@ export default class index extends Component {
                         </TabPane>
                     </Tabs>
                 </Card>
-                <Modal width="180vh" title={'Graph'} visible={this.state.isBig} onOk={handleOk} onCancel={handleCancel} footer={
-                    [] // 设置footer为空，去掉 取消 确定默认按钮
-                }>
-                    <Show symbolSize={60} id="show2" change={(index) => {
+                <Modal width="180vh" title={'Graph'} visible={this.state.isBig} onOk={handleOk} onCancel={handleCancel}
+                       footer={
+                           [] // 设置footer为空，去掉 取消 确定默认按钮
+                       }>
+                    <Show names={this.state.names} symbolSize={60} id="show2" change={(index) => {
                         this.setState()
                     }} style={{width: "100%", height: "60vh"}}/>
                 </Modal>
