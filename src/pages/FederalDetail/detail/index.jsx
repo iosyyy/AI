@@ -139,15 +139,20 @@ class federalDetailOutput extends Component {
 }
 
 function federalDetailLog() {
-    let logArr = ["[INFO][2021-03-0707:34:18,020][1103:140127953299264] run task"
-        , "[INFO] [2021-03-07 07:34:18,020][1103:140127953299264] read data", "[INFO][2021-03-0707:34:18,020][1103:140127953299264] check ......",
-        "[INFO][2021-03-0707:34:18,020][1103:140127953299264] save data", "[INFO] [2021-03-07 07:34:18,020] [1103:140127953299264] successful",
-        "[INFO][2021-03-0707:34:18,020][1103:140127953299264] finished"]
+    let logArr = ["[INFO][2021-03-07 07:34:18,020][1103:140127953299264] run task"
+        , "[INFO][2021-03-07 07:34:18,020][1103:140127953299264] read data", "[INFO][2021-03-07 07:34:18,020][1103:140127953299264] check ......",
+        "[INFO][2021-03-07 07:34:18,020][1103:140127953299264] save data", "[INFO][2021-03-07 07:34:18,020][1103:140127953299264] successful",
+        "[INFO][2021-03-07 07:34:18,020][1103:140127953299264] finished"]
 
     return (<div
         style={{marginTop: "3vh", border: "1px solid", height: "55vh", overflow: "auto"}}>
-        {logArr.map(value => {
-            return <div style={{marginLeft: "1vh", marginTop: "0.2vh"}}>{value}</div>
+        {logArr.map((value,index) => {
+            if(index!=4)
+            {
+                return <div style={{color:"rgb(121,121,122)",marginLeft: "1vh", marginTop: "0.2vh"}}>{value}</div>
+            }else{
+                return <div style={{color:"rgb(51,199,111)",marginLeft: "1vh", marginTop: "0.2vh"}}>{value}</div>
+            }
         })}
     </div>)
 
@@ -468,6 +473,8 @@ class Compare extends Component {
     }
 }
 
+
+
 class FederalDetailShow extends Component {
     constructor(props) {
         super(props);
@@ -479,8 +486,8 @@ class FederalDetailShow extends Component {
             names = ["model output", "data output", "log"]
         } else if (name == "Attack Test") {
             names = ["Evaluation", "compare", "log"]
-        }else{
-            names = ["Evaluation", "compare", "log"]
+        }else if(name == "Evaluation"){
+            names = ["metrics", "log"]
 
         }
         this.state = {change: 0, name, names}
@@ -504,6 +511,7 @@ class FederalDetailShow extends Component {
                     <Route path="/federalDetail/detail/model output" component={federalModelOutput}/>
                     <Route path="/federalDetail/detail/Evaluation" component={Evaluation}/>
                     <Route path="/federalDetail/detail/compare" component={Compare}/>
+                    <Route path="/federalDetail/detail/metrics" component={Evaluation}/>
 
 
                     <Redirect to={"/federalDetail/detail/" + this.state.names[0]}/>

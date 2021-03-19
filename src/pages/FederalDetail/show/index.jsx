@@ -14,7 +14,7 @@ class FederalDetail extends Component {
             endTime: '2021-03-14  18:30:50',
             duration: '00:00:50',
             dataIndex:-1,
-            names:["Input","HeteroLR","Attack Test"]
+            names:["Input","HeteroLR","Evaluation"]
         }
 
     }

@@ -49,7 +49,7 @@ export default class index extends Component {
             scheduleInfo: true,
             isBig: false,
 
-        }, names: ["Input", "HeteroLR", "Attack Test"]
+        }, names: ["Input", "HeteroLR", "Evaluation"]
 
     };
     readNew1 = (key) => {
