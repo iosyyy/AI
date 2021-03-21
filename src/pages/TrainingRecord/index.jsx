@@ -6,7 +6,6 @@ import {SearchOutlined} from '@ant-design/icons';
 import { Radio } from 'antd';
 
 
-//TODO 训练详情界面没有代码实现
 class TrainingRecord extends Component {
 
 

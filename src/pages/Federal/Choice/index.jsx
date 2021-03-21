@@ -63,6 +63,16 @@ class FederalChoice extends Component {
                         <InputNumber/>
                     </Form.Item>
 
+                    <Tooltip  placement="top" title="选择不同的攻击类型" color="black" arrowPointAtCenter={true}>
+                        <Form.Item name="attackType" label="攻击类型：" initialValue="type1">
+                            <Select>
+                                <Select.Option value="type1">朴素free rider攻击</Select.Option>
+                                <Select.Option value="type2">差分扰动free rider攻击(线性)</Select.Option>
+                                <Select.Option value="type3">差分扰动free rider攻击(指数)</Select.Option>
+                            </Select>
+                        </Form.Item>
+                    </Tooltip>
+
                     <Form.Item name="lr" label="学习率：" initialValue={0.01}>
                         <InputNumber min={0} max={1} step={0.01}/>
                     </Form.Item>
