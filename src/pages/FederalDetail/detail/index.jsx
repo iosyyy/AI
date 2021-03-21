@@ -1,7 +1,43 @@
 import React, {Component} from 'react';
-import {Menu, Button, Table} from 'antd';
 import {Link, Redirect, Route, Switch} from "react-router-dom";
+import {Button, Card, Image, Input, Modal, Progress, Tabs,Menu,Table} from "antd";
+import ShowEnergy from '../../../components/ShowEnergy';
+import Show from '../../../components/Show';
 import './change.css'
+let {TextArea} = Input;
+class Defence extends Component {
+    state = {
+        option : {
+            xAxis: {
+                type: 'category',
+                data: ['c3', 'c5', 'c8', 'c2', 'c1', 'c10', 'c8']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: [120, 200, 150, 80, 70, 110, 130],
+                type: 'bar'
+            }]
+        },
+        msg:"客户端01:\n检测结果:free_rider_detective[1]:not free rider\n-----------------------------"
+    }
+    render() {
+        return (
+            <div>
+                <h1>Server Defence Detective</h1>
+                <ShowEnergy id={"aaa"} style={{width:"100vw",height:"30vh"}}></ShowEnergy>
+                <h1>Client Defence Detective</h1>
+                <TextArea
+                    disabled
+                    autoSize={{minRows: 7, maxRows: 7}}
+                    value={this.state.msg}
+                ></TextArea>
+            </div>
+        )
+    }
+}
+
 class federalModelOutput extends Component {
     constructor(props) {
         super(props);
@@ -479,7 +515,7 @@ class FederalDetailShow extends Component {
     constructor(props) {
         super(props);
         let names = []
-        let name = this.props.location.state.name
+        let name = this.props.location.state.name 
         if (name == "Input") {
             names = ["data output", "log"]
         } else if (name == "HeteroLR") {
@@ -488,7 +524,8 @@ class FederalDetailShow extends Component {
             names = ["Evaluation", "compare", "log"]
         }else if(name == "Evaluation"){
             names = ["metrics", "log"]
-
+        }else if(name == "Defence Test"){
+            names = ["Defence","compare","evalution","log"]
         }
         this.state = {change: 0, name, names}
     }
@@ -512,7 +549,7 @@ class FederalDetailShow extends Component {
                     <Route path="/federalDetail/detail/Evaluation" component={Evaluation}/>
                     <Route path="/federalDetail/detail/compare" component={Compare}/>
                     <Route path="/federalDetail/detail/metrics" component={Evaluation}/>
-
+                    <Route path="/federalDetail/detail/Defence" component={Defence}/>
 
                     <Redirect to={"/federalDetail/detail/" + this.state.names[0]}/>
                 </Switch>
