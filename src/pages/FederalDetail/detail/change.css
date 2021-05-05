@@ -1,4 +1,5 @@
 .ant-table-thead > tr > th {
   color: rgb(65, 89, 209);
   font-size: larger;
+  font-weight: 900;
 }
