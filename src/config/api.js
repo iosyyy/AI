@@ -8,6 +8,13 @@ const e = {
   host,
   serverSocketIp: "http://localhost:8080",
   pageList: "http://127.0.0.1:8080/job/query/page/new",
+  showList: "ws://127.0.0.1:8080/websocket/progress/{jobId}/{role}/{partyId}", // TODO 中间的Show组件的url这里使用websocket链接注意一下
+  showDetailMetrics: "http://127.0.0.1:8080/v1/tracking/component/metrics",
+  showDetailOutputModel:
+    "http://127.0.0.1:8080/v1/tracking/component/output/model",
+  showDetailParameters:
+    "http://127.0.0.1:8080/v1/tracking/component/parameters",
+  // TODO 上面三个链接是获取点击右下角按钮的详情页面,其他参数都是从上一个页面传过来的
 };
 
 export default e;
