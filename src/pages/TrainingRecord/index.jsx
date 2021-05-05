@@ -1,196 +1,244 @@
-import React, {Component} from 'react';
-import {Button, Input, Space, Table} from "antd";
-import {Link} from "react-router-dom";
-import Highlighter from 'react-highlight-words';
-import {SearchOutlined} from '@ant-design/icons';
-import { Radio } from 'antd';
-
+import React, { Component } from "react";
+import { Button, Image, Input, Space, Table } from "antd";
+import NoteImg from "../../img/Note.png";
+import NoteHover from "../../img/NoteHover.png";
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import axios from "axios";
 
 class TrainingRecord extends Component {
-
-
-    constructor(props) {
-        super(props);
-        const columns = [
-            {
-                title: <div>ID</div>,
-                dataIndex: 'id',
-                key: 'id',
-                render: (id) => <Button onClick={()=>{
-                    console.log(123)
-                    this.props.history.push({
-                        pathname: '/federalDetail/show',
-                        state: {id: id}
-                    })
-                }} type="link">{id}</Button>,
-                ...this.getColumnSearchProps('id'),
-
-            },
-            {
-                title: <div>开始时间</div>,
-                dataIndex: 'startTime',
-                key: 'startTime',
-            },
-            {
-                title: <div>结束时间</div>,
-                dataIndex: 'endTime',
-                key: 'endTime',
-            },
-            {
-                title: <div>运行时间</div>,
-                dataIndex: 'duration',
-                key: 'duration',
-            },
-            {
-                title: <div>结果</div>,
-                dataIndex: 'status',
-                key: 'status',
-                onFilter: (value, record) => {
-                    if(value==1)
-                    {
-                        return record['status']==='success'
-                    }else if(value==2){
-                        return record['status']==='fail'
-                    }else if(value==3)
-                    {
-                        return true
-                    }
-
-                },
-                filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters}) => {
-                    const radioStyle = {
-                        display: 'block',
-                        height: '30px',
-                        lineHeight: '30px',
-                    };
-                    return(
-                        <div style={{padding: 8}}>
-                            <Radio.Group onChange={(e) => {
-                                setSelectedKeys([e.target.value])
-                                confirm();
-                                console.log(selectedKeys[0])
-                                this.setState({
-                                    selectKey: e.target.value,
-                                });
-                            }} value={selectedKeys[0]}>
-                                <Radio style={radioStyle} value={1}>Success</Radio>
-                                <Radio style={radioStyle} value={2}>Fail</Radio>
-                                <Radio style={radioStyle} value={3}>All</Radio>
-                            </Radio.Group>
-                        </div>
-                    )
-                },
-            }, {
-                title: <div>类型</div>,
-                dataIndex: 'type',
-                key: 'type',
-            },
-        ];
-
-        const dataSource = []
-        for (let i = 0; i < 200; i++) {
-            dataSource.push({
-                id: '202102100815575259056',
-                startTime: '2021-02-10 16:15:57',
-                endTime: '2021-02-10 16:16:50',
-                duration: '00:00:52',
-                status: 'success',
-                type: 'Federal'
-            })
-        }
-        dataSource.push({
-            id: '20210210081557525905-',
-            startTime: '2021-02-10 16:15:57',
-            endTime: '2021-02-10 16:16:50',
-            duration: '00:00:52',
-            status: 'fail',
-            type: 'Federal'
-        })
-        this.state = {
-            columns,
-            dataSource,
-            searchText: '',
-            searchedColumn: '',
-            selectKey:''
-        }
-    }
-
-    getColumnSearchProps = dataIndex => ({
-        filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters}) => (
-            <div style={{padding: 8}}>
-                <Input
-                    ref={node => {
-                        this.searchInput = node;
-                    }}
-                    placeholder={`搜索 ${dataIndex}`}
-                    value={selectedKeys[0]}
-                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                    onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-                    style={{width: 188, marginBottom: 8, display: 'block'}}
-                />
-                <Space>
-                    <Button
-                        type="primary"
-                        onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-                        icon={<SearchOutlined/>}
-                        size="small"
-                        style={{width: 90}}
-                    >
-                        Search
-                    </Button>
-                </Space>
-            </div>
+  constructor(props) {
+    super(props);
+    const columns = [
+      {
+        title: <div>ID</div>,
+        dataIndex: "id",
+        key: "id",
+        render: (id) => (
+          <div>
+            <a
+              style={{
+                color: "rgb(65,89,209)",
+              }}
+              onClick={() => {
+                this.props.history.push({
+                  pathname: "/federalDetail/show",
+                  state: { id: id },
+                });
+              }}
+            >
+              {id}
+            </a>
+          </div>
         ),
-        onFilter: (value, record) => {
-           return record[dataIndex]
-                ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
-                : ''
+      },
+      {
+        title: <div>PartyID</div>,
+        dataIndex: "partyId",
+        key: "partyId",
+      },
+      {
+        title: <div>规则</div>,
+        dataIndex: "role",
+        key: "role",
+      },
+      {
+        title: <div>开始时间</div>,
+        dataIndex: "startTime",
+        key: "startTime",
+        render: (text) => {
+          return <>{new Date(text).toLocaleString()}</>;
         },
-        filterIcon: filtered => <SearchOutlined style={{color: filtered ? '#1890ff' : undefined}}/>,
-        render: text =>
-            this.state.searchedColumn === dataIndex ? (
-                <Button type="link" onClick={()=>{
-                    this.props.history.push({
-                        pathname: '/federalDetail/show',
-                        state: {id: text}
-                    })
-                }}><Highlighter
-                    highlightStyle={{backgroundColor: '#faf8ed', padding: 0}}
-                    searchWords={[this.state.searchText]}
-                    autoEscape
-                    textToHighlight={text ? text.toString() : ''}
-                /></Button>
-            ) : (
-                <Button type="link" onClick={()=>{
-                    this.props.history.push({
-                        pathname: '/federalDetail/show',
-                        state: {id: text}
-                    })
-                }}>{text}</Button>
-            ),
-    });
-
-    handleSearch = (selectedKeys, confirm, dataIndex) => {
-        confirm();
-        this.setState({
-            searchText: selectedKeys[0],
-            searchedColumn: dataIndex,
-        });
-    };
-
-
-    render() {
-        return (
-            <div className="site-layout-content">
-                <Table
-                    scroll={{y: "55vh"}}
-                    bordered={true} dataSource={this.state.dataSource}
-                    columns={this.state.columns}
-                    pagination={{pageSize: 50}}
-                />
+      },
+      {
+        title: <div>结束时间</div>,
+        dataIndex: "endTime",
+        key: "endTime",
+        render: (text) => {
+          return <>{new Date(text).toLocaleString()}</>;
+        },
+      },
+      {
+        title: <div>运行时间</div>,
+        dataIndex: "duration",
+        key: "duration",
+        render: (text, value) => {
+          let time = value.endTime - value.startTime;
+          let seconds = Math.floor((time / 1000) % 60);
+          let minutes = Math.floor((time / 1000 / 60) % 60);
+          let hour = Math.floor((time / 1000 / 60 / 60) % 60);
+          console.log(seconds);
+          return (
+            <>
+              {(hour < 10 ? "0" + hour : hour) +
+                ":" +
+                (minutes < 10 ? "0" + minutes : minutes) +
+                ":" +
+                (seconds < 10 ? "0" + seconds : seconds)}
+            </>
+          );
+        },
+      },
+      {
+        title: <div>结果</div>,
+        dataIndex: "status",
+        key: "status",
+      },
+      {
+        title: <div>记录</div>,
+        dataIndex: "notes",
+        key: "notes",
+        render: (text, value, context) => {
+          let note = this.state.NoteNow[value.key];
+          return (
+            <div>
+              {note.Show ? (
+                <div>
+                  <span>{text}</span>
+                  <Image
+                    onClick={() => {
+                      this.setNoteShow(false, value);
+                    }}
+                    onMouseOver={() => {
+                      this.setNotesState(NoteHover, value);
+                    }}
+                    onMouseLeave={() => {
+                      this.setNotesState(NoteImg, value);
+                    }}
+                    height={15}
+                    width={15}
+                    src={note.Notes}
+                    preview={false}
+                  />
+                </div>
+              ) : (
+                <div>
+                  <Space>
+                    <Input
+                      style={{ display: "inline-block", width: "5vw" }}
+                      onChange={(value) => {}}
+                      type="text"
+                    />
+                    <Button
+                      onClick={() => {
+                        // TODO 文本信息提交到后端
+                        this.setNoteShow(true, value);
+                      }}
+                      size={"small"}
+                      type="text"
+                      icon={<CheckOutlined />}
+                    />
+                    <Button
+                      onClick={() => {
+                        this.setNoteShow(true, value);
+                      }}
+                      size={"small"}
+                      type="text"
+                      icon={<CloseOutlined />}
+                    />
+                  </Space>
+                </div>
+              )}
             </div>
-        );
+          );
+        },
+      },
+      {
+        title: <div>action</div>,
+        dataIndex: "action",
+        key: "action",
+        render: (text) => {
+          return <Button type={"link"}>{text}</Button>;
+        },
+      },
+    ];
+    let NoteNow = [];
+    for (let i = 0; i < 25; i++) {
+      NoteNow.push({ Notes: NoteImg, Show: true });
     }
+    this.state = {
+      columns,
+      dataSource: [],
+      searchText: "",
+      searchedColumn: "",
+      selectKey: "",
+      NoteNow,
+      loading: true,
+    };
+  }
+
+  componentDidMount() {
+    // TODO 增加ajax
+    axios
+      .post("http://127.0.0.1:8080/job/query/page/new", {
+        fDescription: "",
+        jobId: "",
+        job_id: "",
+        note: "",
+        orderField: "f_job_id",
+        orderRule: "desc",
+        pageNum: 1,
+        pageSize: 20,
+        partyId: "",
+        party_id: "",
+        role: [],
+        status: [],
+      })
+      .then((r) => {
+        let list = r.data.data.list;
+        let dataSource = [];
+        list.forEach((values, key) => {
+          let value = values["job"];
+          dataSource.push({
+            key: key,
+            id: value.fJobId,
+            startTime: value.fStartTime,
+            endTime: value.fEndTime,
+            duration: value.fElapsed,
+            role: value.fRole,
+            partyId: value.fPartyId,
+            notes: value.fDescription,
+            status: value.fStatus,
+            action: value.fStatus === "success" ? "retry" : "",
+          });
+        });
+        this.setState({
+          dataSource,
+          loading: false,
+        });
+      });
+  }
+
+  setNoteShow(states, value) {
+    let Notew = this.state.NoteNow;
+    Notew[value.key].Show = states;
+    Notew[value.key].Notes = NoteImg;
+    this.setState({
+      NoteNow: Notew,
+    });
+  }
+
+  setNotesState(states, value) {
+    let Notew = this.state.NoteNow;
+    Notew[value.key].Notes = states;
+    this.setState({
+      NoteNow: Notew,
+    });
+  }
+
+  render() {
+    return (
+      <div className="site-layout-content">
+        <Table
+          loading={this.state.loading}
+          scroll={{ y: "64vh" }}
+          bordered={false}
+          dataSource={this.state.dataSource}
+          columns={this.state.columns}
+          pagination={{ pageSize: 25 }}
+        />
+      </div>
+    );
+  }
 }
 
 export default TrainingRecord;

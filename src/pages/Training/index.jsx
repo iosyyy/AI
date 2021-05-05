@@ -28,14 +28,14 @@ class Training extends Component {
   render() {
     let trainList = this.state.trainInfo.map((item, index) => (
       <Card
-      hoverable
+        hoverable
         className="training-list-item"
         key={index}
         onDoubleClick={() => {
           this.props.history.push({
-            pathname: '/trainingDetails',
-            state: {id: item.id}
-          })
+            pathname: "/trainingDetails",
+            state: { id: item.id },
+          });
         }}
       >
         <h1 style={{ margin: 0 }}>{item.id}</h1>
