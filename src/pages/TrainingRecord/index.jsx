@@ -101,7 +101,7 @@ class TrainingRecord extends Component {
         title: <div>记录</div>,
         dataIndex: "notes",
         key: "notes",
-        render: (text, value, context) => {
+        render: (text, value, _context) => {
           let note = this.state.NoteNow[value.key];
           return (
             <div>
@@ -129,7 +129,7 @@ class TrainingRecord extends Component {
                   <Space>
                     <Input
                       style={{ display: "inline-block", width: "5vw" }}
-                      onChange={(value) => {}}
+                      onChange={(_value) => {}}
                       type="text"
                     />
                     <Button
@@ -393,7 +393,7 @@ class TrainingRecord extends Component {
             position: ["bottomCenter"],
             size: "small",
             total: this.state.pageSize,
-            onChange: (page, pageSize) => {
+            onChange: (page, _pageSize) => {
               this.setState({ loading: true });
               axios
                 .post(api.pageList, {
