@@ -29,7 +29,7 @@ class FederalDetail extends Component {
     return (
       <div
         className='site-layout-content'
-        style={{ height: "75vh", width: "100%" }}
+        style={{height: "83vh", width: "100%"}}
       >
         <div style={{ display: "inline-block", width: "20%", height: "75vh" }}>
           <div
@@ -68,7 +68,7 @@ class FederalDetail extends Component {
         <div
           style={{
             borderLeft: "1px solid",
-            height: "70vh",
+            height: "75vh",
             width: "80%",
             float: "right",
           }}
@@ -84,7 +84,7 @@ class FederalDetail extends Component {
                   marginLeft: "3vh",
                   border: "1px solid",
                   backgroundColor: "rgb(240,240,240)",
-                  height: "57vh",
+                  height: "65vh",
                 }}
               >
                 <Show
@@ -102,7 +102,7 @@ class FederalDetail extends Component {
               </div>
               <div
                 style={{
-                  height: "45vh",
+                  height: "53vh",
                   padding: "5px 10px",
                   backgroundColor: "rgb(240,240,240)",
                   border: "1px solid",

@@ -23,15 +23,15 @@ export default class MyForm extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{height: "80vh"}}>
         <h1 className={"colorWhite"}>联邦攻击</h1>
         <div className="site-card-wrapper">
-          <Row style={{ marginBottom: "2vh" }} gutter={[0, 30]}>
+          <Row style={{marginBottom: "2vh"}} gutter={[0, 30]}>
             <Col offset={8} span={12}>
               <div>联邦类型:</div>
             </Col>
           </Row>
-          <Row style={{ marginBottom: "5vh" }} gutter={[0, 24]}>
+          <Row style={{marginBottom: "5vh"}} gutter={[0, 24]}>
             <Col offset={8} span={8}>
               <Select
                 style={{ width: "100%" }}

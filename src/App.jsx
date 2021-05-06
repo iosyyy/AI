@@ -69,25 +69,25 @@ class App extends Component {
               <Menu.Item key="3">
                 <NavLink to="/federal">联邦攻击</NavLink>
               </Menu.Item>
-              <Menu.Item style={{ float: "right" }} key="4">
+              <Menu.Item style={{float: "right"}} key="4">
                 <NavLink to="/trainingRecord">训练记录</NavLink>
               </Menu.Item>
-              <Menu.Item style={{ float: "right" }} key="5">
+              <Menu.Item style={{float: "right"}} key="5">
                 <NavLink to="/training">正在训练</NavLink>
               </Menu.Item>
             </Menu>
           </Header>
-          <Content style={{ padding: "50px 50px" }}>
+          <Content style={{padding: "20px 50px"}}>
             <Switch>
-              <Route path="/federalTrain" component={FederalIndex} />
-              <Route path="/normal" component={Normal} />
-              <Route path="/federal" component={Federal} />
-              <Route path="/training" component={Training} />
-              <Route path="/trainingRecord" component={TrainingRecord} />
-              <Route path="/federalDetail" component={FederalDetailAll} />
-              <Route path="/trainingDetails" component={TrainingDetails} />
+              <Route path="/federalTrain" component={FederalIndex}/>
+              <Route path="/normal" component={Normal}/>
+              <Route path="/federal" component={Federal}/>
+              <Route path="/training" component={Training}/>
+              <Route path="/trainingRecord" component={TrainingRecord}/>
+              <Route path="/federalDetail" component={FederalDetailAll}/>
+              <Route path="/trainingDetails" component={TrainingDetails}/>
 
-              <Redirect to="/federalTrain" />
+              <Redirect to="/federalTrain"/>
             </Switch>
           </Content>
           <div

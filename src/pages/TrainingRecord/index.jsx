@@ -129,7 +129,7 @@ class TrainingRecord extends Component {
                   <Form
                     onFinish={(data) => {
                       // TODO 文本信息提交到后端
-                      console.log(data);
+                      this.setState({loading: true})
                       axios
                         .put("http://127.0.0.1:8080/job/update", {
                           job_id: value.id.toString(),
@@ -139,10 +139,11 @@ class TrainingRecord extends Component {
                         })
                         .then((r) => {
                           if (r.data.code === 0) {
-                            let { dataSource } = this.state;
+                            let {dataSource} = this.state;
                             dataSource[value.key].notes = data.notes;
                             this.setState({
                               dataSource,
+                              loading: false,
                             });
                             this.setNoteShow(true, value);
                           }
@@ -223,7 +224,6 @@ class TrainingRecord extends Component {
         status: [],
       })
       .then(r => {
-        console.log(r);
         let list = r.data.data.list;
         let pageSize = r.data.data.totalRecord;
         let dataSource = this.getDataSourceByDataList(list);
@@ -291,10 +291,9 @@ class TrainingRecord extends Component {
               });
               axios
                 .post(api.pageList, {
-                  fDescription: "",
+                  fDescription: res.note,
                   jobId: res.id,
                   job_id: res.id,
-                  note: res.note,
                   orderField: "f_job_id",
                   orderRule: "desc",
                   pageNum: 1,
@@ -405,7 +404,7 @@ class TrainingRecord extends Component {
         </div>
         <Table
           loading={this.state.loading}
-          scroll={{ y: "62vh" }}
+          scroll={{y: "65vh"}}
           bordered={false}
           dataSource={this.state.dataSource}
           columns={this.state.columns}
