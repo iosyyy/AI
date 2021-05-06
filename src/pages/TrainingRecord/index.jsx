@@ -199,7 +199,6 @@ class TrainingRecord extends Component {
         status: [],
       })
       .then((r) => {
-        console.log(r);
         let list = r.data.data.list;
         let pageSize = r.data.data.totalRecord;
         let dataSource = this.getDataSourceByDataList(list);
