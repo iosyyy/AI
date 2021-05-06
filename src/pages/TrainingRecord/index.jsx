@@ -231,10 +231,7 @@ class TrainingRecord extends Component {
         partyId: value.fPartyId,
         notes: value.fDescription,
         status: value.fStatus,
-        action:
-          value.fStatus === "success"
-            ? ""
-            : "retryD:\\repos\\webReact\\AI\\src\\pages\\TrainingRecord",
+        action: value.fStatus === "success" ? "" : "retry",
       });
     });
     return dataSource;
