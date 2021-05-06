@@ -106,7 +106,7 @@ class TrainingRecord extends Component {
           return (
             <div>
               {note.Show ? (
-                <div>
+                <Space>
                   <span>{text}</span>
                   <Image
                     onClick={() => {
@@ -123,33 +123,57 @@ class TrainingRecord extends Component {
                     src={note.Notes}
                     preview={false}
                   />
-                </div>
+                </Space>
               ) : (
                 <div>
-                  <Space>
-                    <Input
-                      style={{ display: "inline-block", width: "5vw" }}
-                      onChange={(_value) => {}}
-                      type="text"
-                    />
-                    <Button
-                      onClick={() => {
-                        // TODO 文本信息提交到后端
-                        this.setNoteShow(true, value);
-                      }}
-                      size={"small"}
-                      type="text"
-                      icon={<CheckOutlined />}
-                    />
-                    <Button
-                      onClick={() => {
-                        this.setNoteShow(true, value);
-                      }}
-                      size={"small"}
-                      type="text"
-                      icon={<CloseOutlined />}
-                    />
-                  </Space>
+                  <Form
+                    onFinish={(data) => {
+                      // TODO 文本信息提交到后端
+                      console.log(data);
+                      axios
+                        .put("http://127.0.0.1:8080/job/update", {
+                          job_id: value.id.toString(),
+                          notes: data.notes,
+                          party_id: value.partyId,
+                          role: value.role,
+                        })
+                        .then((r) => {
+                          if (r.data.code === 0) {
+                            let { dataSource } = this.state;
+                            dataSource[value.key].notes = data.notes;
+                            this.setState({
+                              dataSource,
+                            });
+                            this.setNoteShow(true, value);
+                          }
+                        });
+                    }}
+                    size={"small"}
+                    layout="inline"
+                  >
+                    <Form.Item wrapperCol={{ span: 9 }} name={"notes"}>
+                      <Input />
+                    </Form.Item>
+                    <Form.Item>
+                      <Button
+                        htmlType="submit"
+                        size={"small"}
+                        type="text"
+                        width={10}
+                        icon={<CheckOutlined />}
+                      />
+                    </Form.Item>
+                    <Form.Item>
+                      <Button
+                        onClick={() => {
+                          this.setNoteShow(true, value);
+                        }}
+                        size={"small"}
+                        type="text"
+                        icon={<CloseOutlined />}
+                      />
+                    </Form.Item>
+                  </Form>
                 </div>
               )}
             </div>
@@ -199,6 +223,7 @@ class TrainingRecord extends Component {
         status: [],
       })
       .then((r) => {
+        console.log(r);
         let list = r.data.data.list;
         let pageSize = r.data.data.totalRecord;
         let dataSource = this.getDataSourceByDataList(list);
