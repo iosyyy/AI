@@ -16,9 +16,9 @@ class TrainingRecord extends Component {
         title: <div>ID</div>,
         dataIndex: "id",
         key: "id",
-        render: (id) => (
+        render: id => (
           <div>
-            <a
+            <font
               style={{
                 color: "rgb(65,89,209)",
               }}
@@ -30,7 +30,7 @@ class TrainingRecord extends Component {
               }}
             >
               {id}
-            </a>
+            </font>
           </div>
         ),
       },
@@ -52,7 +52,7 @@ class TrainingRecord extends Component {
           compare: (a, b) => a.startTime - b.startTime,
           multiple: 1,
         },
-        render: (text) => {
+        render: text => {
           return <>{new Date(text).toLocaleString()}</>;
         },
       },
@@ -64,7 +64,7 @@ class TrainingRecord extends Component {
           compare: (a, b) => a.endTime - b.endTime,
           multiple: 2,
         },
-        render: (text) => {
+        render: text => {
           return <>{new Date(text).toLocaleString()}</>;
         },
       },
@@ -184,7 +184,7 @@ class TrainingRecord extends Component {
         title: <div>action</div>,
         dataIndex: "action",
         key: "action",
-        render: (text) => {
+        render: text => {
           return <Button type={"link"}>{text}</Button>;
         },
       },
@@ -222,7 +222,7 @@ class TrainingRecord extends Component {
         role: [],
         status: [],
       })
-      .then((r) => {
+      .then(r => {
         console.log(r);
         let list = r.data.data.list;
         let pageSize = r.data.data.totalRecord;
@@ -280,12 +280,12 @@ class TrainingRecord extends Component {
 
   render() {
     return (
-      <div className="site-layout-content">
+      <div className='site-layout-content'>
         <div style={{ float: "right" }}>
           <Form
             size={"small"}
-            layout="inline"
-            onFinish={(res) => {
+            layout='inline'
+            onFinish={res => {
               this.setState({
                 loading: true,
               });
@@ -304,7 +304,7 @@ class TrainingRecord extends Component {
                   role: res.role,
                   status: res.status,
                 })
-                .then((r) => {
+                .then(r => {
                   let pageSize = r.data.data.totalRecord;
                   let dataSource = this.getDataSourceByDataList(
                     r.data.data.list
@@ -329,7 +329,7 @@ class TrainingRecord extends Component {
                   Job ID
                 </div>
               }
-              name="id"
+              name='id'
             >
               <Input />
             </Form.Item>
@@ -339,11 +339,11 @@ class TrainingRecord extends Component {
                   Role
                 </div>
               }
-              name="role"
+              name='role'
             >
               <Select
-                mode="multiple"
-                placeholder="Select Role"
+                mode='multiple'
+                placeholder='Select Role'
                 style={{ width: "8vw" }}
               >
                 <Option value={"guest"}>guest</Option>
@@ -358,7 +358,7 @@ class TrainingRecord extends Component {
                   Party ID
                 </div>
               }
-              name="partyId"
+              name='partyId'
             >
               <Input />
             </Form.Item>
@@ -368,11 +368,11 @@ class TrainingRecord extends Component {
                   Status
                 </div>
               }
-              name="status"
+              name='status'
             >
               <Select
-                mode="multiple"
-                placeholder="Select Status"
+                mode='multiple'
+                placeholder='Select Status'
                 style={{ width: "8vw" }}
               >
                 <Option value={"success"}>success</Option>
@@ -388,15 +388,15 @@ class TrainingRecord extends Component {
                   note
                 </div>
               }
-              name="note"
+              name='note'
             >
               <Input />
             </Form.Item>
             <Form.Item>
               <Button
                 style={{ borderRadius: "5vw", width: "4vw" }}
-                type="primary"
-                htmlType="submit"
+                type='primary'
+                htmlType='submit'
               >
                 搜索
               </Button>
@@ -431,7 +431,7 @@ class TrainingRecord extends Component {
                   role: [],
                   status: [],
                 })
-                .then((r) => {
+                .then(r => {
                   let list = r.data.data.list;
                   let pageSize = r.data.data.totalRecord;
                   let dataSource = this.getDataSourceByDataList(list);

@@ -51,7 +51,7 @@ export default class index extends Component {
     },
     names: ["Input", "HeteroLR", "Evaluation"],
   };
-  readNew1 = (key) => {
+  readNew1 = key => {
     let newData;
     switch (key) {
       case "1":
@@ -70,10 +70,12 @@ export default class index extends Component {
         newData = this.state.logs;
         newData["algorithmDebug"] = false;
         break;
+      default:
+        break;
     }
     this.setState(newData);
   };
-  readNew2 = (key) => {
+  readNew2 = key => {
     let newData;
     switch (key) {
       case "1":
@@ -83,6 +85,8 @@ export default class index extends Component {
       case "2":
         newData = this.state.logs;
         newData["scheduleInfo"] = false;
+        break;
+      default:
         break;
     }
     this.setState(newData);
@@ -101,18 +105,18 @@ export default class index extends Component {
       });
     };
     return (
-      <div className="training-details">
-        <div className="trainning-details-card1-continer">
-          <Card className="trainning-details-card1">
+      <div className='training-details'>
+        <div className='trainning-details-card1-continer'>
+          <Card className='trainning-details-card1'>
             <h4>Info</h4>
-            <div className="trainning-details-info">
+            <div className='trainning-details-info'>
               <p>Dataset:{this.state.info.dataset}</p>
               <p>Epoch:{this.state.info.epoch}</p>
               <p>Optimizer:{this.state.info.optimizer}</p>
               <p>Lr:{this.state.info.lr}</p>
             </div>
           </Card>
-          <Card className="trainning-details-card1 c2">
+          <Card className='trainning-details-card1 c2'>
             <h4>Task</h4>
             <Progress
               percent={this.state.percent}
@@ -131,13 +135,13 @@ export default class index extends Component {
                   state: { id: this.state.id },
                 });
               }}
-              type="primary"
+              type='primary'
               style={{ marginTop: "5vh", float: "right" }}
             >
               view the job -&gt;
             </Button>
           </Card>
-          <Card className="trainning-details-card1">
+          <Card className='trainning-details-card1'>
             <div>
               <span style={{ fontWeight: 600 }}>Graph</span>
               <div
@@ -146,7 +150,7 @@ export default class index extends Component {
                   display: "inline",
                 }}
               >
-                <Button type="text" size="small">
+                <Button type='text' size='small'>
                   <Image
                     preview={false}
                     onClick={() => {
@@ -167,8 +171,8 @@ export default class index extends Component {
             <Show
               names={this.state.names}
               symbolSize={32}
-              id="show"
-              change={(index) => {
+              id='show'
+              change={index => {
                 this.setState();
               }}
               style={{ width: "100%", height: "22vh" }}
@@ -176,12 +180,10 @@ export default class index extends Component {
           </Card>
         </div>
 
-        <Card className="trainning-details-card2">
-          <Tabs defaultActiveKey="1">
-            //algorithm Log 一级标签
-            <TabPane tab="algorithmm Log" key="1">
-              <Tabs defaultActiveKey="1" type="card" onChange={this.readNew1}>
-                //error
+        <Card className='trainning-details-card2'>
+          <Tabs defaultActiveKey='1'>
+            <TabPane tab='algorithmm Log' key='1'>
+              <Tabs defaultActiveKey='1' type='card' onChange={this.readNew1}>
                 <TabPane
                   tab={
                     <>
@@ -193,7 +195,7 @@ export default class index extends Component {
                       />
                     </>
                   }
-                  key="1"
+                  key='1'
                 >
                   <TextArea
                     disabled
@@ -201,7 +203,6 @@ export default class index extends Component {
                     value={this.state.logs.algorithm.error.msg}
                   ></TextArea>
                 </TabPane>
-                //warning
                 <TabPane
                   tab={
                     <>
@@ -215,7 +216,7 @@ export default class index extends Component {
                       />
                     </>
                   }
-                  key="2"
+                  key='2'
                 >
                   <TextArea
                     disabled
@@ -223,7 +224,6 @@ export default class index extends Component {
                     value={this.state.logs.algorithm.warning.msg}
                   ></TextArea>
                 </TabPane>
-                //info
                 <TabPane
                   tab={
                     <>
@@ -235,7 +235,7 @@ export default class index extends Component {
                       />
                     </>
                   }
-                  key="3"
+                  key='3'
                 >
                   <TextArea
                     disabled
@@ -243,7 +243,6 @@ export default class index extends Component {
                     value={this.state.logs.algorithm.info.msg}
                   ></TextArea>
                 </TabPane>
-                //debug
                 <TabPane
                   tab={
                     <>
@@ -255,7 +254,7 @@ export default class index extends Component {
                       />
                     </>
                   }
-                  key="4"
+                  key='4'
                 >
                   <TextArea
                     disabled
@@ -265,10 +264,8 @@ export default class index extends Component {
                 </TabPane>
               </Tabs>
             </TabPane>
-            //Schedule Log 一级标签
-            <TabPane tab="Schedule Log" key="2" animated>
-              <Tabs defaultActiveKey="1" type="card" onChange={this.readNew2}>
-                //error
+            <TabPane tab='Schedule Log' key='2' animated>
+              <Tabs defaultActiveKey='1' type='card' onChange={this.readNew2}>
                 <TabPane
                   tab={
                     <>
@@ -280,7 +277,7 @@ export default class index extends Component {
                       />
                     </>
                   }
-                  key="1"
+                  key='1'
                 >
                   <TextArea
                     disabled
@@ -288,7 +285,6 @@ export default class index extends Component {
                     value={this.state.logs.schedule.error.msg}
                   ></TextArea>
                 </TabPane>
-                //info
                 <TabPane
                   tab={
                     <>
@@ -300,7 +296,7 @@ export default class index extends Component {
                       />
                     </>
                   }
-                  key="2"
+                  key='2'
                 >
                   <TextArea
                     disabled
@@ -313,7 +309,7 @@ export default class index extends Component {
           </Tabs>
         </Card>
         <Modal
-          width="180vh"
+          width='180vh'
           title={"Graph"}
           visible={this.state.isBig}
           onOk={handleOk}
@@ -325,8 +321,8 @@ export default class index extends Component {
           <Show
             names={this.state.names}
             symbolSize={60}
-            id="show2"
-            change={(index) => {
+            id='show2'
+            change={index => {
               this.setState();
             }}
             style={{ width: "100%", height: "60vh" }}

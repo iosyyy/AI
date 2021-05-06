@@ -165,8 +165,7 @@ class DefenseResult extends Component {
       : this.state.dataSource2;
     //定义数据拼接
     //str:table的每一列的标题，即为导出后的csv文件的每一列的标题
-    let str = "";
-    str += "name" + "," + "age" + "," + "address";
+    let str = "name,age,address";
     for (const i in data) {
       str += "\n";
       str += data[i].name + "," + data[i].age + "," + data[i].address;
@@ -293,7 +292,7 @@ class DefenseResult extends Component {
                 </Col>
                 <Col span={18}>
                   <div style={{ marginTop: "2vh", marginBottom: "15px" }}>
-                    > {this.state.choice ? "train.csv" : "test.csv"}
+                    {this.state.choice ? "train.csv" : "test.csv"}
                     {this.state.isViewing ? (
                       <div style={{ float: "right", marginRight: "4vh" }}>
                         <Button

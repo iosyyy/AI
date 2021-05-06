@@ -13,7 +13,7 @@ import TrainingDetails from "./pages/Training/Detail";
 import PubSubJS from "pubsub-js";
 import FederalDetailAll from "./pages/FederalDetail";
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 
 class App extends Component {
   constructor(props) {

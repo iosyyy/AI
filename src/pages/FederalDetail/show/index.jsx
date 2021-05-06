@@ -18,7 +18,7 @@ class FederalDetail extends Component {
     };
   }
 
-  onChange = (index) => {
+  onChange = index => {
     console.log(index);
     this.setState({
       dataIndex: index,
@@ -28,7 +28,7 @@ class FederalDetail extends Component {
   render() {
     return (
       <div
-        className="site-layout-content"
+        className='site-layout-content'
         style={{ height: "75vh", width: "100%" }}
       >
         <div style={{ display: "inline-block", width: "20%", height: "75vh" }}>
@@ -74,7 +74,7 @@ class FederalDetail extends Component {
           }}
         >
           <Row gutter={16}>
-            <Col className="gutter-row" span={15}>
+            <Col className='gutter-row' span={15}>
               <h1 style={{ marginLeft: "3vh" }}>Outputs From Task</h1>
               <div style={{ marginLeft: "3vh", marginBottom: "1vh" }}>
                 Main Graph
@@ -90,13 +90,13 @@ class FederalDetail extends Component {
                 <Show
                   names={this.state.names}
                   symbolSize={60}
-                  id="show"
+                  id='show'
                   change={this.onChange}
                   style={{ width: "100%", height: "100%" }}
                 />
               </div>
             </Col>
-            <Col className="gutter-row" span={9}>
+            <Col className='gutter-row' span={9}>
               <div style={{ marginTop: "6vh", marginBottom: "1vh" }}>
                 Information
               </div>
@@ -111,9 +111,9 @@ class FederalDetail extends Component {
                 No Date
               </div>
               <Button
-                onClick={(e) => {
+                onClick={e => {
                   console.log(this.state);
-                  if (this.state.dataIndex != -1) {
+                  if (this.state.dataIndex !== -1) {
                     this.props.history.push({
                       pathname: "/federalDetail/detail",
                       state: { name: this.state.names[this.state.dataIndex] },
@@ -121,7 +121,7 @@ class FederalDetail extends Component {
                   }
                 }}
                 style={{ height: "7vh", marginTop: "5vh", width: "100%" }}
-                type="primary"
+                type='primary'
               >
                 view the optputs
               </Button>
