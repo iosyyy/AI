@@ -1,18 +1,7 @@
 import React, { Component } from "react";
 import { Link, Redirect, Route, Switch } from "react-router-dom";
-import {
-  Button,
-  Card,
-  Image,
-  Input,
-  Modal,
-  Progress,
-  Tabs,
-  Menu,
-  Table,
-} from "antd";
+import { Button, Input, Menu, Table } from "antd";
 import ShowEnergy from "../../../components/ShowEnergy";
-import Show from "../../../components/Show";
 import "./change.css";
 
 let { TextArea } = Input;
@@ -209,7 +198,7 @@ function federalDetailLog() {
       }}
     >
       {logArr.map((value, index) => {
-        if (index != 4) {
+        if (index !== 4) {
           return (
             <div
               style={{
@@ -451,7 +440,7 @@ class Evaluation extends Component {
     this.drew();
   }
 
-  handleClick = (e) => {
+  handleClick = e => {
     console.log(e.key);
     this.setState({ current: e.key });
   };
@@ -468,20 +457,20 @@ class Evaluation extends Component {
               dataSource={this.state.dataSource}
               columns={this.state.columns}
               pagination={false}
-              size="small"
+              size='small'
             />
           </div>
           <Menu
             onClick={this.handleClick}
             selectedKeys={[current]}
-            mode="horizontal"
+            mode='horizontal'
           >
-            <Menu.Item key="0">ROC</Menu.Item>
-            <Menu.Item key="1">K-S</Menu.Item>
-            <Menu.Item key="2">Accuracy</Menu.Item>
+            <Menu.Item key='0'>ROC</Menu.Item>
+            <Menu.Item key='1'>K-S</Menu.Item>
+            <Menu.Item key='2'>Accuracy</Menu.Item>
           </Menu>
           <div style={{ padding: 0, width: "100%" }}>
-            <div style={{ width: "100%", height: "38vh" }} id="evaluation" />
+            <div style={{ width: "100%", height: "38vh" }} id='evaluation' />
           </div>
         </div>
       </div>
@@ -495,10 +484,6 @@ let myChart1;
 let myChart2;
 
 class Compare extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   drew() {
     let options = {
       title: {
@@ -603,12 +588,12 @@ class Compare extends Component {
         <div
           style={{ display: "inline-block", marginTop: "5px", width: "45%" }}
         >
-          <div id="acc" style={{ width: "100%", height: "60vh" }} />
+          <div id='acc' style={{ width: "100%", height: "60vh" }} />
         </div>
         <div
           style={{ display: "inline-block", marginTop: "5px", width: "45%" }}
         >
-          <div id="fail" style={{ width: "100%", height: "60vh" }} />
+          <div id='fail' style={{ width: "100%", height: "60vh" }} />
         </div>
       </div>
     );
@@ -620,15 +605,15 @@ class FederalDetailShow extends Component {
     super(props);
     let names = [];
     let name = this.props.location.state.name;
-    if (name == "Input") {
+    if (name === "Input") {
       names = ["data output", "log"];
-    } else if (name == "HeteroLR") {
+    } else if (name === "HeteroLR") {
       names = ["model output", "data output", "log"];
-    } else if (name == "Attack Test") {
+    } else if (name === "Attack Test") {
       names = ["Evaluation", "compare", "log"];
-    } else if (name == "Evaluation") {
+    } else if (name === "Evaluation") {
       names = ["metrics", "log"];
-    } else if (name == "Defence Test") {
+    } else if (name === "Defence Test") {
       names = ["Defence", "compare", "evalution", "log"];
     }
     this.state = { change: 0, name, names };
@@ -641,36 +626,36 @@ class FederalDetailShow extends Component {
           onClick={() => {
             this.setState({ change: index });
           }}
-          type={index == this.state.change ? "primary" : "text"}
+          type={index === this.state.change ? "primary" : "text"}
         >
           <Link to={"/federalDetail/detail/" + values}>{values}</Link>
         </Button>
       );
     });
     return (
-      <div className="site-layout-content">
+      <div className='site-layout-content'>
         <h1>{this.state.name}</h1>
         {xr}
         <Switch>
           <Route
-            path="/federalDetail/detail/data output"
+            path='/federalDetail/detail/data output'
             component={federalDetailOutput}
           />
           <Route
-            path="/federalDetail/detail/log"
+            path='/federalDetail/detail/log'
             component={federalDetailLog}
           />
           <Route
-            path="/federalDetail/detail/model output"
+            path='/federalDetail/detail/model output'
             component={federalModelOutput}
           />
           <Route
-            path="/federalDetail/detail/Evaluation"
+            path='/federalDetail/detail/Evaluation'
             component={Evaluation}
           />
-          <Route path="/federalDetail/detail/compare" component={Compare} />
-          <Route path="/federalDetail/detail/metrics" component={Evaluation} />
-          <Route path="/federalDetail/detail/Defence" component={Defence} />
+          <Route path='/federalDetail/detail/compare' component={Compare} />
+          <Route path='/federalDetail/detail/metrics' component={Evaluation} />
+          <Route path='/federalDetail/detail/Defence' component={Defence} />
 
           <Redirect to={"/federalDetail/detail/" + this.state.names[0]} />
         </Switch>

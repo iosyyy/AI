@@ -1,15 +1,5 @@
 import React, { Component } from "react";
-import Show from "../../../components/Show";
-import {
-  Button,
-  Col,
-  Image,
-  Modal,
-  notification,
-  Row,
-  Select,
-  Table,
-} from "antd";
+import { Button, Col, Image, Modal, Row, Select, Table } from "antd";
 import fileImg from "../../../img/file.png";
 import bigImg from "../../../img/big.png";
 //引入生成csv文件的插件
@@ -158,13 +148,13 @@ export default class Result extends Component {
     };
   }
 
-  onView = (e) => {
+  onView = e => {
     this.setState({
       isViewing: true,
     });
   };
 
-  onEnlarge = (e) => {
+  onEnlarge = e => {
     console.log("be large");
   };
 
@@ -176,8 +166,7 @@ export default class Result extends Component {
       : this.state.dataSource2;
     //定义数据拼接
     //str:table的每一列的标题，即为导出后的csv文件的每一列的标题
-    let str = "";
-    str += "name" + "," + "age" + "," + "address";
+    let str = "name,age,address";
     for (const i in data) {
       str += "\n";
       str += data[i].name + "," + data[i].age + "," + data[i].address;
@@ -212,7 +201,7 @@ export default class Result extends Component {
       });
     };
     return (
-      <div className="site-card-wrapper site-layout-content">
+      <div className='site-card-wrapper site-layout-content'>
         <h1 className={"colorWhite"}>联邦攻防</h1>
 
         <Row gutter={[0, 30]}>
@@ -222,11 +211,11 @@ export default class Result extends Component {
             </div>
           </Col>
         </Row>
-        <Row justify="center" gutter={[0, 24]}>
+        <Row justify='center' gutter={[0, 24]}>
           <Col span={8}>
             <Select
               style={{ width: "100%" }}
-              onChange={(e) => {
+              onChange={e => {
                 if (e === "option1") {
                   this.setState({
                     type: true,
@@ -239,12 +228,12 @@ export default class Result extends Component {
               }}
               value={this.state.type ? "option1" : "option2"}
             >
-              <Select.Option value="option1">横向联邦数据集</Select.Option>
-              <Select.Option value="option2">纵向联邦数据集</Select.Option>
+              <Select.Option value='option1'>横向联邦数据集</Select.Option>
+              <Select.Option value='option2'>纵向联邦数据集</Select.Option>
             </Select>
           </Col>
         </Row>
-        <Row justify="center" gutter={[0, 30]}>
+        <Row justify='center' gutter={[0, 30]}>
           <Col span={14}>
             <div style={{ border: "1px solid", height: "38vh" }}>
               <Row gutter={[48, 1]}>
@@ -256,13 +245,13 @@ export default class Result extends Component {
                   </Col>
                   <Col offset={1} span={24}>
                     <Button
-                      onClick={(e) => {
+                      onClick={e => {
                         this.setState({
                           choice: true,
                           isViewing: false,
                         });
                       }}
-                      type="text"
+                      type='text'
                     >
                       <Image
                         height={15}
@@ -275,13 +264,13 @@ export default class Result extends Component {
                   </Col>
                   <Col offset={1} span={24}>
                     <Button
-                      onClick={(e) => {
+                      onClick={e => {
                         this.setState({
                           choice: false,
                           isViewing: false,
                         });
                       }}
-                      type="text"
+                      type='text'
                     >
                       <Image
                         height={15}
@@ -296,7 +285,7 @@ export default class Result extends Component {
                     <Button
                       onClick={this.exportList}
                       style={{ marginTop: "13vh" }}
-                      size="small"
+                      size='small'
                     >
                       下载
                     </Button>
@@ -304,13 +293,13 @@ export default class Result extends Component {
                 </Col>
                 <Col span={18}>
                   <div style={{ marginTop: "2vh", marginBottom: "15px" }}>
-                    > {this.state.choice ? "train.csv" : "test.csv"}
+                    {this.state.choice ? "train.csv" : "test.csv"}
                     {this.state.isViewing ? (
                       <div style={{ float: "right", marginRight: "4vh" }}>
                         <Button
                           onClick={this.onEnlarge}
-                          type="text"
-                          size="small"
+                          type='text'
+                          size='small'
                         >
                           <Image
                             preview={false}
@@ -371,15 +360,15 @@ export default class Result extends Component {
                   state: { type: this.state.type, status: this.state.status },
                 });
               }}
-              type="primary"
-              htmlType="submit"
+              type='primary'
+              htmlType='submit'
             >
               下一步
             </Button>
           </Col>
         </Row>
         <Modal
-          width="180vh"
+          width='180vh'
           title={this.state.choice ? "train.csv" : "test.csv"}
           visible={this.state.isBig}
           onOk={handleOk}

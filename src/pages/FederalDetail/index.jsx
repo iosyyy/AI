@@ -1,10 +1,5 @@
 import React, { Component } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import FederalIndex from "../FederalTrain";
-import Normal from "../Normal";
-import Federal from "../Federal";
-import Training from "../Training";
-import TrainingRecord from "../TrainingRecord";
 import FederalDetailShow from "./detail";
 import FederalDetail from "./show";
 
