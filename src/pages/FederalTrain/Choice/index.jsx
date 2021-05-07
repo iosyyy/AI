@@ -26,10 +26,10 @@ class FederalTrainChoice extends Component {
       wrapperCol: { span: 6 },
     };
     return (
-      <div className="site-layout-content">
+      <div style={{height: "80vh"}} className="site-layout-content">
         <h1 className={"colorWhite"}>联邦训练</h1>
         <div
-          style={{ textAlign: "center", marginBottom: "5vh", marginTop: "3vh" }}
+          style={{textAlign: "center", marginBottom: "5vh", marginTop: "3vh"}}
         >
           模型参数选择
         </div>

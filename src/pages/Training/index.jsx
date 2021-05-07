@@ -49,7 +49,7 @@ class Training extends Component {
             }}
             percent={item.percent}
             status={item.percent === 100 ? "succcess" : "active"}
-          ></Progress>
+          />
         </div>
       </Card>
     ));

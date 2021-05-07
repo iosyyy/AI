@@ -200,20 +200,20 @@ class FederalResult extends Component {
       });
     };
     return (
-      <div className='site-card-wrapper site-layout-content'>
+      <div style={{height: "80vh"}} className='site-card-wrapper site-layout-content'>
         <h1 className={"colorWhite"}>联邦训练</h1>
 
-        <Row gutter={[0, 30]}>
+        <Row style={{marginBottom: "1vh"}}>
           <Col offset={8} span={12}>
             <div>
               <b>数据集选择:</b>
             </div>
           </Col>
         </Row>
-        <Row justify='center' gutter={[0, 24]}>
+        <Row style={{marginBottom: "4vh"}} justify='center'>
           <Col span={8}>
             <Select
-              style={{ width: "100%" }}
+              style={{width: "100%"}}
               onChange={e => {
                 if (e === "option1") {
                   this.setState({
@@ -232,13 +232,13 @@ class FederalResult extends Component {
             </Select>
           </Col>
         </Row>
-        <Row justify='center' gutter={[0, 30]}>
+        <Row style={{marginBottom: "5vh"}} justify='center'>
           <Col span={14}>
-            <div style={{ border: "1px solid", height: "38vh" }}>
+            <div style={{border: "1px solid", height: "38vh"}}>
               <Row gutter={[48, 1]}>
                 <Col span={6}>
                   <Col offset={1} span={24}>
-                    <div style={{ marginTop: "2vh", marginBottom: "15px" }}>
+                    <div style={{marginTop: "2vh", marginBottom: "15px"}}>
                       数据浏览器
                     </div>
                   </Col>
