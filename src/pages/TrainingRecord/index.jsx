@@ -23,9 +23,12 @@ class TrainingRecord extends Component {
                 color: "rgb(65,89,209)",
               }}
               onClick={() => {
+                let cur = this.state.dataSource.filter(item => item.id === id)[0]
+                let role = cur.role
+                let partyId = cur.partyId
                 this.props.history.push({
                   pathname: "/federalDetail/show",
-                  state: { id: id },
+                  state: { id, role, partyId },
                 });
               }}
             >
