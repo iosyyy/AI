@@ -23,9 +23,12 @@ class TrainingRecord extends Component {
                 color: "rgb(65,89,209)",
               }}
               onClick={() => {
+                let cur = this.state.dataSource.filter(item => item.id === id)[0]
+                let role = cur.role
+                let partyId = cur.partyId
                 this.props.history.push({
                   pathname: "/federalDetail/show",
-                  state: { id: id },
+                  state: { id, role, partyId },
                 });
               }}
             >
@@ -129,7 +132,7 @@ class TrainingRecord extends Component {
                   <Space>
                     <Input
                       style={{ display: "inline-block", width: "5vw" }}
-                      onChange={_value => {}}
+                      onChange={_value => { }}
                       type='text'
                     />
                     <Button
@@ -199,7 +202,6 @@ class TrainingRecord extends Component {
         status: [],
       })
       .then(r => {
-        console.log(r);
         let list = r.data.data.list;
         let pageSize = r.data.data.totalRecord;
         let dataSource = this.getDataSourceByDataList(list);

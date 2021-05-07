@@ -10,7 +10,6 @@ let myChart;
 export default class Show extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props);
     this.state = {
       colors: ["#386db3", "#386db3", "#386db3"],
       colorType: ["#386db3", "#386db3", "#386db3"],

@@ -1,13 +1,16 @@
 import React, { Component } from "react";
 import { Button, Col, Row } from "antd";
 import Show from "../../../components/Show";
+import api from "../../../config/api"
+import io from "socket.io-client"
 
 class FederalDetail extends Component {
   constructor(props) {
     super(props);
-    console.log();
     this.state = {
       id: this.props.location.state.id,
+      role: this.props.location.state.role,
+      partyId: this.props.location.state.partyId,
       status: "success",
       type: "FEDERAL DEFENCE",
       startTime: "2021-03-14  18:30:00",
@@ -24,6 +27,29 @@ class FederalDetail extends Component {
       dataIndex: index,
     });
   };
+
+  getShowList(jobId, role, partyId) {
+    let url = api.showList.replace("{jobId}", jobId).replace("{role}", role).replace("{partyId}", partyId)
+    console.log(url);
+    
+    const socket = io(url)
+
+    socket.on('connect', function (data) {
+      console.log("连接成功");
+    })
+
+    socket.on('disconnect', function (data) {
+      console.log("断开连接");
+    })
+
+    socket.on('connect_error', function (error) {
+      console.log("error");
+    });
+  }
+
+  componentDidMount() {
+    this.getShowList(this.state.id, this.state.role, this.state.partyId);
+  }
 
   render() {
     return (
