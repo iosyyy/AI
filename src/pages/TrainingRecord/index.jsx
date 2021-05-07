@@ -1,7 +1,16 @@
 import React, { Component } from "react";
-import { Button, Form, Image, Input, Select, Space, Table } from "antd";
+import {
+  Button,
+  Form,
+  Image,
+  Input,
+  message,
+  Select,
+  Space,
+  Table,
+} from "antd";
 import NoteImg from "../../img/Note.png";
-import NoteHover from "../../img/NoteHover.png";
+import NoteHover from "../../img/Note.png";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import axios from "axios";
 import api from "../../config/api";
@@ -16,7 +25,7 @@ class TrainingRecord extends Component {
         title: <div>ID</div>,
         dataIndex: "id",
         key: "id",
-        render: id => (
+        render: (id) => (
           <div>
             <font
               style={{
@@ -52,7 +61,7 @@ class TrainingRecord extends Component {
           compare: (a, b) => a.startTime - b.startTime,
           multiple: 1,
         },
-        render: text => {
+        render: (text) => {
           return <>{new Date(text).toLocaleString()}</>;
         },
       },
@@ -64,7 +73,7 @@ class TrainingRecord extends Component {
           compare: (a, b) => a.endTime - b.endTime,
           multiple: 2,
         },
-        render: text => {
+        render: (text) => {
           return <>{new Date(text).toLocaleString()}</>;
         },
       },
@@ -78,9 +87,9 @@ class TrainingRecord extends Component {
         },
         render: (text, value) => {
           let time = value.endTime - value.startTime;
-          let seconds = Math.floor((time / 1000) % 60);
-          let minutes = Math.floor((time / 1000 / 60) % 60);
-          let hour = Math.floor((time / 1000 / 60 / 60) % 60);
+          let seconds = Math.round((time / 1000) % 60);
+          let minutes = Math.round((time / 1000 / 60) % 60);
+          let hour = Math.round((time / 1000 / 60 / 60) % 60);
           return (
             <>
               {(hour < 10 ? "0" + hour : hour) +
@@ -115,7 +124,7 @@ class TrainingRecord extends Component {
                     onMouseOver={() => {
                       this.setNotesState(NoteHover, value);
                     }}
-                    onMouseLeave={() => {
+                    onMouseLeave={(e) => {
                       this.setNotesState(NoteImg, value);
                     }}
                     height={15}
@@ -128,8 +137,7 @@ class TrainingRecord extends Component {
                 <div>
                   <Form
                     onFinish={(data) => {
-                      // TODO 文本信息提交到后端
-                      this.setState({loading: true})
+                      this.setState({ loading: true });
                       axios
                         .put("http://127.0.0.1:8080/job/update", {
                           job_id: value.id.toString(),
@@ -139,15 +147,18 @@ class TrainingRecord extends Component {
                         })
                         .then((r) => {
                           if (r.data.code === 0) {
-                            let {dataSource} = this.state;
+                            let { dataSource } = this.state;
                             dataSource[value.key].notes = data.notes;
                             this.setState({
                               dataSource,
                               loading: false,
                             });
                             this.setNoteShow(true, value);
+                          } else {
+                            message.error(r.data.message).then();
                           }
-                        });
+                        })
+                        .catch(() => {});
                     }}
                     size={"small"}
                     layout="inline"
@@ -185,7 +196,7 @@ class TrainingRecord extends Component {
         title: <div>action</div>,
         dataIndex: "action",
         key: "action",
-        render: text => {
+        render: (text) => {
           return <Button type={"link"}>{text}</Button>;
         },
       },
@@ -207,7 +218,6 @@ class TrainingRecord extends Component {
   }
 
   componentDidMount() {
-    // TODO 增加ajax
     axios
       .post(api.pageList, {
         fDescription: "",
@@ -223,7 +233,7 @@ class TrainingRecord extends Component {
         role: [],
         status: [],
       })
-      .then(r => {
+      .then((r) => {
         let list = r.data.data.list;
         let pageSize = r.data.data.totalRecord;
         let dataSource = this.getDataSourceByDataList(list);
@@ -234,7 +244,6 @@ class TrainingRecord extends Component {
         });
       })
       .catch(() => {
-        // TODO 把异常显示到页面中
         this.setState({
           loading: false,
         });
@@ -280,12 +289,12 @@ class TrainingRecord extends Component {
 
   render() {
     return (
-      <div className='site-layout-content'>
+      <div className="site-layout-content">
         <div style={{ float: "right" }}>
           <Form
             size={"small"}
-            layout='inline'
-            onFinish={res => {
+            layout="inline"
+            onFinish={(res) => {
               this.setState({
                 loading: true,
               });
@@ -303,7 +312,7 @@ class TrainingRecord extends Component {
                   role: res.role,
                   status: res.status,
                 })
-                .then(r => {
+                .then((r) => {
                   let pageSize = r.data.data.totalRecord;
                   let dataSource = this.getDataSourceByDataList(
                     r.data.data.list
@@ -315,7 +324,6 @@ class TrainingRecord extends Component {
                   });
                 })
                 .catch(() => {
-                  // TODO 把异常显示到页面中
                   this.setState({
                     loading: false,
                   });
@@ -328,7 +336,7 @@ class TrainingRecord extends Component {
                   Job ID
                 </div>
               }
-              name='id'
+              name="id"
             >
               <Input />
             </Form.Item>
@@ -338,11 +346,11 @@ class TrainingRecord extends Component {
                   Role
                 </div>
               }
-              name='role'
+              name="role"
             >
               <Select
-                mode='multiple'
-                placeholder='Select Role'
+                mode="multiple"
+                placeholder="Select Role"
                 style={{ width: "8vw" }}
               >
                 <Option value={"guest"}>guest</Option>
@@ -357,7 +365,7 @@ class TrainingRecord extends Component {
                   Party ID
                 </div>
               }
-              name='partyId'
+              name="partyId"
             >
               <Input />
             </Form.Item>
@@ -367,11 +375,11 @@ class TrainingRecord extends Component {
                   Status
                 </div>
               }
-              name='status'
+              name="status"
             >
               <Select
-                mode='multiple'
-                placeholder='Select Status'
+                mode="multiple"
+                placeholder="Select Status"
                 style={{ width: "8vw" }}
               >
                 <Option value={"success"}>success</Option>
@@ -387,15 +395,15 @@ class TrainingRecord extends Component {
                   note
                 </div>
               }
-              name='note'
+              name="note"
             >
               <Input />
             </Form.Item>
             <Form.Item>
               <Button
                 style={{ borderRadius: "5vw", width: "4vw" }}
-                type='primary'
-                htmlType='submit'
+                type="primary"
+                htmlType="submit"
               >
                 搜索
               </Button>
@@ -404,7 +412,7 @@ class TrainingRecord extends Component {
         </div>
         <Table
           loading={this.state.loading}
-          scroll={{y: "65vh"}}
+          scroll={{ y: "65vh" }}
           bordered={false}
           dataSource={this.state.dataSource}
           columns={this.state.columns}
@@ -430,7 +438,7 @@ class TrainingRecord extends Component {
                   role: [],
                   status: [],
                 })
-                .then(r => {
+                .then((r) => {
                   let list = r.data.data.list;
                   let pageSize = r.data.data.totalRecord;
                   let dataSource = this.getDataSourceByDataList(list);
@@ -441,7 +449,6 @@ class TrainingRecord extends Component {
                   });
                 })
                 .catch(() => {
-                  // TODO 把异常显示到页面中
                   this.setState({
                     loading: false,
                   });
