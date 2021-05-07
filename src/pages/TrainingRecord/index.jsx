@@ -8,9 +8,10 @@ import {
   Select,
   Space,
   Table,
+  Tooltip,
 } from "antd";
 import NoteImg from "../../img/Note.png";
-import NoteHover from "../../img/Note.png";
+import NoteHover from "../../img/NoteHover.png";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import axios from "axios";
 import api from "../../config/api";
@@ -25,6 +26,7 @@ class TrainingRecord extends Component {
         title: <div>ID</div>,
         dataIndex: "id",
         key: "id",
+        width: "16vw",
         render: (id) => (
           <div>
             <font
@@ -110,13 +112,30 @@ class TrainingRecord extends Component {
         title: <div>记录</div>,
         dataIndex: "notes",
         key: "notes",
+        width: "9vw",
         render: (text, value, _context) => {
           let note = this.state.NoteNow[value.key];
           return (
-            <div>
+            <>
               {note.Show ? (
                 <Space>
-                  <span>{text}</span>
+                  <span>
+                    {text.length >= 5 ? (
+                      <Tooltip color={"#108ee9"} title={text}>
+                        <span>{text.slice(0, 5)}</span>
+                        <span
+                          style={{
+                            color: "rgb(127,125,142)",
+                            fontSize: "small",
+                          }}
+                        >
+                          ···
+                        </span>
+                      </Tooltip>
+                    ) : (
+                      text
+                    )}
+                  </span>
                   <Image
                     onClick={() => {
                       this.setNoteShow(false, value);
@@ -134,61 +153,58 @@ class TrainingRecord extends Component {
                   />
                 </Space>
               ) : (
-                <div>
-                  <Form
-                    onFinish={(data) => {
-                      this.setState({ loading: true });
-                      axios
-                        .put("http://127.0.0.1:8080/job/update", {
-                          job_id: value.id.toString(),
-                          notes: data.notes,
-                          party_id: value.partyId,
-                          role: value.role,
-                        })
-                        .then((r) => {
-                          if (r.data.code === 0) {
-                            let { dataSource } = this.state;
-                            dataSource[value.key].notes = data.notes;
-                            this.setState({
-                              dataSource,
-                              loading: false,
-                            });
-                            this.setNoteShow(true, value);
-                          } else {
-                            message.error(r.data.message).then();
-                          }
-                        })
-                        .catch(() => {});
-                    }}
-                    size={"small"}
-                    layout="inline"
-                  >
-                    <Form.Item wrapperCol={{ span: 9 }} name={"notes"}>
-                      <Input />
-                    </Form.Item>
-                    <Form.Item>
-                      <Button
-                        htmlType="submit"
-                        size={"small"}
-                        type="text"
-                        width={10}
-                        icon={<CheckOutlined />}
-                      />
-                    </Form.Item>
-                    <Form.Item>
-                      <Button
-                        onClick={() => {
+                <Form
+                  onFinish={(data) => {
+                    this.setState({ loading: true });
+                    axios
+                      .put("http://127.0.0.1:8080/job/update", {
+                        job_id: value.id.toString(),
+                        notes: data.notes,
+                        party_id: value.partyId,
+                        role: value.role,
+                      })
+                      .then((r) => {
+                        if (r.data.code === 0) {
+                          let { dataSource } = this.state;
+                          dataSource[value.key].notes = data.notes;
+                          this.setState({
+                            dataSource,
+                            loading: false,
+                          });
                           this.setNoteShow(true, value);
-                        }}
-                        size={"small"}
-                        type="text"
-                        icon={<CloseOutlined />}
-                      />
-                    </Form.Item>
-                  </Form>
-                </div>
+                        } else {
+                          message.error(r.data.msg).then();
+                          this.setState({ loading: false });
+                          this.setNoteShow(true, value);
+                        }
+                      })
+                      .catch(() => {});
+                  }}
+                  size={"small"}
+                  layout="inline"
+                >
+                  <Form.Item wrapperCol={{ span: 12 }} name={"notes"}>
+                    <Input placeholder="输入记录" bordered={false} />
+                  </Form.Item>
+                  <Form.Item>
+                    <Button
+                      htmlType="submit"
+                      type="text"
+                      icon={<CheckOutlined />}
+                    />
+                  </Form.Item>
+                  <Form.Item>
+                    <Button
+                      onClick={() => {
+                        this.setNoteShow(true, value);
+                      }}
+                      type="text"
+                      icon={<CloseOutlined />}
+                    />
+                  </Form.Item>
+                </Form>
               )}
-            </div>
+            </>
           );
         },
       },

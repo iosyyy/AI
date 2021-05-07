@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="1e8293fc-9252-49f5-a5a3-14558ff65e96" name="默认变更列表" comment="#fix 修改部分样式">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/img/Note.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/img/NoteHover.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/img/NoteHover.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/TrainingRecord/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/TrainingRecord/index.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -58,6 +56,9 @@
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\repos\webReact\AI\src\img" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\repos\webReact\AI\src\img" />
     </key>
@@ -102,7 +103,11 @@
       <workItem from="1620299775740" duration="644000" />
       <workItem from="1620300614804" duration="105000" />
       <workItem from="1620300741998" duration="2042000" />
-      <workItem from="1620353498401" duration="1960000" />
+      <workItem from="1620353498401" duration="3922000" />
+      <workItem from="1620359142451" duration="454000" />
+      <workItem from="1620359620754" duration="31000" />
+      <workItem from="1620360331361" duration="22000" />
+      <workItem from="1620367296453" duration="1934000" />
     </task>
     <task id="LOCAL-00001" summary="#fix 修改部分代码样式增加history">
       <created>1620199795725</created>
@@ -167,7 +172,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620302735735</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="#fix 修改部分样式">
+      <created>1620355741207</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1620355741207</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
