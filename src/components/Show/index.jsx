@@ -10,17 +10,36 @@ let myChart;
 export default class Show extends Component {
   constructor(props) {
     super(props);
+    let colors = []
+    for (let i = 0; i < 100; i++) {
+      colors.push("#386db3")
+    }
     this.state = {
-      colors: ["#386db3", "#386db3", "#386db3"],
-      colorType: ["#386db3", "#386db3", "#386db3"],
+      colors,
+      colorType: colors,
       style: this.props.style,
       id: this.props.id,
       symbolSize: this.props.symbolSize,
-      names: this.props.names,
     };
   }
 
   drew() {
+    let datas = this.props.names.map((item, index) => {
+      return {
+        name: item,
+        x: index * 50,
+        y: index * 50,
+        colors: this.state.colorType[index],
+      }
+    })
+    let links = []
+    for (let i = 0; i < this.props.names.length - 1; i++) {
+      links.push({
+        source: i,
+        target: i + 1,
+      })
+    }
+
     let option = {
       tooltip: {},
       animationEasingUpdate: "quinticInOut",
@@ -50,37 +69,9 @@ export default class Show extends Component {
               show: false,
             },
           },
-          data: [
-            {
-              name: this.state.names[0],
-              x: 620,
-              y: 0,
-              colors: this.state.colorType[0],
-            },
-            {
-              name: this.state.names[1],
-              x: 650,
-              y: 30,
-              colors: this.state.colorType[1],
-            },
-            {
-              name: this.state.names[2],
-              x: 600,
-              y: 60,
-              colors: this.state.colorType[2], //折线点的颜色
-            },
-          ],
+          data: datas,
           // links: [],
-          links: [
-            {
-              source: 0,
-              target: 1,
-            },
-            {
-              source: 1,
-              target: 2,
-            },
-          ],
+          links: links,
           lineStyle: {
             opacity: 0.9,
             width: 2,
@@ -100,6 +91,7 @@ export default class Show extends Component {
 
   componentDidMount() {
     let that = this;
+
     myChart = echarts.init(document.getElementById(this.state.id));
     myChart.on("click", function (handler, context) {
       let arr = [...that.state.colors];

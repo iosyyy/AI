@@ -1,51 +1,91 @@
 import React, { Component } from "react";
-import { Button, Col, Row } from "antd";
+import { Button, Col, Row, Tree } from "antd";
+import { DownOutlined } from '@ant-design/icons';
 import Show from "../../../components/Show";
 import api from "../../../config/api"
-import io from "socket.io-client"
+import dayjs from "dayjs"
+import axios from "axios";
 
 class FederalDetail extends Component {
   constructor(props) {
     super(props);
+    let cur = this.props.location.state.cur
+    let startTime = dayjs(cur.startTime).format("YYYY/MM/DD hh:mm:ss")
+    let endTime = dayjs(cur.endTime).format("YYYY/MM/DD hh:mm:ss")
+    let duration = cur.duration / 1000
     this.state = {
-      id: this.props.location.state.id,
-      role: this.props.location.state.role,
-      partyId: this.props.location.state.partyId,
-      status: "success",
+      id: cur.id,
+      role: cur.role,
+      partyId: cur.partyId,
+      status: cur.status,
       type: "FEDERAL DEFENCE",
-      startTime: "2021-03-14  18:30:00",
-      endTime: "2021-03-14  18:30:50",
-      duration: "00:00:50",
-      dataIndex: -1,
-      names: ["Input", "HeteroLR", "Defence Test"],
+      startTime: startTime,
+      endTime: endTime,
+      duration: duration + "秒",
+      names: [],
+      treeData: [],
+      d: {}
     };
   }
 
+
+
   onChange = index => {
-    console.log(index);
-    this.setState({
-      dataIndex: index,
-    });
+    axios.post(api.showDetailParameters, {
+      component_name: this.state.names[index],
+      job_id: this.state.id,
+      party_id: this.state.partyId,
+      role: this.state.role
+    }).then(data => {
+      let d = JSON.parse(data.data.data)
+      console.log(d);
+      let treeData = [
+        {
+          title: `module:${d.module}`,
+          key: `module:${d.module}`,
+          icon: <div />
+        },
+        {
+          title: 'SecureAddExampleParam',
+          key: 'SecureAddExampleParam',
+          children: [
+            {
+              title: "partition:" + d.SecureAddExampleParam.partition,
+              key: "partition:" + d.SecureAddExampleParam.partition
+            },
+            {
+              title: "seed:" + d.SecureAddExampleParam.seed,
+              key: "seed:" + d.SecureAddExampleParam.seed
+            },
+            {
+              title: "data_num:" + d.SecureAddExampleParam.data_num,
+              key: "data_num:" + d.SecureAddExampleParam.data_num
+            }
+          ]
+        }
+      ]
+      this.setState({ treeData })
+    })
   };
 
   getShowList(jobId, role, partyId) {
-    let url = api.showList.replace("{jobId}", jobId).replace("{role}", role).replace("{partyId}", partyId)
-    console.log(url);
-    
-    const socket = io(url)
+    let url = api.showList.replace("{jobId}", jobId)
+      .replace("{role}", role)
+      .replace("{partyId}", partyId)
+    const socket = new WebSocket(url)
 
-    socket.on('connect', function (data) {
+    socket.onopen = () => {
       console.log("连接成功");
-    })
+    }
 
-    socket.on('disconnect', function (data) {
-      console.log("断开连接");
-    })
+    socket.onmessage = (data) => {
+      let d = JSON.parse(data.data)
+      let names = d.dependency_data.component_list.map(item => item.component_name)
+      this.setState({ names })
+    }
 
-    socket.on('connect_error', function (error) {
-      console.log("error");
-    });
   }
+
 
   componentDidMount() {
     this.getShowList(this.state.id, this.state.role, this.state.partyId);
@@ -55,7 +95,7 @@ class FederalDetail extends Component {
     return (
       <div
         className='site-layout-content'
-        style={{height: "83vh", width: "100%"}}
+        style={{ height: "83vh", width: "100%" }}
       >
         <div style={{ display: "inline-block", width: "20%", height: "75vh" }}>
           <div
@@ -134,7 +174,12 @@ class FederalDetail extends Component {
                   border: "1px solid",
                 }}
               >
-                No Date
+                <Tree
+                  defaultExpandedKeys={['0-0-0']}
+                  onSelect={this.onSelect}
+                  treeData={this.state.treeData}
+                  style={{ background: "rgb(240,240,240)" }}
+                />
               </div>
               <Button
                 onClick={e => {
