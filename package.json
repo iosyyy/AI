@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^12.6.2",
     "axios": "^0.21.1",
     "d3": "^6.5.0",
+    "dayjs": "^1.10.4",
     "http-proxy-middleware": "^1.0.6",
     "immer": "^8.0.1",
     "jschardet": "^2.3.0",
