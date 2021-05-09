@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
-import Form from "./Form";
-import Result from "./Result";
-import "../../css/fontColor.css";
-import Choice from "./Choice";
+import React, { Component } from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import Form from './Form';
+import Result from './Result';
+import '../../css/fontColor.css';
+import Choice from './Choice';
 
 export default class Normal extends Component {
   render() {

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Button,
   Form,
@@ -9,12 +9,12 @@ import {
   Space,
   Table,
   Tooltip,
-} from "antd";
-import NoteImg from "../../img/Note.png";
-import NoteHover from "../../img/NoteHover.png";
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
-import axios from "axios";
-import api from "../../config/api";
+} from 'antd';
+import NoteImg from '../../img/Note.png';
+import NoteHover from '../../img/NoteHover.png';
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import axios from 'axios';
+import api from '../../config/api';
 
 const { Option } = Select;
 
@@ -24,19 +24,21 @@ class TrainingRecord extends Component {
     const columns = [
       {
         title: <div>ID</div>,
-        dataIndex: "id",
-        key: "id",
-        width: "16vw",
-        render: (id) => (
+        dataIndex: 'id',
+        key: 'id',
+        width: '16vw',
+        render: id => (
           <div>
             <font
               style={{
-                color: "rgb(65,89,209)",
+                color: 'rgb(65,89,209)',
               }}
-              onClick={() => {
-                let cur = this.state.dataSource.filter(item => item.id === id)[0]
+              onClick={e => {
+                let cur = this.state.dataSource.filter(
+                  item => item.id === id
+                )[0];
                 this.props.history.push({
-                  pathname: "/federalDetail/show",
+                  pathname: '/federalDetail/show',
                   state: { cur },
                 });
               }}
@@ -48,42 +50,42 @@ class TrainingRecord extends Component {
       },
       {
         title: <div>PartyID</div>,
-        dataIndex: "partyId",
-        key: "partyId",
+        dataIndex: 'partyId',
+        key: 'partyId',
       },
       {
         title: <div>规则</div>,
-        dataIndex: "role",
-        key: "role",
+        dataIndex: 'role',
+        key: 'role',
       },
       {
         title: <div>开始时间</div>,
-        dataIndex: "startTime",
-        key: "startTime",
+        dataIndex: 'startTime',
+        key: 'startTime',
         sorter: {
           compare: (a, b) => a.startTime - b.startTime,
           multiple: 1,
         },
-        render: (text) => {
+        render: text => {
           return <>{new Date(text).toLocaleString()}</>;
         },
       },
       {
         title: <div>结束时间</div>,
-        dataIndex: "endTime",
-        key: "endTime",
+        dataIndex: 'endTime',
+        key: 'endTime',
         sorter: {
           compare: (a, b) => a.endTime - b.endTime,
           multiple: 2,
         },
-        render: (text) => {
+        render: text => {
           return <>{new Date(text).toLocaleString()}</>;
         },
       },
       {
         title: <div>运行时间</div>,
-        dataIndex: "duration",
-        key: "duration",
+        dataIndex: 'duration',
+        key: 'duration',
         sorter: {
           compare: (a, b) => a.duration - b.duration,
           multiple: 3,
@@ -95,25 +97,25 @@ class TrainingRecord extends Component {
           let hour = Math.round((time / 1000 / 60 / 60) % 60);
           return (
             <>
-              {(hour < 10 ? "0" + hour : hour) +
-              ":" +
-              (minutes < 10 ? "0" + minutes : minutes) +
-              ":" +
-              (seconds < 10 ? "0" + seconds : seconds)}
+              {(hour < 10 ? '0' + hour : hour) +
+                ':' +
+                (minutes < 10 ? '0' + minutes : minutes) +
+                ':' +
+                (seconds < 10 ? '0' + seconds : seconds)}
             </>
           );
         },
       },
       {
         title: <div>结果</div>,
-        dataIndex: "status",
-        key: "status",
+        dataIndex: 'status',
+        key: 'status',
       },
       {
         title: <div>记录</div>,
-        dataIndex: "notes",
-        key: "notes",
-        width: "9vw",
+        dataIndex: 'notes',
+        key: 'notes',
+        width: '9vw',
         render: (text, value, _context) => {
           let note = this.state.NoteNow[value.key];
           return (
@@ -122,12 +124,12 @@ class TrainingRecord extends Component {
                 <Space>
                   <span>
                     {text.length >= 5 ? (
-                      <Tooltip color={"#108ee9"} title={text}>
+                      <Tooltip color={'#108ee9'} title={text}>
                         <span>{text.slice(0, 5)}</span>
                         <span
                           style={{
-                            color: "rgb(127,125,142)",
-                            fontSize: "small",
+                            color: 'rgb(127,125,142)',
+                            fontSize: 'small',
                           }}
                         >
                           ···
@@ -137,6 +139,7 @@ class TrainingRecord extends Component {
                       text
                     )}
                   </span>
+
                   <Image
                     onClick={() => {
                       this.setNoteShow(false, value);
@@ -155,16 +158,16 @@ class TrainingRecord extends Component {
                 </Space>
               ) : (
                 <Form
-                  onFinish={(data) => {
+                  onFinish={data => {
                     this.setState({ loading: true });
                     axios
-                      .put("http://127.0.0.1:8080/job/update", {
+                      .put('http://127.0.0.1:8080/job/update', {
                         job_id: value.id.toString(),
                         notes: data.notes,
                         party_id: value.partyId,
                         role: value.role,
                       })
-                      .then((r) => {
+                      .then(r => {
                         if (r.data.code === 0) {
                           let { dataSource } = this.state;
                           dataSource[value.key].notes = data.notes;
@@ -181,10 +184,10 @@ class TrainingRecord extends Component {
                       })
                       .catch(() => {});
                   }}
-                  size={"small"}
+                  size={'small'}
                   layout="inline"
                 >
-                  <Form.Item wrapperCol={{ span: 12 }} name={"notes"}>
+                  <Form.Item wrapperCol={{ span: 12 }} name={'notes'}>
                     <Input placeholder="输入记录" bordered={false} />
                   </Form.Item>
                   <Form.Item>
@@ -211,10 +214,10 @@ class TrainingRecord extends Component {
       },
       {
         title: <div>action</div>,
-        dataIndex: "action",
-        key: "action",
-        render: (text) => {
-          return <Button type={"link"}>{text}</Button>;
+        dataIndex: 'action',
+        key: 'action',
+        render: text => {
+          return <Button type={'link'}>{text}</Button>;
         },
       },
     ];
@@ -225,9 +228,9 @@ class TrainingRecord extends Component {
     this.state = {
       columns,
       dataSource: [],
-      searchText: "",
-      searchedColumn: "",
-      selectKey: "",
+      searchText: '',
+      searchedColumn: '',
+      selectKey: '',
       NoteNow,
       loading: true,
       pageSize: 0,
@@ -237,20 +240,20 @@ class TrainingRecord extends Component {
   componentDidMount() {
     axios
       .post(api.pageList, {
-        fDescription: "",
-        jobId: "",
-        job_id: "",
-        note: "",
-        orderField: "f_job_id",
-        orderRule: "desc",
+        fDescription: '',
+        jobId: '',
+        job_id: '',
+        note: '',
+        orderField: 'f_job_id',
+        orderRule: 'desc',
         pageNum: 1,
         pageSize: 20,
-        partyId: "",
-        party_id: "",
+        partyId: '',
+        party_id: '',
         role: [],
         status: [],
       })
-      .then((r) => {
+      .then(r => {
         let list = r.data.data.list;
         let pageSize = r.data.data.totalRecord;
         let dataSource = this.getDataSourceByDataList(list);
@@ -270,7 +273,7 @@ class TrainingRecord extends Component {
   getDataSourceByDataList(list) {
     let dataSource = [];
     list.forEach((values, key) => {
-      let value = values["job"];
+      let value = values['job'];
       dataSource.push({
         key: key,
         id: value.fJobId,
@@ -281,7 +284,7 @@ class TrainingRecord extends Component {
         partyId: value.fPartyId,
         notes: value.fDescription,
         status: value.fStatus,
-        action: value.fStatus === "success" ? "" : "retry",
+        action: value.fStatus === 'success' ? '' : 'retry',
       });
     });
     return dataSource;
@@ -307,11 +310,11 @@ class TrainingRecord extends Component {
   render() {
     return (
       <div className="site-layout-content">
-        <div style={{ float: "right" }}>
+        <div style={{ float: 'right' }}>
           <Form
-            size={"small"}
+            size={'small'}
             layout="inline"
-            onFinish={(res) => {
+            onFinish={res => {
               this.setState({
                 loading: true,
               });
@@ -320,8 +323,8 @@ class TrainingRecord extends Component {
                   fDescription: res.note,
                   jobId: res.id,
                   job_id: res.id,
-                  orderField: "f_job_id",
-                  orderRule: "desc",
+                  orderField: 'f_job_id',
+                  orderRule: 'desc',
                   pageNum: 1,
                   pageSize: 20,
                   partyId: res.partyId,
@@ -329,7 +332,7 @@ class TrainingRecord extends Component {
                   role: res.role,
                   status: res.status,
                 })
-                .then((r) => {
+                .then(r => {
                   let pageSize = r.data.data.totalRecord;
                   let dataSource = this.getDataSourceByDataList(
                     r.data.data.list
@@ -349,7 +352,7 @@ class TrainingRecord extends Component {
           >
             <Form.Item
               label={
-                <div style={{ fontWeight: 900, color: "rgb(127,125,142)" }}>
+                <div style={{ fontWeight: 900, color: 'rgb(127,125,142)' }}>
                   Job ID
                 </div>
               }
@@ -359,7 +362,7 @@ class TrainingRecord extends Component {
             </Form.Item>
             <Form.Item
               label={
-                <div style={{ fontWeight: 900, color: "rgb(127,125,142)" }}>
+                <div style={{ fontWeight: 900, color: 'rgb(127,125,142)' }}>
                   Role
                 </div>
               }
@@ -368,17 +371,17 @@ class TrainingRecord extends Component {
               <Select
                 mode="multiple"
                 placeholder="Select Role"
-                style={{ width: "8vw" }}
+                style={{ width: '8vw' }}
               >
-                <Option value={"guest"}>guest</Option>
-                <Option value={"host"}>host</Option>
-                <Option value={"arbiter"}>arbiter</Option>
-                <Option value={"local"}>local</Option>
+                <Option value={'guest'}>guest</Option>
+                <Option value={'host'}>host</Option>
+                <Option value={'arbiter'}>arbiter</Option>
+                <Option value={'local'}>local</Option>
               </Select>
             </Form.Item>
             <Form.Item
               label={
-                <div style={{ fontWeight: 900, color: "rgb(127,125,142)" }}>
+                <div style={{ fontWeight: 900, color: 'rgb(127,125,142)' }}>
                   Party ID
                 </div>
               }
@@ -388,7 +391,7 @@ class TrainingRecord extends Component {
             </Form.Item>
             <Form.Item
               label={
-                <div style={{ fontWeight: 900, color: "rgb(127,125,142)" }}>
+                <div style={{ fontWeight: 900, color: 'rgb(127,125,142)' }}>
                   Status
                 </div>
               }
@@ -397,18 +400,18 @@ class TrainingRecord extends Component {
               <Select
                 mode="multiple"
                 placeholder="Select Status"
-                style={{ width: "8vw" }}
+                style={{ width: '8vw' }}
               >
-                <Option value={"success"}>success</Option>
-                <Option value={"running"}>running</Option>
-                <Option value={"waiting"}>waiting</Option>
-                <Option value={"failed"}>failed</Option>
-                <Option value={"canceled"}>canceled</Option>
+                <Option value={'success'}>success</Option>
+                <Option value={'running'}>running</Option>
+                <Option value={'waiting'}>waiting</Option>
+                <Option value={'failed'}>failed</Option>
+                <Option value={'canceled'}>canceled</Option>
               </Select>
             </Form.Item>
             <Form.Item
               label={
-                <div style={{ fontWeight: 900, color: "rgb(127,125,142)" }}>
+                <div style={{ fontWeight: 900, color: 'rgb(127,125,142)' }}>
                   note
                 </div>
               }
@@ -418,7 +421,7 @@ class TrainingRecord extends Component {
             </Form.Item>
             <Form.Item>
               <Button
-                style={{ borderRadius: "5vw", width: "4vw" }}
+                style={{ borderRadius: '5vw', width: '4vw' }}
                 type="primary"
                 htmlType="submit"
               >
@@ -429,33 +432,33 @@ class TrainingRecord extends Component {
         </div>
         <Table
           loading={this.state.loading}
-          scroll={{ y: "65vh" }}
+          scroll={{ y: '65vh' }}
           bordered={false}
           dataSource={this.state.dataSource}
           columns={this.state.columns}
           pagination={{
             pageSize: 20,
-            position: ["bottomCenter"],
-            size: "small",
+            position: ['bottomCenter'],
+            size: 'small',
             total: this.state.pageSize,
             onChange: (page, _pageSize) => {
               this.setState({ loading: true });
               axios
                 .post(api.pageList, {
-                  fDescription: "",
-                  jobId: "",
-                  job_id: "",
-                  note: "",
-                  orderField: "f_job_id",
-                  orderRule: "desc",
+                  fDescription: '',
+                  jobId: '',
+                  job_id: '',
+                  note: '',
+                  orderField: 'f_job_id',
+                  orderRule: 'desc',
                   pageNum: page,
                   pageSize: 20,
-                  partyId: "",
-                  party_id: "",
+                  partyId: '',
+                  party_id: '',
                   role: [],
                   status: [],
                 })
-                .then((r) => {
+                .then(r => {
                   let list = r.data.data.list;
                   let pageSize = r.data.data.totalRecord;
                   let dataSource = this.getDataSourceByDataList(list);

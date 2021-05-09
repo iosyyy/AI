@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
-import FederalDetailShow from "./detail";
-import FederalDetail from "./show";
+import React, { Component } from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import FederalDetailShow from './detail';
+import FederalDetail from './show';
 
 class FederalDetailAll extends Component {
   render() {

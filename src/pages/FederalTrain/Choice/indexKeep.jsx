@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { Button, Form, InputNumber, Select, Tooltip } from "antd";
-import PubSubJS from "pubsub-js";
+import React, { Component } from 'react';
+import { Button, Form, InputNumber, Select, Tooltip } from 'antd';
+import PubSubJS from 'pubsub-js';
 
 class FederalTrainChoiceKeep extends Component {
   constructor(props) {
@@ -8,13 +8,13 @@ class FederalTrainChoiceKeep extends Component {
     this.state = { ...this.props.location.state };
   }
 
-  onFinish = (values) => {
-    PubSubJS.publish("trainChoice", {
+  onFinish = values => {
+    PubSubJS.publish('trainChoice', {
       ...values,
       type: this.state.type,
       status: this.state.status,
     });
-    this.props.history.push("/training");
+    this.props.history.push('/training');
   };
 
   render() {
@@ -26,10 +26,10 @@ class FederalTrainChoiceKeep extends Component {
       wrapperCol: { span: 6 },
     };
     return (
-      <div style={{height: "80vh"}} className="site-layout-content">
-        <h1 className={"colorWhite"}>联邦训练</h1>
+      <div style={{ height: '80vh' }} className="site-layout-content">
+        <h1 className={'colorWhite'}>联邦训练</h1>
         <div
-          style={{textAlign: "center", marginBottom: "5vh", marginTop: "3vh"}}
+          style={{ textAlign: 'center', marginBottom: '5vh', marginTop: '3vh' }}
         >
           模型参数选择
         </div>
@@ -51,7 +51,7 @@ class FederalTrainChoiceKeep extends Component {
           <Form.Item
             name="local_ep"
             label="客户端学习："
-            rules={[{ type: "number", min: 1, max: 1000 }]}
+            rules={[{ type: 'number', min: 1, max: 1000 }]}
             initialValue={10}
           >
             <InputNumber />
@@ -60,7 +60,7 @@ class FederalTrainChoiceKeep extends Component {
           <Form.Item
             name="epochs"
             label="训练次数："
-            rules={[{ type: "number", min: 1, max: 10 }]}
+            rules={[{ type: 'number', min: 1, max: 10 }]}
             initialValue={5}
           >
             <InputNumber />

@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
-import FederalTrain from "./Form";
-import FederalResult from "./Result";
-import FederalTrainChoice from "./Choice";
+import React, { Component } from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import FederalTrain from './Form';
+import FederalResult from './Result';
+import FederalTrainChoice from './Choice';
 
 class FederalIndex extends Component {
   render() {

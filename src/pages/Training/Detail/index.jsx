@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { Button, Card, Image, Input, Modal, Progress, Tabs } from "antd";
-import { BulbTwoTone } from "@ant-design/icons";
-import "./index.css";
-import Show from "../../../components/Show";
-import bigImg from "../../../img/big.png";
+import React, { Component } from 'react';
+import { Button, Card, Image, Input, Modal, Progress, Tabs } from 'antd';
+import { BulbTwoTone } from '@ant-design/icons';
+import './index.css';
+import Show from '../../../components/Show';
+import bigImg from '../../../img/big.png';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -12,33 +12,33 @@ export default class index extends Component {
   state = {
     id: this.props.location.state.id,
     info: {
-      dataset: "train.csv",
+      dataset: 'train.csv',
       epoch: 5,
-      optimizer: "sgim",
-      lr: "0.01",
+      optimizer: 'sgim',
+      lr: '0.01',
     },
     percent: 40,
     logs: {
       algorithm: {
         error: {
-          msg: "algorithm-error的数据",
+          msg: 'algorithm-error的数据',
         },
         warning: {
-          msg: "algorithm-warning的数据",
+          msg: 'algorithm-warning的数据',
         },
         info: {
-          msg: "algorithm-info的数据",
+          msg: 'algorithm-info的数据',
         },
         debug: {
-          msg: "algorithm-debug的数据",
+          msg: 'algorithm-debug的数据',
         },
       },
       schedule: {
         error: {
-          msg: "schedule-error的数据",
+          msg: 'schedule-error的数据',
         },
         info: {
-          msg: "schedule-info的数据",
+          msg: 'schedule-info的数据',
         },
       },
       algorithmError: false,
@@ -49,26 +49,26 @@ export default class index extends Component {
       scheduleInfo: true,
       isBig: false,
     },
-    names: ["Input", "HeteroLR", "Evaluation"],
+    names: ['Input', 'HeteroLR', 'Evaluation'],
   };
   readNew1 = key => {
     let newData;
     switch (key) {
-      case "1":
+      case '1':
         newData = this.state.logs;
-        newData["algorithmError"] = false;
+        newData['algorithmError'] = false;
         break;
-      case "2":
+      case '2':
         newData = this.state.logs;
-        newData["algorithmWarning"] = false;
+        newData['algorithmWarning'] = false;
         break;
-      case "3":
+      case '3':
         newData = this.state.logs;
-        newData["algorithmInfo"] = false;
+        newData['algorithmInfo'] = false;
         break;
-      case "4":
+      case '4':
         newData = this.state.logs;
-        newData["algorithmDebug"] = false;
+        newData['algorithmDebug'] = false;
         break;
       default:
         break;
@@ -78,13 +78,13 @@ export default class index extends Component {
   readNew2 = key => {
     let newData;
     switch (key) {
-      case "1":
+      case '1':
         newData = this.state.logs;
-        newData["scheduleError"] = false;
+        newData['scheduleError'] = false;
         break;
-      case "2":
+      case '2':
         newData = this.state.logs;
-        newData["scheduleInfo"] = false;
+        newData['scheduleInfo'] = false;
         break;
       default:
         break;
@@ -105,52 +105,52 @@ export default class index extends Component {
       });
     };
     return (
-      <div className='training-details'>
-        <div className='trainning-details-card1-continer'>
-          <Card className='trainning-details-card1'>
+      <div className="training-details">
+        <div className="trainning-details-card1-continer">
+          <Card className="trainning-details-card1">
             <h4>Info</h4>
-            <div className='trainning-details-info'>
+            <div className="trainning-details-info">
               <p>Dataset:{this.state.info.dataset}</p>
               <p>Epoch:{this.state.info.epoch}</p>
               <p>Optimizer:{this.state.info.optimizer}</p>
               <p>Lr:{this.state.info.lr}</p>
             </div>
           </Card>
-          <Card className='trainning-details-card1 c2'>
+          <Card className="trainning-details-card1 c2">
             <h4>Task</h4>
             <Progress
               percent={this.state.percent}
               strokeColor={{
-                "0%": "#108ee9",
-                "100%": "#87d068",
+                '0%': '#108ee9',
+                '100%': '#87d068',
               }}
-              status={this.state.percent === 100 ? "success" : "active"}
+              status={this.state.percent === 100 ? 'success' : 'active'}
             />
             <h6>duration:00:00:56</h6>
             <Button
               onClick={() => {
                 console.log(this.state.id);
                 this.props.history.push({
-                  pathname: "/federalDetail/show",
+                  pathname: '/federalDetail/show',
                   state: { id: this.state.id },
                 });
               }}
-              type='primary'
-              style={{ marginTop: "5vh", float: "right" }}
+              type="primary"
+              style={{ marginTop: '5vh', float: 'right' }}
             >
               view the job -&gt;
             </Button>
           </Card>
-          <Card className='trainning-details-card1'>
+          <Card className="trainning-details-card1">
             <div>
               <span style={{ fontWeight: 600 }}>Graph</span>
               <div
                 style={{
-                  float: "right",
-                  display: "inline",
+                  float: 'right',
+                  display: 'inline',
                 }}
               >
-                <Button type='text' size='small'>
+                <Button type="text" size="small">
                   <Image
                     preview={false}
                     onClick={() => {
@@ -161,7 +161,7 @@ export default class index extends Component {
                     style={{
                       width: 20,
                       height: 20,
-                      display: "",
+                      display: '',
                     }}
                   />
                 </Button>
@@ -171,31 +171,31 @@ export default class index extends Component {
             <Show
               names={this.state.names}
               symbolSize={32}
-              id='show'
+              id="show"
               change={index => {
                 this.setState();
               }}
-              style={{ width: "100%", height: "22vh" }}
+              style={{ width: '100%', height: '22vh' }}
             />
           </Card>
         </div>
 
-        <Card className='trainning-details-card2'>
-          <Tabs defaultActiveKey='1'>
-            <TabPane tab='algorithmm Log' key='1'>
-              <Tabs defaultActiveKey='1' type='card' onChange={this.readNew1}>
+        <Card className="trainning-details-card2">
+          <Tabs defaultActiveKey="1">
+            <TabPane tab="algorithmm Log" key="1">
+              <Tabs defaultActiveKey="1" type="card" onChange={this.readNew1}>
                 <TabPane
                   tab={
                     <>
                       <span>error</span>&nbsp;
                       <BulbTwoTone
                         twoToneColor={
-                          this.state.logs.algorithmError ? "#FFD700" : "#C0C0C0"
+                          this.state.logs.algorithmError ? '#FFD700' : '#C0C0C0'
                         }
                       />
                     </>
                   }
-                  key='1'
+                  key="1"
                 >
                   <TextArea
                     disabled
@@ -210,13 +210,13 @@ export default class index extends Component {
                       <BulbTwoTone
                         twoToneColor={
                           this.state.logs.algorithmWarning
-                            ? "#FFD700"
-                            : "#C0C0C0"
+                            ? '#FFD700'
+                            : '#C0C0C0'
                         }
                       />
                     </>
                   }
-                  key='2'
+                  key="2"
                 >
                   <TextArea
                     disabled
@@ -230,12 +230,12 @@ export default class index extends Component {
                       <span>info</span>&nbsp;
                       <BulbTwoTone
                         twoToneColor={
-                          this.state.logs.algorithmInfo ? "#FFD700" : "#C0C0C0"
+                          this.state.logs.algorithmInfo ? '#FFD700' : '#C0C0C0'
                         }
                       />
                     </>
                   }
-                  key='3'
+                  key="3"
                 >
                   <TextArea
                     disabled
@@ -249,12 +249,12 @@ export default class index extends Component {
                       <span>debug</span>&nbsp;
                       <BulbTwoTone
                         twoToneColor={
-                          this.state.logs.algorithmDebug ? "#FFD700" : "#C0C0C0"
+                          this.state.logs.algorithmDebug ? '#FFD700' : '#C0C0C0'
                         }
                       />
                     </>
                   }
-                  key='4'
+                  key="4"
                 >
                   <TextArea
                     disabled
@@ -264,20 +264,20 @@ export default class index extends Component {
                 </TabPane>
               </Tabs>
             </TabPane>
-            <TabPane tab='Schedule Log' key='2' animated>
-              <Tabs defaultActiveKey='1' type='card' onChange={this.readNew2}>
+            <TabPane tab="Schedule Log" key="2" animated>
+              <Tabs defaultActiveKey="1" type="card" onChange={this.readNew2}>
                 <TabPane
                   tab={
                     <>
                       <span>error</span>&nbsp;
                       <BulbTwoTone
                         twoToneColor={
-                          this.state.logs.scheduleError ? "#FFD700" : "#C0C0C0"
+                          this.state.logs.scheduleError ? '#FFD700' : '#C0C0C0'
                         }
                       />
                     </>
                   }
-                  key='1'
+                  key="1"
                 >
                   <TextArea
                     disabled
@@ -291,12 +291,12 @@ export default class index extends Component {
                       <span>info</span>&nbsp;
                       <BulbTwoTone
                         twoToneColor={
-                          this.state.logs.scheduleInfo ? "#FFD700" : "#C0C0C0"
+                          this.state.logs.scheduleInfo ? '#FFD700' : '#C0C0C0'
                         }
                       />
                     </>
                   }
-                  key='2'
+                  key="2"
                 >
                   <TextArea
                     disabled
@@ -309,8 +309,8 @@ export default class index extends Component {
           </Tabs>
         </Card>
         <Modal
-          width='180vh'
-          title={"Graph"}
+          width="180vh"
+          title={'Graph'}
           visible={this.state.isBig}
           onOk={handleOk}
           onCancel={handleCancel}
@@ -321,11 +321,11 @@ export default class index extends Component {
           <Show
             names={this.state.names}
             symbolSize={60}
-            id='show2'
+            id="show2"
             change={index => {
               this.setState();
             }}
-            style={{ width: "100%", height: "60vh" }}
+            style={{ width: '100%', height: '60vh' }}
           />
         </Modal>
       </div>
