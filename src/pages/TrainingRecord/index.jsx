@@ -144,7 +144,7 @@ class TrainingRecord extends Component {
                     onMouseOver={() => {
                       this.setNotesState(NoteHover, value);
                     }}
-                    onMouseLeave={(e) => {
+                    onMouseLeave={() => {
                       this.setNotesState(NoteImg, value);
                     }}
                     height={15}
