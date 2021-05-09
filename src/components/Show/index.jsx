@@ -1,18 +1,19 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 // 引入柱状图
-import "echarts/lib/chart/bar";
+import 'echarts/lib/chart/bar';
 // 引入提示框和标题组件
-import "echarts/lib/component/tooltip";
-import "echarts/lib/component/title";
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/title';
 
-let echarts = require("echarts");
+const echarts = require('echarts');
+
 let myChart;
 export default class Show extends Component {
   constructor(props) {
     super(props);
-    let colors = []
+    const colors = [];
     for (let i = 0; i < 100; i++) {
-      colors.push("#386db3")
+      colors.push('#386db3');
     }
     this.state = {
       colors,
@@ -24,37 +25,37 @@ export default class Show extends Component {
   }
 
   drew() {
-    let datas = this.props.names.map((item, index) => {
+    const datas = this.props.names.map((item, index) => {
       return {
         name: item,
         x: index * 50,
         y: index * 50,
         colors: this.state.colorType[index],
-      }
-    })
-    let links = []
+      };
+    });
+    const links = [];
     for (let i = 0; i < this.props.names.length - 1; i++) {
       links.push({
         source: i,
         target: i + 1,
-      })
+      });
     }
 
-    let option = {
+    const option = {
       tooltip: {},
-      animationEasingUpdate: "quinticInOut",
+      animationEasingUpdate: 'quinticInOut',
       series: [
         {
           itemStyle: {
             normal: {
-              color: function (params) {
-                return params.data.colors; //获取具体的参数
+              color(params) {
+                return params.data.colors; // 获取具体的参数
               },
             },
           },
           tooltip: { show: false },
-          type: "graph",
-          layout: "none",
+          type: 'graph',
+          layout: 'none',
           symbolSize: this.state.symbolSize,
           roam: false,
           label: {
@@ -71,7 +72,7 @@ export default class Show extends Component {
           },
           data: datas,
           // links: [],
-          links: links,
+          links,
           lineStyle: {
             opacity: 0.9,
             width: 2,
@@ -90,12 +91,12 @@ export default class Show extends Component {
   }
 
   componentDidMount() {
-    let that = this;
+    const that = this;
 
     myChart = echarts.init(document.getElementById(this.state.id));
-    myChart.on("click", function (handler, context) {
-      let arr = [...that.state.colors];
-      arr[handler.dataIndex] = "rgb(128,244,61)";
+    myChart.on('click', function (handler, context) {
+      const arr = [...that.state.colors];
+      arr[handler.dataIndex] = 'rgb(128,244,61)';
       that.setState({
         colorType: [...arr],
       });
@@ -104,7 +105,7 @@ export default class Show extends Component {
     this.drew();
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate() {
     this.drew();
   }
 

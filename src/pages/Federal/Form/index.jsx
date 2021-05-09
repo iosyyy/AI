@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Card, Col, Row, Select } from 'antd';
-import { openListenByFederal } from '../../../util/util';
 import PubSubJS from 'pubsub-js';
+import { openListenByFederal } from '../../../util/util';
 
 export default class MyForm extends Component {
   constructor(props) {
@@ -12,19 +12,19 @@ export default class MyForm extends Component {
   }
 
   onFinish = values => {
-    //开始监听服务器
+    // 开始监听服务器
     openListenByFederal(values, data => {
-      //将从服务器得到的数据传递到result组件
-      PubSubJS.publish('result2', { ...data, epochs: values['epochs'] });
+      // 将从服务器得到的数据传递到result组件
+      PubSubJS.publish('result2', { ...data, epochs: values.epochs });
     });
-    //跳转到结果页面
+    // 跳转到结果页面
     this.props.history.push('/federal/result');
   };
 
   render() {
     return (
       <div style={{ height: '80vh' }}>
-        <h1 className={'colorWhite'}>联邦攻击</h1>
+        <h1 className="colorWhite">联邦攻击</h1>
         <div className="site-card-wrapper">
           <Row style={{ marginBottom: '2vh' }} gutter={[0, 30]}>
             <Col offset={8} span={12}>
@@ -89,7 +89,7 @@ export default class MyForm extends Component {
                 }}
                 title="free-rider攻击"
                 bordered={false}
-                hoverable={true}
+                hoverable
               >
                 <div
                   style={{
@@ -124,7 +124,7 @@ export default class MyForm extends Component {
                 }}
                 title="分布式投毒攻击"
                 bordered={false}
-                hoverable={true}
+                hoverable
               >
                 <div
                   style={{
@@ -159,7 +159,7 @@ export default class MyForm extends Component {
                 }}
                 title="推断攻击"
                 bordered={false}
-                hoverable={true}
+                hoverable
               >
                 <div
                   style={{

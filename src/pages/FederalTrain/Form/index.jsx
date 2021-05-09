@@ -60,7 +60,7 @@ class FederalTrain extends Component {
                 }}
                 title="横向联邦"
                 bordered={false}
-                hoverable={true}
+                hoverable
               >
                 <div
                   style={{
@@ -94,7 +94,7 @@ class FederalTrain extends Component {
                 }}
                 title="纵向联邦"
                 bordered={false}
-                hoverable={true}
+                hoverable
               >
                 <div
                   style={{

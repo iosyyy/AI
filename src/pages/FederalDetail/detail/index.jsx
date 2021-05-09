@@ -4,7 +4,7 @@ import { Button, Input, Menu, Table } from 'antd';
 import ShowEnergy from '../../../components/ShowEnergy';
 import './change.css';
 
-let { TextArea } = Input;
+const { TextArea } = Input;
 
 class Defence extends Component {
   state = {
@@ -31,16 +31,13 @@ class Defence extends Component {
     return (
       <div>
         <h1>Server Defence Detective</h1>
-        <ShowEnergy
-          id={'aaa'}
-          style={{ width: '100vw', height: '30vh' }}
-        ></ShowEnergy>
+        <ShowEnergy id="aaa" style={{ width: '100vw', height: '30vh' }} />
         <h1>Client Defence Detective</h1>
         <TextArea
           disabled
           autoSize={{ minRows: 7, maxRows: 7 }}
           value={this.state.msg}
-        ></TextArea>
+        />
       </div>
     );
   }
@@ -69,11 +66,11 @@ class federalModelOutput extends Component {
         align: 'center',
       },
     ];
-    let dataSource = [];
+    const dataSource = [];
     for (let i = 0; i < 3; i++) {
       dataSource.push({
         index: i,
-        variable: 'x' + i,
+        variable: `x${i}`,
         weight: 0.0693,
       });
     }
@@ -88,7 +85,7 @@ class federalModelOutput extends Component {
       <div style={{ marginTop: '3vh', height: '55vh', overflow: 'auto' }}>
         <Table
           scroll={{ y: '55vh' }}
-          bordered={true}
+          bordered
           dataSource={this.state.dataSource}
           columns={this.state.columns}
           pagination={false}
@@ -145,7 +142,7 @@ class federalDetailOutput extends Component {
         align: 'center',
       },
     ];
-    let dataSource = [];
+    const dataSource = [];
     for (let i = 0; i < 200; i++) {
       dataSource.push({
         index: i,
@@ -179,7 +176,7 @@ class federalDetailOutput extends Component {
 }
 
 function federalDetailLog() {
-  let logArr = [
+  const logArr = [
     '[INFO][2021-03-07 07:34:18,020][1103:140127953299264] run task',
     '[INFO][2021-03-07 07:34:18,020][1103:140127953299264] read data',
     '[INFO][2021-03-07 07:34:18,020][1103:140127953299264] check ......',
@@ -210,19 +207,18 @@ function federalDetailLog() {
               {value}
             </div>
           );
-        } else {
-          return (
-            <div
-              style={{
-                color: 'rgb(51,199,111)',
-                marginLeft: '1vh',
-                marginTop: '0.2vh',
-              }}
-            >
-              {value}
-            </div>
-          );
         }
+        return (
+          <div
+            style={{
+              color: 'rgb(51,199,111)',
+              marginLeft: '1vh',
+              marginTop: '0.2vh',
+            }}
+          >
+            {value}
+          </div>
+        );
       })}
     </div>
   );
@@ -271,7 +267,7 @@ class Evaluation extends Component {
         align: 'center',
       },
     ];
-    let dataSource = [];
+    const dataSource = [];
     dataSource.push({
       index: 0,
       dataset: 'train',
@@ -288,8 +284,8 @@ class Evaluation extends Component {
   }
 
   drew() {
-    let options = [];
-    let option1 = {
+    const options = [];
+    const option1 = {
       xAxis: {
         name: 'tpr',
         type: 'value',
@@ -322,11 +318,11 @@ class Evaluation extends Component {
           type: 'line',
           areaStyle: {},
           smooth: true,
-          symbol: 'none', //取消折点圆圈
+          symbol: 'none', // 取消折点圆圈
         },
       ],
     };
-    let option2 = {
+    const option2 = {
       xAxis: {
         name: 'tpr',
         type: 'value',
@@ -358,7 +354,7 @@ class Evaluation extends Component {
           ],
           type: 'line',
 
-          symbol: 'none', //取消折点圆圈
+          symbol: 'none', // 取消折点圆圈
 
           smooth: true,
         },
@@ -376,13 +372,13 @@ class Evaluation extends Component {
           ],
           type: 'line',
 
-          symbol: 'none', //取消折点圆圈
+          symbol: 'none', // 取消折点圆圈
 
           smooth: true,
         },
       ],
     };
-    let option3 = {
+    const option3 = {
       xAxis: {
         name: 'tpr',
         type: 'value',
@@ -414,7 +410,7 @@ class Evaluation extends Component {
           ],
           type: 'line',
 
-          symbol: 'none', //取消折点圆圈
+          symbol: 'none', // 取消折点圆圈
 
           smooth: true,
         },
@@ -446,14 +442,14 @@ class Evaluation extends Component {
   };
 
   render() {
-    const current = this.state.current;
+    const { current } = this.state;
     return (
       <div>
         <div style={{ marginTop: '20px', marginLeft: '10px' }}>
           <h2 style={{ marginBottom: '20px' }}>Evaluation scores</h2>
           <div>
             <Table
-              bordered={true}
+              bordered
               dataSource={this.state.dataSource}
               columns={this.state.columns}
               pagination={false}
@@ -485,7 +481,7 @@ let myChart2;
 
 class Compare extends Component {
   drew() {
-    let options = {
+    const options = {
       title: {
         text: 'acc',
       },
@@ -520,7 +516,7 @@ class Compare extends Component {
         },
       ],
     };
-    let optionsFail = {
+    const optionsFail = {
       title: {
         text: 'fail',
       },
@@ -604,7 +600,7 @@ class FederalDetailShow extends Component {
   constructor(props) {
     super(props);
     let names = [];
-    let name = this.props.location.state.name;
+    const { name } = this.props.location.state;
     if (name === 'Input') {
       names = ['data output', 'log'];
     } else if (name === 'HeteroLR') {
@@ -620,7 +616,7 @@ class FederalDetailShow extends Component {
   }
 
   render() {
-    let xr = this.state.names.map((values, index) => {
+    const xr = this.state.names.map((values, index) => {
       return (
         <Button
           onClick={() => {
@@ -628,7 +624,7 @@ class FederalDetailShow extends Component {
           }}
           type={index === this.state.change ? 'primary' : 'text'}
         >
-          <Link to={'/federalDetail/detail/' + values}>{values}</Link>
+          <Link to={`/federalDetail/detail/${values}`}>{values}</Link>
         </Button>
       );
     });
@@ -657,7 +653,7 @@ class FederalDetailShow extends Component {
           <Route path="/federalDetail/detail/metrics" component={Evaluation} />
           <Route path="/federalDetail/detail/Defence" component={Defence} />
 
-          <Redirect to={'/federalDetail/detail/' + this.state.names[0]} />
+          <Redirect to={`/federalDetail/detail/${this.state.names[0]}`} />
         </Switch>
       </div>
     );

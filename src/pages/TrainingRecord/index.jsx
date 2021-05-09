@@ -10,10 +10,10 @@ import {
   Table,
   Tooltip,
 } from 'antd';
-import NoteImg from '../../img/Note.png';
-import NoteHover from '../../img/NoteHover.png';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import NoteImg from '../../img/Note.png';
+import NoteHover from '../../img/NoteHover.png';
 import api from '../../config/api';
 
 const { Option } = Select;
@@ -29,12 +29,12 @@ class TrainingRecord extends Component {
         width: '16vw',
         render: id => (
           <div>
-            <font
+            <div
               style={{
                 color: 'rgb(65,89,209)',
               }}
               onClick={e => {
-                let cur = this.state.dataSource.filter(
+                const cur = this.state.dataSource.filter(
                   item => item.id === id
                 )[0];
                 this.props.history.push({
@@ -44,7 +44,7 @@ class TrainingRecord extends Component {
               }}
             >
               {id}
-            </font>
+            </div>
           </div>
         ),
       },
@@ -91,17 +91,15 @@ class TrainingRecord extends Component {
           multiple: 3,
         },
         render: (text, value) => {
-          let time = value.endTime - value.startTime;
-          let seconds = Math.round((time / 1000) % 60);
-          let minutes = Math.round((time / 1000 / 60) % 60);
-          let hour = Math.round((time / 1000 / 60 / 60) % 60);
+          const time = value.endTime - value.startTime;
+          const seconds = Math.round((time / 1000) % 60);
+          const minutes = Math.round((time / 1000 / 60) % 60);
+          const hour = Math.round((time / 1000 / 60 / 60) % 60);
           return (
             <>
-              {(hour < 10 ? '0' + hour : hour) +
-                ':' +
-                (minutes < 10 ? '0' + minutes : minutes) +
-                ':' +
-                (seconds < 10 ? '0' + seconds : seconds)}
+              {`${hour < 10 ? `0${hour}` : hour}:${
+                minutes < 10 ? `0${minutes}` : minutes
+              }:${seconds < 10 ? `0${seconds}` : seconds}`}
             </>
           );
         },
@@ -117,14 +115,14 @@ class TrainingRecord extends Component {
         key: 'notes',
         width: '9vw',
         render: (text, value, _context) => {
-          let note = this.state.NoteNow[value.key];
+          const note = this.state.NoteNow[value.key];
           return (
             <>
               {note.Show ? (
                 <Space>
                   <span>
                     {text.length >= 5 ? (
-                      <Tooltip color={'#108ee9'} title={text}>
+                      <Tooltip color="#108ee9" title={text}>
                         <span>{text.slice(0, 5)}</span>
                         <span
                           style={{
@@ -169,7 +167,7 @@ class TrainingRecord extends Component {
                       })
                       .then(r => {
                         if (r.data.code === 0) {
-                          let { dataSource } = this.state;
+                          const { dataSource } = this.state;
                           dataSource[value.key].notes = data.notes;
                           this.setState({
                             dataSource,
@@ -184,10 +182,10 @@ class TrainingRecord extends Component {
                       })
                       .catch(() => {});
                   }}
-                  size={'small'}
+                  size="small"
                   layout="inline"
                 >
-                  <Form.Item wrapperCol={{ span: 12 }} name={'notes'}>
+                  <Form.Item wrapperCol={{ span: 12 }} name="notes">
                     <Input placeholder="输入记录" bordered={false} />
                   </Form.Item>
                   <Form.Item>
@@ -217,11 +215,11 @@ class TrainingRecord extends Component {
         dataIndex: 'action',
         key: 'action',
         render: text => {
-          return <Button type={'link'}>{text}</Button>;
+          return <Button type="link">{text}</Button>;
         },
       },
     ];
-    let NoteNow = [];
+    const NoteNow = [];
     for (let i = 0; i < 25; i++) {
       NoteNow.push({ Notes: NoteImg, Show: true });
     }
@@ -254,9 +252,9 @@ class TrainingRecord extends Component {
         status: [],
       })
       .then(r => {
-        let list = r.data.data.list;
-        let pageSize = r.data.data.totalRecord;
-        let dataSource = this.getDataSourceByDataList(list);
+        const { list } = r.data.data;
+        const pageSize = r.data.data.totalRecord;
+        const dataSource = this.getDataSourceByDataList(list);
         this.setState({
           dataSource,
           loading: false,
@@ -271,11 +269,11 @@ class TrainingRecord extends Component {
   }
 
   getDataSourceByDataList(list) {
-    let dataSource = [];
+    const dataSource = [];
     list.forEach((values, key) => {
-      let value = values['job'];
+      const value = values.job;
       dataSource.push({
-        key: key,
+        key,
         id: value.fJobId,
         startTime: value.fStartTime,
         endTime: value.fEndTime,
@@ -291,7 +289,7 @@ class TrainingRecord extends Component {
   }
 
   setNoteShow(states, value) {
-    let Notew = this.state.NoteNow;
+    const Notew = this.state.NoteNow;
     Notew[value.key].Show = states;
     Notew[value.key].Notes = NoteImg;
     this.setState({
@@ -300,7 +298,7 @@ class TrainingRecord extends Component {
   }
 
   setNotesState(states, value) {
-    let Notew = this.state.NoteNow;
+    const Notew = this.state.NoteNow;
     Notew[value.key].Notes = states;
     this.setState({
       NoteNow: Notew,
@@ -312,7 +310,7 @@ class TrainingRecord extends Component {
       <div className="site-layout-content">
         <div style={{ float: 'right' }}>
           <Form
-            size={'small'}
+            size="small"
             layout="inline"
             onFinish={res => {
               this.setState({
@@ -333,12 +331,12 @@ class TrainingRecord extends Component {
                   status: res.status,
                 })
                 .then(r => {
-                  let pageSize = r.data.data.totalRecord;
-                  let dataSource = this.getDataSourceByDataList(
+                  const pageSize = r.data.data.totalRecord;
+                  const dataSource = this.getDataSourceByDataList(
                     r.data.data.list
                   );
                   this.setState({
-                    dataSource: dataSource,
+                    dataSource,
                     loading: false,
                     pageSize,
                   });
@@ -373,10 +371,10 @@ class TrainingRecord extends Component {
                 placeholder="Select Role"
                 style={{ width: '8vw' }}
               >
-                <Option value={'guest'}>guest</Option>
-                <Option value={'host'}>host</Option>
-                <Option value={'arbiter'}>arbiter</Option>
-                <Option value={'local'}>local</Option>
+                <Option value="guest">guest</Option>
+                <Option value="host">host</Option>
+                <Option value="arbiter">arbiter</Option>
+                <Option value="local">local</Option>
               </Select>
             </Form.Item>
             <Form.Item
@@ -402,11 +400,11 @@ class TrainingRecord extends Component {
                 placeholder="Select Status"
                 style={{ width: '8vw' }}
               >
-                <Option value={'success'}>success</Option>
-                <Option value={'running'}>running</Option>
-                <Option value={'waiting'}>waiting</Option>
-                <Option value={'failed'}>failed</Option>
-                <Option value={'canceled'}>canceled</Option>
+                <Option value="success">success</Option>
+                <Option value="running">running</Option>
+                <Option value="waiting">waiting</Option>
+                <Option value="failed">failed</Option>
+                <Option value="canceled">canceled</Option>
               </Select>
             </Form.Item>
             <Form.Item
@@ -459,9 +457,9 @@ class TrainingRecord extends Component {
                   status: [],
                 })
                 .then(r => {
-                  let list = r.data.data.list;
-                  let pageSize = r.data.data.totalRecord;
-                  let dataSource = this.getDataSourceByDataList(list);
+                  const { list } = r.data.data;
+                  const pageSize = r.data.data.totalRecord;
+                  const dataSource = this.getDataSourceByDataList(list);
                   this.setState({
                     dataSource,
                     loading: false,

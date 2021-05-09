@@ -1,26 +1,26 @@
 import React, { Component } from 'react';
 import { Button, Col, Row, Tree } from 'antd';
-import Show from '../../../components/Show';
-import api from '../../../config/api';
 import dayjs from 'dayjs';
 import axios from 'axios';
+import Show from '../../../components/Show';
+import api from '../../../config/api';
 
 class FederalDetail extends Component {
   constructor(props) {
     super(props);
-    let cur = this.props.location.state.cur;
-    let startTime = dayjs(cur.startTime).format('YYYY/MM/DD hh:mm:ss');
-    let endTime = dayjs(cur.endTime).format('YYYY/MM/DD hh:mm:ss');
-    let duration = cur.duration / 1000;
+    const { cur } = this.props.location.state;
+    const startTime = dayjs(cur.startTime).format('YYYY/MM/DD hh:mm:ss');
+    const endTime = dayjs(cur.endTime).format('YYYY/MM/DD hh:mm:ss');
+    const duration = cur.duration / 1000;
     this.state = {
       id: cur.id,
       role: cur.role,
       partyId: cur.partyId,
       status: cur.status,
       type: 'FEDERAL DEFENCE',
-      startTime: startTime,
-      endTime: endTime,
-      duration: duration + '秒',
+      startTime,
+      endTime,
+      duration: `${duration}秒`,
       names: [],
       treeData: [],
       d: {},
@@ -36,9 +36,9 @@ class FederalDetail extends Component {
         role: this.state.role,
       })
       .then(data => {
-        let d = JSON.parse(data.data.data);
+        const d = JSON.parse(data.data.data);
         console.log(d);
-        let treeData = [
+        const treeData = [
           {
             title: `module:${d.module}`,
             key: `module:${d.module}`,
@@ -49,16 +49,16 @@ class FederalDetail extends Component {
             key: 'SecureAddExampleParam',
             children: [
               {
-                title: 'partition:' + d.SecureAddExampleParam.partition,
-                key: 'partition:' + d.SecureAddExampleParam.partition,
+                title: `partition:${d.SecureAddExampleParam.partition}`,
+                key: `partition:${d.SecureAddExampleParam.partition}`,
               },
               {
-                title: 'seed:' + d.SecureAddExampleParam.seed,
-                key: 'seed:' + d.SecureAddExampleParam.seed,
+                title: `seed:${d.SecureAddExampleParam.seed}`,
+                key: `seed:${d.SecureAddExampleParam.seed}`,
               },
               {
-                title: 'data_num:' + d.SecureAddExampleParam.data_num,
-                key: 'data_num:' + d.SecureAddExampleParam.data_num,
+                title: `data_num:${d.SecureAddExampleParam.data_num}`,
+                key: `data_num:${d.SecureAddExampleParam.data_num}`,
               },
             ],
           },
@@ -68,7 +68,7 @@ class FederalDetail extends Component {
   };
 
   getShowList(jobId, role, partyId) {
-    let url = api.showList
+    const url = api.showList
       .replace('{jobId}', jobId)
       .replace('{role}', role)
       .replace('{partyId}', partyId);
@@ -79,8 +79,8 @@ class FederalDetail extends Component {
     };
 
     socket.onmessage = data => {
-      let d = JSON.parse(data.data);
-      let names = d.dependency_data.component_list.map(
+      const d = JSON.parse(data.data);
+      const names = d.dependency_data.component_list.map(
         item => item.component_name
       );
       this.setState({ names });

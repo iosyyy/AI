@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Button, Col, Image, Modal, Row, Select, Table } from 'antd';
+import FileSaver from 'file-saver';
 import fileImg from '../../../img/file.png';
 import bigImg from '../../../img/big.png';
-//引入生成csv文件的插件
-import FileSaver from 'file-saver';
+// 引入生成csv文件的插件
 
 export default class Result extends Component {
   constructor(props) {
@@ -158,32 +158,32 @@ export default class Result extends Component {
     console.log('be large');
   };
 
-  //点击批量导出数据生成csv文件
+  // 点击批量导出数据生成csv文件
   exportList = () => {
-    //拿到所有的数据
-    let data = this.state.choice
+    // 拿到所有的数据
+    const data = this.state.choice
       ? this.state.dataSource1
       : this.state.dataSource2;
-    //定义数据拼接
-    //str:table的每一列的标题，即为导出后的csv文件的每一列的标题
+    // 定义数据拼接
+    // str:table的每一列的标题，即为导出后的csv文件的每一列的标题
     let str = 'name,age,address';
     for (const i in data) {
       str += '\n';
-      str += data[i].name + ',' + data[i].age + ',' + data[i].address;
+      str += `${data[i].name},${data[i].age},${data[i].address}`;
     }
-    //Excel打开后中文乱码添加如下字符串解决
-    let exportContent = '\uFEFF';
-    let blob = new Blob([exportContent + str], {
+    // Excel打开后中文乱码添加如下字符串解决
+    const exportContent = '\uFEFF';
+    const blob = new Blob([exportContent + str], {
       type: 'text/plain;charset=utf-8',
     });
-    //根据数据生成生成文件
+    // 根据数据生成生成文件
     FileSaver.saveAs(blob, this.state.choice ? 'train.csv' : 'test.csv');
   };
 
   render() {
-    const dataSource1 = this.state.dataSource1;
-    const dataSource2 = this.state.dataSource2;
-    const columns = this.state.columns;
+    const { dataSource1 } = this.state;
+    const { dataSource2 } = this.state;
+    const { columns } = this.state;
     const showModal = () => {
       this.setState({
         isBig: true,
@@ -205,7 +205,7 @@ export default class Result extends Component {
         style={{ height: '80vh' }}
         className="site-card-wrapper site-layout-content"
       >
-        <h1 className={'colorWhite'}>联邦攻防</h1>
+        <h1 className="colorWhite">联邦攻防</h1>
 
         <Row style={{ marginBottom: '1vh' }}>
           <Col offset={8} span={12}>
@@ -354,7 +354,7 @@ export default class Result extends Component {
             </div>
           </Col>
         </Row>
-        <Row justify={'center'}>
+        <Row justify="center">
           <Col>
             <Button
               onClick={() => {

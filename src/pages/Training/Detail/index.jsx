@@ -9,82 +9,91 @@ const { TabPane } = Tabs;
 const { TextArea } = Input;
 
 export default class index extends Component {
-  state = {
-    id: this.props.location.state.id,
-    info: {
-      dataset: 'train.csv',
-      epoch: 5,
-      optimizer: 'sgim',
-      lr: '0.01',
-    },
-    percent: 40,
-    logs: {
-      algorithm: {
-        error: {
-          msg: 'algorithm-error的数据',
-        },
-        warning: {
-          msg: 'algorithm-warning的数据',
-        },
-        info: {
-          msg: 'algorithm-info的数据',
-        },
-        debug: {
-          msg: 'algorithm-debug的数据',
-        },
+  constructor(props) {
+    super(props);
+    this.state = {
+      id: this.props.location.state.id,
+      info: {
+        dataset: 'train.csv',
+        epoch: 5,
+        optimizer: 'sgim',
+        lr: '0.01',
       },
-      schedule: {
-        error: {
-          msg: 'schedule-error的数据',
+      percent: 40,
+      logs: {
+        algorithm: {
+          error: {
+            msg: 'algorithm-error的数据',
+          },
+          warning: {
+            msg: 'algorithm-warning的数据',
+          },
+          info: {
+            msg: 'algorithm-info的数据',
+          },
+          debug: {
+            msg: 'algorithm-debug的数据',
+          },
         },
-        info: {
-          msg: 'schedule-info的数据',
+        schedule: {
+          error: {
+            msg: 'schedule-error的数据',
+          },
+          info: {
+            msg: 'schedule-info的数据',
+          },
         },
+        algorithmError: false,
+        algorithmWarning: true,
+        algorithmInfo: true,
+        algorithmDebug: true,
+        scheduleError: false,
+        scheduleInfo: true,
+        isBig: false,
       },
-      algorithmError: false,
-      algorithmWarning: true,
-      algorithmInfo: true,
-      algorithmDebug: true,
-      scheduleError: false,
-      scheduleInfo: true,
-      isBig: false,
-    },
-    names: ['Input', 'HeteroLR', 'Evaluation'],
+      names: ['Input', 'HeteroLR', 'Evaluation'],
+    };
+  }
+
+  showChange = indexs => {
+    console.log(indexs);
   };
+
   readNew1 = key => {
     let newData;
     switch (key) {
       case '1':
         newData = this.state.logs;
-        newData['algorithmError'] = false;
+        newData.algorithmError = false;
         break;
       case '2':
         newData = this.state.logs;
-        newData['algorithmWarning'] = false;
+        newData.algorithmWarning = false;
         break;
       case '3':
         newData = this.state.logs;
-        newData['algorithmInfo'] = false;
+        newData.algorithmInfo = false;
         break;
       case '4':
         newData = this.state.logs;
-        newData['algorithmDebug'] = false;
+        newData.algorithmDebug = false;
         break;
       default:
         break;
     }
     this.setState(newData);
   };
+
   readNew2 = key => {
     let newData;
     switch (key) {
       case '1':
         newData = this.state.logs;
-        newData['scheduleError'] = false;
+        newData.scheduleError = false;
         break;
       case '2':
         newData = this.state.logs;
-        newData['scheduleInfo'] = false;
+        newData.scheduleInfo = false;
         break;
       default:
         break;
@@ -172,9 +181,7 @@ export default class index extends Component {
               names={this.state.names}
               symbolSize={32}
               id="show"
-              change={index => {
-                this.setState();
-              }}
+              change={this.showChange}
               style={{ width: '100%', height: '22vh' }}
             />
           </Card>
@@ -201,7 +208,7 @@ export default class index extends Component {
                     disabled
                     autoSize={{ minRows: 7, maxRows: 7 }}
                     value={this.state.logs.algorithm.error.msg}
-                  ></TextArea>
+                  />
                 </TabPane>
                 <TabPane
                   tab={
@@ -222,7 +229,7 @@ export default class index extends Component {
                     disabled
                     autoSize={{ minRows: 7, maxRows: 7 }}
                     value={this.state.logs.algorithm.warning.msg}
-                  ></TextArea>
+                  />
                 </TabPane>
                 <TabPane
                   tab={
@@ -241,7 +248,7 @@ export default class index extends Component {
                     disabled
                     autoSize={{ minRows: 7, maxRows: 7 }}
                     value={this.state.logs.algorithm.info.msg}
-                  ></TextArea>
+                  />
                 </TabPane>
                 <TabPane
                   tab={
@@ -260,7 +267,7 @@ export default class index extends Component {
                     disabled
                     autoSize={{ minRows: 7, maxRows: 7 }}
                     value={this.state.logs.algorithm.debug.msg}
-                  ></TextArea>
+                  />
                 </TabPane>
               </Tabs>
             </TabPane>
@@ -283,7 +290,7 @@ export default class index extends Component {
                     disabled
                     autoSize={{ minRows: 7, maxRows: 7 }}
                     value={this.state.logs.schedule.error.msg}
-                  ></TextArea>
+                  />
                 </TabPane>
                 <TabPane
                   tab={
@@ -302,7 +309,7 @@ export default class index extends Component {
                     disabled
                     autoSize={{ minRows: 7, maxRows: 7 }}
                     value={this.state.logs.schedule.info.msg}
-                  ></TextArea>
+                  />
                 </TabPane>
               </Tabs>
             </TabPane>
@@ -310,7 +317,7 @@ export default class index extends Component {
         </Card>
         <Modal
           width="180vh"
-          title={'Graph'}
+          title="Graph"
           visible={this.state.isBig}
           onOk={handleOk}
           onCancel={handleCancel}
@@ -322,9 +329,7 @@ export default class index extends Component {
             names={this.state.names}
             symbolSize={60}
             id="show2"
-            change={index => {
-              this.setState();
-            }}
+            change={this.showChange}
             style={{ width: '100%', height: '60vh' }}
           />
         </Modal>

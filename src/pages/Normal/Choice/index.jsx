@@ -30,7 +30,7 @@ class Choice extends Component {
     };
     return (
       <div style={{ height: '80vh' }} className="site-layout-content">
-        <h1 className={'colorWhite'}>联邦攻防</h1>
+        <h1 className="colorWhite">联邦攻防</h1>
         <div
           style={{ textAlign: 'center', marginBottom: '5vh', marginTop: '3vh' }}
         >
@@ -41,7 +41,7 @@ class Choice extends Component {
             placement="top"
             title="选择不同的优化器"
             color="#95DDDA"
-            arrowPointAtCenter={true}
+            arrowPointAtCenter
           >
             <Form.Item name="optimizer" label="优化器类型：" initialValue="cnn">
               <Select>
@@ -72,7 +72,7 @@ class Choice extends Component {
             placement="top"
             title="选择不同的攻击类型"
             color="black"
-            arrowPointAtCenter={true}
+            arrowPointAtCenter
           >
             <Form.Item
               name="attackType"
