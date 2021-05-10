@@ -26,10 +26,13 @@ class FederalResult extends Component {
         <Form
           size={'middle'}
           onFinish={e => {
-            const { table_name, namespace } = e;
+            const { table_name, namespace, dataset } = e;
             axios
               .post(api.taskUpload, {
-                file: 'examples/data/breast_homo_guest.csv',
+                file:
+                  'examples/data/breast_homo_' +
+                  (dataset === 'option1' ? 'guest' : 'host') +
+                  '.csv',
                 table_name,
                 namespace,
               })
