@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { Button, Col, Row, Tree } from 'antd';
-import dayjs from 'dayjs';
-import axios from 'axios';
-import Show from '../../../components/Show';
-import api from '../../../config/api';
+import React, { Component } from "react";
+import { Button, Col, Row, Tree } from "antd";
+import Show from "../../../components/Show";
+import api from "../../../config/api";
+import dayjs from "dayjs";
+import axios from "axios";
 
 class FederalDetail extends Component {
   constructor(props) {
@@ -175,7 +175,7 @@ class FederalDetail extends Component {
                 }}
               >
                 <Tree
-                  defaultExpandedKeys={['0-0-0']}
+                  defaultExpandedKeys={["0-0-0"]}
                   onSelect={this.onSelect}
                   treeData={this.state.treeData}
                   style={{ background: 'rgb(240,240,240)' }}
