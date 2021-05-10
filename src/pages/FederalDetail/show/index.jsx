@@ -1,18 +1,17 @@
 import React, { Component } from "react";
 import { Button, Col, Row, Tree } from "antd";
-import { DownOutlined } from '@ant-design/icons';
 import Show from "../../../components/Show";
-import api from "../../../config/api"
-import dayjs from "dayjs"
+import api from "../../../config/api";
+import dayjs from "dayjs";
 import axios from "axios";
 
 class FederalDetail extends Component {
   constructor(props) {
     super(props);
-    let cur = this.props.location.state.cur
-    let startTime = dayjs(cur.startTime).format("YYYY/MM/DD hh:mm:ss")
-    let endTime = dayjs(cur.endTime).format("YYYY/MM/DD hh:mm:ss")
-    let duration = cur.duration / 1000
+    let cur = this.props.location.state.cur;
+    let startTime = dayjs(cur.startTime).format("YYYY/MM/DD hh:mm:ss");
+    let endTime = dayjs(cur.endTime).format("YYYY/MM/DD hh:mm:ss");
+    let duration = cur.duration / 1000;
     this.state = {
       id: cur.id,
       role: cur.role,
@@ -24,68 +23,69 @@ class FederalDetail extends Component {
       duration: duration + "秒",
       names: [],
       treeData: [],
-      d: {}
+      d: {},
     };
   }
 
-
-
   onChange = index => {
-    axios.post(api.showDetailParameters, {
-      component_name: this.state.names[index],
-      job_id: this.state.id,
-      party_id: this.state.partyId,
-      role: this.state.role
-    }).then(data => {
-      let d = JSON.parse(data.data.data)
-      console.log(d);
-      let treeData = [
-        {
-          title: `module:${d.module}`,
-          key: `module:${d.module}`,
-          icon: <div />
-        },
-        {
-          title: 'SecureAddExampleParam',
-          key: 'SecureAddExampleParam',
-          children: [
-            {
-              title: "partition:" + d.SecureAddExampleParam.partition,
-              key: "partition:" + d.SecureAddExampleParam.partition
-            },
-            {
-              title: "seed:" + d.SecureAddExampleParam.seed,
-              key: "seed:" + d.SecureAddExampleParam.seed
-            },
-            {
-              title: "data_num:" + d.SecureAddExampleParam.data_num,
-              key: "data_num:" + d.SecureAddExampleParam.data_num
-            }
-          ]
-        }
-      ]
-      this.setState({ treeData })
-    })
+    axios
+      .post(api.showDetailParameters, {
+        component_name: this.state.names[index],
+        job_id: this.state.id,
+        party_id: this.state.partyId,
+        role: this.state.role,
+      })
+      .then(data => {
+        let d = JSON.parse(data.data.data);
+        console.log(d);
+        let treeData = [
+          {
+            title: `module:${d.module}`,
+            key: `module:${d.module}`,
+            icon: <div />,
+          },
+          {
+            title: "SecureAddExampleParam",
+            key: "SecureAddExampleParam",
+            children: [
+              {
+                title: "partition:" + d.SecureAddExampleParam.partition,
+                key: "partition:" + d.SecureAddExampleParam.partition,
+              },
+              {
+                title: "seed:" + d.SecureAddExampleParam.seed,
+                key: "seed:" + d.SecureAddExampleParam.seed,
+              },
+              {
+                title: "data_num:" + d.SecureAddExampleParam.data_num,
+                key: "data_num:" + d.SecureAddExampleParam.data_num,
+              },
+            ],
+          },
+        ];
+        this.setState({ treeData });
+      });
   };
 
   getShowList(jobId, role, partyId) {
-    let url = api.showList.replace("{jobId}", jobId)
+    let url = api.showList
+      .replace("{jobId}", jobId)
       .replace("{role}", role)
-      .replace("{partyId}", partyId)
-    const socket = new WebSocket(url)
+      .replace("{partyId}", partyId);
+    const socket = new WebSocket(url);
 
     socket.onopen = () => {
       console.log("连接成功");
-    }
+    };
 
-    socket.onmessage = (data) => {
-      let d = JSON.parse(data.data)
-      let names = d.dependency_data.component_list.map(item => item.component_name)
-      this.setState({ names })
-    }
-
+    socket.onmessage = data => {
+      let d = JSON.parse(data.data);
+      let names = d.dependency_data.component_list.map(
+        item => item.component_name
+      );
+      this.setState({ names });
+    };
   }
-
 
   componentDidMount() {
     this.getShowList(this.state.id, this.state.role, this.state.partyId);
@@ -175,7 +175,7 @@ class FederalDetail extends Component {
                 }}
               >
                 <Tree
-                  defaultExpandedKeys={['0-0-0']}
+                  defaultExpandedKeys={["0-0-0"]}
                   onSelect={this.onSelect}
                   treeData={this.state.treeData}
                   style={{ background: "rgb(240,240,240)" }}
