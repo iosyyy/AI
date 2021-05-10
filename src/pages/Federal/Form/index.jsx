@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import { Button, Card, Col, Row, Select } from "antd";
-import { openListenByFederal } from "../../../util/util";
-import PubSubJS from "pubsub-js";
+import React, { Component } from 'react';
+import { Button, Card, Col, Row, Select } from 'antd';
+import PubSubJS from 'pubsub-js';
+import { openListenByFederal } from '../../../util/util';
 
 export default class MyForm extends Component {
   constructor(props) {
@@ -11,36 +11,36 @@ export default class MyForm extends Component {
     };
   }
 
-  onFinish = (values) => {
-    //开始监听服务器
-    openListenByFederal(values, (data) => {
-      //将从服务器得到的数据传递到result组件
-      PubSubJS.publish("result2", { ...data, epochs: values["epochs"] });
+  onFinish = values => {
+    // 开始监听服务器
+    openListenByFederal(values, data => {
+      // 将从服务器得到的数据传递到result组件
+      PubSubJS.publish('result2', { ...data, epochs: values.epochs });
     });
-    //跳转到结果页面
-    this.props.history.push("/federal/result");
+    // 跳转到结果页面
+    this.props.history.push('/federal/result');
   };
 
   render() {
     return (
-      <div style={{height: "80vh"}}>
-        <h1 className={"colorWhite"}>联邦攻击</h1>
+      <div style={{ height: '80vh' }}>
+        <h1 className="colorWhite">联邦攻击</h1>
         <div className="site-card-wrapper">
-          <Row style={{marginBottom: "2vh"}} gutter={[0, 30]}>
+          <Row style={{ marginBottom: '2vh' }} gutter={[0, 30]}>
             <Col offset={8} span={12}>
               <div>联邦类型:</div>
             </Col>
           </Row>
-          <Row style={{marginBottom: "5vh"}} gutter={[0, 24]}>
+          <Row style={{ marginBottom: '5vh' }} gutter={[0, 24]}>
             <Col offset={8} span={8}>
               <Select
-                style={{ width: "100%" }}
-                onChange={(e) => {
-                  if (e === "option1") {
+                style={{ width: '100%' }}
+                onChange={e => {
+                  if (e === 'option1') {
                     this.setState({
                       type: 0,
                     });
-                  } else if (e === "option2") {
+                  } else if (e === 'option2') {
                     this.setState({
                       type: 1,
                     });
@@ -52,10 +52,10 @@ export default class MyForm extends Component {
                 }}
                 value={
                   this.state.type === 0
-                    ? "option1"
+                    ? 'option1'
                     : this.state.type === 1
-                    ? "option2"
-                    : "option3"
+                    ? 'option2'
+                    : 'option3'
                 }
               >
                 <Select.Option value="option1">free-rider攻击</Select.Option>
@@ -65,7 +65,7 @@ export default class MyForm extends Component {
             </Col>
           </Row>
           <Row
-            style={{ marginBottom: "15vh" }}
+            style={{ marginBottom: '15vh' }}
             justify="space-around"
             gutter={[10, 48]}
           >
@@ -80,21 +80,21 @@ export default class MyForm extends Component {
               <Card
                 style={{
                   backgroundColor:
-                    this.state.type === 0 ? "RGB(96,185,234)" : "#FFF",
+                    this.state.type === 0 ? 'RGB(96,185,234)' : '#FFF',
                 }}
                 headStyle={{
                   border: 0,
-                  textAlign: "center",
-                  color: this.state.type === 0 ? "white" : "black",
+                  textAlign: 'center',
+                  color: this.state.type === 0 ? 'white' : 'black',
                 }}
                 title="free-rider攻击"
                 bordered={false}
-                hoverable={true}
+                hoverable
               >
                 <div
                   style={{
-                    height: "150px",
-                    color: this.state.type === 0 ? "white" : "black",
+                    height: '150px',
+                    color: this.state.type === 0 ? 'white' : 'black',
                   }}
                 >
                   参与者不使用本地数据进行训练，而是提供伪造的模型参数以获取全局模型
@@ -115,21 +115,21 @@ export default class MyForm extends Component {
               <Card
                 style={{
                   backgroundColor:
-                    this.state.type === 1 ? "RGB(96,185,234)" : "#FFF",
+                    this.state.type === 1 ? 'RGB(96,185,234)' : '#FFF',
                 }}
                 headStyle={{
                   border: 0,
-                  textAlign: "center",
-                  color: this.state.type === 1 ? "white" : "black",
+                  textAlign: 'center',
+                  color: this.state.type === 1 ? 'white' : 'black',
                 }}
                 title="分布式投毒攻击"
                 bordered={false}
-                hoverable={true}
+                hoverable
               >
                 <div
                   style={{
-                    height: "150px",
-                    color: this.state.type === 1 ? "white" : "black",
+                    height: '150px',
+                    color: this.state.type === 1 ? 'white' : 'black',
                   }}
                 >
                   多个攻击者修改训练数据集的标签或样本数据以降低训练的收敛速度和模型准确率
@@ -150,21 +150,21 @@ export default class MyForm extends Component {
               <Card
                 style={{
                   backgroundColor:
-                    this.state.type === 2 ? "RGB(96,185,234)" : "#FFF",
+                    this.state.type === 2 ? 'RGB(96,185,234)' : '#FFF',
                 }}
                 headStyle={{
                   border: 0,
-                  textAlign: "center",
-                  color: this.state.type === 2 ? "white" : "black",
+                  textAlign: 'center',
+                  color: this.state.type === 2 ? 'white' : 'black',
                 }}
                 title="推断攻击"
                 bordered={false}
-                hoverable={true}
+                hoverable
               >
                 <div
                   style={{
-                    height: "150px",
-                    color: this.state.type === 2 ? "white" : "black",
+                    height: '150px',
+                    color: this.state.type === 2 ? 'white' : 'black',
                   }}
                 >
                   当训练者为2时，攻击者通过每轮训练返回的全局模型参数和自己的模型参数反推出另一位参与者的模型参数，推断出其样本数据
@@ -179,7 +179,7 @@ export default class MyForm extends Component {
               <Button
                 onClick={() => {
                   this.props.history.push({
-                    pathname: "/federal/result",
+                    pathname: '/federal/result',
                     state: { status: this.state.type },
                   });
                 }}

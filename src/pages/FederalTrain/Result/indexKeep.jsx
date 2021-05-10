@@ -4,7 +4,7 @@ import FileSaver from 'file-saver';
 import fileImg from '../../../img/file.png';
 import bigImg from '../../../img/big.png';
 
-class DefenseResult extends Component {
+class FederalResultKeep extends Component {
   constructor(props) {
     super(props);
     const dataSource1 = [
@@ -33,7 +33,6 @@ class DefenseResult extends Component {
         address: '西湖区湖底公园1号',
       },
     ];
-
     const dataSource2 = [
       {
         key: '1',
@@ -205,7 +204,7 @@ class DefenseResult extends Component {
         style={{ height: '80vh' }}
         className="site-card-wrapper site-layout-content"
       >
-        <h1 className="colorWhite">联邦攻击</h1>
+        <h1 className="colorWhite">联邦训练</h1>
 
         <Row style={{ marginBottom: '1vh' }}>
           <Col offset={8} span={12}>
@@ -214,7 +213,7 @@ class DefenseResult extends Component {
             </div>
           </Col>
         </Row>
-        <Row justify="center" style={{ marginBottom: '4vh' }}>
+        <Row style={{ marginBottom: '4vh' }} justify="center">
           <Col span={8}>
             <Select
               style={{ width: '100%' }}
@@ -236,7 +235,7 @@ class DefenseResult extends Component {
             </Select>
           </Col>
         </Row>
-        <Row justify="center" style={{ marginBottom: '5vh' }}>
+        <Row style={{ marginBottom: '5vh' }} justify="center">
           <Col span={14}>
             <div style={{ border: '1px solid', height: '38vh' }}>
               <Row gutter={[48, 1]}>
@@ -359,7 +358,7 @@ class DefenseResult extends Component {
             <Button
               onClick={() => {
                 this.props.history.push({
-                  pathname: '/federal/choice',
+                  pathname: '/federalTrain/choice',
                   state: { type: this.state.type, status: this.state.status },
                 });
               }}
@@ -382,7 +381,6 @@ class DefenseResult extends Component {
         >
           <Table
             scroll={{ y: '50vh' }}
-            bordered={false}
             dataSource={this.state.choice ? dataSource1 : dataSource2}
             columns={columns}
             pagination={false}
@@ -393,4 +391,4 @@ class DefenseResult extends Component {
   }
 }
 
-export default DefenseResult;
+export default FederalResult;

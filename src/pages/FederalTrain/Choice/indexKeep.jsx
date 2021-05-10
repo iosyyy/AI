@@ -2,22 +2,19 @@ import React, { Component } from 'react';
 import { Button, Form, InputNumber, Select, Tooltip } from 'antd';
 import PubSubJS from 'pubsub-js';
 
-class Choice extends Component {
+class FederalTrainChoiceKeep extends Component {
   constructor(props) {
     super(props);
     this.state = { ...this.props.location.state };
   }
 
   onFinish = values => {
-    this.props.history.push({
-      pathname: '/federalDetail/show',
-      state: { id: '20232011' },
-    });
     PubSubJS.publish('trainChoice', {
       ...values,
       type: this.state.type,
       status: this.state.status,
     });
+    this.props.history.push('/training');
   };
 
   render() {
@@ -30,7 +27,7 @@ class Choice extends Component {
     };
     return (
       <div style={{ height: '80vh' }} className="site-layout-content">
-        <h1 className="colorWhite">联邦攻防</h1>
+        <h1 className="colorWhite">联邦训练</h1>
         <div
           style={{ textAlign: 'center', marginBottom: '5vh', marginTop: '3vh' }}
         >
@@ -43,17 +40,17 @@ class Choice extends Component {
             color="#95DDDA"
             arrowPointAtCenter
           >
-            <Form.Item name="optimizer" label="优化器类型：" initialValue="cnn">
+            <Form.Item name="optimizer" label="优化器类型：" initialValue="sgd">
               <Select>
-                <Select.Option value="cnn">cnn</Select.Option>
-                <Select.Option value="mpl">mpl</Select.Option>
+                <Select.Option value="sgd">sgd</Select.Option>
+                <Select.Option value="adam">adam</Select.Option>
               </Select>
             </Form.Item>
           </Tooltip>
 
           <Form.Item
             name="local_ep"
-            label="客户端训练次数："
+            label="客户端学习："
             rules={[{ type: 'number', min: 1, max: 1000 }]}
             initialValue={10}
           >
@@ -61,47 +58,18 @@ class Choice extends Component {
           </Form.Item>
 
           <Form.Item
-            name="iteration"
-            label="全局迭代次数："
-            rules={[{ type: 'number', min: 10, max: 20 }]}
-            initialValue={10}
+            name="epochs"
+            label="训练次数："
+            rules={[{ type: 'number', min: 1, max: 10 }]}
+            initialValue={5}
           >
             <InputNumber />
           </Form.Item>
-          <Tooltip
-            placement="top"
-            title="选择不同的攻击类型"
-            color="black"
-            arrowPointAtCenter
-          >
-            <Form.Item
-              name="attackType"
-              label="攻击类型："
-              initialValue="type1"
-            >
-              <Select>
-                <Select.Option value="type1">朴素free rider攻击</Select.Option>
-                <Select.Option value="type2">
-                  差分扰动free rider攻击(线性)
-                </Select.Option>
-                <Select.Option value="type3">
-                  差分扰动free rider攻击(指数)
-                </Select.Option>
-              </Select>
-            </Form.Item>
-          </Tooltip>
+
           <Form.Item name="lr" label="学习率：" initialValue={0.01}>
             <InputNumber min={0} max={1} step={0.01} />
           </Form.Item>
 
-          <Form.Item
-            name="attacker"
-            label="攻击者数："
-            rules={[{ type: 'number', min: 1, max: 20 }]}
-            initialValue={10}
-          >
-            <InputNumber />
-          </Form.Item>
           <Form.Item {...tailLayout}>
             <Button type="primary" htmlType="submit">
               提交
@@ -113,4 +81,4 @@ class Choice extends Component {
   }
 }
 
-export default Choice;
+export default FederalTrainChoice;
