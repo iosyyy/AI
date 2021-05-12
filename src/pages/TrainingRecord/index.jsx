@@ -15,6 +15,7 @@ import axios from 'axios';
 import NoteImg from '../../img/Note.png';
 import NoteHover from '../../img/NoteHover.png';
 import api from '../../config/api';
+import PubSubJS from 'pubsub-js';
 
 const { Option } = Select;
 
@@ -236,6 +237,8 @@ class TrainingRecord extends Component {
   }
 
   componentDidMount() {
+    PubSubJS.publish('isRunning', { page: '4' });
+
     axios
       .post(api.pageList, {
         fDescription: '',

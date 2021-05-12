@@ -19,10 +19,7 @@ class FederalResult extends Component {
       wrapperCol: { span: 8 },
     };
     return (
-      <div
-        style={{ height: '80vh' }}
-        className="site-card-wrapper site-layout-content"
-      >
+      <div style={{ height: '80vh' }}>
         <Form
           size={'middle'}
           onFinish={e => {
@@ -50,6 +47,10 @@ class FederalResult extends Component {
                       console.log(r);
                     });
                 }
+              })
+              .catch(e => {
+                console.log(e);
+                message.error('服务器链接异常');
               });
           }}
           initialValues={{
@@ -64,20 +65,20 @@ class FederalResult extends Component {
             </Select>
           </Form.Item>
           <Form.Item
-            style={{ marginTop: '5vh' }}
+            style={{ marginTop: '1vh' }}
             name={'table_name'}
             label={'表名'}
           >
             <Input placeholder={'请输入表名'} />
           </Form.Item>
           <Form.Item
-            style={{ marginTop: '5vh' }}
+            style={{ marginTop: '1vh' }}
             name={'namespace'}
             label={'命名空间'}
           >
             <Input placeholder={'请输入命名空间'} />
           </Form.Item>
-          <Form.Item style={{ marginTop: '15vh' }} {...tailLayout}>
+          <Form.Item style={{ marginTop: '5vh' }} {...tailLayout}>
             <Button type="primary" htmlType="submit">
               下一步
             </Button>

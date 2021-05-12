@@ -7,4 +7,10 @@ module.exports = function (app) {
       changeOrigin: true,
     })
   );
+  app.use(
+    createProxyMiddleware('/job', {
+      target: 'http://8.136.225.205:8080/',
+      changeOrigin: true,
+    })
+  );
 };
