@@ -23,15 +23,13 @@ class Training extends Component {
 
     let numInterval = setInterval(() => {
       axios.get(api.isTrainingDetail).then(r => {
-        console.log(r);
         const { data } = r.data;
         const trainInfo = data.map((v, i) => {
-          console.log(v);
           return {
             id: v.fJobId,
             percent: v.fProgress,
             role: v.fRole,
-            partyId: v.fPartyID,
+            partyId: v.fPartyId,
           };
         });
         this.setState({

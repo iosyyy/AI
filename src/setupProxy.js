@@ -13,4 +13,14 @@ module.exports = function (app) {
       changeOrigin: true,
     })
   );
+  app.use(
+    createProxyMiddleware('/log', {
+      target: 'ws://8.136.225.205:8080/',
+    })
+  );
+  app.use(
+    createProxyMiddleware('/v1', {
+      target: 'http://8.136.225.205:8080/',
+    })
+  );
 };
