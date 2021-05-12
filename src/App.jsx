@@ -20,7 +20,6 @@ class App extends Component {
     super(props);
     this.state = { page: '1' };
     PubSubJS.subscribe('isRunning', (msg, data) => {
-      console.log(data);
       this.setState({ page: data.page });
     });
   }

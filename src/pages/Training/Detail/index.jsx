@@ -1,13 +1,27 @@
 import React, { Component } from 'react';
-import { Button, Card, Image, Input, Modal, Progress, Tabs } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Image,
+  Input,
+  Modal,
+  Progress,
+  Row,
+  Space,
+  Tabs,
+} from 'antd';
 import { BulbTwoTone } from '@ant-design/icons';
 import './index.css';
 import Show from '../../../components/Show';
 import bigImg from '../../../img/big.png';
+import api from '../../../config/api';
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
 
+let socket;
+let socketList;
 export default class index extends Component {
   constructor(props) {
     super(props);
@@ -52,12 +66,72 @@ export default class index extends Component {
         isBig: false,
       },
       names: ['Input', 'HeteroLR', 'Evaluation'],
+      timeString: '',
+      roles: [],
+      role: '',
+      roleDataset: {},
+      startTime: 0,
+      endTime: 0,
+      duration: 0,
     };
   }
 
-  showChange = indexs => {
-    console.log(indexs);
-  };
+  componentWillUnmount() {
+    socket.close();
+    socketList.close();
+  }
+  componentDidMount() {
+    let { id, partyId, role } = this.props.location.state;
+    let url = api.logDetail
+      .replace('{id}', id)
+      .replace('{partyId}', partyId)
+      .replace('{role}', role);
+
+    socket = new WebSocket(url);
+
+    socket.onmessage = data => {
+      let detail = JSON.parse(data.data);
+    };
+
+    const urlList = api.showList
+      .replace('{jobId}', id)
+      .replace('{role}', role)
+      .replace('{partyId}', partyId);
+    socketList = new WebSocket(urlList);
+
+    socketList.onmessage = data => {
+      const d = JSON.parse(data.data);
+      const names = d.dependency_data.component_list.map(
+        item => item.component_name
+      );
+      const percent = d.process;
+      const time = d.summary_date.job.fElapsed;
+      const seconds = Math.round((time / 1000) % 60);
+      const minutes = Math.round((time / 1000 / 60) % 60);
+      const hour = Math.round((time / 1000 / 60 / 60) % 60);
+      const timeString = `${hour < 10 ? `0${hour}` : hour}:${
+        minutes < 10 ? `0${minutes}` : minutes
+      }:${seconds < 10 ? `0${seconds}` : seconds}`;
+
+      const roles = d.summary_date.dataset.roles;
+      const dataset = d.summary_date.dataset.dataset;
+
+      this.setState({
+        names,
+        percent,
+        timeString,
+        roles,
+        roleDataset: dataset,
+        startTime: d.summary_date.job.fStartTime,
+        endTime: d.summary_date.job.fEndTime,
+        duration: percent,
+        role: d.summary_date.job.fRole,
+        partyId: d.summary_date.job.fPartyId,
+      });
+    };
+  }
+
+  showChange = indexs => {};
 
   readNew1 = key => {
     let newData;
@@ -102,6 +176,8 @@ export default class index extends Component {
   };
 
   render() {
+    let cur = this.state;
+    const { roles, roleDataset } = this.state;
     const handleOk = () => {
       this.setState({
         isBig: false,
@@ -113,16 +189,52 @@ export default class index extends Component {
         isBig: false,
       });
     };
+
+    let guest = roles['guest'];
+    let host = roles['host'];
+    let arbiter = roles['arbiter'];
     return (
       <div className="training-details">
         <div className="trainning-details-card1-continer">
           <Card className="trainning-details-card1">
             <h4>Info</h4>
-            <div className="trainning-details-info">
-              <p>Dataset:{this.state.info.dataset}</p>
-              <p>Epoch:{this.state.info.epoch}</p>
-              <p>Optimizer:{this.state.info.optimizer}</p>
-              <p>Lr:{this.state.info.lr}</p>
+            <div
+              style={{ fontWeight: 600, width: '18vw' }}
+              className="trainning-details-info"
+            >
+              <Row
+                justify={'space-between'}
+                style={{ color: 'rgb(153,155,163)', marginBottom: '0.5vh' }}
+              >
+                <Col>GUEST</Col>
+                <Col>dataset</Col>
+              </Row>
+              <Row justify={'space-between'} style={{ marginBottom: '2vh' }}>
+                <Col>{guest}</Col>
+                <Col style={{ color: 'rgb(145,89,209)' }}>{}</Col>
+              </Row>
+              <Row
+                justify={'space-between'}
+                style={{ color: 'rgb(153,155,163)', marginBottom: '0.5vh' }}
+              >
+                <Col>HOST</Col>
+                <Col>dataset</Col>
+              </Row>
+              <Row justify={'space-between'} style={{ marginBottom: '2vh' }}>
+                <Col>{host}</Col>
+                <Col style={{ color: 'rgb(145,89,209)' }}>{}</Col>
+              </Row>
+              <Row
+                justify={'space-between'}
+                style={{ color: 'rgb(153,155,163)', marginBottom: '0.5vh' }}
+              >
+                <Col>ARBITER</Col>
+                <Col>dataset</Col>
+              </Row>
+              <Row justify={'space-between'} style={{ marginBottom: '2vh' }}>
+                <Col>{arbiter}</Col>
+                <Col style={{ color: 'rgb(145,89,209)' }}>{}</Col>
+              </Row>
             </div>
           </Card>
           <Card className="trainning-details-card1 c2">
@@ -135,13 +247,12 @@ export default class index extends Component {
               }}
               status={this.state.percent === 100 ? 'success' : 'active'}
             />
-            <h6>duration:00:00:56</h6>
+            <h6>duration:{this.state.timeString}</h6>
             <Button
               onClick={() => {
-                console.log(this.state.id);
                 this.props.history.push({
                   pathname: '/federalDetail/show',
-                  state: { id: this.state.id },
+                  state: { cur },
                 });
               }}
               type="primary"
@@ -163,7 +274,6 @@ export default class index extends Component {
                   <Image
                     preview={false}
                     onClick={() => {
-                      console.log(123);
                       this.setState({ isBig: true });
                     }}
                     src={bigImg}

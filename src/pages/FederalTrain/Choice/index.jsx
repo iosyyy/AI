@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import { Form, Input, Button, Upload, message } from "antd";
-import axios from "axios";
-import api from "../../../config/api";
+import React, { Component } from 'react';
+import { Form, Input, Button, Upload, message } from 'antd';
+import axios from 'axios';
+import api from '../../../config/api';
 
 class FederalTrainChoice extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      trainName: "homo_logistic_regression",
+      trainName: 'homo_logistic_regression',
       fileList1: [],
       fileList2: [],
     };
@@ -69,21 +69,21 @@ class FederalTrainChoice extends Component {
     return (
       <div>
         <Form
-          size={"middle"}
+          size={'middle'}
           onFinish={e => {
             let { trainName } = e;
             let { fileList1, fileList2 } = this.state;
             const formData = new FormData();
-            formData.append("train_name", trainName);
+            formData.append('train_name', trainName);
             fileList1.forEach(file => {
-              formData.append("config_file", file);
+              formData.append('config_file', file);
             });
             fileList2.forEach(file => {
-              formData.append("dsl_file", file);
+              formData.append('dsl_file', file);
             });
             axios({
               url: api.beginTrain,
-              method: "post",
+              method: 'post',
               processData: false,
               data: formData,
             })
@@ -93,18 +93,18 @@ class FederalTrainChoice extends Component {
                     fileList1: [],
                     fileList2: [],
                   });
-                  message.success("上传成功");
+                  message.success('上传成功');
                   this.props.history.push({
-                    pathname: "/traning",
+                    pathname: '/training',
                     state: { data: res.data },
                   });
                 } else {
-                  message.error("上传失败");
+                  message.error('上传失败');
                   console.error(res);
                 }
               })
               .catch(res => {
-                message.error("上传失败");
+                message.error('上传失败');
                 console.error(res);
               });
           }}
@@ -130,7 +130,7 @@ class FederalTrainChoice extends Component {
             </Upload>
           </Form.Item>
 
-          <Form.Item style={{ marginTop: "15vh" }} {...tailLayout}>
+          <Form.Item style={{ marginTop: '15vh' }} {...tailLayout}>
             <Button type="primary" htmlType="submit">
               提交
             </Button>
