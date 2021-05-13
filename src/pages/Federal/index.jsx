@@ -1,4 +1,4 @@
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import Form from './Form';
 import React, { Component } from 'react';
 
@@ -11,6 +11,7 @@ export default class Normal extends Component {
   componentDidMount() {
     PubSubJS.publish('isRunning', { page: '3' });
   }
+
   render() {
     return (
       <div>

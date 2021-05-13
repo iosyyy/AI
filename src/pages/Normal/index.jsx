@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from 'react';
+import React, { Component } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import Form from './Form';
 import Result from './Result';
@@ -10,6 +10,7 @@ class Normal extends Component {
   componentDidMount() {
     PubSubJS.publish('isRunning', { page: '2' });
   }
+
   render() {
     return (
       <div>
@@ -23,4 +24,5 @@ class Normal extends Component {
     );
   }
 }
+
 export default Normal;

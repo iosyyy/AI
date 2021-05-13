@@ -388,8 +388,6 @@ class TrainingRecord extends Component {
   };
 
   render() {
-    const res = this.state.searchRes;
-
     return (
       <div className="site-layout-content">
         <div style={{ float: 'right' }}>

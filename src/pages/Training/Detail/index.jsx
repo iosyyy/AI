@@ -8,7 +8,6 @@ import {
   Modal,
   Progress,
   Row,
-  Space,
   Tabs,
 } from 'antd';
 import { BulbTwoTone } from '@ant-design/icons';
@@ -80,6 +79,7 @@ export default class index extends Component {
     socket.close();
     socketList.close();
   }
+
   componentDidMount() {
     let { id, partyId, role } = this.props.location.state;
     let url = api.logDetail
@@ -90,7 +90,7 @@ export default class index extends Component {
     socket = new WebSocket(url);
 
     socket.onmessage = data => {
-      let detail = JSON.parse(data.data);
+      // let detail = JSON.parse(data.data);
     };
 
     const urlList = api.showList
@@ -186,7 +186,7 @@ export default class index extends Component {
 
   render() {
     let cur = this.state;
-    const { roles, roleDataset } = this.state;
+    const { roles } = this.state;
     const handleOk = () => {
       this.setState({
         isBig: false,

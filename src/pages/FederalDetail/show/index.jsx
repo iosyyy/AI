@@ -9,7 +9,6 @@ class FederalDetail extends Component {
   constructor(props) {
     super(props);
     const { cur } = this.props.location.state;
-    console.log(cur);
     const startTime = dayjs(cur.startTime).format('YYYY/MM/DD hh:mm:ss');
     const endTime = dayjs(cur.endTime).format('YYYY/MM/DD hh:mm:ss');
     const duration = cur.duration / 1000;
@@ -38,37 +37,42 @@ class FederalDetail extends Component {
       })
       .then(data => {
         const d = JSON.parse(data.data.data);
-        const treeData = [
-          {
-            title: `module:${d.module}`,
-            key: `module:${d.module}`,
-            icon: <div />,
-          },
-          {
-            title: 'SecureAddExampleParam',
-            key: 'SecureAddExampleParam',
-            children: [
-              {
-                title: `partition:${d.SecureAddExampleParam.partition}`,
-                key: `partition:${d.SecureAddExampleParam.partition}`,
-              },
-              {
-                title: `seed:${d.SecureAddExampleParam.seed}`,
-                key: `seed:${d.SecureAddExampleParam.seed}`,
-              },
-              {
-                title: `data_num:${d.SecureAddExampleParam.data_num}`,
-                key: `data_num:${d.SecureAddExampleParam.data_num}`,
-              },
-            ],
-          },
-        ];
+        let treeData = [];
+        treeData = this.getDeatilList(treeData, d);
+        console.log(treeData);
         this.setState({ treeData });
       })
       .catch(m => {
-        message.error(m.msg);
+        message.error('服务器异常');
       });
   };
+
+  getDeatilList(data, treeData) {
+    for (let treeDataKey in treeData) {
+      let child = [];
+      if (typeof treeData[treeDataKey] === 'object') {
+        if (treeData[treeDataKey] !== null) {
+          this.getDeatilList(child, treeData[treeDataKey]);
+          data.push({
+            title: `${treeDataKey}`,
+            key: `${treeDataKey}`,
+            children: child,
+          });
+        } else {
+          data.push({
+            title: `${treeDataKey}:  ${treeData[treeDataKey]}`,
+            key: `${treeDataKey}:  ${treeData[treeDataKey]}`,
+          });
+        }
+      } else {
+        data.push({
+          title: `${treeDataKey}:  ${treeData[treeDataKey]}`,
+          key: `${treeDataKey}:  ${treeData[treeDataKey]}`,
+        });
+      }
+    }
+    return data;
+  }
 
   getShowList(jobId, role, partyId) {
     const url = api.showList
@@ -76,10 +80,6 @@ class FederalDetail extends Component {
       .replace('{role}', role)
       .replace('{partyId}', partyId);
     const socket = new WebSocket(url);
-
-    socket.onopen = () => {
-      console.log('连接成功');
-    };
 
     socket.onmessage = data => {
       const d = JSON.parse(data.data);
@@ -171,6 +171,7 @@ class FederalDetail extends Component {
               </div>
               <div
                 style={{
+                  scroll: 'auto',
                   height: '53vh',
                   padding: '5px 10px',
                   backgroundColor: 'rgb(240,240,240)',
@@ -178,15 +179,21 @@ class FederalDetail extends Component {
                 }}
               >
                 <Tree
+                  selectable={false}
+                  showLine={false}
                   defaultExpandedKeys={['0-0-0']}
                   onSelect={this.onSelect}
                   treeData={this.state.treeData}
-                  style={{ background: 'rgb(240,240,240)' }}
+                  height={'50vh'}
+                  style={{
+                    fontSize: 'small',
+                    color: 'rgb(153,167,193)',
+                    background: 'rgb(240,240,240)',
+                  }}
                 />
               </div>
               <Button
                 onClick={e => {
-                  console.log(this.state);
                   if (this.state.dataIndex !== -1) {
                     this.props.history.push({
                       pathname: '/federalDetail/detail',
