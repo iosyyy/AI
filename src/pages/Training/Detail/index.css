@@ -1,5 +1,5 @@
-trainning-details-card2.training-details {
-    width: 65vh;
+.trainning-details-card2 .training-details {
+    width: 68vh;
     height: 100%;
     flex-direction: column;
     display: flex;

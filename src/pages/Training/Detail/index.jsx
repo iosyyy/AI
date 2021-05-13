@@ -112,16 +112,25 @@ export default class index extends Component {
       const timeString = `${hour < 10 ? `0${hour}` : hour}:${
         minutes < 10 ? `0${minutes}` : minutes
       }:${seconds < 10 ? `0${seconds}` : seconds}`;
+      let role, datasets;
+      if (
+        d.summary_date.dataset &&
+        Object.keys(d.summary_date.dataset).length
+      ) {
+        const { roles, dataset, partner } = d.summary_date.dataset;
 
-      const roles = d.summary_date.dataset.roles;
-      const dataset = d.summary_date.dataset.dataset;
-
+        for (let objectKey in Object(partner)) {
+          roles[objectKey] = partner[objectKey];
+        }
+        role = roles;
+        datasets = dataset;
+      }
       this.setState({
         names,
         percent,
         timeString,
-        roles,
-        roleDataset: dataset,
+        roles: role,
+        roleDataset: datasets,
         startTime: d.summary_date.job.fStartTime,
         endTime: d.summary_date.job.fEndTime,
         duration: percent,
@@ -189,10 +198,14 @@ export default class index extends Component {
         isBig: false,
       });
     };
-
-    let guest = roles['guest'];
-    let host = roles['host'];
-    let arbiter = roles['arbiter'];
+    let guest = '';
+    let host = '';
+    let arbiter = '';
+    if (roles && Object.keys(roles).length) {
+      guest = roles['guest'];
+      host = roles['host'];
+      arbiter = roles['arbiter'];
+    }
     return (
       <div className="training-details">
         <div className="trainning-details-card1-continer">
@@ -297,7 +310,7 @@ export default class index extends Component {
           </Card>
         </div>
 
-        <Card className="trainning-details-card2">
+        <Card style={{ height: '49vh' }} className="trainning-details-card2">
           <Tabs defaultActiveKey="1">
             <TabPane tab="algorithmm Log" key="1">
               <Tabs defaultActiveKey="1" type="card" onChange={this.readNew1}>
@@ -316,7 +329,7 @@ export default class index extends Component {
                 >
                   <TextArea
                     disabled
-                    autoSize={{ minRows: 7, maxRows: 7 }}
+                    autoSize={{ minRows: 9, maxRows: 9 }}
                     value={this.state.logs.algorithm.error.msg}
                   />
                 </TabPane>
@@ -337,7 +350,7 @@ export default class index extends Component {
                 >
                   <TextArea
                     disabled
-                    autoSize={{ minRows: 7, maxRows: 7 }}
+                    autoSize={{ minRows: 9, maxRows: 9 }}
                     value={this.state.logs.algorithm.warning.msg}
                   />
                 </TabPane>
@@ -356,7 +369,7 @@ export default class index extends Component {
                 >
                   <TextArea
                     disabled
-                    autoSize={{ minRows: 7, maxRows: 7 }}
+                    autoSize={{ minRows: 9, maxRows: 9 }}
                     value={this.state.logs.algorithm.info.msg}
                   />
                 </TabPane>
@@ -375,7 +388,7 @@ export default class index extends Component {
                 >
                   <TextArea
                     disabled
-                    autoSize={{ minRows: 7, maxRows: 7 }}
+                    autoSize={{ minRows: 9, maxRows: 9 }}
                     value={this.state.logs.algorithm.debug.msg}
                   />
                 </TabPane>
@@ -398,7 +411,7 @@ export default class index extends Component {
                 >
                   <TextArea
                     disabled
-                    autoSize={{ minRows: 7, maxRows: 7 }}
+                    autoSize={{ minRows: 9, maxRows: 9 }}
                     value={this.state.logs.schedule.error.msg}
                   />
                 </TabPane>
@@ -417,7 +430,7 @@ export default class index extends Component {
                 >
                   <TextArea
                     disabled
-                    autoSize={{ minRows: 7, maxRows: 7 }}
+                    autoSize={{ minRows: 9, maxRows: 9 }}
                     value={this.state.logs.schedule.info.msg}
                   />
                 </TabPane>

@@ -437,25 +437,6 @@ class TrainingRecord extends Component {
             <Form.Item
               label={
                 <div style={{ fontWeight: 900, color: 'rgb(127,125,142)' }}>
-                  Role
-                </div>
-              }
-              name="role"
-            >
-              <Select
-                mode="multiple"
-                placeholder="Select Role"
-                style={{ width: '8vw' }}
-              >
-                <Option value="guest">guest</Option>
-                <Option value="host">host</Option>
-                <Option value="arbiter">arbiter</Option>
-                <Option value="local">local</Option>
-              </Select>
-            </Form.Item>
-            <Form.Item
-              label={
-                <div style={{ fontWeight: 900, color: 'rgb(127,125,142)' }}>
                   Party ID
                 </div>
               }
@@ -466,14 +447,34 @@ class TrainingRecord extends Component {
             <Form.Item
               label={
                 <div style={{ fontWeight: 900, color: 'rgb(127,125,142)' }}>
-                  Status
+                  规则
+                </div>
+              }
+              name="role"
+            >
+              <Select
+                mode="multiple"
+                placeholder="选择规则"
+                style={{ width: '8vw' }}
+              >
+                <Option value="guest">guest</Option>
+                <Option value="host">host</Option>
+                <Option value="arbiter">arbiter</Option>
+                <Option value="local">local</Option>
+              </Select>
+            </Form.Item>
+
+            <Form.Item
+              label={
+                <div style={{ fontWeight: 900, color: 'rgb(127,125,142)' }}>
+                  结果
                 </div>
               }
               name="status"
             >
               <Select
                 mode="multiple"
-                placeholder="Select Status"
+                placeholder="选择结果"
                 style={{ width: '8vw' }}
               >
                 <Option value="success">success</Option>
@@ -486,7 +487,7 @@ class TrainingRecord extends Component {
             <Form.Item
               label={
                 <div style={{ fontWeight: 900, color: 'rgb(127,125,142)' }}>
-                  note
+                  记录
                 </div>
               }
               name="note"
