@@ -181,7 +181,7 @@ class TrainingRecord extends Component {
                         }
                       })
                       .catch(m => {
-                        message.error(m.msg);
+                        message.error('服务器异常');
                       });
                   }}
                   size="small"
@@ -273,7 +273,7 @@ class TrainingRecord extends Component {
         });
       })
       .catch(m => {
-        message.error(m.msg);
+        message.error('服务器异常');
         this.setState({
           loading: false,
           currentPage: 1,
@@ -375,7 +375,7 @@ class TrainingRecord extends Component {
           });
         })
         .catch(m => {
-          message.error(m.msg);
+          message.error('服务器异常');
           this.setState({
             loading: false,
             currentPage: 1,
@@ -416,7 +416,7 @@ class TrainingRecord extends Component {
                   });
                 })
                 .catch(m => {
-                  message.error(m.msg);
+                  message.error('服务器异常');
                   this.setState({
                     loading: false,
                     currentPage: 1,
@@ -535,7 +535,7 @@ class TrainingRecord extends Component {
                   });
                 })
                 .catch(m => {
-                  message.error(m.msg);
+                  message.error('服务器异常');
                   this.setState({
                     loading: false,
                     currentPage: page,

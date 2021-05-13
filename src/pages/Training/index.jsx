@@ -39,7 +39,7 @@ class Training extends Component {
           });
         })
         .catch(m => {
-          message.error(m.msg);
+          message.error('服务器异常');
         });
     }, 1500);
 
