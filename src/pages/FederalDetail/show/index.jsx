@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Col, message, Row, Tree } from 'antd';
+import { Button, Col, message, Row, Spin, Tree } from 'antd';
 import Show from '../../../components/Show';
 import api from '../../../config/api';
 import dayjs from 'dayjs';
@@ -24,10 +24,14 @@ class FederalDetail extends Component {
       names: [],
       treeData: [],
       d: {},
+      loading: false,
     };
   }
 
   onChange = index => {
+    this.setState({
+      loading: true,
+    });
     axios
       .post(api.showDetailParameters, {
         component_name: this.state.names[index],
@@ -38,15 +42,32 @@ class FederalDetail extends Component {
       .then(data => {
         const d = JSON.parse(data.data.data);
         let treeData = [];
-        treeData = this.getDeatilList(treeData, d);
+        treeData = this.getDeatilList([], d);
         console.log(treeData);
-        this.setState({ treeData });
+        this.setState({ treeData, loading: false });
       })
       .catch(m => {
         message.error('服务器异常');
+        this.setState({
+          loading: false,
+        });
       });
   };
-
+  generateUUID() {
+    var d = new Date().getTime();
+    if (window.performance && typeof window.performance.now === 'function') {
+      d += performance.now(); //use high-precision timer if available
+    }
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+      /[xy]/g,
+      function (c) {
+        var r = (d + Math.random() * 16) % 16 | 0;
+        d = Math.floor(d / 16);
+        return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
+      }
+    );
+    return uuid;
+  }
   getDeatilList(data, treeData) {
     for (let treeDataKey in treeData) {
       let child = [];
@@ -55,19 +76,19 @@ class FederalDetail extends Component {
           this.getDeatilList(child, treeData[treeDataKey]);
           data.push({
             title: `${treeDataKey}`,
-            key: `${treeDataKey}`,
+            key: `${this.generateUUID().replace('-', '')}`,
             children: child,
           });
         } else {
           data.push({
             title: `${treeDataKey}:  ${treeData[treeDataKey]}`,
-            key: `${treeDataKey}:  ${treeData[treeDataKey]}`,
+            key: `${this.generateUUID().replace('-', '')}`,
           });
         }
       } else {
         data.push({
           title: `${treeDataKey}:  ${treeData[treeDataKey]}`,
-          key: `${treeDataKey}:  ${treeData[treeDataKey]}`,
+          key: `${this.generateUUID().replace('-', '')}`,
         });
       }
     }
@@ -169,29 +190,30 @@ class FederalDetail extends Component {
               <div style={{ marginTop: '6vh', marginBottom: '1vh' }}>
                 Information
               </div>
-              <div
-                style={{
-                  scroll: 'auto',
-                  height: '53vh',
-                  padding: '5px 10px',
-                  backgroundColor: 'rgb(240,240,240)',
-                  border: '1px solid',
-                }}
-              >
-                <Tree
-                  selectable={false}
-                  showLine={false}
-                  defaultExpandedKeys={['0-0-0']}
-                  onSelect={this.onSelect}
-                  treeData={this.state.treeData}
-                  height={'50vh'}
+              <Spin spinning={this.state.loading} delay={500}>
+                <div
                   style={{
-                    fontSize: 'small',
-                    color: 'rgb(153,167,193)',
-                    background: 'rgb(240,240,240)',
+                    scroll: 'auto',
+                    height: '53vh',
+                    padding: '5px 10px',
+                    backgroundColor: 'rgb(240,240,240)',
+                    border: '1px solid',
                   }}
-                />
-              </div>
+                >
+                  <Tree
+                    selectable={false}
+                    showLine={false}
+                    onSelect={this.onSelect}
+                    treeData={this.state.treeData}
+                    height={'50vh'}
+                    style={{
+                      fontSize: 'small',
+                      color: 'rgb(153,167,193)',
+                      background: 'rgb(240,240,240)',
+                    }}
+                  />
+                </div>
+              </Spin>
               <Button
                 onClick={e => {
                   if (this.state.dataIndex !== -1) {
