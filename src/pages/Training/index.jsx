@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './index.css';
 import PubSubJS from 'pubsub-js';
-import { Card, Progress } from 'antd';
+import { Card, message, Progress } from 'antd';
 import axios from 'axios';
 import api from '../../config/api';
 
@@ -22,20 +22,25 @@ class Training extends Component {
     PubSubJS.publish('isRunning', { page: '5' });
 
     let numInterval = setInterval(() => {
-      axios.get(api.isTrainingDetail).then(r => {
-        const { data } = r.data;
-        const trainInfo = data.map((v, i) => {
-          return {
-            id: v.fJobId,
-            percent: v.fProgress,
-            role: v.fRole,
-            partyId: v.fPartyId,
-          };
+      axios
+        .get(api.isTrainingDetail)
+        .then(r => {
+          const { data } = r.data;
+          const trainInfo = data.map((v, i) => {
+            return {
+              id: v.fJobId,
+              percent: v.fProgress,
+              role: v.fRole,
+              partyId: v.fPartyId,
+            };
+          });
+          this.setState({
+            trainInfo,
+          });
+        })
+        .catch(m => {
+          message.error(m.msg);
         });
-        this.setState({
-          trainInfo,
-        });
-      });
     }, 1500);
 
     this.setState({

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Col, Row, Tree } from 'antd';
+import { Button, Col, message, Row, Tree } from 'antd';
 import Show from '../../../components/Show';
 import api from '../../../config/api';
 import dayjs from 'dayjs';
@@ -64,6 +64,9 @@ class FederalDetail extends Component {
           },
         ];
         this.setState({ treeData });
+      })
+      .catch(m => {
+        message.error(m.msg);
       });
   };
 

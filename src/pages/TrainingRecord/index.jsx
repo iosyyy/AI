@@ -62,9 +62,11 @@ class TrainingRecord extends Component {
       {
         title: <div>开始时间</div>,
         dataIndex: 'startTime',
-        key: 'startTime',
+        key: 'start_time',
         sorter: {
-          compare: (a, b) => a.startTime - b.startTime,
+          compare: (a, b) => {
+            return true;
+          },
           multiple: 1,
         },
         render: text => {
@@ -74,11 +76,8 @@ class TrainingRecord extends Component {
       {
         title: <div>结束时间</div>,
         dataIndex: 'endTime',
-        key: 'endTime',
-        sorter: {
-          compare: (a, b) => a.endTime - b.endTime,
-          multiple: 2,
-        },
+        key: 'end_time',
+        sorter: true,
         render: text => {
           return <>{new Date(text).toLocaleString()}</>;
         },
@@ -86,11 +85,8 @@ class TrainingRecord extends Component {
       {
         title: <div>运行时间</div>,
         dataIndex: 'duration',
-        key: 'duration',
-        sorter: {
-          compare: (a, b) => a.duration - b.duration,
-          multiple: 3,
-        },
+        key: 'elapsed',
+        sorter: true,
         render: (text, value) => {
           const time = value.endTime - value.startTime;
           const seconds = Math.round((time / 1000) % 60);
@@ -135,7 +131,9 @@ class TrainingRecord extends Component {
                         </span>
                       </Tooltip>
                     ) : (
-                      text
+                      <Tooltip color="rgb(127,125,142)" title={text}>
+                        {text}
+                      </Tooltip>
                     )}
                   </span>
 
@@ -160,7 +158,7 @@ class TrainingRecord extends Component {
                   onFinish={data => {
                     this.setState({ loading: true });
                     axios
-                      .put('http://127.0.0.1:8080/job/update', {
+                      .put(api.jobUpdate, {
                         job_id: value.id.toString(),
                         notes: data.notes,
                         party_id: value.partyId,
@@ -173,15 +171,18 @@ class TrainingRecord extends Component {
                           this.setState({
                             dataSource,
                             loading: false,
+                            currentPage: 1,
                           });
                           this.setNoteShow(true, value);
                         } else {
                           message.error(r.data.msg).then();
-                          this.setState({ loading: false });
+                          this.setState({ loading: false, currentPage: 1 });
                           this.setNoteShow(true, value);
                         }
                       })
-                      .catch(() => {});
+                      .catch(m => {
+                        message.error(m.msg);
+                      });
                   }}
                   size="small"
                   layout="inline"
@@ -233,6 +234,12 @@ class TrainingRecord extends Component {
       NoteNow,
       loading: true,
       pageSize: 0,
+      currentPage: 1,
+      searchRes: { note: '', id: '', partyId: '', role: [], status: [] },
+      sorter: {
+        columnKey: 'job_id',
+        orderRule: 'desc',
+      },
     };
   }
 
@@ -262,11 +269,14 @@ class TrainingRecord extends Component {
           dataSource,
           loading: false,
           pageSize,
+          currentPage: 1,
         });
       })
-      .catch(() => {
+      .catch(m => {
+        message.error(m.msg);
         this.setState({
           loading: false,
+          currentPage: 1,
         });
       });
   }
@@ -308,7 +318,78 @@ class TrainingRecord extends Component {
     });
   }
 
+  getData = (page, sor, resw) => {
+    let res = this.state.searchRes;
+    if (resw && Object.keys(resw).length) {
+      res = resw;
+    }
+    let { sorter } = this.state;
+    let orderField, orderRule;
+    console.log(sorter);
+    if (Object.keys(sorter).length) {
+      orderField = `f_${sorter.columnKey}`;
+      orderRule = `${sorter.order === `ascend` ? `asc` : `desc`}`;
+    } else {
+      orderField = 'f_job_id';
+      orderRule = 'desc';
+    }
+    if (sor && Object.keys(sor).length) {
+      orderField = `f_${sor.columnKey}`;
+      orderRule = `${sor.order === `ascend` ? `asc` : `desc`}`;
+    }
+    return {
+      fDescription: res.note,
+      jobId: res.id,
+      job_id: res.id,
+      orderField,
+      orderRule,
+      pageNum: page,
+      pageSize: 20,
+      partyId: res.partyId,
+      party_id: res.partyId,
+      role: res.role,
+      status: res.status,
+    };
+  };
+
+  onTableChange = (pagination, filters, sorter) => {
+    if (
+      Object.keys(sorter).length &&
+      (this.state.sorter.columnKey !== sorter.columnKey ||
+        this.state.sorter.order !== sorter.order)
+    ) {
+      this.setState({ loading: true });
+
+      axios
+        .post(api.pageList, this.getData(1, sorter))
+        .then(r => {
+          const { list } = r.data.data;
+          const pageSize = r.data.data.totalRecord;
+          const dataSource = this.getDataSourceByDataList(list);
+          this.setState({
+            dataSource,
+            loading: false,
+            pageSize,
+            currentPage: 1,
+            sorter,
+          });
+        })
+        .catch(m => {
+          message.error(m.msg);
+          this.setState({
+            loading: false,
+            currentPage: 1,
+            sorter,
+          });
+        });
+    } else {
+      this.setState({ sorter });
+    }
+  };
+
   render() {
+    const res = this.state.searchRes;
+
     return (
       <div className="site-layout-content">
         <div style={{ float: 'right' }}>
@@ -320,19 +401,7 @@ class TrainingRecord extends Component {
                 loading: true,
               });
               axios
-                .post(api.pageList, {
-                  fDescription: res.note,
-                  jobId: res.id,
-                  job_id: res.id,
-                  orderField: 'f_job_id',
-                  orderRule: 'desc',
-                  pageNum: 1,
-                  pageSize: 20,
-                  partyId: res.partyId,
-                  party_id: res.partyId,
-                  role: res.role,
-                  status: res.status,
-                })
+                .post(api.pageList, this.getData(1, {}, res))
                 .then(r => {
                   const pageSize = r.data.data.totalRecord;
                   const dataSource = this.getDataSourceByDataList(
@@ -342,11 +411,15 @@ class TrainingRecord extends Component {
                     dataSource,
                     loading: false,
                     pageSize,
+                    currentPage: 1,
+                    searchRes: res,
                   });
                 })
-                .catch(() => {
+                .catch(m => {
+                  message.error(m.msg);
                   this.setState({
                     loading: false,
+                    currentPage: 1,
                   });
                 });
             }}
@@ -432,34 +505,25 @@ class TrainingRecord extends Component {
           </Form>
         </div>
         <Table
+          onChange={this.onTableChange}
           loading={this.state.loading}
           scroll={{ y: '65vh' }}
           bordered={false}
           dataSource={this.state.dataSource}
           columns={this.state.columns}
           pagination={{
+            showSizeChanger: false,
             pageSize: 20,
             position: ['bottomCenter'],
             size: 'small',
             total: this.state.pageSize,
+            current: this.state.currentPage,
             onChange: (page, _pageSize) => {
               this.setState({ loading: true });
               axios
-                .post(api.pageList, {
-                  fDescription: '',
-                  jobId: '',
-                  job_id: '',
-                  note: '',
-                  orderField: 'f_job_id',
-                  orderRule: 'desc',
-                  pageNum: page,
-                  pageSize: 20,
-                  partyId: '',
-                  party_id: '',
-                  role: [],
-                  status: [],
-                })
+                .post(api.pageList, this.getData(page))
                 .then(r => {
+                  console.log(page);
                   const { list } = r.data.data;
                   const pageSize = r.data.data.totalRecord;
                   const dataSource = this.getDataSourceByDataList(list);
@@ -467,11 +531,14 @@ class TrainingRecord extends Component {
                     dataSource,
                     loading: false,
                     pageSize,
+                    currentPage: page,
                   });
                 })
-                .catch(() => {
+                .catch(m => {
+                  message.error(m.msg);
                   this.setState({
                     loading: false,
+                    currentPage: page,
                   });
                 });
             },
