@@ -20,32 +20,37 @@ class Training extends Component {
   componentDidMount() {
     // eslint-disable-next-line no-unused-vars
     PubSubJS.publish('isRunning', { page: '5' });
+    this.getRunning();
 
     let numInterval = setInterval(() => {
-      axios
-        .get(api.isTrainingDetail)
-        .then(r => {
-          const { data } = r.data;
-          const trainInfo = data.map((v, i) => {
-            return {
-              id: v.fJobId,
-              percent: v.fProgress,
-              role: v.fRole,
-              partyId: v.fPartyId,
-            };
-          });
-          this.setState({
-            trainInfo,
-          });
-        })
-        .catch(m => {
-          message.error('服务器异常');
-        });
+      this.getRunning();
     }, 1500);
 
     this.setState({
       numInterval,
     });
+  }
+
+  getRunning() {
+    axios
+      .get(api.isTrainingDetail)
+      .then(r => {
+        const { data } = r.data;
+        const trainInfo = data.map((v, i) => {
+          return {
+            id: v.fJobId,
+            percent: v.fProgress,
+            role: v.fRole,
+            partyId: v.fPartyId,
+          };
+        });
+        this.setState({
+          trainInfo,
+        });
+      })
+      .catch(m => {
+        message.error('服务器异常');
+      });
   }
 
   render() {
@@ -54,7 +59,7 @@ class Training extends Component {
         hoverable
         className="training-list-item"
         key={index.toString()}
-        onDoubleClick={() => {
+        onClick={() => {
           this.props.history.push({
             pathname: '/trainingDetails',
             state: { id: item.id, role: item.role, partyId: item.partyId },
