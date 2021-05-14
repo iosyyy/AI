@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   Button,
   Card,
@@ -9,12 +9,12 @@ import {
   Progress,
   Row,
   Tabs,
-} from 'antd';
-import { BulbTwoTone } from '@ant-design/icons';
-import './index.css';
-import Show from '../../../components/Show';
-import bigImg from '../../../img/big.png';
-import api from '../../../config/api';
+  Badge,
+} from "antd";
+import "./index.css";
+import Show from "../../../components/Show";
+import bigImg from "../../../img/big.png";
+import api from "../../../config/api";
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -27,47 +27,29 @@ export default class index extends Component {
     this.state = {
       id: this.props.location.state.id,
       info: {
-        dataset: 'train.csv',
+        dataset: "train.csv",
         epoch: 5,
-        optimizer: 'sgim',
-        lr: '0.01',
+        optimizer: "sgim",
+        lr: "0.01",
       },
-      percent: 40,
-      logs: {
-        algorithm: {
-          error: {
-            msg: 'algorithm-error的数据',
-          },
-          warning: {
-            msg: 'algorithm-warning的数据',
-          },
-          info: {
-            msg: 'algorithm-info的数据',
-          },
-          debug: {
-            msg: 'algorithm-debug的数据',
-          },
-        },
-        schedule: {
-          error: {
-            msg: 'schedule-error的数据',
-          },
-          info: {
-            msg: 'schedule-info的数据',
-          },
-        },
-        algorithmError: false,
-        algorithmWarning: true,
-        algorithmInfo: true,
-        algorithmDebug: true,
-        scheduleError: false,
-        scheduleInfo: true,
-        isBig: false,
-      },
-      names: ['Input', 'HeteroLR', 'Evaluation'],
-      timeString: '',
+      percent: 0,
+      partyErrorMsg: "",
+      partyWarningMsg: "",
+      partyInfoMsg: "",
+      partyDebugMsg: "",
+      jobErrorMsg: "",
+      jobInfoMsg: "",
+      partyError: 0,
+      partyWarning: 0,
+      partyInfo: 0,
+      partyDebug: 0,
+      jobError: 0,
+      jobSchedule: 0,
+      isBig: false,
+      names: ["Input", "HeteroLR", "Evaluation"],
+      timeString: "",
       roles: [],
-      role: '',
+      role: "",
       roleDataset: {},
       startTime: 0,
       endTime: 0,
@@ -75,44 +57,92 @@ export default class index extends Component {
     };
   }
 
-  componentWillUnmount() {
-    socket.close();
-    socketList.close();
+
+  sendLogRequest() {
+    console.log("run...");
+      socket.onopen = data => {
+        socket.send(JSON.stringify({ type: "partyError", begin: 0, end: 999999 }));
+        socket.send(JSON.stringify({ type: "partyWarning", begin: 0, end: 999999 }));
+        socket.send(JSON.stringify({ type: "partyInfo", begin: 0, end: 999999 }));
+        socket.send(JSON.stringify({ type: "partyDebug", begin: 0, end: 999999 }));
+        socket.send(JSON.stringify({ type: "jobError", begin: 0, end: 999999 }));
+        socket.send(JSON.stringify({ type: "jobSchedule", begin: 0, end: 999999 }));
+        socket.send({});
+      };
+    
   }
 
   componentDidMount() {
     let { id, partyId, role } = this.props.location.state;
     let url = api.logDetail
-      .replace('{id}', id)
-      .replace('{partyId}', partyId)
-      .replace('{role}', role);
+      .replace("{id}", id)
+      .replace("{partyId}", partyId)
+      .replace("{role}", role);
 
     socket = new WebSocket(url);
+    this.sendLogRequest();
 
-    socket.onopen = data => {
-      socket.send(JSON.stringify({ type: 'partyInfo', begin: 0, end: 361 }));
-    };
+    let getMsg = (data)=>{
+      let arr
+      if(data){
+      arr = data.map((item,index)=>`${index} -- ${item.content}`)
+      }
+      return arr.join("\n\n")
+    }
+
     socket.onmessage = data => {
       let messageLog = JSON.parse(data.data);
-      if (messageLog.type === 'partyInfo') {
-        console.log(messageLog);
-        let textLog = messageLog.data;
-        let { logs } = this.state;
-        let text = textLog.map((v, i) => {
-          return v.content;
-        });
-        logs.algorithm.info.msg = text.join('\n');
-        this.setState({
-          logs,
-        });
+      console.log(messageLog);
+      let msg
+      switch(messageLog.type){
+        case "logSize":
+          this.setState(messageLog.data);
+          break;
+        case "partyError":
+          msg = getMsg(messageLog.data)
+          this.setState({
+            partyErrorMsg:msg
+          })
+          break;
+        case "partyWarning":
+          msg = getMsg(messageLog.data)
+          this.setState({
+            partyWarningMsg:msg
+          })
+          break;
+        case "partyInfo":
+          msg = getMsg(messageLog.data)
+          this.setState({
+            partyInfoMsg:msg
+          })
+          break;
+        case "partyDebug":
+          msg = getMsg(messageLog.data)
+          this.setState({
+            partyDebugMsg:msg
+          })
+          break;
+        case "jobError":
+          msg = getMsg(messageLog.data)
+          this.setState({
+            jobErrorMsg:msg
+          })
+          break;
+        case "jobSchedule":
+          msg = getMsg(messageLog.data)
+          this.setState({
+            jobScheduleMsg:msg
+          })
+          break;
+        default: break;
       }
 
-      // let detail = JSON.parse(data.data);
+
     };
     const urlList = api.showList
-      .replace('{jobId}', id)
-      .replace('{role}', role)
-      .replace('{partyId}', partyId);
+      .replace("{jobId}", id)
+      .replace("{role}", role)
+      .replace("{partyId}", partyId);
     socketList = new WebSocket(urlList);
 
     socketList.onmessage = data => {
@@ -156,49 +186,6 @@ export default class index extends Component {
     };
   }
 
-  showChange = indexs => {};
-
-  readNew1 = key => {
-    let newData;
-    switch (key) {
-      case '1':
-        newData = this.state.logs;
-        newData.algorithmError = false;
-        break;
-      case '2':
-        newData = this.state.logs;
-        newData.algorithmWarning = false;
-        break;
-      case '3':
-        newData = this.state.logs;
-        newData.algorithmInfo = false;
-        break;
-      case '4':
-        newData = this.state.logs;
-        newData.algorithmDebug = false;
-        break;
-      default:
-        break;
-    }
-    this.setState(newData);
-  };
-
-  readNew2 = key => {
-    let newData;
-    switch (key) {
-      case '1':
-        newData = this.state.logs;
-        newData.scheduleError = false;
-        break;
-      case '2':
-        newData = this.state.logs;
-        newData.scheduleInfo = false;
-        break;
-      default:
-        break;
-    }
-    this.setState(newData);
-  };
 
   render() {
     let cur = this.state;
@@ -214,92 +201,92 @@ export default class index extends Component {
         isBig: false,
       });
     };
-    let guest = '';
-    let host = '';
-    let arbiter = '';
+    let guest = "";
+    let host = "";
+    let arbiter = "";
     if (roles && Object.keys(roles).length) {
-      guest = roles['guest'];
-      host = roles['host'];
-      arbiter = roles['arbiter'];
+      guest = roles["guest"];
+      host = roles["host"];
+      arbiter = roles["arbiter"];
     }
     return (
-      <div className="training-details">
-        <div className="trainning-details-card1-continer">
-          <Card className="trainning-details-card1">
+      <div className='training-details'>
+        <div className='trainning-details-card1-continer'>
+          <Card className='trainning-details-card1'>
             <h4>Info</h4>
             <div
-              style={{ fontWeight: 600, width: '18vw' }}
-              className="trainning-details-info"
+              style={{ fontWeight: 600, width: "18vw" }}
+              className='trainning-details-info'
             >
               <Row
-                justify={'space-between'}
-                style={{ color: 'rgb(153,155,163)', marginBottom: '0.5vh' }}
+                justify={"space-between"}
+                style={{ color: "rgb(153,155,163)", marginBottom: "0.5vh" }}
               >
                 <Col>GUEST</Col>
                 <Col>dataset</Col>
               </Row>
-              <Row justify={'space-between'} style={{ marginBottom: '2vh' }}>
+              <Row justify={"space-between"} style={{ marginBottom: "2vh" }}>
                 <Col>{guest}</Col>
-                <Col style={{ color: 'rgb(145,89,209)' }}>{}</Col>
+                <Col style={{ color: "rgb(145,89,209)" }}>{}</Col>
               </Row>
               <Row
-                justify={'space-between'}
-                style={{ color: 'rgb(153,155,163)', marginBottom: '0.5vh' }}
+                justify={"space-between"}
+                style={{ color: "rgb(153,155,163)", marginBottom: "0.5vh" }}
               >
                 <Col>HOST</Col>
                 <Col>dataset</Col>
               </Row>
-              <Row justify={'space-between'} style={{ marginBottom: '2vh' }}>
+              <Row justify={"space-between"} style={{ marginBottom: "2vh" }}>
                 <Col>{host}</Col>
-                <Col style={{ color: 'rgb(145,89,209)' }}>{}</Col>
+                <Col style={{ color: "rgb(145,89,209)" }}>{}</Col>
               </Row>
               <Row
-                justify={'space-between'}
-                style={{ color: 'rgb(153,155,163)', marginBottom: '0.5vh' }}
+                justify={"space-between"}
+                style={{ color: "rgb(153,155,163)", marginBottom: "0.5vh" }}
               >
                 <Col>ARBITER</Col>
                 <Col>dataset</Col>
               </Row>
-              <Row justify={'space-between'} style={{ marginBottom: '2vh' }}>
+              <Row justify={"space-between"} style={{ marginBottom: "2vh" }}>
                 <Col>{arbiter}</Col>
-                <Col style={{ color: 'rgb(145,89,209)' }}>{}</Col>
+                <Col style={{ color: "rgb(145,89,209)" }}>{}</Col>
               </Row>
             </div>
           </Card>
-          <Card className="trainning-details-card1 c2">
+          <Card className='trainning-details-card1 c2'>
             <h4>Task</h4>
             <Progress
               percent={this.state.percent}
               strokeColor={{
-                '0%': '#108ee9',
-                '100%': '#87d068',
+                "0%": "#108ee9",
+                "100%": "#87d068",
               }}
-              status={this.state.percent === 100 ? 'success' : 'active'}
+              status={this.state.percent === 100 ? "success" : "active"}
             />
             <h6>duration:{this.state.timeString}</h6>
             <Button
               onClick={() => {
                 this.props.history.push({
-                  pathname: '/federalDetail/show',
+                  pathname: "/federalDetail/show",
                   state: { cur },
                 });
               }}
-              type="primary"
-              style={{ marginTop: '5vh', float: 'right' }}
+              type='primary'
+              style={{ marginTop: "5vh", float: "right" }}
             >
               view the job -&gt;
             </Button>
           </Card>
-          <Card className="trainning-details-card1">
+          <Card className='trainning-details-card1'>
             <div>
               <span style={{ fontWeight: 600 }}>Graph</span>
               <div
                 style={{
-                  float: 'right',
-                  display: 'inline',
+                  float: "right",
+                  display: "inline",
                 }}
               >
-                <Button type="text" size="small">
+                <Button type='text' size='small'>
                   <Image
                     preview={false}
                     onClick={() => {
@@ -309,7 +296,7 @@ export default class index extends Component {
                     style={{
                       width: 20,
                       height: 20,
-                      display: '',
+                      display: "",
                     }}
                   />
                 </Button>
@@ -319,144 +306,150 @@ export default class index extends Component {
             <Show
               names={this.state.names}
               symbolSize={32}
-              id="show"
+              id='show'
               change={this.showChange}
-              style={{ width: '100%', height: '22vh' }}
+              style={{ width: "100%", height: "22vh" }}
             />
           </Card>
         </div>
 
-        <Card style={{ height: '49vh' }} className="trainning-details-card2">
-          <Tabs defaultActiveKey="1">
-            <TabPane tab="algorithmm Log" key="1">
-              <Tabs defaultActiveKey="1" type="card" onChange={this.readNew1}>
+        <Card style={{ height: "49vh" }} className='trainning-details-card2'>
+          <Tabs defaultActiveKey='1'>
+            <TabPane tab='partym Log' key='1'>
+              <Tabs defaultActiveKey='1' type='card' >
                 <TabPane
                   tab={
                     <>
                       <span>error</span>&nbsp;
-                      <BulbTwoTone
-                        twoToneColor={
-                          this.state.logs.algorithmError ? '#FFD700' : '#C0C0C0'
+                      <Badge
+                        count={
+                          this.state.partyError ? this.state.partyError : 0
                         }
-                      />
+                        overflowCount={10000}
+                        showZero={true}
+                      ></Badge>
                     </>
                   }
-                  key="1"
+                  key='1'
                 >
                   <TextArea
                     disabled
                     autoSize={{ minRows: 9, maxRows: 9 }}
-                    value={this.state.logs.algorithm.error.msg}
+                    value={this.state.partyErrorMsg}
                   />
                 </TabPane>
                 <TabPane
                   tab={
                     <>
                       <span>warning</span>&nbsp;
-                      <BulbTwoTone
-                        twoToneColor={
-                          this.state.logs.algorithmWarning
-                            ? '#FFD700'
-                            : '#C0C0C0'
+                      <Badge
+                        count={
+                          this.state.partyWarning ? this.state.partyWarning : 0
                         }
-                      />
+                        overflowCount={10000}
+                        showZero={true}
+                      ></Badge>
                     </>
                   }
-                  key="2"
+                  key='2'
                 >
                   <TextArea
                     disabled
                     autoSize={{ minRows: 9, maxRows: 9 }}
-                    value={this.state.logs.algorithm.warning.msg}
+                    value={this.state.partyWarningMsg}
                   />
                 </TabPane>
                 <TabPane
+              
                   tab={
                     <>
                       <span>info</span>&nbsp;
-                      <BulbTwoTone
-                        twoToneColor={
-                          this.state.logs.algorithmInfo ? '#FFD700' : '#C0C0C0'
-                        }
-                      />
+                      <Badge
+                        count={this.state.partyInfo ? this.state.partyInfo : 0}
+                        overflowCount={10000}
+                        showZero={true}
+                      ></Badge>
                     </>
                   }
-                  key="3"
+                  key='3'
                 >
                   <TextArea
                     disabled
                     autoSize={{ minRows: 9, maxRows: 9 }}
-                    value={this.state.logs.algorithm.info.msg}
+                    value={this.state.partyInfoMsg}
                   />
                 </TabPane>
                 <TabPane
                   tab={
                     <>
                       <span>debug</span>&nbsp;
-                      <BulbTwoTone
-                        twoToneColor={
-                          this.state.logs.algorithmDebug ? '#FFD700' : '#C0C0C0'
+                      <Badge
+                        count={
+                          this.state.partyDebug ? this.state.partyDebug : 0
                         }
-                      />
+                        overflowCount={10000}
+                        showZero={true}
+                      ></Badge>
                     </>
                   }
-                  key="4"
+                  key='4'
                 >
                   <TextArea
                     disabled
                     autoSize={{ minRows: 9, maxRows: 9 }}
-                    value={this.state.logs.algorithm.debug.msg}
+                    value={this.state.partyDebugMsg}
                   />
                 </TabPane>
               </Tabs>
             </TabPane>
-            <TabPane tab="Schedule Log" key="2" animated>
-              <Tabs defaultActiveKey="1" type="card" onChange={this.readNew2}>
+            <TabPane tab='job Log' key='2' animated>
+              <Tabs defaultActiveKey='1' type='card'>
                 <TabPane
                   tab={
                     <>
                       <span>error</span>&nbsp;
-                      <BulbTwoTone
-                        twoToneColor={
-                          this.state.logs.scheduleError ? '#FFD700' : '#C0C0C0'
-                        }
-                      />
+                      <Badge
+                        count={this.state.jobError ? this.state.jobError : 0}
+                        overflowCount={10000}
+                        showZero={true}
+                      ></Badge>
                     </>
                   }
-                  key="1"
+                  key='1'
                 >
                   <TextArea
                     disabled
                     autoSize={{ minRows: 9, maxRows: 9 }}
-                    value={this.state.logs.schedule.error.msg}
+                    value={this.state.jobErrorMsg}
                   />
                 </TabPane>
                 <TabPane
                   tab={
                     <>
-                      <span>info</span>&nbsp;
-                      <BulbTwoTone
-                        twoToneColor={
-                          this.state.logs.scheduleInfo ? '#FFD700' : '#C0C0C0'
-                        }
-                      />
+                      <span>schedule</span>&nbsp;
+                      <Badge
+                        count={this.state.jobSchedule ? this.state.jobSchedule : 0}
+                        overflowCount={10000}
+                        showZero={true}
+                      ></Badge>
                     </>
                   }
-                  key="2"
+                  key='2'
                 >
                   <TextArea
                     disabled
                     autoSize={{ minRows: 9, maxRows: 9 }}
-                    value={this.state.logs.schedule.info.msg}
+                    value={this.state.jobScheduleMsg}
                   />
                 </TabPane>
               </Tabs>
             </TabPane>
           </Tabs>
         </Card>
+
         <Modal
-          width="180vh"
-          title="Graph"
+          width='180vh'
+          title='Graph'
           visible={this.state.isBig}
           onOk={handleOk}
           onCancel={handleCancel}
@@ -467,9 +460,9 @@ export default class index extends Component {
           <Show
             names={this.state.names}
             symbolSize={60}
-            id="show2"
+            id='show2'
             change={this.showChange}
-            style={{ width: '100%', height: '60vh' }}
+            style={{ width: "100%", height: "60vh" }}
           />
         </Modal>
       </div>
