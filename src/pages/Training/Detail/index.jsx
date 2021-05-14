@@ -89,10 +89,26 @@ export default class index extends Component {
 
     socket = new WebSocket(url);
 
+    socket.onopen = data => {
+      socket.send(JSON.stringify({ type: 'partyInfo', begin: 0, end: 361 }));
+    };
     socket.onmessage = data => {
+      let messageLog = JSON.parse(data.data);
+      if (messageLog.type === 'partyInfo') {
+        console.log(messageLog);
+        let textLog = messageLog.data;
+        let { logs } = this.state;
+        let text = textLog.map((v, i) => {
+          return v.content;
+        });
+        logs.algorithm.info.msg = text.join('\n');
+        this.setState({
+          logs,
+        });
+      }
+
       // let detail = JSON.parse(data.data);
     };
-
     const urlList = api.showList
       .replace('{jobId}', id)
       .replace('{role}', role)
