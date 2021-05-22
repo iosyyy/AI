@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import { Form, Input, Button, Upload, message } from 'antd';
-import axios from 'axios';
-import api from '../../../config/api';
+import React, { Component } from "react";
+import { Form, Input, Button, Upload, message, Space } from "antd";
+import axios from "axios";
+import api from "../../../config/api";
 
 class FederalTrainChoice extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      trainName: 'homo_logistic_regression',
+      trainName: "homo_logistic_regression",
       fileList1: [],
       fileList2: [],
     };
@@ -69,21 +69,21 @@ class FederalTrainChoice extends Component {
     return (
       <div>
         <Form
-          size={'middle'}
+          size={"middle"}
           onFinish={e => {
             let { trainName } = e;
             let { fileList1, fileList2 } = this.state;
             const formData = new FormData();
-            formData.append('train_name', trainName);
+            formData.append("train_name", trainName);
             fileList1.forEach(file => {
-              formData.append('config_file', file);
+              formData.append("config_file", file);
             });
             fileList2.forEach(file => {
-              formData.append('dsl_file', file);
+              formData.append("dsl_file", file);
             });
             axios({
               url: api.beginTrain,
-              method: 'post',
+              method: "post",
               processData: false,
               data: formData,
             })
@@ -93,49 +93,56 @@ class FederalTrainChoice extends Component {
                     fileList1: [],
                     fileList2: [],
                   });
-                  message.success('上传成功');
+                  message.success("上传成功");
                   this.props.history.push({
-                    pathname: '/training',
+                    pathname: "/training",
                     state: { data: res.data },
                   });
                 } else {
-                  message.error('上传失败');
+                  message.error("上传失败");
                   console.error(res);
                 }
               })
               .catch(res => {
-                message.error('上传失败');
+                message.error("上传失败");
                 console.error(res);
               });
           }}
           {...layout}
         >
           <Form.Item
-            name="trainName"
-            label="train_name"
+            name='trainName'
+            label='train_name'
             initialValue={this.state.trainName}
           >
             <Input disabled />
           </Form.Item>
 
-          <Form.Item name="configFile" label="config_file">
+          <Form.Item name='configFile' label='config_file'>
             <Upload {...props1}>
-              <Button type="primary">选择文件</Button>
+              <Button type='primary'>选择文件</Button>
             </Upload>
           </Form.Item>
 
-          <Form.Item name="dslFile" label="dsl_file">
+          <Form.Item name='dslFile' label='dsl_file'>
             <Upload {...props2}>
-              <Button type="primary">选择文件</Button>
+              <Button type='primary'>选择文件</Button>
             </Upload>
           </Form.Item>
 
-          <Form.Item style={{ marginTop: '15vh' }} {...tailLayout}>
-            <Button type="primary" htmlType="submit">
+          <Form.Item style={{ marginTop: "15vh" }} {...tailLayout}>
+            <Button type='primary' htmlType='submit'>
               提交
             </Button>
           </Form.Item>
+          
         </Form>
+        <div  style={{ margin:"0 auto",backgroundColor:"red",display:"flex",justifyContent:"center" }}>
+            <Space>
+              <Button type='primary'>下载config模版</Button>
+              <Button type='primary'>下载dsl模版</Button>
+            </Space>
+          </div>
       </div>
     );
   }
