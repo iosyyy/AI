@@ -30,6 +30,66 @@ class FederalResult extends Component {
     };
   }
 
+  onFormFinish = (ew) => {
+    const { uploadKey, isLoading, namespaces, tables, disables } = this.state;
+    const e = ew.users[uploadKey];
+    const dis = disables.map((v, i) => {
+      return false;
+    });
+    isLoading[uploadKey] = false;
+    const formData = new FormData();
+    if (tables[uploadKey] && e.dataset && tables[uploadKey]) {
+      formData.append("file", e.dataset.file);
+      formData.append("table_name", namespaces[uploadKey]);
+      formData.append("namespace", tables[uploadKey]);
+    } else {
+      message.error("数据填写错误,请重新填写");
+      this.setState({
+        isLoading,
+        disables: dis,
+        uploadIng: false,
+      });
+      return;
+    }
+    axios
+      .post(api.taskUpload, formData)
+      .then((r) => {
+        if (r.data.retcode === 0) {
+          message.success("上传成功");
+        } else {
+          message.error(r.data.retcode + ":" + r.data.retmsg).then((r) => {
+            console.log(r);
+          });
+          this.setState({
+            isLoading,
+            disables: dis,
+            uploadIng: false,
+          });
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        message.error("服务器链接异常");
+        this.setState({
+          isLoading,
+          disables: dis,
+          uploadIng: false,
+        });
+      });
+  };
+
+  toNextPage = () => {
+    this.props.history.push({
+      pathname: "/federalTrain/choice",
+    });
+  };
+
+  toLastPage = () => {
+    this.props.history.push({
+      pathname: "/federalTrain/form",
+    });
+  };
+
   render() {
     const tailLayout = {};
     const layout = {};
@@ -37,65 +97,7 @@ class FederalResult extends Component {
       <>
         <Row justify={"center"} style={{ height: "75vh", overflow: "auto" }}>
           <Col>
-            <Form
-              size={"middle"}
-              onFinish={(ew) => {
-                const {
-                  uploadKey,
-                  isLoading,
-                  namespaces,
-                  tables,
-                  disables,
-                } = this.state;
-                const e = ew.users[uploadKey];
-                const dis = disables.map((v, i) => {
-                  return false;
-                });
-                isLoading[uploadKey] = false;
-                const formData = new FormData();
-                if (tables[uploadKey] && e.dataset && tables[uploadKey]) {
-                  formData.append("file", e.dataset.file);
-                  formData.append("table_name", namespaces[uploadKey]);
-                  formData.append("namespace", tables[uploadKey]);
-                } else {
-                  message.error("数据填写错误,请重新填写");
-                  this.setState({
-                    isLoading,
-                    disables: dis,
-                    uploadIng: false,
-                  });
-                  return;
-                }
-                axios
-                  .post(api.taskUpload, formData)
-                  .then((r) => {
-                    if (r.data.retcode === 0) {
-                      message.success("上传成功");
-                    } else {
-                      message
-                        .error(r.data.retcode + ":" + r.data.retmsg)
-                        .then((r) => {
-                          console.log(r);
-                        });
-                      this.setState({
-                        isLoading,
-                        disables: dis,
-                        uploadIng: false,
-                      });
-                    }
-                  })
-                  .catch((e) => {
-                    console.log(e);
-                    message.error("服务器链接异常");
-                    this.setState({
-                      isLoading,
-                      disables: dis,
-                      uploadIng: false,
-                    });
-                  });
-              }}
-              {...layout}
-            >
+            <Form size={"middle"} onFinish={this.onFormFinish} {...layout}>
               <Form.List rules={[{ required: true }]} name="users">
                 {(fields, { add, remove }) => (
                   <>
@@ -112,6 +114,7 @@ class FederalResult extends Component {
                           label="数据集选择"
                         >
                           <Upload
+                            filelist={[]}
                             beforeUpload={() => {
                               return false;
                             }}
@@ -226,23 +229,12 @@ class FederalResult extends Component {
         <Row style={{ marginTop: "30px" }} justify={"center"}>
           <Space size={300}>
             <Button
-              onClick={() => {
-                this.props.history.push({
-                  pathname: "/federalTrain/form",
-                });
-              }}
+              onClick={this.toLastPage}
               style={{ background: "rgb(201,201,201)" }}
             >
               上一步
             </Button>
-            <Button
-              onClick={() => {
-                this.props.history.push({
-                  pathname: "/federalTrain/choice",
-                });
-              }}
-              type="primary"
-            >
+            <Button onClick={this.toNextPage} type="primary">
               下一步
             </Button>
           </Space>
