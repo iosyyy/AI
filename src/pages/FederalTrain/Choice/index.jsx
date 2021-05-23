@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Form, Input, Button, Upload, message, Space } from "antd";
 import axios from "axios";
 import api from "../../../config/api";
+import FileSaver from "file-saver";
 
 class FederalTrainChoice extends Component {
   constructor(props) {
@@ -13,10 +14,24 @@ class FederalTrainChoice extends Component {
     };
   }
 
+  downloadTempalte(fileName) {
+    axios
+      .post(api.downloadTemplate, {
+        file_name: fileName,
+      })
+      .then(f => {
+        let jsonObj = f.data;
+        let jsonStr = JSON.stringify(jsonObj);
+        console.log(jsonStr);
+        let file = new File([jsonStr], { type: "text/plain;charset=utf-8" });
+        FileSaver.saveAs(file, fileName + ".json");
+      });
+  }
+
   render() {
     // 表单样式
     const tailLayout = {
-      wrapperCol: { offset: 12, span: 8 },
+      wrapperCol: { offset: 12 },
     };
     // 表单样式
     const layout = {
@@ -119,30 +134,45 @@ class FederalTrainChoice extends Component {
           </Form.Item>
 
           <Form.Item name='configFile' label='config_file'>
-            <Upload {...props1}>
-              <Button type='primary'>选择文件</Button>
-            </Upload>
+            <Space>
+              <Upload {...props1}>
+                <Button type='primary'>选择文件</Button>
+              </Upload>
+              <Button
+                type='primary'
+                style={{ width: "9vw" }}
+                onClick={() => {
+                  this.downloadTempalte("config_file");
+                }}
+              >
+                下载config模版
+              </Button>
+            </Space>
           </Form.Item>
 
           <Form.Item name='dslFile' label='dsl_file'>
-            <Upload {...props2}>
-              <Button type='primary'>选择文件</Button>
-            </Upload>
+            <Space>
+              <Upload {...props2}>
+                <Button type='primary'>选择文件</Button>
+              </Upload>
+              <Button
+                type='primary'
+                style={{ width: "9vw" }}
+                onClick={() => {
+                  this.downloadTempalte("dsl_file");
+                }}
+              >
+                下载dsl模版
+              </Button>
+            </Space>
           </Form.Item>
 
-          <Form.Item style={{ marginTop: "15vh" }} {...tailLayout}>
+          <Form.Item {...tailLayout} style={{ marginTop: "10vh" }}>
             <Button type='primary' htmlType='submit'>
               提交
             </Button>
           </Form.Item>
-          
         </Form>
-        <div  style={{ margin:"0 auto",backgroundColor:"red",display:"flex",justifyContent:"center" }}>
-            <Space>
-              <Button type='primary'>下载config模版</Button>
-              <Button type='primary'>下载dsl模版</Button>
-            </Space>
-          </div>
       </div>
     );
   }

@@ -12,6 +12,7 @@ const e = {
   isTrainingDetail: host + '/job/query/status',
   logDetail: ws + '/log/new/{id}/{role}/{partyId}/default',
   jobUpdate: host + '/job/update',
+  downloadTemplate: host + "/api/v1/client/download/template"
 };
 
 export default e;
