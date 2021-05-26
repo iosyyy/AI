@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import './index.css';
-import PubSubJS from 'pubsub-js';
-import { Card, message, Progress } from 'antd';
-import axios from 'axios';
-import api from '../../config/api';
+import React, { Component } from "react";
+import "./index.css";
+import PubSubJS from "pubsub-js";
+import { Button, Card, message, Progress } from "antd";
+import axios from "axios";
+import api from "../../config/api";
 
 class Training extends Component {
   constructor(props) {
@@ -19,7 +19,7 @@ class Training extends Component {
 
   componentDidMount() {
     // eslint-disable-next-line no-unused-vars
-    PubSubJS.publish('isRunning', { page: '5' });
+    PubSubJS.publish("isRunning", { page: "5" });
     this.getRunning();
 
     let numInterval = setInterval(() => {
@@ -34,22 +34,21 @@ class Training extends Component {
   getRunning() {
     axios
       .get(api.isTrainingDetail)
-      .then(r => {
+      .then((r) => {
         const { data } = r.data;
-        const trainInfo = data.map((v, i) => {
-          return {
-            id: v.fJobId,
-            percent: v.fProgress,
-            role: v.fRole,
-            partyId: v.fPartyId,
-          };
-        });
+        const trainInfo = [
+          {
+            id: 10000,
+            percent: 100,
+            role: "helloss",
+          },
+        ];
         this.setState({
           trainInfo,
         });
       })
-      .catch(m => {
-        message.error('服务器异常');
+      .catch((m) => {
+        message.error("服务器异常");
       });
   }
 
@@ -59,26 +58,32 @@ class Training extends Component {
         hoverable
         className="training-list-item"
         key={index.toString()}
-        onClick={() => {
+        onDoubleClick={() => {
           this.props.history.push({
-            pathname: '/trainingDetails',
+            pathname: "/trainingDetails",
             state: { id: item.id, role: item.role, partyId: item.partyId },
           });
         }}
       >
         <h1 style={{ margin: 0 }}>{item.id}</h1>
-        <div style={{ marginTop: '10px' }}>
+        <div style={{ marginLeft: 0, color: "rgb(190,190,190)" }}>
+          Role: {item.role}
+        </div>
+        <div style={{ marginTop: "10px" }}>
           进度
           <Progress
-            style={{ marginLeft: '20px', width: '85%' }}
+            style={{ marginLeft: "20px", width: "85%" }}
             strokeColor={{
-              '0%': '#108ee9',
-              '100%': '#87d068',
+              "0%": "#108ee9",
+              "100%": "#87d068",
             }}
             percent={item.percent}
-            status={item.percent === 100 ? 'succcess' : 'active'}
+            status={item.percent === 100 ? "succcess" : "active"}
           />
         </div>
+        <Button style={{ float: "right", marginBottom: "5vh" }} type={"link"}>
+          cancel
+        </Button>
       </Card>
     ));
 
