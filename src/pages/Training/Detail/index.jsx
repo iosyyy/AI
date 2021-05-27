@@ -39,12 +39,12 @@ export default class index extends Component {
       partyDebugMsg: "",
       jobErrorMsg: "",
       jobInfoMsg: "",
-      partyError: 0,
-      partyWarning: 0,
-      partyInfo: 0,
-      partyDebug: 0,
-      jobError: 0,
-      jobSchedule: 0,
+      partyError: 3,
+      partyWarning: 4,
+      partyInfo: 5,
+      partyDebug: 6,
+      jobError: 7,
+      jobSchedule: 8,
       isBig: false,
       names: ["Input", "HeteroLR", "Evaluation"],
       timeString: "",
@@ -325,8 +325,8 @@ export default class index extends Component {
                         count={
                           this.state.partyError ? this.state.partyError : 0
                         }
+                        style={{ backgroundColor: 'red' }}
                         overflowCount={10000}
-                        showZero={true}
                       ></Badge>
                     </>
                   }
@@ -347,7 +347,7 @@ export default class index extends Component {
                           this.state.partyWarning ? this.state.partyWarning : 0
                         }
                         overflowCount={10000}
-                        showZero={true}
+                        style={{ backgroundColor: 'gold' }}
                       ></Badge>
                     </>
                   }
@@ -367,7 +367,7 @@ export default class index extends Component {
                       <Badge
                         count={this.state.partyInfo ? this.state.partyInfo : 0}
                         overflowCount={10000}
-                        showZero={true}
+                        style={{ backgroundColor: 'green' }}
                       ></Badge>
                     </>
                   }
@@ -388,7 +388,7 @@ export default class index extends Component {
                           this.state.partyDebug ? this.state.partyDebug : 0
                         }
                         overflowCount={10000}
-                        showZero={true}
+                        style={{ backgroundColor: 'blue' }}
                       ></Badge>
                     </>
                   }
@@ -411,7 +411,7 @@ export default class index extends Component {
                       <Badge
                         count={this.state.jobError ? this.state.jobError : 0}
                         overflowCount={10000}
-                        showZero={true}
+                        style={{ backgroundColor: 'red' }}
                       ></Badge>
                     </>
                   }
@@ -430,7 +430,7 @@ export default class index extends Component {
                       <Badge
                         count={this.state.jobSchedule ? this.state.jobSchedule : 0}
                         overflowCount={10000}
-                        showZero={true}
+                        style={{ backgroundColor: 'cyan' }}
                       ></Badge>
                     </>
                   }
