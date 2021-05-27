@@ -96,32 +96,36 @@ class FederalTrainChoice extends Component {
             fileList2.forEach(file => {
               formData.append("dsl_file", file);
             });
-            axios({
-              url: api.beginTrain,
-              method: "post",
-              processData: false,
-              data: formData,
-            })
-              .then(res => {
-                if (res.data.retcode === 0) {
-                  this.setState({
-                    fileList1: [],
-                    fileList2: [],
-                  });
-                  message.success("上传成功");
-                  this.props.history.push({
-                    pathname: "/training",
-                    state: { data: res.data },
-                  });
-                } else {
+            if (formData.get("config_file") && formData.get("dsl_file")) {
+              axios({
+                url: api.beginTrain,
+                method: "post",
+                processData: false,
+                data: formData,
+              })
+                .then(res => {
+                  if (res.data.retcode === 0) {
+                    this.setState({
+                      fileList1: [],
+                      fileList2: [],
+                    });
+                    message.success("上传成功");
+                    this.props.history.push({
+                      pathname: "/training",
+                      state: { data: res.data },
+                    });
+                  } else {
+                    message.error("上传失败");
+                    console.error(res);
+                  }
+                })
+                .catch(res => {
                   message.error("上传失败");
                   console.error(res);
-                }
-              })
-              .catch(res => {
-                message.error("上传失败");
-                console.error(res);
-              });
+                });
+            } else {
+              message.error("请提交文件config文件与dsl文件");
+            }
           }}
           {...layout}
         >
@@ -168,9 +172,21 @@ class FederalTrainChoice extends Component {
           </Form.Item>
 
           <Form.Item {...tailLayout} style={{ marginTop: "10vh" }}>
-            <Button type='primary' htmlType='submit'>
-              提交
-            </Button>
+            <Space>
+              <Button
+                type='primary'
+                onClick={() => {
+                  this.props.history.push({
+                    pathname: "/federalTrain/result",
+                  });
+                }}
+              >
+                上一步
+              </Button>
+              <Button type='primary' htmlType='submit'>
+                提交
+              </Button>
+            </Space>
           </Form.Item>
         </Form>
       </div>
