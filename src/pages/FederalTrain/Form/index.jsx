@@ -72,6 +72,7 @@ class FederalTrain extends Component {
               <Card
                 style={{
                   backgroundColor: this.state.type ? "RGB(96,185,234)" : "#FFF",
+                  height: "32vh",
                 }}
                 headStyle={{
                   border: 0,
@@ -106,6 +107,7 @@ class FederalTrain extends Component {
                   backgroundColor: !this.state.type
                     ? "RGB(96,185,234)"
                     : "#FFF",
+                  height: "32vh",
                 }}
                 headStyle={{
                   border: 0,
