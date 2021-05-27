@@ -122,7 +122,7 @@ class FederalResult extends Component {
             },
             {
               status: "wait",
-              title: "数据下载",
+              title: "参数配置",
               icon: <DownloadOutlined />,
             },
           ]}
