@@ -7,7 +7,6 @@ import {
   Input,
   message,
   Row,
-  Select,
   Space,
   Upload,
 } from "antd";
@@ -15,6 +14,7 @@ import axios from "axios";
 import api from "../../../config/api";
 import FileImg from "../../../img/file.png";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+
 class FederalResult extends Component {
   constructor(props) {
     super(props);
@@ -56,6 +56,11 @@ class FederalResult extends Component {
       .then((r) => {
         if (r.data.retcode === 0) {
           message.success("上传成功");
+          this.setState({
+            isLoading,
+            disables: dis,
+            uploadIng: false,
+          });
         } else {
           message.error(r.data.retcode + ":" + r.data.retmsg).then((r) => {
             console.log(r);
@@ -68,7 +73,6 @@ class FederalResult extends Component {
         }
       })
       .catch((e) => {
-        console.log(e);
         message.error("服务器链接异常");
         this.setState({
           isLoading,
@@ -114,7 +118,7 @@ class FederalResult extends Component {
                           label="数据集选择"
                         >
                           <Upload
-                            filelist={[]}
+                            maxCount={1}
                             beforeUpload={() => {
                               return false;
                             }}
@@ -139,9 +143,9 @@ class FederalResult extends Component {
                         >
                           <Input
                             value={this.state.tables}
-                            onChange={(value) => {
+                            onChange={(e) => {
                               const { tables } = this.state;
-                              tables[key] = value;
+                              tables[key] = e.target.value;
                               this.setState({
                                 tables,
                               });
@@ -160,9 +164,9 @@ class FederalResult extends Component {
                         >
                           <Input
                             value={this.state.namespaces}
-                            onChange={(value) => {
+                            onChange={(e) => {
                               const { namespaces } = this.state;
-                              namespaces[key] = value;
+                              namespaces[key] = e.target.value;
                               this.setState({
                                 namespaces,
                               });

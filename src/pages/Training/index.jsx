@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import "./index.css";
 import PubSubJS from "pubsub-js";
-import { Button, Card, message, Progress } from "antd";
+import { Button, Card, message, Popconfirm, Progress } from "antd";
 import axios from "axios";
 import api from "../../config/api";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 
 class Training extends Component {
   constructor(props) {
@@ -36,13 +37,15 @@ class Training extends Component {
       .get(api.isTrainingDetail)
       .then((r) => {
         const { data } = r.data;
-        const trainInfo = [
-          {
-            id: 10000,
-            percent: 100,
-            role: "helloss",
-          },
-        ];
+        const trainInfo = data.map((v, i) => {
+          return {
+            id: v.fJobId,
+            percent: v.fProgress,
+            role: v.fRole,
+            partyId: v.fPartyId,
+          };
+        });
+
         this.setState({
           trainInfo,
         });
@@ -80,10 +83,34 @@ class Training extends Component {
             percent={item.percent}
             status={item.percent === 100 ? "succcess" : "active"}
           />
+          <Popconfirm
+            title="Are you sure to delete this job?"
+            onConfirm={() => {
+              axios
+                .post(api.stopJob, { job_id: item.id })
+                .then((r) => {
+                  if (r.data.code === 0) {
+                    message.success(r.data.msg);
+                  } else {
+                    message.error(r.data.msg);
+                  }
+                })
+                .catch((e) => {
+                  message.error("服务器异常");
+                });
+            }}
+            okText="Yes"
+            cancelText="No"
+            icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+          >
+            <Button
+              style={{ float: "right", marginBottom: "5vh" }}
+              type={"link"}
+            >
+              cancel
+            </Button>
+          </Popconfirm>
         </div>
-        <Button style={{ float: "right", marginBottom: "5vh" }} type={"link"}>
-          cancel
-        </Button>
       </Card>
     ));
 
