@@ -165,7 +165,7 @@ class FederalTrainChoice extends Component {
               </Upload>
               <Button
                 type="primary"
-                style={{ width: "9vw" }}
+                style={{ width: "130px" }}
                 onClick={() => {
                   this.downloadTempalte("config_file");
                 }}
@@ -182,7 +182,7 @@ class FederalTrainChoice extends Component {
               </Upload>
               <Button
                 type="primary"
-                style={{ width: "9vw" }}
+                style={{ width: "130px" }}
                 onClick={() => {
                   this.downloadTempalte("dsl_file");
                 }}
