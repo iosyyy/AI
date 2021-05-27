@@ -39,12 +39,12 @@ export default class index extends Component {
       partyDebugMsg: "",
       jobErrorMsg: "",
       jobInfoMsg: "",
-      partyError: 3,
-      partyWarning: 4,
-      partyInfo: 5,
-      partyDebug: 6,
-      jobError: 7,
-      jobSchedule: 8,
+      partyError: 0,
+      partyWarning: 0,
+      partyInfo: 0,
+      partyDebug: 0,
+      jobError: 0,
+      jobSchedule: 0,
       isBig: false,
       names: ["Input", "HeteroLR", "Evaluation"],
       timeString: "",
@@ -57,19 +57,25 @@ export default class index extends Component {
     };
   }
 
-
   sendLogRequest() {
     console.log("run...");
-      socket.onopen = data => {
-        socket.send(JSON.stringify({ type: "partyError", begin: 0, end: 999999 }));
-        socket.send(JSON.stringify({ type: "partyWarning", begin: 0, end: 999999 }));
-        socket.send(JSON.stringify({ type: "partyInfo", begin: 0, end: 999999 }));
-        socket.send(JSON.stringify({ type: "partyDebug", begin: 0, end: 999999 }));
-        socket.send(JSON.stringify({ type: "jobError", begin: 0, end: 999999 }));
-        socket.send(JSON.stringify({ type: "jobSchedule", begin: 0, end: 999999 }));
-        socket.send({});
-      };
-    
+    socket.onopen = data => {
+      socket.send(
+        JSON.stringify({ type: "partyError", begin: 0, end: 999999 })
+      );
+      socket.send(
+        JSON.stringify({ type: "partyWarning", begin: 0, end: 999999 })
+      );
+      socket.send(JSON.stringify({ type: "partyInfo", begin: 0, end: 999999 }));
+      socket.send(
+        JSON.stringify({ type: "partyDebug", begin: 0, end: 999999 })
+      );
+      socket.send(JSON.stringify({ type: "jobError", begin: 0, end: 999999 }));
+      socket.send(
+        JSON.stringify({ type: "jobSchedule", begin: 0, end: 999999 })
+      );
+      socket.send({});
+    };
   }
 
   componentDidMount() {
@@ -82,62 +88,61 @@ export default class index extends Component {
     socket = new WebSocket(url);
     this.sendLogRequest();
 
-    let getMsg = (data)=>{
-      let arr
-      if(data){
-      arr = data.map((item,index)=>`${index} -- ${item.content}`)
+    let getMsg = data => {
+      let arr;
+      if (data) {
+        arr = data.map((item, index) => `${index} -- ${item.content}`);
       }
-      return arr.join("\n\n")
-    }
+      return arr.join("\n\n");
+    };
 
     socket.onmessage = data => {
       let messageLog = JSON.parse(data.data);
       console.log(messageLog);
-      let msg
-      switch(messageLog.type){
+      let msg;
+      switch (messageLog.type) {
         case "logSize":
           this.setState(messageLog.data);
           break;
         case "partyError":
-          msg = getMsg(messageLog.data)
+          msg = getMsg(messageLog.data);
           this.setState({
-            partyErrorMsg:msg
-          })
+            partyErrorMsg: msg,
+          });
           break;
         case "partyWarning":
-          msg = getMsg(messageLog.data)
+          msg = getMsg(messageLog.data);
           this.setState({
-            partyWarningMsg:msg
-          })
+            partyWarningMsg: msg,
+          });
           break;
         case "partyInfo":
-          msg = getMsg(messageLog.data)
+          msg = getMsg(messageLog.data);
           this.setState({
-            partyInfoMsg:msg
-          })
+            partyInfoMsg: msg,
+          });
           break;
         case "partyDebug":
-          msg = getMsg(messageLog.data)
+          msg = getMsg(messageLog.data);
           this.setState({
-            partyDebugMsg:msg
-          })
+            partyDebugMsg: msg,
+          });
           break;
         case "jobError":
-          msg = getMsg(messageLog.data)
+          msg = getMsg(messageLog.data);
           this.setState({
-            jobErrorMsg:msg
-          })
+            jobErrorMsg: msg,
+          });
           break;
         case "jobSchedule":
-          msg = getMsg(messageLog.data)
+          msg = getMsg(messageLog.data);
           this.setState({
-            jobScheduleMsg:msg
-          })
+            jobScheduleMsg: msg,
+          });
           break;
-        default: break;
+        default:
+          break;
       }
-
-
     };
     const urlList = api.showList
       .replace("{jobId}", id)
@@ -185,7 +190,6 @@ export default class index extends Component {
       });
     };
   }
-
 
   render() {
     let cur = this.state;
@@ -253,7 +257,7 @@ export default class index extends Component {
               </Row>
             </div>
           </Card>
-          <Card className='trainning-details-card1 c2'>
+          <Card className='trainning-details-card1 c2' style={{position:"relative"}}>
             <h4>Task</h4>
             <Progress
               percent={this.state.percent}
@@ -263,7 +267,7 @@ export default class index extends Component {
               }}
               status={this.state.percent === 100 ? "success" : "active"}
             />
-            <h6>duration:{this.state.timeString}</h6>
+            <h6 style={{ display:"block",position:"absolute",marginTop: "4vh",marginLeft:"-4vw",left:"50%" }}>duration:{this.state.timeString}</h6>
             <Button
               onClick={() => {
                 this.props.history.push({
@@ -272,7 +276,7 @@ export default class index extends Component {
                 });
               }}
               type='primary'
-              style={{ marginTop: "5vh", float: "right" }}
+              style={{display:"block", position:"absolute",marginTop: "10vh",marginLeft:"-4vw",left:"50%" }}
             >
               view the job -&gt;
             </Button>
@@ -316,7 +320,7 @@ export default class index extends Component {
         <Card style={{ height: "49vh" }} className='trainning-details-card2'>
           <Tabs defaultActiveKey='1'>
             <TabPane tab='partym Log' key='1'>
-              <Tabs defaultActiveKey='1' type='card' >
+              <Tabs defaultActiveKey='1' type='card'>
                 <TabPane
                   tab={
                     <>
@@ -325,7 +329,7 @@ export default class index extends Component {
                         count={
                           this.state.partyError ? this.state.partyError : 0
                         }
-                        style={{ backgroundColor: 'red' }}
+                        style={{ backgroundColor: "red" }}
                         overflowCount={10000}
                       ></Badge>
                     </>
@@ -347,7 +351,7 @@ export default class index extends Component {
                           this.state.partyWarning ? this.state.partyWarning : 0
                         }
                         overflowCount={10000}
-                        style={{ backgroundColor: 'gold' }}
+                        style={{ backgroundColor: "gold" }}
                       ></Badge>
                     </>
                   }
@@ -360,14 +364,13 @@ export default class index extends Component {
                   />
                 </TabPane>
                 <TabPane
-              
                   tab={
                     <>
                       <span>info</span>&nbsp;
                       <Badge
                         count={this.state.partyInfo ? this.state.partyInfo : 0}
                         overflowCount={10000}
-                        style={{ backgroundColor: 'green' }}
+                        style={{ backgroundColor: "green" }}
                       ></Badge>
                     </>
                   }
@@ -388,7 +391,7 @@ export default class index extends Component {
                           this.state.partyDebug ? this.state.partyDebug : 0
                         }
                         overflowCount={10000}
-                        style={{ backgroundColor: 'blue' }}
+                        style={{ backgroundColor: "blue" }}
                       ></Badge>
                     </>
                   }
@@ -411,7 +414,7 @@ export default class index extends Component {
                       <Badge
                         count={this.state.jobError ? this.state.jobError : 0}
                         overflowCount={10000}
-                        style={{ backgroundColor: 'red' }}
+                        style={{ backgroundColor: "red" }}
                       ></Badge>
                     </>
                   }
@@ -428,9 +431,11 @@ export default class index extends Component {
                     <>
                       <span>schedule</span>&nbsp;
                       <Badge
-                        count={this.state.jobSchedule ? this.state.jobSchedule : 0}
+                        count={
+                          this.state.jobSchedule ? this.state.jobSchedule : 0
+                        }
                         overflowCount={10000}
-                        style={{ backgroundColor: 'cyan' }}
+                        style={{ backgroundColor: "cyan" }}
                       ></Badge>
                     </>
                   }
