@@ -25,6 +25,7 @@ export default class index extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isShowing: 0,
       id: this.props.location.state.id,
       info: {
         dataset: "train.csv",
@@ -57,9 +58,15 @@ export default class index extends Component {
     };
   }
 
+  showChange = (index) => {
+    this.setState({
+      isShowing: index,
+    });
+  };
+
   sendLogRequest() {
     console.log("run...");
-    socket.onopen = data => {
+    socket.onopen = (data) => {
       socket.send(
         JSON.stringify({ type: "partyError", begin: 0, end: 999999 })
       );
@@ -88,7 +95,7 @@ export default class index extends Component {
     socket = new WebSocket(url);
     this.sendLogRequest();
 
-    let getMsg = data => {
+    let getMsg = (data) => {
       let arr;
       if (data) {
         arr = data.map((item, index) => `${index} -- ${item.content}`);
@@ -96,7 +103,7 @@ export default class index extends Component {
       return arr.join("\n\n");
     };
 
-    socket.onmessage = data => {
+    socket.onmessage = (data) => {
       let messageLog = JSON.parse(data.data);
       console.log(messageLog);
       let msg;
@@ -150,13 +157,13 @@ export default class index extends Component {
       .replace("{partyId}", partyId);
     socketList = new WebSocket(urlList);
 
-    socketList.onmessage = data => {
+    socketList.onmessage = (data) => {
       const d = JSON.parse(data.data);
       const names = d.dependency_data.component_list.map(
-        item => item.component_name
+        (item) => item.component_name
       );
       const percent = d.process;
-      const time = int(d.summary_date.job.fElapsed);
+      const time = parseInt(d.summary_date.job.fElapsed);
       const seconds = Math.round((time / 1000) % 60);
       const minutes = Math.round((time / 1000 / 60) % 60);
       const hour = Math.round((time / 1000 / 60 / 60) % 60);
@@ -214,13 +221,13 @@ export default class index extends Component {
       arbiter = roles["arbiter"];
     }
     return (
-      <div className='training-details'>
-        <div className='trainning-details-card1-continer'>
-          <Card className='trainning-details-card1'>
+      <div className="training-details">
+        <div className="trainning-details-card1-continer">
+          <Card className="trainning-details-card1">
             <h4>Info</h4>
             <div
               style={{ fontWeight: 600, width: "18vw" }}
-              className='trainning-details-info'
+              className="trainning-details-info"
             >
               <Row
                 justify={"space-between"}
@@ -257,7 +264,10 @@ export default class index extends Component {
               </Row>
             </div>
           </Card>
-          <Card className='trainning-details-card1 c2' style={{position:"relative"}}>
+          <Card
+            className="trainning-details-card1 c2"
+            style={{ position: "relative" }}
+          >
             <h4>Task</h4>
             <Progress
               percent={this.state.percent}
@@ -267,7 +277,17 @@ export default class index extends Component {
               }}
               status={this.state.percent === 100 ? "success" : "active"}
             />
-            <h6 style={{ display:"block",position:"absolute",marginTop: "4vh",marginLeft:"-4vw",left:"50%" }}>duration:{this.state.timeString}</h6>
+            <h6
+              style={{
+                display: "block",
+                position: "absolute",
+                marginTop: "4vh",
+                marginLeft: "-4vw",
+                left: "50%",
+              }}
+            >
+              duration:{this.state.timeString}
+            </h6>
             <Button
               onClick={() => {
                 this.props.history.push({
@@ -275,13 +295,19 @@ export default class index extends Component {
                   state: { cur },
                 });
               }}
-              type='primary'
-              style={{display:"block", position:"absolute",marginTop: "10vh",marginLeft:"-4vw",left:"50%" }}
+              type="primary"
+              style={{
+                display: "block",
+                position: "absolute",
+                marginTop: "10vh",
+                marginLeft: "-4vw",
+                left: "50%",
+              }}
             >
               view the job -&gt;
             </Button>
           </Card>
-          <Card className='trainning-details-card1'>
+          <Card className="trainning-details-card1">
             <div>
               <span style={{ fontWeight: 600 }}>Graph</span>
               <div
@@ -290,7 +316,7 @@ export default class index extends Component {
                   display: "inline",
                 }}
               >
-                <Button type='text' size='small'>
+                <Button type="text" size="small">
                   <Image
                     preview={false}
                     onClick={() => {
@@ -310,17 +336,17 @@ export default class index extends Component {
             <Show
               names={this.state.names}
               symbolSize={32}
-              id='show'
+              id="show"
               change={this.showChange}
               style={{ width: "100%", height: "22vh" }}
             />
           </Card>
         </div>
 
-        <Card style={{ height: "49vh" }} className='trainning-details-card2'>
-          <Tabs defaultActiveKey='1'>
-            <TabPane tab='partym Log' key='1'>
-              <Tabs defaultActiveKey='1' type='card'>
+        <Card style={{ height: "49vh" }} className="trainning-details-card2">
+          <Tabs defaultActiveKey="1">
+            <TabPane tab="partym Log" key="1">
+              <Tabs defaultActiveKey="1" type="card">
                 <TabPane
                   tab={
                     <>
@@ -334,7 +360,7 @@ export default class index extends Component {
                       ></Badge>
                     </>
                   }
-                  key='1'
+                  key="1"
                 >
                   <TextArea
                     disabled
@@ -355,7 +381,7 @@ export default class index extends Component {
                       ></Badge>
                     </>
                   }
-                  key='2'
+                  key="2"
                 >
                   <TextArea
                     disabled
@@ -374,7 +400,7 @@ export default class index extends Component {
                       ></Badge>
                     </>
                   }
-                  key='3'
+                  key="3"
                 >
                   <TextArea
                     disabled
@@ -395,7 +421,7 @@ export default class index extends Component {
                       ></Badge>
                     </>
                   }
-                  key='4'
+                  key="4"
                 >
                   <TextArea
                     disabled
@@ -405,8 +431,8 @@ export default class index extends Component {
                 </TabPane>
               </Tabs>
             </TabPane>
-            <TabPane tab='job Log' key='2' animated>
-              <Tabs defaultActiveKey='1' type='card'>
+            <TabPane tab="job Log" key="2" animated>
+              <Tabs defaultActiveKey="1" type="card">
                 <TabPane
                   tab={
                     <>
@@ -418,7 +444,7 @@ export default class index extends Component {
                       ></Badge>
                     </>
                   }
-                  key='1'
+                  key="1"
                 >
                   <TextArea
                     disabled
@@ -439,7 +465,7 @@ export default class index extends Component {
                       ></Badge>
                     </>
                   }
-                  key='2'
+                  key="2"
                 >
                   <TextArea
                     disabled
@@ -453,8 +479,8 @@ export default class index extends Component {
         </Card>
 
         <Modal
-          width='180vh'
-          title='Graph'
+          width="180vh"
+          title="Graph"
           visible={this.state.isBig}
           onOk={handleOk}
           onCancel={handleCancel}
@@ -465,7 +491,7 @@ export default class index extends Component {
           <Show
             names={this.state.names}
             symbolSize={60}
-            id='show2'
+            id="show2"
             change={this.showChange}
             style={{ width: "100%", height: "60vh" }}
           />
