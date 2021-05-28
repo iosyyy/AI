@@ -14,6 +14,11 @@ const e = {
   jobUpdate: host + "/job/update",
   downloadTemplate: host + "/api/v1/client/download/template",
   stopJob: host + "/job/v1/pipeline/job/stop",
+  getJobOutput: host + "/v1/tracking/component/output/model",
+  metrics: host + "/v1/tracking/component/metrics",
+  metrics_data: host + "/v1/tracking/component/metric_data",
+  data_output: host + "/v1/tracking/component/output/data",
+  log: ws + "/log/new/{id}/{role}/{partyId}/{name}",
 };
 
 export default e;

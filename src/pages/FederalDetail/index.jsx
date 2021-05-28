@@ -1,6 +1,6 @@
-import { Redirect, Route, Switch } from 'react-router-dom';
-import FederalDetailShow from './detail';
-import FederalDetail from './show';
+import { Redirect, Route, Switch } from "react-router-dom";
+import FederalDetailShow from "./detail";
+import FederalDetail from "./show";
 
 function FederalDetailAll() {
   return (

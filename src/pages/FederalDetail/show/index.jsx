@@ -1,23 +1,24 @@
-import React, { Component } from 'react';
-import { Button, Col, message, Row, Spin, Tree } from 'antd';
-import Show from '../../../components/Show';
-import api from '../../../config/api';
-import dayjs from 'dayjs';
-import axios from 'axios';
+import React, { Component } from "react";
+import { Button, Col, message, Row, Spin, Tree } from "antd";
+import Show from "../../../components/Show";
+import api from "../../../config/api";
+import dayjs from "dayjs";
+import axios from "axios";
+import PubSubJS from "pubsub-js";
 
 class FederalDetail extends Component {
   constructor(props) {
     super(props);
     const { cur } = this.props.location.state;
-    const startTime = dayjs(cur.startTime).format('YYYY/MM/DD hh:mm:ss');
-    const endTime = dayjs(cur.endTime).format('YYYY/MM/DD hh:mm:ss');
+    const startTime = dayjs(cur.startTime).format("YYYY/MM/DD hh:mm:ss");
+    const endTime = dayjs(cur.endTime).format("YYYY/MM/DD hh:mm:ss");
     const duration = cur.duration / 1000;
     this.state = {
       id: cur.id,
       role: cur.role,
       partyId: cur.partyId,
       status: cur.status,
-      type: 'FEDERAL DEFENCE',
+      type: "FEDERAL DEFENCE",
       startTime,
       endTime,
       duration: `${duration}秒`,
@@ -25,12 +26,14 @@ class FederalDetail extends Component {
       treeData: [],
       d: {},
       loading: false,
+      dataIndex: -1,
     };
   }
 
-  onChange = index => {
+  onChange = (index) => {
     this.setState({
       loading: true,
+      dataIndex: index,
     });
     axios
       .post(api.showDetailParameters, {
@@ -39,15 +42,15 @@ class FederalDetail extends Component {
         party_id: this.state.partyId,
         role: this.state.role,
       })
-      .then(data => {
+      .then((data) => {
         const d = JSON.parse(data.data.data);
         let treeData = [];
         treeData = this.getDeatilList([], d);
         console.log(treeData);
         this.setState({ treeData, loading: false });
       })
-      .catch(m => {
-        message.error('服务器异常');
+      .catch((m) => {
+        message.error("服务器异常");
         this.setState({
           loading: false,
         });
@@ -55,15 +58,15 @@ class FederalDetail extends Component {
   };
   generateUUID() {
     var d = new Date().getTime();
-    if (window.performance && typeof window.performance.now === 'function') {
+    if (window.performance && typeof window.performance.now === "function") {
       d += performance.now(); //use high-precision timer if available
     }
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+    var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
       /[xy]/g,
       function (c) {
         var r = (d + Math.random() * 16) % 16 | 0;
         d = Math.floor(d / 16);
-        return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+        return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
       }
     );
     return uuid;
@@ -71,24 +74,24 @@ class FederalDetail extends Component {
   getDeatilList(data, treeData) {
     for (let treeDataKey in treeData) {
       let child = [];
-      if (typeof treeData[treeDataKey] === 'object') {
+      if (typeof treeData[treeDataKey] === "object") {
         if (treeData[treeDataKey] !== null) {
           this.getDeatilList(child, treeData[treeDataKey]);
           data.push({
             title: `${treeDataKey}`,
-            key: `${this.generateUUID().replace('-', '')}`,
+            key: `${this.generateUUID().replace("-", "")}`,
             children: child,
           });
         } else {
           data.push({
             title: `${treeDataKey}:  ${treeData[treeDataKey]}`,
-            key: `${this.generateUUID().replace('-', '')}`,
+            key: `${this.generateUUID().replace("-", "")}`,
           });
         }
       } else {
         data.push({
           title: `${treeDataKey}:  ${treeData[treeDataKey]}`,
-          key: `${this.generateUUID().replace('-', '')}`,
+          key: `${this.generateUUID().replace("-", "")}`,
         });
       }
     }
@@ -97,58 +100,61 @@ class FederalDetail extends Component {
 
   getShowList(jobId, role, partyId) {
     const url = api.showList
-      .replace('{jobId}', jobId)
-      .replace('{role}', role)
-      .replace('{partyId}', partyId);
+      .replace("{jobId}", jobId)
+      .replace("{role}", role)
+      .replace("{partyId}", partyId);
     const socket = new WebSocket(url);
 
-    socket.onmessage = data => {
+    socket.onmessage = (data) => {
       const d = JSON.parse(data.data);
       const names = d.dependency_data.component_list.map(
-        item => item.component_name
+        (item) => item.component_name
       );
       this.setState({ names });
     };
   }
 
   componentDidMount() {
+    PubSubJS.publish("isRunning", { page: "-1" });
     this.getShowList(this.state.id, this.state.role, this.state.partyId);
   }
 
   render() {
+    const { id, role, partyId } = this.state;
+
     return (
       <div
         className="site-layout-content"
-        style={{ height: '83vh', width: '100%' }}
+        style={{ height: "83vh", width: "100%" }}
       >
-        <div style={{ display: 'inline-block', width: '20%', height: '75vh' }}>
+        <div style={{ display: "inline-block", width: "20%", height: "75vh" }}>
           <div
             style={{
-              marginRight: '1vh',
-              paddingBottom: '2vh',
-              borderBottom: '1px solid',
+              marginRight: "1vh",
+              paddingBottom: "2vh",
+              borderBottom: "1px solid",
             }}
           >
             <h1>Task Summary</h1>
-            <div style={{ marginTop: '4vh' }}>task ID:</div>
-            <div style={{ marginBottom: '1vh' }}>{this.state.id}</div>
+            <div style={{ marginTop: "4vh" }}>task ID:</div>
+            <div style={{ marginBottom: "1vh" }}>{this.state.id}</div>
             <div>status:</div>
-            <div style={{ marginBottom: '1vh' }}>{this.state.status}</div>
+            <div style={{ marginBottom: "1vh" }}>{this.state.status}</div>
             <div>type:</div>
-            <div style={{ marginBottom: '1vh' }}>{this.state.type}</div>
+            <div style={{ marginBottom: "1vh" }}>{this.state.type}</div>
           </div>
           <div>
-            <div style={{ marginTop: '2vh' }}>
+            <div style={{ marginTop: "2vh" }}>
               start time:
               <br />
               {this.state.startTime}
             </div>
-            <div style={{ marginTop: '2vh' }}>
+            <div style={{ marginTop: "2vh" }}>
               end time:
               <br />
               {this.state.endTime}
             </div>
-            <div style={{ marginTop: '2vh' }}>
+            <div style={{ marginTop: "2vh" }}>
               duration:
               <br />
               {this.state.duration}
@@ -157,24 +163,24 @@ class FederalDetail extends Component {
         </div>
         <div
           style={{
-            borderLeft: '1px solid',
-            height: '75vh',
-            width: '80%',
-            float: 'right',
+            borderLeft: "1px solid",
+            height: "75vh",
+            width: "80%",
+            float: "right",
           }}
         >
           <Row gutter={16}>
             <Col className="gutter-row" span={15}>
-              <h1 style={{ marginLeft: '3vh' }}>Outputs From Task</h1>
-              <div style={{ marginLeft: '3vh', marginBottom: '1vh' }}>
+              <h1 style={{ marginLeft: "3vh" }}>Outputs From Task</h1>
+              <div style={{ marginLeft: "3vh", marginBottom: "1vh" }}>
                 Main Graph
               </div>
               <div
                 style={{
-                  marginLeft: '3vh',
-                  border: '1px solid',
-                  backgroundColor: 'rgb(240,240,240)',
-                  height: '65vh',
+                  marginLeft: "3vh",
+                  border: "1px solid",
+                  backgroundColor: "rgb(240,240,240)",
+                  height: "65vh",
                 }}
               >
                 <Show
@@ -182,22 +188,22 @@ class FederalDetail extends Component {
                   symbolSize={60}
                   id="show"
                   change={this.onChange}
-                  style={{ width: '100%', height: '100%' }}
+                  style={{ width: "100%", height: "100%" }}
                 />
               </div>
             </Col>
             <Col className="gutter-row" span={9}>
-              <div style={{ marginTop: '6vh', marginBottom: '1vh' }}>
+              <div style={{ marginTop: "6vh", marginBottom: "1vh" }}>
                 Information
               </div>
               <Spin spinning={this.state.loading} delay={500}>
                 <div
                   style={{
-                    scroll: 'auto',
-                    height: '53vh',
-                    padding: '5px 10px',
-                    backgroundColor: 'rgb(240,240,240)',
-                    border: '1px solid',
+                    scroll: "auto",
+                    height: "53vh",
+                    padding: "5px 10px",
+                    backgroundColor: "rgb(240,240,240)",
+                    border: "1px solid",
                   }}
                 >
                   <Tree
@@ -205,25 +211,30 @@ class FederalDetail extends Component {
                     showLine={false}
                     onSelect={this.onSelect}
                     treeData={this.state.treeData}
-                    height={'50vh'}
+                    height={"50vh"}
                     style={{
-                      fontSize: 'small',
-                      color: 'rgb(153,167,193)',
-                      background: 'rgb(240,240,240)',
+                      fontSize: "small",
+                      color: "rgb(153,167,193)",
+                      background: "rgb(240,240,240)",
                     }}
                   />
                 </div>
               </Spin>
               <Button
-                onClick={e => {
+                onClick={(e) => {
                   if (this.state.dataIndex !== -1) {
                     this.props.history.push({
-                      pathname: '/federalDetail/detail',
-                      state: { name: this.state.names[this.state.dataIndex] },
+                      pathname: "/federalDetail/detail",
+                      state: {
+                        name: this.state.names[this.state.dataIndex],
+                        id,
+                        role,
+                        partyId,
+                      },
                     });
                   }
                 }}
-                style={{ height: '7vh', marginTop: '5vh', width: '100%' }}
+                style={{ height: "7vh", marginTop: "5vh", width: "100%" }}
                 type="primary"
               >
                 view the optputs
