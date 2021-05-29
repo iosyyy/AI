@@ -123,7 +123,6 @@ class FederalDetailShow extends Component {
                 component: <Log model={model} post_data={post_data} />,
               },
             ];
-            this.setState({ names });
             break;
           case "Evaluation":
             names = [
@@ -142,7 +141,6 @@ class FederalDetailShow extends Component {
                 component: <Log model={model} post_data={post_data} />,
               },
             ];
-            this.setState({ names });
             break;
           case "HomoLR":
             names = [
@@ -167,7 +165,6 @@ class FederalDetailShow extends Component {
                 component: <Log model={model} post_data={post_data} />,
               },
             ];
-            this.setState({ names });
             break;
           case "Reader":
             names = [
@@ -194,9 +191,35 @@ class FederalDetailShow extends Component {
                 component: <Log model={model} post_data={post_data} />,
               },
             ];
-            this.setState({ names });
+            break;
+          case "DataIO":
+            names = [
+              {
+                name: "summary",
+                component: (
+                  <SummaryBatch
+                    metric_name={metric_name}
+                    metric_namespace={metric_namespace}
+                    model={model}
+                    post_data={post_data}
+                    metrics={metrics}
+                  />
+                ),
+              },
+              {
+                name: "data output",
+                component: (
+                  <FederalDetailOutput model={model} post_data={post_data} />
+                ),
+              },
+              {
+                name: "log",
+                component: <Log model={model} post_data={post_data} />,
+              },
+            ];
             break;
         }
+        this.setState({ names });
       });
     });
 

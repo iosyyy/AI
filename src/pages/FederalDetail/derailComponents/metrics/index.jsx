@@ -8,7 +8,7 @@ class Metrics extends Component {
   componentDidMount() {}
 
   render() {
-    return <div></div>;
+    return <div style={{ height: "65vh" }}></div>;
   }
 }
 

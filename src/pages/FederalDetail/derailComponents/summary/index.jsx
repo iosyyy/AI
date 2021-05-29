@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import api from "../../../../config/api";
 import { message } from "antd/es";
+import { Col, Row } from "antd";
 
 class Summary extends Component {
   constructor(props) {
@@ -37,16 +38,26 @@ class Summary extends Component {
         return (
           <div
             key={v[0] + i}
-            style={{ marginBottom: "1vh", color: "rgb(127, 125, 142)" }}
+            style={{
+              height: "65vh",
+              marginBottom: "1vh",
+              color: "rgb(127, 125, 142)",
+            }}
           >
             {v[0] + ": " + v[1]}
           </div>
         );
       });
     } else {
-      dataDetail = <h1>There is no data</h1>;
+      dataDetail = (
+        <Row style={{ height: "65vh", marginTop: "2vh" }} justify={"center"}>
+          <Col>
+            <h1>There is no data</h1>
+          </Col>
+        </Row>
+      );
     }
-    return <div>{dataDetail}</div>;
+    return <div style={{ height: "65vh" }}>{dataDetail}</div>;
   }
 }
 

@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Input, Table } from "antd";
+import { Table } from "antd";
 import axios from "axios";
 import api from "../../../../config/api";
 import { message } from "antd/es";
+
 class FederalDetailOutput extends Component {
   constructor(props) {
     super(props);
@@ -14,6 +15,7 @@ class FederalDetailOutput extends Component {
       dataSource,
       post_data,
       loading: true,
+      total: 0,
     };
   }
 
@@ -47,16 +49,17 @@ class FederalDetailOutput extends Component {
         columns,
         dataSource,
         loading: false,
+        total: data.meta.total,
       });
     });
   }
 
   generateUUID() {
-    var d = new Date().getTime();
+    let d = new Date().getTime();
     if (window.performance && typeof window.performance.now === "function") {
       d += performance.now(); //use high-precision timer if available
     }
-    var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
       /[xy]/g,
       function (c) {
         var r = (d + Math.random() * 16) % 16 | 0;
@@ -64,20 +67,27 @@ class FederalDetailOutput extends Component {
         return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
       }
     );
-    return uuid;
   }
 
   render() {
-    const { loading, dataSource, columns } = this.state;
+    const { loading, dataSource, columns, total } = this.state;
 
     return (
       <div
         style={{
-          marginTop: "3vh",
-          height: "60vh",
+          height: "65vh",
           overflow: "auto",
         }}
       >
+        <div
+          style={{
+            fontSize: "small",
+            color: "rgb(127,125,142)",
+            marginBottom: "1vh",
+          }}
+        >
+          {`Outputting ${total} instances (only 100 instances are shown in the table)`}
+        </div>
         <Table
           loading={loading}
           scroll={{ y: "55vh" }}
@@ -85,7 +95,7 @@ class FederalDetailOutput extends Component {
           size={"middle"}
           dataSource={dataSource}
           columns={columns}
-          pagination={{ pageSize: 5 }}
+          pagination={false}
         />
       </div>
     );

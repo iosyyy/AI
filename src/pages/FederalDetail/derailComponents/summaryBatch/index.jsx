@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import api from "../../../../config/api";
-import { message, Table } from "antd";
+import { Col, message, Row, Table } from "antd";
 import Search from "antd/es/input/Search";
 
 class SummaryBatch extends Component {
@@ -107,10 +107,16 @@ class SummaryBatch extends Component {
       }
     }
     if (Object.keys(metrics).length === 0) {
-      return <h1>There is no Data</h1>;
+      return (
+        <Row style={{ marginTop: "2vh", height: "63vh" }} justify={"center"}>
+          <Col>
+            <h1>There is no data</h1>
+          </Col>
+        </Row>
+      );
     } else {
       return (
-        <div style={{ height: "64vh", overflow: "auto" }}>
+        <div style={{ height: "80vh", overflow: "auto" }}>
           <div>{dataDetail}</div>
           <Search
             onSearch={(value) => {
