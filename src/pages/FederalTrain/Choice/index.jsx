@@ -112,7 +112,7 @@ class FederalTrainChoice extends Component {
                     message.success("上传成功");
                     this.props.history.push({
                       pathname: "/training",
-                      state: { data: res.data },
+                      state: { data: res.data }, 
                     });
                   } else {
                     message.error("上传失败");
