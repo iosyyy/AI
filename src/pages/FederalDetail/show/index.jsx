@@ -27,6 +27,7 @@ class FederalDetail extends Component {
       d: {},
       loading: false,
       dataIndex: -1,
+      datas: [],
     };
   }
 
@@ -47,7 +48,7 @@ class FederalDetail extends Component {
         let treeData = [];
         treeData = this.getDeatilList([], d);
         console.log(treeData);
-        this.setState({ treeData, loading: false });
+        this.setState({ datas: d, treeData, loading: false });
       })
       .catch((m) => {
         message.error("服务器异常");
@@ -230,6 +231,7 @@ class FederalDetail extends Component {
                         id,
                         role,
                         partyId,
+                        treeData: this.state.datas,
                       },
                     });
                   }

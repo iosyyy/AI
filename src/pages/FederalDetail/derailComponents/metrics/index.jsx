@@ -5,6 +5,8 @@ class Metrics extends Component {
     super(props);
   }
 
+  componentDidMount() {}
+
   render() {
     return <div></div>;
   }

@@ -18,7 +18,8 @@ const { TabPane } = Tabs;
 class FederalDetailShow extends Component {
   constructor(props) {
     super(props);
-    const { name, id, partyId, role } = this.props.location.state;
+    console.log(props);
+    const { name, id, partyId, role, treeData } = this.props.location.state;
     /**
      * @param isLoading 代表是否正在刷新的状态
      * @param role,id,partyId,role 代表所需的post_data的基本属性
@@ -37,6 +38,7 @@ class FederalDetailShow extends Component {
       names: [],
       loading: [],
       isLoading: false,
+      treeData,
     };
   }
 
@@ -49,7 +51,7 @@ class FederalDetailShow extends Component {
   refresh = () => {
     this.setState({ isLoading: true });
 
-    const { id, name, partyId, role, loading } = this.state;
+    const { id, name, partyId, role, loading, treeData } = this.state;
     let data = {};
     let post_data = {
       component_name: name,
@@ -57,20 +59,17 @@ class FederalDetailShow extends Component {
       party_id: partyId,
       role: role,
     };
+    let namew = treeData.module;
+    this.setState({
+      metric_namespace: namew,
+    });
     // 首先获取Model(api.getJobOutput)再获取Metrics(api.metrics),然后每个tab执行不同的操作
     axios.post(api.getJobOutput, post_data).then((r) => {
       if (r.data.code !== 0) {
         message.error(`${r.data.code}:${r.data.msg}`);
         return;
       }
-      let metric_name, metric_namespace; // 这两个名字用来定义左上角的名字,并且通过这两个名字定义不同的tabs
-
-      // 判断是否有data传过来
-      if (Object.keys(r.data.data.data).length !== 0) {
-        metric_name = r.data.data.meta.module_name;
-        metric_namespace = metric_name;
-      }
-
+      const model = r;
       // 获取Metrics
       axios.post(api.metrics, post_data).then((r) => {
         if (r.data.code !== 0) {
@@ -80,6 +79,7 @@ class FederalDetailShow extends Component {
 
         data = r.data.data;
         let metrics = r.data.data;
+        let metric_name, metric_namespace; // 这两个名字用来定义左上角的名字,并且通过这两个名字定义不同的tabs
 
         if (
           !metric_name &&
@@ -90,17 +90,6 @@ class FederalDetailShow extends Component {
           metric_namespace = Object.keys(data)[0];
         }
 
-        // 这两个值做特殊处理(还不清楚为什么)
-        if (name === "evaluation_0") {
-          metric_namespace = "Evaluation";
-        }
-        if (metric_namespace === "reader_namespace") {
-          metric_namespace = "Reader";
-        }
-
-        this.setState({
-          metric_namespace,
-        });
         let names; // names中的name代表tab的标题,component代表tab对应的组件
         /**
          * props解释
@@ -108,15 +97,16 @@ class FederalDetailShow extends Component {
          * metric_name代表上面说到的名字,metric_namespace上面也有提到
          * metrics代表api.metrics返回的data数据
          */
-        switch (metric_namespace) {
+        switch (namew) {
           // 这里通过metric_namespace选择不同的tabs
-          case "upload":
+          case "Upload":
           case "FeatureScale":
             names = [
               {
                 name: "summary",
                 component: (
                   <Summary
+                    model={model}
                     post_data={post_data}
                     metric_name={metric_name}
                     metric_namespace={metric_namespace}
@@ -125,9 +115,14 @@ class FederalDetailShow extends Component {
               },
               {
                 name: "data output",
-                component: <FederalDetailOutput post_data={post_data} />,
+                component: (
+                  <FederalDetailOutput model={model} post_data={post_data} />
+                ),
               },
-              { name: "log", component: <Log post_data={post_data} /> },
+              {
+                name: "log",
+                component: <Log model={model} post_data={post_data} />,
+              },
             ];
             this.setState({ names });
             break;
@@ -135,9 +130,18 @@ class FederalDetailShow extends Component {
             names = [
               {
                 name: "metrics",
-                component: <Metrics metrics={metrics} post_data={post_data} />,
+                component: (
+                  <Metrics
+                    model={model}
+                    metrics={metrics}
+                    post_data={post_data}
+                  />
+                ),
               },
-              { name: "log", component: <Log post_data={post_data} /> },
+              {
+                name: "log",
+                component: <Log model={model} post_data={post_data} />,
+              },
             ];
             this.setState({ names });
             break;
@@ -146,14 +150,23 @@ class FederalDetailShow extends Component {
               {
                 name: "model output",
                 component: (
-                  <ModelOutput post_data={post_data} metrics={metrics} />
+                  <ModelOutput
+                    model={model}
+                    post_data={post_data}
+                    metrics={metrics}
+                  />
                 ),
               },
               {
                 name: "data output",
-                component: <FederalDetailOutput post_data={post_data} />,
+                component: (
+                  <FederalDetailOutput model={model} post_data={post_data} />
+                ),
               },
-              { name: "log", component: <Log post_data={post_data} /> },
+              {
+                name: "log",
+                component: <Log model={model} post_data={post_data} />,
+              },
             ];
             this.setState({ names });
             break;
@@ -162,14 +175,25 @@ class FederalDetailShow extends Component {
               {
                 name: "summary",
                 component: (
-                  <SummaryBatch post_data={post_data} metrics={metrics} />
+                  <SummaryBatch
+                    metric_name={metric_name}
+                    metric_namespace={metric_namespace}
+                    model={model}
+                    post_data={post_data}
+                    metrics={metrics}
+                  />
                 ),
               },
               {
                 name: "data output",
-                component: <FederalDetailOutput post_data={post_data} />,
+                component: (
+                  <FederalDetailOutput model={model} post_data={post_data} />
+                ),
               },
-              { name: "log", component: <Log post_data={post_data} /> },
+              {
+                name: "log",
+                component: <Log model={model} post_data={post_data} />,
+              },
             ];
             this.setState({ names });
             break;
