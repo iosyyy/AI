@@ -99,7 +99,6 @@ class FederalDetailShow extends Component {
         switch (namew) {
           // 这里通过metric_namespace选择不同的tabs
           case "Upload":
-          case "FeatureScale":
             names = [
               {
                 name: "summary",
@@ -193,6 +192,7 @@ class FederalDetailShow extends Component {
             ];
             break;
           case "DataIO":
+          case "FeatureScale":
             names = [
               {
                 name: "summary",
