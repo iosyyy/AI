@@ -1,14 +1,15 @@
 import React, { Component } from "react";
-import { Button, Col, Row, Space, Tabs } from "antd";
+import { Button, Col, Row, Tabs } from "antd";
 import "./change.css";
 import axios from "axios";
 import api from "../../../config/api";
-import federalDetailOutput from "../derailComponents/output";
 import FederalDetailOutput from "../derailComponents/output";
 import Summary from "../derailComponents/summary";
 import Log from "../derailComponents/log";
 import PubSubJS from "pubsub-js";
 import { Loading3QuartersOutlined } from "@ant-design/icons";
+import Metrics from "../derailComponents/metrics";
+import { message } from "antd/es";
 
 const { TabPane } = Tabs;
 
@@ -45,41 +46,86 @@ class FederalDetailShow extends Component {
       party_id: partyId,
       role: role,
     };
-    axios.post(api.getJobOutput, post_data).then((r) => {});
-    axios.post(api.metrics, post_data).then((r) => {
-      data = r.data.data;
-      const metric_name = Object.values(data)[0][0];
-      const metric_namespace = Object.keys(data)[0];
-
-      this.setState({
-        metric_namespace,
-      });
-      if (metric_namespace === "upload") {
-        axios
-          .post(api.metrics_data, {
-            metric_namespace,
-            metric_name,
-            ...post_data,
-          })
-          .then((r) => {
-            let names = [];
-            names = [
-              {
-                name: "summary",
-                component: <Summary data={r.data.data.data} />,
-              },
-              {
-                name: "data output",
-                component: (
-                  <FederalDetailOutput key={loading} post_data={post_data} />
-                ),
-              },
-              { name: "log", component: <Log post_data={post_data} /> },
-            ];
-            this.setState({ names });
-          });
+    axios.post(api.getJobOutput, post_data).then((r) => {
+      if (r.data.code !== 0) {
+        message.error(`${r.data.code}:${r.data.msg}`);
+        return;
       }
+      let metric_name, metric_namespace;
+      if (Object.keys(r.data.data.data).length !== 0) {
+        metric_name = r.data.data.meta.module_name;
+        metric_namespace = metric_name;
+      }
+      axios.post(api.metrics, post_data).then((r) => {
+        if (r.data.code !== 0) {
+          message.error(`${r.data.code}:${r.data.msg}`);
+          return;
+        }
+        data = r.data.data;
+        let metrics = r.data.data;
+        if (
+          !metric_name &&
+          !metric_namespace &&
+          Object.keys(data).length !== 0
+        ) {
+          metric_name = Object.values(data)[0][0];
+          metric_namespace = Object.keys(data)[0];
+        }
+        if (name === "evaluation_0") {
+          metric_namespace = "Evaluation";
+        }
+        this.setState({
+          metric_namespace,
+        });
+        if (metric_namespace === "upload") {
+          const names = [
+            {
+              name: "summary",
+              component: (
+                <Summary
+                  post_data={post_data}
+                  metric_name={metric_name}
+                  metric_namespace={metric_namespace}
+                />
+              ),
+            },
+            {
+              name: "data output",
+              component: (
+                <FederalDetailOutput key={loading} post_data={post_data} />
+              ),
+            },
+            { name: "log", component: <Log post_data={post_data} /> },
+          ];
+          this.setState({ names });
+        } else if (metric_namespace === "FeatureScale") {
+          const names = [
+            {
+              name: "summary",
+              component: <Summary post_data={post_data} />,
+            },
+            {
+              name: "data output",
+              component: (
+                <FederalDetailOutput key={loading} post_data={post_data} />
+              ),
+            },
+            { name: "log", component: <Log post_data={post_data} /> },
+          ];
+          this.setState({ names });
+        } else if (metric_namespace === "Evaluation") {
+          const names = [
+            {
+              name: "metrics",
+              component: <Metrics metrics={metrics} post_data={post_data} />,
+            },
+            { name: "log", component: <Log post_data={post_data} /> },
+          ];
+          this.setState({ names });
+        }
+      });
     });
+
     setTimeout(() => {
       this.setState({ isLoading: false });
     }, 1500);
