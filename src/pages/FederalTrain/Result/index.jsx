@@ -8,12 +8,24 @@ import {
   message,
   Row,
   Space,
+  Steps,
   Upload,
 } from "antd";
 import axios from "axios";
 import api from "../../../config/api";
 import FileImg from "../../../img/file.png";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import "antd/dist/antd.css";
+import {
+  CloudUploadOutlined,
+  DownloadOutlined,
+  FileOutlined,
+  LoadingOutlined,
+  MinusCircleOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
+import StepsTemplate from "../../../components/StepsTemplate";
+
+const { Step } = Steps;
 
 class FederalResult extends Component {
   constructor(props) {
@@ -97,9 +109,25 @@ class FederalResult extends Component {
   render() {
     const tailLayout = {};
     const layout = {};
+    const { uploadIng } = this.state;
     return (
-      <>
-        <Row justify={"center"} style={{ height: "75vh", overflow: "auto" }}>
+      <div style={{ height: "80vh" }} className="site-layout-content">
+        <StepsTemplate
+          steps={[
+            { status: "finish", title: "联邦类型", icon: <FileOutlined /> },
+            {
+              status: "process",
+              title: "数据上传",
+              icon: uploadIng ? <LoadingOutlined /> : <CloudUploadOutlined />,
+            },
+            {
+              status: "wait",
+              title: "参数配置",
+              icon: <DownloadOutlined />,
+            },
+          ]}
+        />
+        <Row justify={"center"} style={{ height: "60vh", overflow: "auto" }}>
           <Col>
             <Form size={"middle"} onFinish={this.onFormFinish} {...layout}>
               <Form.List rules={[{ required: true }]} name="users">
@@ -221,7 +249,7 @@ class FederalResult extends Component {
                         block
                         icon={<PlusOutlined />}
                       >
-                        Add field
+                        添加新的数据集
                       </Button>
                     </Form.Item>
                   </>
@@ -243,7 +271,7 @@ class FederalResult extends Component {
             </Button>
           </Space>
         </Row>
-      </>
+      </div>
     );
   }
 }
