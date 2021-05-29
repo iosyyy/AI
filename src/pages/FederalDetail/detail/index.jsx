@@ -18,7 +18,6 @@ const { TabPane } = Tabs;
 class FederalDetailShow extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     const { name, id, partyId, role, treeData } = this.props.location.state;
     /**
      * @param isLoading 代表是否正在刷新的状态
@@ -220,7 +219,7 @@ class FederalDetailShow extends Component {
               onClick={this.refresh}
               icon={<Loading3QuartersOutlined />}
               style={{ height: "10px" }}
-              type={"text"}
+              type={"link"}
             >
               刷新
             </Button>

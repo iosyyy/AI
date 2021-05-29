@@ -35,7 +35,10 @@ class Summary extends Component {
     if (data) {
       dataDetail = data.map((v, i) => {
         return (
-          <div key={v[0] + i} style={{ color: "rgb(127, 125, 142)" }}>
+          <div
+            key={v[0] + i}
+            style={{ marginBottom: "1vh", color: "rgb(127, 125, 142)" }}
+          >
             {v[0] + ": " + v[1]}
           </div>
         );
