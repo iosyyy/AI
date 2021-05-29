@@ -71,6 +71,7 @@ class FederalDetailShow extends Component {
           metric_name = Object.values(data)[0][0];
           metric_namespace = Object.keys(data)[0];
         }
+
         if (name === "evaluation_0") {
           metric_namespace = "Evaluation";
         }
