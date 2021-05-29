@@ -3,8 +3,6 @@ import { Input, Table } from "antd";
 import axios from "axios";
 import api from "../../../../config/api";
 import { message } from "antd/es";
-const { TextArea } = Input;
-
 class FederalDetailOutput extends Component {
   constructor(props) {
     super(props);
@@ -30,9 +28,9 @@ class FederalDetailOutput extends Component {
       const { header } = data.meta;
       const columns = header[0].map((v, i) => {
         return {
-          title: <div>{v}</div>,
+          title: v,
           dataIndex: v,
-          key: this.generateUUID(),
+          key: this.generateUUID() + " " + Date.now(),
           align: "center",
           width: "9vw",
         };

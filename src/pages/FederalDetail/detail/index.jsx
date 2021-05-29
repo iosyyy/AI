@@ -10,6 +10,8 @@ import PubSubJS from "pubsub-js";
 import { Loading3QuartersOutlined } from "@ant-design/icons";
 import Metrics from "../derailComponents/metrics";
 import { message } from "antd/es";
+import ModelOutput from "../derailComponents/modelOutput";
+import SummaryBatch from "../derailComponents/summaryBatch";
 
 const { TabPane } = Tabs;
 
@@ -17,6 +19,14 @@ class FederalDetailShow extends Component {
   constructor(props) {
     super(props);
     const { name, id, partyId, role } = this.props.location.state;
+    /**
+     * @param isLoading 代表是否正在刷新的状态
+     * @param role,id,partyId,role 代表所需的post_data的基本属性
+     * @param change 代表当前选择的tab
+     * @param names 代表tabs的属性其中name代表tab的名称,component代表tab对应的组件
+     * @param isLoading 判断当前是否被刷新如果刷新重新执行refresh操作
+     * @type {{isLoading: boolean, role, names: *[], change: number, name, metric_namespace: string, id, partyId, loading: *[]}}
+     */
     this.state = {
       change: 0,
       name,
@@ -31,6 +41,7 @@ class FederalDetailShow extends Component {
   }
 
   componentDidMount() {
+    // 向主页面发送数据让其知道当前所在的page
     PubSubJS.publish("isRunning", { page: "-1" });
     this.refresh();
   }
@@ -46,23 +57,30 @@ class FederalDetailShow extends Component {
       party_id: partyId,
       role: role,
     };
+    // 首先获取Model(api.getJobOutput)再获取Metrics(api.metrics),然后每个tab执行不同的操作
     axios.post(api.getJobOutput, post_data).then((r) => {
       if (r.data.code !== 0) {
         message.error(`${r.data.code}:${r.data.msg}`);
         return;
       }
-      let metric_name, metric_namespace;
+      let metric_name, metric_namespace; // 这两个名字用来定义左上角的名字,并且通过这两个名字定义不同的tabs
+
+      // 判断是否有data传过来
       if (Object.keys(r.data.data.data).length !== 0) {
         metric_name = r.data.data.meta.module_name;
         metric_namespace = metric_name;
       }
+
+      // 获取Metrics
       axios.post(api.metrics, post_data).then((r) => {
         if (r.data.code !== 0) {
           message.error(`${r.data.code}:${r.data.msg}`);
           return;
         }
+
         data = r.data.data;
         let metrics = r.data.data;
+
         if (
           !metric_name &&
           !metric_namespace &&
@@ -72,57 +90,89 @@ class FederalDetailShow extends Component {
           metric_namespace = Object.keys(data)[0];
         }
 
+        // 这两个值做特殊处理(还不清楚为什么)
         if (name === "evaluation_0") {
           metric_namespace = "Evaluation";
         }
+        if (metric_namespace === "reader_namespace") {
+          metric_namespace = "Reader";
+        }
+
         this.setState({
           metric_namespace,
         });
-        if (metric_namespace === "upload") {
-          const names = [
-            {
-              name: "summary",
-              component: (
-                <Summary
-                  post_data={post_data}
-                  metric_name={metric_name}
-                  metric_namespace={metric_namespace}
-                />
-              ),
-            },
-            {
-              name: "data output",
-              component: (
-                <FederalDetailOutput key={loading} post_data={post_data} />
-              ),
-            },
-            { name: "log", component: <Log post_data={post_data} /> },
-          ];
-          this.setState({ names });
-        } else if (metric_namespace === "FeatureScale") {
-          const names = [
-            {
-              name: "summary",
-              component: <Summary post_data={post_data} />,
-            },
-            {
-              name: "data output",
-              component: (
-                <FederalDetailOutput key={loading} post_data={post_data} />
-              ),
-            },
-            { name: "log", component: <Log post_data={post_data} /> },
-          ];
-          this.setState({ names });
-        } else if (metric_namespace === "Evaluation") {
-          const names = [
-            {
-              name: "metrics",
-              component: <Metrics metrics={metrics} post_data={post_data} />,
-            },
-            { name: "log", component: <Log post_data={post_data} /> },
-          ];
-          this.setState({ names });
+        let names; // names中的name代表tab的标题,component代表tab对应的组件
+        /**
+         * props解释
+         * post_data代表所传axios所需要的基本参数有job_id,party_id,role,component_name
+         * metric_name代表上面说到的名字,metric_namespace上面也有提到
+         * metrics代表api.metrics返回的data数据
+         */
+        switch (metric_namespace) {
+          // 这里通过metric_namespace选择不同的tabs
+          case "upload":
+          case "FeatureScale":
+            names = [
+              {
+                name: "summary",
+                component: (
+                  <Summary
+                    post_data={post_data}
+                    metric_name={metric_name}
+                    metric_namespace={metric_namespace}
+                  />
+                ),
+              },
+              {
+                name: "data output",
+                component: <FederalDetailOutput post_data={post_data} />,
+              },
+              { name: "log", component: <Log post_data={post_data} /> },
+            ];
+            this.setState({ names });
+            break;
+          case "Evaluation":
+            names = [
+              {
+                name: "metrics",
+                component: <Metrics metrics={metrics} post_data={post_data} />,
+              },
+              { name: "log", component: <Log post_data={post_data} /> },
+            ];
+            this.setState({ names });
+            break;
+          case "HomoLR":
+            names = [
+              {
+                name: "model output",
+                component: (
+                  <ModelOutput post_data={post_data} metrics={metrics} />
+                ),
+              },
+              {
+                name: "data output",
+                component: <FederalDetailOutput post_data={post_data} />,
+              },
+              { name: "log", component: <Log post_data={post_data} /> },
+            ];
+            this.setState({ names });
+            break;
+          case "Reader":
+            names = [
+              {
+                name: "summary",
+                component: (
+                  <SummaryBatch post_data={post_data} metrics={metrics} />
+                ),
+              },
+              {
+                name: "data output",
+                component: <FederalDetailOutput post_data={post_data} />,
+              },
+              { name: "log", component: <Log post_data={post_data} /> },
+            ];
+            this.setState({ names });
+            break;
         }
       });
     });
@@ -142,6 +192,7 @@ class FederalDetailShow extends Component {
           </Col>
           <Col>
             <Button
+              loading={isLoading}
               onClick={this.refresh}
               icon={<Loading3QuartersOutlined />}
               style={{ height: "10px" }}
