@@ -1,23 +1,39 @@
 import React, { Component } from "react";
-import { Divider, Row, Col, Table, Slider, InputNumber } from "antd";
+import { Col, Divider, InputNumber, Row, Slider, Table } from "antd";
+import axios from "axios";
+import api from "../../../../config/api";
+
 const { Column, ColumnGroup } = Table;
+
 class Metrics extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       inputValue1: 0.5,
       inputValue2: 0.5,
     };
   }
 
-  onChange1 = value => {
+  componentDidMount() {
+    const { post_data, metrics } = this.props;
+    axios
+      .post(api.batch, {
+        ...post_data,
+        metrics,
+      })
+      .then((r) => {
+        console.log(r.data);
+        // 页面数据
+      });
+  }
+
+  onChange1 = (value) => {
     this.setState({
       inputValue1: value,
     });
   };
 
-  onChange2 = value => {
+  onChange2 = (value) => {
     this.setState({
       inputValue2: value,
     });
