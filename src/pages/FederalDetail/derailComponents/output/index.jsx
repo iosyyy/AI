@@ -92,7 +92,6 @@ class FederalDetailOutput extends Component {
         </div>
         <Table
           loading={loading}
-          scroll={{ y: "55vh" }}
           bordered={false}
           size={"middle"}
           dataSource={dataSource}
