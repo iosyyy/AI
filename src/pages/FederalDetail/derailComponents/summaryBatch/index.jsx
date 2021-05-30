@@ -119,7 +119,7 @@ class SummaryBatch extends Component {
       );
     } else {
       return (
-        <div style={{ height: "65vh", overflow: "auto" }}>
+        <div className={"scrollContent"} style={{ height: "65vh" }}>
           <div>{dataDetail}</div>
           <Search
             onSearch={(value) => {

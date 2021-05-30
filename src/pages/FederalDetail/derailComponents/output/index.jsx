@@ -3,7 +3,7 @@ import { Table } from "antd";
 import axios from "axios";
 import api from "../../../../config/api";
 import { message } from "antd/es";
-
+import "./index.css";
 
 class FederalDetailOutput extends Component {
   constructor(props) {
@@ -76,12 +76,7 @@ class FederalDetailOutput extends Component {
     const { loading, dataSource, columns, total } = this.state;
 
     return (
-      <div
-        style={{
-          height: "65vh",
-          overflow: "auto",
-        }}
-      >
+      <div style={{ height: "65vh" }} className="scrollContent">
         <div
           style={{
             fontSize: "small",

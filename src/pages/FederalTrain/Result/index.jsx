@@ -127,7 +127,11 @@ class FederalResult extends Component {
             },
           ]}
         />
-        <Row justify={"center"} style={{ height: "60vh", overflow: "auto" }}>
+        <Row
+          justify={"center"}
+          className={"scrollContent"}
+          style={{ height: "60vh" }}
+        >
           <Col>
             <Form size={"middle"} onFinish={this.onFormFinish} {...layout}>
               <Form.List rules={[{ required: true }]} name="users">

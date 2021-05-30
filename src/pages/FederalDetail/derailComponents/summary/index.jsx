@@ -57,7 +57,11 @@ class Summary extends Component {
         </Row>
       );
     }
-    return <div style={{ height: "65vh" }}>{dataDetail}</div>;
+    return (
+      <div className={"scrollContent"} style={{ height: "65vh" }}>
+        {dataDetail}
+      </div>
+    );
   }
 }
 
