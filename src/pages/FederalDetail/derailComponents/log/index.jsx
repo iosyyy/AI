@@ -40,11 +40,11 @@ class Log extends Component {
         let arr = [];
         if (data) {
           arr = logDetail.data.map(
-            (item, index) => `${index}        ${item.content}`
+            (item, index) => `${index}    ${item.content}`
           );
         }
         this.setState({
-          logDetail: arr.join("\n"),
+          logDetail: arr.join("\n\n"),
         });
       }
     };
