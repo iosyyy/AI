@@ -37,7 +37,7 @@ class Training extends Component {
       .get(api.isTrainingDetail)
       .then((r) => {
         const { data } = r.data;
-        const trainInfo = data.map((v, i) => {
+        const trainInfo = data.map((v, _i) => {
           return {
             id: v.fJobId,
             percent: v.fProgress,
@@ -50,7 +50,7 @@ class Training extends Component {
           trainInfo,
         });
       })
-      .catch((m) => {
+      .catch((_m) => {
         message.error("服务器异常");
       });
   }
@@ -95,7 +95,7 @@ class Training extends Component {
                     message.error(r.data.msg);
                   }
                 })
-                .catch((e) => {
+                .catch((_e) => {
                   message.error("服务器异常");
                 });
             }}

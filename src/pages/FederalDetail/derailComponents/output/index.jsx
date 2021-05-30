@@ -41,7 +41,9 @@ class FederalDetailOutput extends Component {
       const dataSource = dataDeatil[0].map((v, i) => {
         let obj = {};
         for (let key in v) {
-          obj[header[0][key]] = v[key];
+          if (v.hasOwnProperty(key)) {
+            obj[header[0][key]] = v[key];
+          }
         }
         return obj;
       });

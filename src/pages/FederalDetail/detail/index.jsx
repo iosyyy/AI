@@ -50,7 +50,7 @@ class FederalDetailShow extends Component {
   refresh = () => {
     this.setState({ isLoading: true });
 
-    const { id, name, partyId, role, loading, treeData } = this.state;
+    const { id, name, partyId, role, treeData } = this.state;
     let data = {};
     let post_data = {
       component_name: name,

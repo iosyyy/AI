@@ -34,7 +34,7 @@ class TrainingRecord extends Component {
               style={{
                 color: "rgb(65,89,209)",
               }}
-              onClick={(e) => {
+              onClick={(_e) => {
                 const cur = this.state.dataSource.filter(
                   (item) => item.id === id
                 )[0];
@@ -64,7 +64,7 @@ class TrainingRecord extends Component {
         dataIndex: "startTime",
         key: "start_time",
         sorter: {
-          compare: (a, b) => {
+          compare: (_a, _b) => {
             return true;
           },
           multiple: 1,
@@ -180,7 +180,7 @@ class TrainingRecord extends Component {
                           this.setNoteShow(true, value);
                         }
                       })
-                      .catch((m) => {
+                      .catch((_m) => {
                         message.error("服务器异常");
                       });
                   }}
@@ -272,7 +272,7 @@ class TrainingRecord extends Component {
           currentPage: 1,
         });
       })
-      .catch((m) => {
+      .catch((_m) => {
         message.error("服务器异常");
         this.setState({
           loading: false,
@@ -374,7 +374,7 @@ class TrainingRecord extends Component {
             sorter,
           });
         })
-        .catch((m) => {
+        .catch((_m) => {
           message.error("服务器异常");
           this.setState({
             loading: false,
@@ -413,7 +413,7 @@ class TrainingRecord extends Component {
                     searchRes: res,
                   });
                 })
-                .catch((m) => {
+                .catch((_m) => {
                   message.error("服务器异常");
                   this.setState({
                     loading: false,
@@ -533,7 +533,7 @@ class TrainingRecord extends Component {
                     currentPage: page,
                   });
                 })
-                .catch((m) => {
+                .catch((_m) => {
                   message.error("服务器异常");
                   this.setState({
                     loading: false,

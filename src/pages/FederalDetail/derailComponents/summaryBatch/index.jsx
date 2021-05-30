@@ -62,12 +62,14 @@ class SummaryBatch extends Component {
           let dataSource = [];
           let index = 1;
           for (let variable in tableInfo) {
-            dataSource.push({
-              index,
-              variable,
-              samples: tableInfo[variable],
-            });
-            index++;
+            if (tableInfo.hasOwnProperty(variable)) {
+              dataSource.push({
+                index,
+                variable,
+                samples: tableInfo[variable],
+              });
+              index++;
+            }
           }
           this.setState({
             data: reader_name,
@@ -79,13 +81,14 @@ class SummaryBatch extends Component {
   }
 
   render() {
-    const { post_data, metrics } = this.props;
+    const { metrics } = this.props;
     const { data, columns, dataSource, dataSources } = this.state;
     let dataDetail = [];
     if (Object.keys(data).length !== 0) {
       const names = data.meta;
       for (let key in names) {
         if (
+          names.hasOwnProperty(key) &&
           key !== "table_info" &&
           key !== "name" &&
           key !== "namespace" &&
@@ -116,7 +119,7 @@ class SummaryBatch extends Component {
       );
     } else {
       return (
-        <div style={{ height: "80vh", overflow: "auto" }}>
+        <div style={{ height: "65vh", overflow: "auto" }}>
           <div>{dataDetail}</div>
           <Search
             onSearch={(value) => {
