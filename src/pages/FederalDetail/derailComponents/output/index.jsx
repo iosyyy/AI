@@ -4,6 +4,7 @@ import axios from "axios";
 import api from "../../../../config/api";
 import { message } from "antd/es";
 
+
 class FederalDetailOutput extends Component {
   constructor(props) {
     super(props);

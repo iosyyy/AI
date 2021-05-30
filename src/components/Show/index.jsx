@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 // 引入柱状图
-import 'echarts/lib/chart/bar';
+import "echarts/lib/chart/bar";
 // 引入提示框和标题组件
-import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/title';
+import "echarts/lib/component/tooltip";
+import "echarts/lib/component/title";
 
-const echarts = require('echarts');
+const echarts = require("echarts");
 
 let myChart;
 export default class Show extends Component {
@@ -13,7 +13,7 @@ export default class Show extends Component {
     super(props);
     const colors = [];
     for (let i = 0; i < 100; i++) {
-      colors.push('#386db3');
+      colors.push("#386db3");
     }
     this.state = {
       colors,
@@ -43,7 +43,7 @@ export default class Show extends Component {
 
     const option = {
       tooltip: {},
-      animationEasingUpdate: 'quinticInOut',
+      animationEasingUpdate: "quinticInOut",
       series: [
         {
           itemStyle: {
@@ -54,8 +54,8 @@ export default class Show extends Component {
             },
           },
           tooltip: { show: false },
-          type: 'graph',
-          layout: 'none',
+          type: "graph",
+          layout: "none",
           symbolSize: this.state.symbolSize,
           roam: false,
           label: {
@@ -94,9 +94,9 @@ export default class Show extends Component {
     const that = this;
 
     myChart = echarts.init(document.getElementById(this.state.id));
-    myChart.on('click', function (handler, context) {
+    myChart.on("click", function (handler, context) {
       const arr = [...that.state.colors];
-      arr[handler.dataIndex] = 'rgb(128,244,61)';
+      arr[handler.dataIndex] = "rgb(128,244,61)";
       that.setState({
         colorType: [...arr],
       });
