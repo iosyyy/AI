@@ -27,6 +27,8 @@ class FederalDetail extends Component {
       d: {},
       loading: false,
       dataIndex: -1,
+      datas: [],
+      isLoading: false,
     };
   }
 
@@ -47,12 +49,13 @@ class FederalDetail extends Component {
         let treeData = [];
         treeData = this.getDeatilList([], d);
         console.log(treeData);
-        this.setState({ treeData, loading: false });
+        this.setState({ datas: d, treeData, loading: false, isLoading: true });
       })
       .catch((m) => {
         message.error("服务器异常");
         this.setState({
           loading: false,
+          isLoading: true,
         });
       });
   };
@@ -230,12 +233,14 @@ class FederalDetail extends Component {
                         id,
                         role,
                         partyId,
+                        treeData: this.state.datas,
                       },
                     });
                   }
                 }}
                 style={{ height: "7vh", marginTop: "5vh", width: "100%" }}
                 type="primary"
+                loading={!this.state.isLoading}
               >
                 view the optputs
               </Button>

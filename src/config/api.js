@@ -19,6 +19,7 @@ const e = {
   metrics_data: host + "/v1/tracking/component/metric_data",
   data_output: host + "/v1/tracking/component/output/data",
   log: ws + "/log/new/{id}/{role}/{partyId}/{name}",
+  batch: host + "/v1/tracking/component/metric_data/batch",
 };
 
 export default e;

@@ -40,11 +40,11 @@ class Log extends Component {
         let arr = [];
         if (data) {
           arr = logDetail.data.map(
-            (item, index) => `${index} -- ${item.content}`
+            (item, index) => `${index}        ${item.content}`
           );
         }
         this.setState({
-          logDetail: arr.join("\n\n"),
+          logDetail: arr.join("\n"),
         });
       }
     };
@@ -54,8 +54,8 @@ class Log extends Component {
     return (
       <div>
         <TextArea
-          style={{ height: "80vh" }}
-          disabled
+          style={{ color: "rgb(181,183,189)", border: "0", height: "80vh" }}
+          onChange={() => {}}
           autoSize={{ minRows: 9, maxRows: 23 }}
           value={this.state.logDetail}
         />

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Input, Table } from "antd";
+import { Table } from "antd";
 import axios from "axios";
 import api from "../../../../config/api";
-const { TextArea } = Input;
+import { message } from "antd/es";
 
 class FederalDetailOutput extends Component {
   constructor(props) {
@@ -15,19 +15,24 @@ class FederalDetailOutput extends Component {
       dataSource,
       post_data,
       loading: true,
+      total: 0,
     };
   }
 
   componentDidMount() {
     const { post_data } = this.state;
     axios.post(api.data_output, post_data).then((r) => {
+      if (r.data.code !== 0) {
+        message.error(`${r.data.code}:${r.data.msg}`);
+        return;
+      }
       let { data } = r.data;
       const { header } = data.meta;
       const columns = header[0].map((v, i) => {
         return {
-          title: <div>{v}</div>,
+          title: v,
           dataIndex: v,
-          key: v,
+          key: this.generateUUID() + " " + Date.now(),
           align: "center",
           width: "9vw",
         };
@@ -35,32 +40,54 @@ class FederalDetailOutput extends Component {
       let dataDeatil = data.data;
       const dataSource = dataDeatil[0].map((v, i) => {
         let obj = {};
-        console.log(v);
         for (let key in v) {
           obj[header[0][key]] = v[key];
         }
         return obj;
       });
-      console.log(dataSource);
       this.setState({
         columns,
         dataSource,
         loading: false,
+        total: data.meta.total,
       });
     });
   }
 
+  generateUUID() {
+    let d = new Date().getTime();
+    if (window.performance && typeof window.performance.now === "function") {
+      d += performance.now(); //use high-precision timer if available
+    }
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        var r = (d + Math.random() * 16) % 16 | 0;
+        d = Math.floor(d / 16);
+        return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+      }
+    );
+  }
+
   render() {
-    const { loading, dataSource, columns } = this.state;
+    const { loading, dataSource, columns, total } = this.state;
 
     return (
       <div
         style={{
-          marginTop: "3vh",
-          height: "60vh",
+          height: "65vh",
           overflow: "auto",
         }}
       >
+        <div
+          style={{
+            fontSize: "small",
+            color: "rgb(127,125,142)",
+            marginBottom: "1vh",
+          }}
+        >
+          {`Outputting ${total} instances (only 100 instances are shown in the table)`}
+        </div>
         <Table
           loading={loading}
           scroll={{ y: "55vh" }}
@@ -68,7 +95,7 @@ class FederalDetailOutput extends Component {
           size={"middle"}
           dataSource={dataSource}
           columns={columns}
-          pagination={{ pageSize: 5 }}
+          pagination={false}
         />
       </div>
     );
