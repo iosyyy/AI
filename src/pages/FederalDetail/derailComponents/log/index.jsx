@@ -28,7 +28,7 @@ class Log extends Component {
 
       if (logDetail.type === "logSize") {
         let logSize = logDetail.data.componentInfo;
-        if (logSize != this.state.size) {
+        if (parseInt(logSize) !== this.state.size) {
           socket.send(
             JSON.stringify({ type: "componentInfo", begin: 1, end: 9999 })
           );
@@ -40,11 +40,11 @@ class Log extends Component {
         let arr = [];
         if (data) {
           arr = logDetail.data.map(
-            (item, index) => `${index}        ${item.content}`
+            (item, index) => `${index}    ${item.content}`
           );
         }
         this.setState({
-          logDetail: arr.join("\n"),
+          logDetail: arr.join("\n\n"),
         });
       }
     };

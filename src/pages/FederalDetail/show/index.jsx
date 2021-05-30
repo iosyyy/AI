@@ -46,12 +46,12 @@ class FederalDetail extends Component {
       })
       .then((data) => {
         const d = JSON.parse(data.data.data);
-        let treeData = [];
+        let treeData;
         treeData = this.getDeatilList([], d);
         console.log(treeData);
         this.setState({ datas: d, treeData, loading: false, isLoading: true });
       })
-      .catch((m) => {
+      .catch((_m) => {
         message.error("服务器异常");
         this.setState({
           loading: false,
@@ -60,31 +60,37 @@ class FederalDetail extends Component {
       });
   };
   generateUUID() {
-    var d = new Date().getTime();
+    let d = new Date().getTime();
     if (window.performance && typeof window.performance.now === "function") {
       d += performance.now(); //use high-precision timer if available
     }
-    var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
       /[xy]/g,
       function (c) {
-        var r = (d + Math.random() * 16) % 16 | 0;
+        let r = (d + Math.random() * 16) % 16 | 0;
         d = Math.floor(d / 16);
         return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
       }
     );
-    return uuid;
   }
   getDeatilList(data, treeData) {
     for (let treeDataKey in treeData) {
-      let child = [];
-      if (typeof treeData[treeDataKey] === "object") {
-        if (treeData[treeDataKey] !== null) {
-          this.getDeatilList(child, treeData[treeDataKey]);
-          data.push({
-            title: `${treeDataKey}`,
-            key: `${this.generateUUID().replace("-", "")}`,
-            children: child,
-          });
+      if (treeData.hasOwnProperty(treeDataKey)) {
+        let child = [];
+        if (typeof treeData[treeDataKey] === "object") {
+          if (treeData[treeDataKey] !== null) {
+            this.getDeatilList(child, treeData[treeDataKey]);
+            data.push({
+              title: `${treeDataKey}`,
+              key: `${this.generateUUID().replace("-", "")}`,
+              children: child,
+            });
+          } else {
+            data.push({
+              title: `${treeDataKey}:  ${treeData[treeDataKey]}`,
+              key: `${this.generateUUID().replace("-", "")}`,
+            });
+          }
         } else {
           data.push({
             title: `${treeDataKey}:  ${treeData[treeDataKey]}`,
@@ -92,10 +98,6 @@ class FederalDetail extends Component {
           });
         }
       } else {
-        data.push({
-          title: `${treeDataKey}:  ${treeData[treeDataKey]}`,
-          key: `${this.generateUUID().replace("-", "")}`,
-        });
       }
     }
     return data;
@@ -224,7 +226,7 @@ class FederalDetail extends Component {
                 </div>
               </Spin>
               <Button
-                onClick={(e) => {
+                onClick={(_e) => {
                   if (this.state.dataIndex !== -1) {
                     this.props.history.push({
                       pathname: "/federalDetail/detail",

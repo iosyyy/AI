@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import {
+  Badge,
   Button,
   Card,
   Col,
@@ -9,7 +10,6 @@ import {
   Progress,
   Row,
   Tabs,
-  Badge,
 } from "antd";
 import "./index.css";
 import Show from "../../../components/Show";
@@ -66,7 +66,7 @@ export default class index extends Component {
 
   sendLogRequest() {
     console.log("run...");
-    socket.onopen = (data) => {
+    socket.onopen = (_data) => {
       socket.send(
         JSON.stringify({ type: "partyError", begin: 0, end: 999999 })
       );
@@ -176,9 +176,11 @@ export default class index extends Component {
         Object.keys(d.summary_date.dataset).length
       ) {
         const { roles, dataset, partner } = d.summary_date.dataset;
-
-        for (let objectKey in Object(partner)) {
-          roles[objectKey] = partner[objectKey];
+        const partnerObj = Object(partner);
+        for (let objectKey in partnerObj) {
+          if (partnerObj.hasOwnProperty(objectKey)) {
+            roles[objectKey] = partner[objectKey];
+          }
         }
         role = roles;
         datasets = dataset;
@@ -357,7 +359,7 @@ export default class index extends Component {
                         }
                         style={{ backgroundColor: "red" }}
                         overflowCount={10000}
-                      ></Badge>
+                      />
                     </>
                   }
                   key="1"
@@ -378,7 +380,7 @@ export default class index extends Component {
                         }
                         overflowCount={10000}
                         style={{ backgroundColor: "gold" }}
-                      ></Badge>
+                      />
                     </>
                   }
                   key="2"
@@ -397,7 +399,7 @@ export default class index extends Component {
                         count={this.state.partyInfo ? this.state.partyInfo : 0}
                         overflowCount={10000}
                         style={{ backgroundColor: "green" }}
-                      ></Badge>
+                      />
                     </>
                   }
                   key="3"
@@ -418,7 +420,7 @@ export default class index extends Component {
                         }
                         overflowCount={10000}
                         style={{ backgroundColor: "blue" }}
-                      ></Badge>
+                      />
                     </>
                   }
                   key="4"
@@ -441,7 +443,7 @@ export default class index extends Component {
                         count={this.state.jobError ? this.state.jobError : 0}
                         overflowCount={10000}
                         style={{ backgroundColor: "red" }}
-                      ></Badge>
+                      />
                     </>
                   }
                   key="1"
@@ -462,7 +464,7 @@ export default class index extends Component {
                         }
                         overflowCount={10000}
                         style={{ backgroundColor: "cyan" }}
-                      ></Badge>
+                      />
                     </>
                   }
                   key="2"
