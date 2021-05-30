@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   Button,
   Form,
@@ -9,13 +9,13 @@ import {
   Space,
   Table,
   Tooltip,
-} from 'antd';
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
-import axios from 'axios';
-import NoteImg from '../../img/Note.png';
-import NoteHover from '../../img/NoteHover.png';
-import api from '../../config/api';
-import PubSubJS from 'pubsub-js';
+} from "antd";
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import axios from "axios";
+import NoteImg from "../../img/Note.png";
+import NoteHover from "../../img/NoteHover.png";
+import api from "../../config/api";
+import PubSubJS from "pubsub-js";
 
 const { Option } = Select;
 
@@ -25,21 +25,21 @@ class TrainingRecord extends Component {
     const columns = [
       {
         title: <div>ID</div>,
-        dataIndex: 'id',
-        key: 'id',
-        width: '16vw',
-        render: id => (
+        dataIndex: "id",
+        key: "id",
+        width: "16vw",
+        render: (id) => (
           <div>
             <div
               style={{
-                color: 'rgb(65,89,209)',
+                color: "rgb(65,89,209)",
               }}
-              onClick={e => {
+              onClick={(e) => {
                 const cur = this.state.dataSource.filter(
-                  item => item.id === id
+                  (item) => item.id === id
                 )[0];
                 this.props.history.push({
-                  pathname: '/federalDetail/show',
+                  pathname: "/federalDetail/show",
                   state: { cur },
                 });
               }}
@@ -51,41 +51,41 @@ class TrainingRecord extends Component {
       },
       {
         title: <div>PartyID</div>,
-        dataIndex: 'partyId',
-        key: 'partyId',
+        dataIndex: "partyId",
+        key: "partyId",
       },
       {
         title: <div>规则</div>,
-        dataIndex: 'role',
-        key: 'role',
+        dataIndex: "role",
+        key: "role",
       },
       {
         title: <div>开始时间</div>,
-        dataIndex: 'startTime',
-        key: 'start_time',
+        dataIndex: "startTime",
+        key: "start_time",
         sorter: {
           compare: (a, b) => {
             return true;
           },
           multiple: 1,
         },
-        render: text => {
+        render: (text) => {
           return <>{new Date(text).toLocaleString()}</>;
         },
       },
       {
         title: <div>结束时间</div>,
-        dataIndex: 'endTime',
-        key: 'end_time',
+        dataIndex: "endTime",
+        key: "end_time",
         sorter: true,
-        render: text => {
+        render: (text) => {
           return <>{new Date(text).toLocaleString()}</>;
         },
       },
       {
         title: <div>运行时间</div>,
-        dataIndex: 'duration',
-        key: 'elapsed',
+        dataIndex: "duration",
+        key: "elapsed",
         sorter: true,
         render: (text, value) => {
           const time = value.endTime - value.startTime;
@@ -103,14 +103,14 @@ class TrainingRecord extends Component {
       },
       {
         title: <div>结果</div>,
-        dataIndex: 'status',
-        key: 'status',
+        dataIndex: "status",
+        key: "status",
       },
       {
         title: <div>记录</div>,
-        dataIndex: 'notes',
-        key: 'notes',
-        width: '9vw',
+        dataIndex: "notes",
+        key: "notes",
+        width: "9vw",
         render: (text, value, _context) => {
           const note = this.state.NoteNow[value.key];
           return (
@@ -123,8 +123,8 @@ class TrainingRecord extends Component {
                         <span>{text.slice(0, 5)}</span>
                         <span
                           style={{
-                            color: 'rgb(127,125,142)',
-                            fontSize: 'small',
+                            color: "rgb(127,125,142)",
+                            fontSize: "small",
                           }}
                         >
                           ···
@@ -155,7 +155,7 @@ class TrainingRecord extends Component {
                 </Space>
               ) : (
                 <Form
-                  onFinish={data => {
+                  onFinish={(data) => {
                     this.setState({ loading: true });
                     axios
                       .put(api.jobUpdate, {
@@ -164,7 +164,7 @@ class TrainingRecord extends Component {
                         party_id: value.partyId,
                         role: value.role,
                       })
-                      .then(r => {
+                      .then((r) => {
                         if (r.data.code === 0) {
                           const { dataSource } = this.state;
                           dataSource[value.key].notes = data.notes;
@@ -180,8 +180,8 @@ class TrainingRecord extends Component {
                           this.setNoteShow(true, value);
                         }
                       })
-                      .catch(m => {
-                        message.error('服务器异常');
+                      .catch((m) => {
+                        message.error("服务器异常");
                       });
                   }}
                   size="small"
@@ -214,9 +214,9 @@ class TrainingRecord extends Component {
       },
       {
         title: <div>action</div>,
-        dataIndex: 'action',
-        key: 'action',
-        render: text => {
+        dataIndex: "action",
+        key: "action",
+        render: (text) => {
           return <Button type="link">{text}</Button>;
         },
       },
@@ -228,40 +228,40 @@ class TrainingRecord extends Component {
     this.state = {
       columns,
       dataSource: [],
-      searchText: '',
-      searchedColumn: '',
-      selectKey: '',
+      searchText: "",
+      searchedColumn: "",
+      selectKey: "",
       NoteNow,
       loading: true,
       pageSize: 0,
       currentPage: 1,
-      searchRes: { note: '', id: '', partyId: '', role: [], status: [] },
+      searchRes: { note: "", id: "", partyId: "", role: [], status: [] },
       sorter: {
-        columnKey: 'job_id',
-        orderRule: 'desc',
+        columnKey: "job_id",
+        orderRule: "desc",
       },
     };
   }
 
   componentDidMount() {
-    PubSubJS.publish('isRunning', { page: '4' });
+    PubSubJS.publish("isRunning", { page: "4" });
 
     axios
       .post(api.pageList, {
-        fDescription: '',
-        jobId: '',
-        job_id: '',
-        note: '',
-        orderField: 'f_job_id',
-        orderRule: 'desc',
+        fDescription: "",
+        jobId: "",
+        job_id: "",
+        note: "",
+        orderField: "f_job_id",
+        orderRule: "desc",
         pageNum: 1,
         pageSize: 20,
-        partyId: '',
-        party_id: '',
+        partyId: "",
+        party_id: "",
         role: [],
         status: [],
       })
-      .then(r => {
+      .then((r) => {
         const { list } = r.data.data;
         const pageSize = r.data.data.totalRecord;
         const dataSource = this.getDataSourceByDataList(list);
@@ -272,8 +272,8 @@ class TrainingRecord extends Component {
           currentPage: 1,
         });
       })
-      .catch(m => {
-        message.error('服务器异常');
+      .catch((m) => {
+        message.error("服务器异常");
         this.setState({
           loading: false,
           currentPage: 1,
@@ -295,7 +295,7 @@ class TrainingRecord extends Component {
         partyId: value.fPartyId,
         notes: value.fDescription,
         status: value.fStatus,
-        action: value.fStatus === 'success' ? '' : 'retry',
+        action: value.fStatus === "success" ? "" : "retry",
       });
     });
     return dataSource;
@@ -330,8 +330,8 @@ class TrainingRecord extends Component {
       orderField = `f_${sorter.columnKey}`;
       orderRule = `${sorter.order === `ascend` ? `asc` : `desc`}`;
     } else {
-      orderField = 'f_job_id';
-      orderRule = 'desc';
+      orderField = "f_job_id";
+      orderRule = "desc";
     }
     if (sor && Object.keys(sor).length) {
       orderField = `f_${sor.columnKey}`;
@@ -362,7 +362,7 @@ class TrainingRecord extends Component {
 
       axios
         .post(api.pageList, this.getData(1, sorter))
-        .then(r => {
+        .then((r) => {
           const { list } = r.data.data;
           const pageSize = r.data.data.totalRecord;
           const dataSource = this.getDataSourceByDataList(list);
@@ -374,8 +374,8 @@ class TrainingRecord extends Component {
             sorter,
           });
         })
-        .catch(m => {
-          message.error('服务器异常');
+        .catch((m) => {
+          message.error("服务器异常");
           this.setState({
             loading: false,
             currentPage: 1,
@@ -390,17 +390,17 @@ class TrainingRecord extends Component {
   render() {
     return (
       <div className="site-layout-content">
-        <div style={{ float: 'right' }}>
+        <div style={{ float: "right" }}>
           <Form
             size="small"
             layout="inline"
-            onFinish={res => {
+            onFinish={(res) => {
               this.setState({
                 loading: true,
               });
               axios
                 .post(api.pageList, this.getData(1, {}, res))
-                .then(r => {
+                .then((r) => {
                   const pageSize = r.data.data.totalRecord;
                   const dataSource = this.getDataSourceByDataList(
                     r.data.data.list
@@ -413,8 +413,8 @@ class TrainingRecord extends Component {
                     searchRes: res,
                   });
                 })
-                .catch(m => {
-                  message.error('服务器异常');
+                .catch((m) => {
+                  message.error("服务器异常");
                   this.setState({
                     loading: false,
                     currentPage: 1,
@@ -424,7 +424,7 @@ class TrainingRecord extends Component {
           >
             <Form.Item
               label={
-                <div style={{ fontWeight: 900, color: 'rgb(127,125,142)' }}>
+                <div style={{ fontWeight: 900, color: "rgb(127,125,142)" }}>
                   Job ID
                 </div>
               }
@@ -434,7 +434,7 @@ class TrainingRecord extends Component {
             </Form.Item>
             <Form.Item
               label={
-                <div style={{ fontWeight: 900, color: 'rgb(127,125,142)' }}>
+                <div style={{ fontWeight: 900, color: "rgb(127,125,142)" }}>
                   Party ID
                 </div>
               }
@@ -444,7 +444,7 @@ class TrainingRecord extends Component {
             </Form.Item>
             <Form.Item
               label={
-                <div style={{ fontWeight: 900, color: 'rgb(127,125,142)' }}>
+                <div style={{ fontWeight: 900, color: "rgb(127,125,142)" }}>
                   规则
                 </div>
               }
@@ -453,7 +453,7 @@ class TrainingRecord extends Component {
               <Select
                 mode="multiple"
                 placeholder="选择规则"
-                style={{ width: '8vw' }}
+                style={{ width: "8vw" }}
               >
                 <Option value="guest">guest</Option>
                 <Option value="host">host</Option>
@@ -464,7 +464,7 @@ class TrainingRecord extends Component {
 
             <Form.Item
               label={
-                <div style={{ fontWeight: 900, color: 'rgb(127,125,142)' }}>
+                <div style={{ fontWeight: 900, color: "rgb(127,125,142)" }}>
                   结果
                 </div>
               }
@@ -473,7 +473,7 @@ class TrainingRecord extends Component {
               <Select
                 mode="multiple"
                 placeholder="选择结果"
-                style={{ width: '8vw' }}
+                style={{ width: "8vw" }}
               >
                 <Option value="success">success</Option>
                 <Option value="running">running</Option>
@@ -484,7 +484,7 @@ class TrainingRecord extends Component {
             </Form.Item>
             <Form.Item
               label={
-                <div style={{ fontWeight: 900, color: 'rgb(127,125,142)' }}>
+                <div style={{ fontWeight: 900, color: "rgb(127,125,142)" }}>
                   记录
                 </div>
               }
@@ -494,7 +494,7 @@ class TrainingRecord extends Component {
             </Form.Item>
             <Form.Item>
               <Button
-                style={{ borderRadius: '5vw', width: '4vw' }}
+                style={{ borderRadius: "5vw", width: "4vw" }}
                 type="primary"
                 htmlType="submit"
               >
@@ -506,22 +506,22 @@ class TrainingRecord extends Component {
         <Table
           onChange={this.onTableChange}
           loading={this.state.loading}
-          scroll={{ y: '65vh' }}
+          scroll={{ y: "61vh" }}
           bordered={false}
           dataSource={this.state.dataSource}
           columns={this.state.columns}
           pagination={{
             showSizeChanger: false,
             pageSize: 20,
-            position: ['bottomCenter'],
-            size: 'small',
+            position: ["bottomCenter"],
+            size: "small",
             total: this.state.pageSize,
             current: this.state.currentPage,
             onChange: (page, _pageSize) => {
               this.setState({ loading: true });
               axios
                 .post(api.pageList, this.getData(page))
-                .then(r => {
+                .then((r) => {
                   console.log(page);
                   const { list } = r.data.data;
                   const pageSize = r.data.data.totalRecord;
@@ -533,8 +533,8 @@ class TrainingRecord extends Component {
                     currentPage: page,
                   });
                 })
-                .catch(m => {
-                  message.error('服务器异常');
+                .catch((m) => {
+                  message.error("服务器异常");
                   this.setState({
                     loading: false,
                     currentPage: page,
