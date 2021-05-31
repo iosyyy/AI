@@ -34,12 +34,12 @@
 }
 
 .scrollContent:hover{
-  overflow: scroll;
+  overflow-y: scroll;
   margin-right: 0;
 
 }
 .scrollContent{
-  overflow: hidden;
+  overflow-y: hidden;
   margin-right: 8px;
 }
 

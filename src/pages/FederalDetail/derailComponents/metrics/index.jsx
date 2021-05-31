@@ -144,7 +144,7 @@ class Metrics extends Component {
           train,
         },
       })
-      .then(r => {
+      .then((r) => {
         let { code, msg } = r.data;
         if (code !== 0) {
           message.error(`${code}: ${msg}`);
@@ -258,7 +258,7 @@ class Metrics extends Component {
       });
   }
 
-  onChange1 = value => {
+  onChange1 = (value) => {
     const { tableDataSource1, p_scores, r_scores } = this.state;
     tableDataSource1[0].precision = p_scores[Math.floor(value * 20)][1];
     tableDataSource1[0].recall = r_scores[Math.floor(value * 20)][1];
@@ -268,7 +268,7 @@ class Metrics extends Component {
     });
   };
 
-  onChange2 = value => {
+  onChange2 = (value) => {
     // fn右下,tn右上,fp左上,tp左下
     const { tableDataSource2, f1_scores, fn, tn, fp, tp } = this.state;
     tableDataSource2[0]["F1-score"] = f1_scores[Math.floor(value * 100)];
@@ -300,7 +300,10 @@ class Metrics extends Component {
     } = this.state;
 
     return (
-      <div style={{ height: "65vh", overflow: "scroll", padding: "2vh" }}>
+      <div
+        className={"scrollContent"}
+        style={{ height: "65vh", padding: "2vh" }}
+      >
         <h2>Evaluation scores</h2>
         <Row>
           <Col span={4}>

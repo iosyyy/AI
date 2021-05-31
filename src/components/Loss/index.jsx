@@ -64,10 +64,10 @@ export default class Loss extends Component {
   render() {
     return (
       <div>
-        <Row align='middle'>
+        <Row align="middle">
           <Space>
             <font style={{ fontSize: "xx-large" }}>LOSS</font>
-            <Button type='primary'>train</Button>
+            <Button type="primary">train</Button>
             <a
               onClick={() => {
                 let dom = document.getElementById("loss");
@@ -81,7 +81,7 @@ export default class Loss extends Component {
             </a>
           </Space>
         </Row>
-        <div id='loss' style={{ width: "90vw", height: "70vh" }} />
+        <div id="loss" style={{ width: "89vw", height: "70vh" }} />
       </div>
     );
   }

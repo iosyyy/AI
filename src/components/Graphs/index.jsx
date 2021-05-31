@@ -76,7 +76,7 @@ export default class Graphs extends Component {
             train,
           },
         })
-        .then(r => {
+        .then((r) => {
           let { code, msg } = r.data;
           if (code !== 0) {
             message.error(`${code}: ${msg}`);
@@ -154,7 +154,7 @@ export default class Graphs extends Component {
             train,
           },
         })
-        .then(r => {
+        .then((r) => {
           let { code, msg } = r.data;
           if (code !== 0) {
             message.error(`${code}: ${msg}`);
@@ -241,7 +241,7 @@ export default class Graphs extends Component {
             train,
           },
         })
-        .then(r => {
+        .then((r) => {
           let { code, msg } = r.data;
           if (code !== 0) {
             message.error(`${code}: ${msg}`);
@@ -317,7 +317,7 @@ export default class Graphs extends Component {
             train,
           },
         })
-        .then(r => {
+        .then((r) => {
           let { code, msg } = r.data;
           if (code !== 0) {
             message.error(`${code}: ${msg}`);
@@ -398,7 +398,7 @@ export default class Graphs extends Component {
             train,
           },
         })
-        .then(r => {
+        .then((r) => {
           let { code, msg } = r.data;
           if (code !== 0) {
             message.error(`${code}: ${msg}`);
@@ -481,7 +481,7 @@ export default class Graphs extends Component {
             train,
           },
         })
-        .then(r => {
+        .then((r) => {
           let { code, msg } = r.data;
           if (code !== 0) {
             message.error(`${code}: ${msg}`);
@@ -550,7 +550,7 @@ export default class Graphs extends Component {
     this.drew();
   }
 
-  changeCur = key => {
+  changeCur = (key) => {
     if (key == this.state.cur) return;
     let title;
     let cur;
@@ -594,20 +594,20 @@ export default class Graphs extends Component {
         <Tabs
           defaultActiveKey={graphType.Roc}
           onChange={this.changeCur}
-          size='large'
+          size="large"
         >
-          <TabPane tab='Roc' key={graphType.Roc} />
-          <TabPane tab='K-S' key={graphType["K-S"]} />
-          <TabPane tab='Lift' key={graphType.Lift} />
-          <TabPane tab='Gain' key={graphType.Gain} />
-          <TabPane tab='Precision Recall' key={graphType["Precision Recall"]} />
-          <TabPane tab='Accuracy' key={graphType.Accuracy} />
+          <TabPane tab="Roc" key={graphType.Roc} />
+          <TabPane tab="K-S" key={graphType["K-S"]} />
+          <TabPane tab="Lift" key={graphType.Lift} />
+          <TabPane tab="Gain" key={graphType.Gain} />
+          <TabPane tab="Precision Recall" key={graphType["Precision Recall"]} />
+          <TabPane tab="Accuracy" key={graphType.Accuracy} />
         </Tabs>
 
-        <Row align='middle'>
+        <Row align="middle">
           <Space>
             <font style={{ fontSize: "xx-large" }}>{this.state.title}</font>
-            <Button type='primary'>train</Button>
+            <Button type="primary">train</Button>
             <a
               onClick={() => {
                 this.drew();
@@ -618,7 +618,7 @@ export default class Graphs extends Component {
             </a>
           </Space>
         </Row>
-        <div id='metricsGraphs' style={{ width: "90vw", height: "70vh" }} />
+        <div id="metricsGraphs" style={{ width: "88vw", height: "70vh" }} />
       </div>
     );
   }
