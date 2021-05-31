@@ -67,6 +67,7 @@ class SummaryBatch extends Component {
                 index,
                 variable,
                 samples: tableInfo[variable],
+                key: index,
               });
               index++;
             }
@@ -97,6 +98,7 @@ class SummaryBatch extends Component {
         )
           dataDetail.push(
             <div
+              key={key}
               style={{
                 fontSize: "small",
                 fontWeight: 10,

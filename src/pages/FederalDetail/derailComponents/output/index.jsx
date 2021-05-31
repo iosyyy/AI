@@ -33,7 +33,7 @@ class FederalDetailOutput extends Component {
         return {
           title: v,
           dataIndex: v,
-          key: this.generateUUID() + " " + Date.now(),
+          key: v,
           align: "center",
           width: "9vw",
         };
@@ -46,6 +46,7 @@ class FederalDetailOutput extends Component {
             obj[header[0][key]] = v[key];
           }
         }
+        obj["key"] = this.generateUUID();
         return obj;
       });
       this.setState({
