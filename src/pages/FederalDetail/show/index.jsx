@@ -204,7 +204,7 @@ class FederalDetail extends Component {
               <Spin spinning={this.state.loading} delay={500}>
                 <div
                   style={{
-                    scroll: "auto",
+                    overflow: "auto",
                     height: "53vh",
                     padding: "5px 10px",
                     backgroundColor: "rgb(240,240,240)",
@@ -216,7 +216,6 @@ class FederalDetail extends Component {
                     showLine={false}
                     onSelect={this.onSelect}
                     treeData={this.state.treeData}
-                    height={"50vh"}
                     style={{
                       fontSize: "small",
                       color: "rgb(153,167,193)",
