@@ -281,6 +281,13 @@ class TrainingRecord extends Component {
       });
   }
 
+  componentWillUnmount() {
+    //处理逻辑
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
+
   getDataSourceByDataList(list) {
     const dataSource = [];
     list.forEach((values, key) => {

@@ -15,6 +15,9 @@ class Training extends Component {
   }
 
   componentWillUnmount() {
+    this.setState = (state, callback) => {
+      return;
+    };
     clearInterval(this.state.numInterval);
   }
 
