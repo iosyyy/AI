@@ -24,13 +24,20 @@ export default class Loss extends Component {
     option = {
       tooltip: {
         trigger: "axis",
-        displayMode: "single",
+        formatter: function (params) {
+          var htmlStr = "<div>";
+          htmlStr += "iteration：" + params[0].axisValue + "<br/>";
+          htmlStr += "loss：" + params[0].value;
+          htmlStr += "</div>";
+          return htmlStr;
+        },
       },
       legend: {
         data: ["loss"],
       },
       xAxis: {
         type: "category",
+        boundaryGap: false,
         name: "iter",
         data: data1,
       },
@@ -74,7 +81,7 @@ export default class Loss extends Component {
             </a>
           </Space>
         </Row>
-        <div id='loss' style={{ width: "90%", height: "70vh" }} />
+        <div id='loss' style={{ width: "90vw", height: "70vh" }} />
       </div>
     );
   }

@@ -22,7 +22,7 @@ class FederalDetailOutput extends Component {
 
   componentDidMount() {
     const { post_data } = this.state;
-    axios.post(api.data_output, post_data).then((r) => {
+    axios.post(api.data_output, post_data).then(r => {
       if (r.data.code !== 0) {
         message.error(`${r.data.code}:${r.data.msg}`);
         return;
@@ -44,6 +44,7 @@ class FederalDetailOutput extends Component {
         for (let key in v) {
           if (v.hasOwnProperty(key)) {
             obj[header[0][key]] = v[key];
+            obj["key"] = i;
           }
         }
         return obj;
@@ -76,7 +77,7 @@ class FederalDetailOutput extends Component {
     const { loading, dataSource, columns, total } = this.state;
 
     return (
-      <div style={{ height: "65vh" }} className="scrollContent">
+      <div style={{ height: "65vh" }} className='scrollContent'>
         <div
           style={{
             fontSize: "small",

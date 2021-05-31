@@ -50,7 +50,7 @@ class ModelOutput extends Component {
       },
     ];
     return (
-      <div className={"scrollContent"} style={{ height: "60vh" }}>
+      <div className={"scrollContent"} style={{ height: "65vh" }}>
         <Row>
           <font style={{ color: "rgb(127,125,142)", fontSize: "small" }}>
             iterations: {this.state.iterations}
