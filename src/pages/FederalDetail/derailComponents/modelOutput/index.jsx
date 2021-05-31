@@ -5,20 +5,21 @@ import Loss from "../../../../components/Loss";
 class ModelOutput extends Component {
   constructor(props) {
     super(props);
-    console.log(props.model.data.data.data);
     let iterations = props.model.data.data.data.iters;
     let isConverged = props.model.data.data.data.isConverged;
     let weight = props.model.data.data.data.weight;
     let dataSource = [];
     let index = 0;
     for (let key in weight) {
-      index = (index % 10) + 1;
-      dataSource.push({
-        key: key,
-        index: index,
-        variable: key,
-        weight: weight[key],
-      });
+      if (weight.hasOwnProperty(key)) {
+        index = (index % 10) + 1;
+        dataSource.push({
+          key: key,
+          index: index,
+          variable: key,
+          weight: weight[key],
+        });
+      }
     }
     this.state = {
       iterations,
@@ -28,6 +29,13 @@ class ModelOutput extends Component {
   }
 
   componentDidMount() {}
+
+  componentWillUnmount() {
+    //处理逻辑
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
 
   render() {
     const TABLE_COLUMNS = [

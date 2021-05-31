@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Col, Row, Tabs } from "antd";
+import { Button, Col, Row, Spin, Tabs } from "antd";
 import "./change.css";
 import axios from "axios";
 import api from "../../../config/api";
@@ -78,200 +78,267 @@ class FederalDetailShow extends Component {
       metric_namespace: namew,
     });
     // 首先获取Model(api.getJobOutput)再获取Metrics(api.metrics),然后每个tab执行不同的操作
-    axios.post(api.getJobOutput, post_data).then((r) => {
-      if (r.data.code !== 0) {
-        message.error(`${r.data.code}:${r.data.msg}`);
-        return;
-      }
-      const model = r;
-      // 获取Metrics
-      axios.post(api.metrics, post_data).then((r) => {
+    axios
+      .post(api.getJobOutput, post_data)
+      .then((r) => {
         if (r.data.code !== 0) {
           message.error(`${r.data.code}:${r.data.msg}`);
           return;
         }
+        const model = r;
+        // 获取Metrics
+        axios
+          .post(api.metrics, post_data)
+          .then((r) => {
+            if (r.data.code !== 0) {
+              message.error(`${r.data.code}:${r.data.msg}`);
+              return;
+            }
 
-        data = r.data.data;
-        let metrics = r.data.data;
-        let metric_name, metric_namespace; // 这两个名字用来定义左上角的名字,并且通过这两个名字定义不同的tabs
+            data = r.data.data;
+            let metrics = r.data.data;
+            let metric_name, metric_namespace; // 这两个名字用来定义左上角的名字,并且通过这两个名字定义不同的tabs
 
-        if (
-          !metric_name &&
-          !metric_namespace &&
-          Object.keys(data).length !== 0
-        ) {
-          metric_name = Object.values(data)[0][0];
-          metric_namespace = Object.keys(data)[0];
-        }
+            if (
+              !metric_name &&
+              !metric_namespace &&
+              Object.keys(data).length !== 0
+            ) {
+              metric_name = Object.values(data)[0][0];
+              metric_namespace = Object.keys(data)[0];
+            }
 
-        let names; // names中的name代表tab的标题,component代表tab对应的组件
-        /**
-         * props解释
-         * post_data代表所传axios所需要的基本参数有job_id,party_id,role,component_name
-         * metric_name代表上面说到的名字,metric_namespace上面也有提到
-         * metrics代表api.metrics返回的data数据
-         */
-        switch (namew) {
-          // 这里通过metric_namespace选择不同的tabs
-          case "Upload":
-            names = [
-              {
-                name: "summary",
-                component: (
-                  <Summary
-                    model={model}
-                    post_data={post_data}
-                    metric_name={metric_name}
-                    metric_namespace={metric_namespace}
-                  />
-                ),
-              },
-              {
-                name: "data output",
-                component: (
-                  <FederalDetailOutput model={model} post_data={post_data} />
-                ),
-              },
-              {
-                name: "log",
-                component: <Log model={model} post_data={post_data} />,
-              },
-            ];
-            break;
-          case "Evaluation":
-            names = [
-              {
-                name: "metrics",
-                component: (
-                  <Metrics
-                    model={model}
-                    metrics={metrics}
-                    post_data={post_data}
-                  />
-                ),
-              },
-              {
-                name: "log",
-                component: <Log model={model} post_data={post_data} />,
-              },
-            ];
-            break;
-          case "HomoLR":
-            names = [
-              {
-                name: "model output",
-                component: (
-                  <ModelOutput
-                    model={model}
-                    post_data={post_data}
-                    metrics={metrics}
-                  />
-                ),
-              },
-              {
-                name: "data output",
-                component: (
-                  <FederalDetailOutput model={model} post_data={post_data} />
-                ),
-              },
-              {
-                name: "log",
-                component: <Log model={model} post_data={post_data} />,
-              },
-            ];
-            break;
-          case "Reader":
-            names = [
-              {
-                name: "summary",
-                component: (
-                  <SummaryBatch
-                    metric_name={metric_name}
-                    metric_namespace={metric_namespace}
-                    model={model}
-                    post_data={post_data}
-                    metrics={metrics}
-                  />
-                ),
-              },
-              {
-                name: "data output",
-                component: (
-                  <FederalDetailOutput model={model} post_data={post_data} />
-                ),
-              },
-              {
-                name: "log",
-                component: <Log model={model} post_data={post_data} />,
-              },
-            ];
-            break;
-          case "DataIO":
-          case "FeatureScale":
-            names = [
-              {
-                name: "summary",
-                component: (
-                  <SummaryBatch
-                    metric_name={metric_name}
-                    metric_namespace={metric_namespace}
-                    model={model}
-                    post_data={post_data}
-                    metrics={metrics}
-                  />
-                ),
-              },
-              {
-                name: "data output",
-                component: (
-                  <FederalDetailOutput model={model} post_data={post_data} />
-                ),
-              },
-              {
-                name: "log",
-                component: <Log model={model} post_data={post_data} />,
-              },
-            ];
-            break;
-        }
-        this.setState({ names });
+            let names; // names中的name代表tab的标题,component代表tab对应的组件
+            /**
+             * props解释
+             * post_data代表所传axios所需要的基本参数有job_id,party_id,role,component_name
+             * metric_name代表上面说到的名字,metric_namespace上面也有提到
+             * metrics代表api.metrics返回的data数据
+             */
+            switch (namew) {
+              // 这里通过metric_namespace选择不同的tabs
+              case "Upload":
+                names = [
+                  {
+                    name: "summary",
+                    component: (
+                      <Summary
+                        key={this.generateUUID()}
+                        model={model}
+                        post_data={post_data}
+                        metric_name={metric_name}
+                        metric_namespace={metric_namespace}
+                      />
+                    ),
+                  },
+                  {
+                    name: "data output",
+                    component: (
+                      <FederalDetailOutput
+                        key={this.generateUUID()}
+                        model={model}
+                        post_data={post_data}
+                      />
+                    ),
+                  },
+                  {
+                    name: "log",
+                    component: (
+                      <Log
+                        key={this.generateUUID()}
+                        model={model}
+                        post_data={post_data}
+                      />
+                    ),
+                  },
+                ];
+                break;
+              case "Evaluation":
+                names = [
+                  {
+                    name: "metrics",
+                    component: (
+                      <Metrics
+                        key={this.generateUUID()}
+                        model={model}
+                        metrics={metrics}
+                        post_data={post_data}
+                      />
+                    ),
+                  },
+                  {
+                    name: "log",
+                    component: (
+                      <Log
+                        key={this.generateUUID()}
+                        model={model}
+                        post_data={post_data}
+                      />
+                    ),
+                  },
+                ];
+                break;
+              case "HomoLR":
+                names = [
+                  {
+                    name: "model output",
+                    component: (
+                      <ModelOutput
+                        key={this.generateUUID()}
+                        model={model}
+                        post_data={post_data}
+                        metrics={metrics}
+                      />
+                    ),
+                  },
+                  {
+                    name: "data output",
+                    component: (
+                      <FederalDetailOutput
+                        key={this.generateUUID()}
+                        model={model}
+                        post_data={post_data}
+                      />
+                    ),
+                  },
+                  {
+                    name: "log",
+                    component: (
+                      <Log
+                        key={this.generateUUID()}
+                        model={model}
+                        post_data={post_data}
+                      />
+                    ),
+                  },
+                ];
+                break;
+              case "Reader":
+                names = [
+                  {
+                    name: "summary",
+                    component: (
+                      <SummaryBatch
+                        key={this.generateUUID()}
+                        metric_name={metric_name}
+                        metric_namespace={metric_namespace}
+                        model={model}
+                        post_data={post_data}
+                        metrics={metrics}
+                      />
+                    ),
+                  },
+                  {
+                    name: "data output",
+                    component: (
+                      <FederalDetailOutput
+                        key={this.generateUUID()}
+                        model={model}
+                        post_data={post_data}
+                      />
+                    ),
+                  },
+                  {
+                    name: "log",
+                    component: (
+                      <Log
+                        key={this.generateUUID()}
+                        model={model}
+                        post_data={post_data}
+                      />
+                    ),
+                  },
+                ];
+                break;
+              case "DataIO":
+              case "FeatureScale":
+                names = [
+                  {
+                    name: "summary",
+                    component: (
+                      <SummaryBatch
+                        key={this.generateUUID()}
+                        metric_name={metric_name}
+                        metric_namespace={metric_namespace}
+                        model={model}
+                        post_data={post_data}
+                        metrics={metrics}
+                      />
+                    ),
+                  },
+                  {
+                    name: "data output",
+                    component: (
+                      <FederalDetailOutput
+                        key={this.generateUUID()}
+                        model={model}
+                        post_data={post_data}
+                      />
+                    ),
+                  },
+                  {
+                    name: "log",
+                    component: (
+                      <Log
+                        key={this.generateUUID()}
+                        model={model}
+                        post_data={post_data}
+                      />
+                    ),
+                  },
+                ];
+                break;
+            }
+            this.setState({ names });
+            setTimeout(() => {
+              this.setState({ isLoading: false });
+            }, 500);
+          })
+          .catch(() => {
+            setTimeout(() => {
+              this.setState({ isLoading: false });
+            }, 500);
+          });
+      })
+      .catch(() => {
+        setTimeout(() => {
+          this.setState({ isLoading: false });
+        }, 500);
       });
-    });
-
-    setTimeout(() => {
-      this.setState({ isLoading: false });
-    }, 1500);
   };
 
   render() {
     const { name, metric_namespace, names, isLoading } = this.state;
     return (
       <div className="site-layout-content">
-        <Row justify={"space-between"}>
-          <Col>
-            <h1>{metric_namespace + ":  " + name}</h1>
-          </Col>
-          <Col>
-            <Button
-              loading={isLoading}
-              onClick={this.refresh}
-              icon={<Loading3QuartersOutlined />}
-              style={{ height: "10px" }}
-              type={"link"}
-            >
-              刷新
-            </Button>
-          </Col>
-        </Row>
-        <Tabs defaultActiveKey="1">
-          {names.map((v, i) => {
-            return (
-              <TabPane tab={v.name} key={i}>
-                {v.component}
-              </TabPane>
-            );
-          })}
-        </Tabs>
+        <Spin spinning={isLoading}>
+          <Row justify={"space-between"}>
+            <Col>
+              <h1>{metric_namespace + ":  " + name}</h1>
+            </Col>
+            <Col>
+              <Button
+                loading={isLoading}
+                onClick={this.refresh}
+                icon={<Loading3QuartersOutlined />}
+                style={{ height: "10px" }}
+                type={"link"}
+                disabled={isLoading}
+              >
+                刷新
+              </Button>
+            </Col>
+          </Row>
+          <Tabs disabled={isLoading} defaultActiveKey="1">
+            {names.map((v, i) => {
+              return (
+                <TabPane tab={v.name} key={i}>
+                  {v.component}
+                </TabPane>
+              );
+            })}
+          </Tabs>
+        </Spin>
       </div>
     );
   }

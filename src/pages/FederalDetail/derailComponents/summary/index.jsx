@@ -14,7 +14,6 @@ class Summary extends Component {
 
   componentDidMount() {
     const { metric_namespace, metric_name, post_data } = this.props;
-    console.log(post_data);
     axios
       .post(api.metrics_data, {
         metric_namespace,
@@ -28,6 +27,13 @@ class Summary extends Component {
         }
         this.setState({ data: r.data.data.data });
       });
+  }
+
+  componentWillUnmount() {
+    //处理逻辑
+    this.setState = (state, callback) => {
+      return;
+    };
   }
 
   render() {

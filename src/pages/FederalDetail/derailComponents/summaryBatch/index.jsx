@@ -81,6 +81,13 @@ class SummaryBatch extends Component {
     }
   }
 
+  componentWillUnmount() {
+    //处理逻辑
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
+
   render() {
     const { metrics } = this.props;
     const { data, columns, dataSource, dataSources } = this.state;

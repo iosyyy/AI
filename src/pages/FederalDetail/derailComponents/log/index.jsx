@@ -50,6 +50,13 @@ class Log extends Component {
     };
   }
 
+  componentWillUnmount() {
+    //处理逻辑
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
+
   render() {
     return (
       <div style={{ height: "65vh" }}>

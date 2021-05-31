@@ -48,7 +48,6 @@ class FederalDetail extends Component {
         const d = JSON.parse(data.data.data);
         let treeData;
         treeData = this.getDeatilList([], d);
-        console.log(treeData);
         this.setState({ datas: d, treeData, loading: false, isLoading: true });
       })
       .catch((_m) => {
@@ -59,6 +58,11 @@ class FederalDetail extends Component {
         });
       });
   };
+
+  componentWillUnmount() {
+    //处理逻辑
+  }
+
   generateUUID() {
     let d = new Date().getTime();
     if (window.performance && typeof window.performance.now === "function") {

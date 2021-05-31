@@ -22,14 +22,14 @@ class FederalDetailOutput extends Component {
 
   componentDidMount() {
     const { post_data } = this.state;
-    axios.post(api.data_output, post_data).then(r => {
+    axios.post(api.data_output, post_data).then((r) => {
       if (r.data.code !== 0) {
         message.error(`${r.data.code}:${r.data.msg}`);
         return;
       }
       let { data } = r.data;
       const { header } = data.meta;
-      const columns = header[0].map((v, i) => {
+      const columns = header[0].map((v, _i) => {
         return {
           title: v,
           dataIndex: v,
@@ -58,6 +58,12 @@ class FederalDetailOutput extends Component {
       });
     });
   }
+  componentWillUnmount() {
+    //处理逻辑
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
 
   generateUUID() {
     let d = new Date().getTime();
@@ -78,7 +84,7 @@ class FederalDetailOutput extends Component {
     const { loading, dataSource, columns, total } = this.state;
 
     return (
-      <div style={{ height: "65vh" }} className='scrollContent'>
+      <div style={{ height: "65vh" }} className="scrollContent">
         <div
           style={{
             fontSize: "small",

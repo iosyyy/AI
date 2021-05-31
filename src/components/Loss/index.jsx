@@ -14,7 +14,7 @@ export default class Loss extends Component {
   }
 
   drew() {
-    var option;
+    let option;
     let data1 = [],
       data2 = [];
     this.state.lossHistory.forEach((item, index) => {
@@ -25,7 +25,7 @@ export default class Loss extends Component {
       tooltip: {
         trigger: "axis",
         formatter: function (params) {
-          var htmlStr = "<div>";
+          let htmlStr = "<div>";
           htmlStr += "iteration：" + params[0].axisValue + "<br/>";
           htmlStr += "loss：" + params[0].value;
           htmlStr += "</div>";
@@ -53,8 +53,19 @@ export default class Loss extends Component {
 
   componentDidMount() {
     let dom = document.getElementById("loss");
+    myChart.clear();
+    if (myChart != null && myChart !== "" && myChart !== undefined) {
+      myChart.dispose(); //销毁
+    }
     myChart = echarts.init(dom);
     this.drew();
+  }
+
+  componentWillUnmount() {
+    //处理逻辑
+    this.setState = (state, callback) => {
+      return;
+    };
   }
 
   componentDidUpdate() {
@@ -72,6 +83,13 @@ export default class Loss extends Component {
               onClick={() => {
                 let dom = document.getElementById("loss");
                 myChart.clear();
+                if (
+                  myChart != null &&
+                  myChart !== "" &&
+                  myChart !== undefined
+                ) {
+                  myChart.dispose(); //销毁
+                }
                 myChart = echarts.init(dom);
                 this.drew();
               }}

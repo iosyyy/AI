@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Row, Col, Button, Space, Tabs } from "antd";
+import { Button, Row, Space, Tabs } from "antd";
 import { SyncOutlined } from "@ant-design/icons";
 import * as echarts from "echarts";
 import axios from "axios";
-import _, { map } from "underscore";
+import _ from "underscore";
 import api from "../../config/api";
+
 const { TabPane } = Tabs;
 
 let myChart;
@@ -20,7 +21,6 @@ const graphType = {
 export default class Graphs extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       cur: graphType.Roc,
       title: "Roc",
@@ -32,9 +32,13 @@ export default class Graphs extends Component {
       AccuracyData: { state: -1 },
     };
   }
+
   drew = () => {
     let dom = document.getElementById("metricsGraphs");
     myChart.clear();
+    if (myChart != null && myChart !== "" && myChart !== undefined) {
+      myChart.dispose(); //销毁
+    }
     myChart = echarts.init(dom);
     switch (this.state.cur) {
       case graphType.Roc:
@@ -102,7 +106,7 @@ export default class Graphs extends Component {
         displayMode: "single",
         formatter: function (params) {
           let dataset = that.props.metrics.train[0];
-          var htmlStr = "<div>";
+          let htmlStr = "<div>";
           params.forEach((item, index) => {
             htmlStr += "Thresholds：" + thresholds[item["dataIndex"]] + "<br/>";
             htmlStr += `Tpr(${dataset})：` + item.value + "<br/>";
@@ -159,7 +163,6 @@ export default class Graphs extends Component {
           if (code !== 0) {
             message.error(`${code}: ${msg}`);
           }
-          console.log(r);
 
           tpr = r.data.data.train["homo_lr_0_ks_tpr"].data;
           fpr = r.data.data.train["homo_lr_0_ks_fpr"].data;
@@ -185,7 +188,7 @@ export default class Graphs extends Component {
         displayMode: "single",
         formatter: function (params) {
           let dataset = that.props.metrics.train[0];
-          var htmlStr = "<div>";
+          let htmlStr = "<div>";
           // params[0]是tpr
           // params[1]是fpr
           htmlStr +=
@@ -267,7 +270,7 @@ export default class Graphs extends Component {
         displayMode: "single",
         formatter: function (params) {
           let dataset = that.props.metrics.train[0];
-          var htmlStr = "<div>";
+          let htmlStr = "<div>";
           params.forEach((item, index) => {
             htmlStr +=
               `Thresholds(${dataset})：` +
@@ -322,7 +325,6 @@ export default class Graphs extends Component {
           if (code !== 0) {
             message.error(`${code}: ${msg}`);
           }
-          console.log(r);
 
           gain = r.data.data.train["homo_lr_0_gain"].data;
           thresholds = r.data.data.train["homo_lr_0_gain"].meta.thresholds;
@@ -344,7 +346,7 @@ export default class Graphs extends Component {
         displayMode: "single",
         formatter: function (params) {
           let dataset = that.props.metrics.train[0];
-          var htmlStr = "<div>";
+          let htmlStr = "<div>";
           params.forEach((item, index) => {
             htmlStr +=
               `Thresholds(${dataset})：` +
@@ -403,7 +405,6 @@ export default class Graphs extends Component {
           if (code !== 0) {
             message.error(`${code}: ${msg}`);
           }
-          console.log(r);
 
           precision = r.data.data.train["homo_lr_0_precision"].data;
           recall = r.data.data.train["homo_lr_0_recall"].data;
@@ -429,8 +430,8 @@ export default class Graphs extends Component {
         displayMode: "single",
         formatter: function (params) {
           let dataset = that.props.metrics.train[0];
-          var htmlStr = "<div>";
-          params.forEach((item, index) => {
+          let htmlStr = "<div>";
+          params.forEach((item, _index) => {
             htmlStr +=
               `Thresholds(${dataset})：` +
               thresholds[item["dataIndex"]] +
@@ -486,7 +487,6 @@ export default class Graphs extends Component {
           if (code !== 0) {
             message.error(`${code}: ${msg}`);
           }
-          console.log(r);
 
           accuracy = r.data.data.train["homo_lr_0_accuracy"].data;
           thresholds = r.data.data.train["homo_lr_0_accuracy"].meta.thresholds;
@@ -509,8 +509,8 @@ export default class Graphs extends Component {
         displayMode: "single",
         formatter: function (params) {
           let dataset = that.props.metrics.train[0];
-          var htmlStr = "<div>";
-          params.forEach((item, index) => {
+          let htmlStr = "<div>";
+          params.forEach((item, _index) => {
             htmlStr +=
               `Thresholds(${dataset})：` +
               thresholds[item["dataIndex"]] +
@@ -544,6 +544,13 @@ export default class Graphs extends Component {
     let dom = document.getElementById("metricsGraphs");
     myChart = echarts.init(dom);
     this.drewRoc();
+  }
+
+  componentWillUnmount() {
+    //处理逻辑
+    this.setState = (state, callback) => {
+      return;
+    };
   }
 
   componentDidUpdate() {

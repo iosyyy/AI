@@ -258,6 +258,13 @@ class Metrics extends Component {
       });
   }
 
+  componentWillUnmount() {
+    //处理逻辑
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
+
   onChange1 = (value) => {
     const { tableDataSource1, p_scores, r_scores } = this.state;
     tableDataSource1[0].precision = p_scores[Math.floor(value * 20)][1];
@@ -369,10 +376,7 @@ class Metrics extends Component {
 
         <Divider style={{ margin: "3vh 0", height: "5px" }} />
 
-        <Graphs
-          metrics={this.props.metrics}
-          post_data={this.props.post_data}
-        ></Graphs>
+        <Graphs metrics={this.props.metrics} post_data={this.props.post_data} />
       </div>
     );
   }
