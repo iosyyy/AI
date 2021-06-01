@@ -53,7 +53,6 @@ export default class Loss extends Component {
 
   componentDidMount() {
     let dom = document.getElementById("loss");
-    myChart.clear();
     if (myChart != null && myChart !== "" && myChart !== undefined) {
       myChart.dispose(); //销毁
     }
