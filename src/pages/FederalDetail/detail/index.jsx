@@ -250,8 +250,7 @@ class FederalDetailShow extends Component {
                   },
                 ];
                 break;
-              case "DataIO":
-              case "FeatureScale":
+              default:
                 names = [
                   {
                     name: "summary",
