@@ -149,6 +149,9 @@ class Metrics extends Component {
         if (code !== 0) {
           message.error(`${code}: ${msg}`);
         }
+        if (Object.keys(r.data.data).length === 0) {
+          return;
+        }
         const dataset = Object.keys(r.data.data)[0];
         const {
           homo_lr_0_quantile_pr,

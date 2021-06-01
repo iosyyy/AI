@@ -22,41 +22,52 @@ class FederalDetailOutput extends Component {
 
   componentDidMount() {
     const { post_data } = this.state;
-    axios.post(api.data_output, post_data).then((r) => {
-      if (r.data.code !== 0) {
-        message.error(`${r.data.code}:${r.data.msg}`);
-        return;
-      }
-      let { data } = r.data;
-      const { header } = data.meta;
-      const columns = header[0].map((v, _i) => {
-        return {
-          title: v,
-          dataIndex: v,
-          key: v,
-          align: "center",
-          width: "9vw",
-        };
-      });
-      let dataDeatil = data.data;
-      const dataSource = dataDeatil[0].map((v, i) => {
-        let obj = {};
-        for (let key in v) {
-          if (v.hasOwnProperty(key)) {
-            obj[header[0][key]] = v[key];
-            obj["key"] = i;
-          }
+    axios
+      .post(api.data_output, post_data)
+      .then((r) => {
+        if (r.data.code !== 0) {
+          message.error(`${r.data.code}:${r.data.msg}`);
+          return;
         }
-        obj["key"] = this.generateUUID();
-        return obj;
+        if (Object.keys(r.data.data).length === 0) {
+          return;
+        }
+        let { data } = r.data;
+        const { header } = data.meta;
+        const columns = header[0].map((v, _i) => {
+          return {
+            title: v,
+            dataIndex: v,
+            key: v,
+            align: "center",
+            width: "9vw",
+          };
+        });
+        let dataDeatil = data.data;
+        const dataSource = dataDeatil[0].map((v, i) => {
+          let obj = {};
+          for (let key in v) {
+            if (v.hasOwnProperty(key)) {
+              obj[header[0][key]] = v[key];
+              obj["key"] = i;
+            }
+          }
+          obj["key"] = this.generateUUID();
+          return obj;
+        });
+        this.setState({
+          columns,
+          dataSource,
+          loading: false,
+          total: data.meta.total,
+        });
+      })
+      .catch(() => {
+        message.error("未知异常错误");
+        this.setState({
+          loading: false,
+        });
       });
-      this.setState({
-        columns,
-        dataSource,
-        loading: false,
-        total: data.meta.total,
-      });
-    });
   }
   componentWillUnmount() {
     //处理逻辑

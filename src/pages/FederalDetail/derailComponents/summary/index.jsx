@@ -25,7 +25,16 @@ class Summary extends Component {
           message.error(`${r.data.code}:${r.data.msg}`);
           return;
         }
+        if (Object.keys(r.data.data).length === 0) {
+          return;
+        }
         this.setState({ data: r.data.data.data });
+      })
+      .catch(() => {
+        message.error("未知异常错误");
+        this.setState({
+          loading: false,
+        });
       });
   }
 

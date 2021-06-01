@@ -85,6 +85,12 @@ class FederalDetailShow extends Component {
           message.error(`${r.data.code}:${r.data.msg}`);
           return;
         }
+        if (Object.keys(r.data.data).length === 0) {
+          this.setState({
+            isLoading: false,
+          });
+          return;
+        }
         const model = r;
         // 获取Metrics
         axios

@@ -54,6 +54,7 @@
     "echarts": "^5.0.1",
     "echarts-for-react": "^2.0.16",
     "encoding": "^0.1.13",
+    "express": "^4.17.1",
     "file-saver": "^2.0.5",
     "force-graph": "^1.36.2",
     "iconv-lite": "^0.6.2",

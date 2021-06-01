@@ -57,6 +57,12 @@ class SummaryBatch extends Component {
             message.error(`${r.data.code}:${r.data.msg}`);
             return;
           }
+          if (Object.keys(r.data.data).length === 0) {
+            this.setState({
+              loading: false,
+            });
+            return;
+          }
           const { reader_name } = r.data.data.reader_namespace;
           const tableInfo = reader_name.meta.table_info;
           let dataSource = [];
@@ -76,6 +82,12 @@ class SummaryBatch extends Component {
             data: reader_name,
             dataSource,
             dataSources: dataSource,
+          });
+        })
+        .catch(() => {
+          message.error("未知异常错误");
+          this.setState({
+            loading: false,
           });
         });
     }
