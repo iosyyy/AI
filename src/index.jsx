@@ -7,10 +7,10 @@ import zhCN from "antd/lib/locale/zh_CN";
 require("./setupProxy");
 
 ReactDOM.render(
-  <BrowserRouter>
+  <HashRouter>
     <ConfigProvider locale={zhCN}>
       <App />
     </ConfigProvider>
-  </BrowserRouter>,
+  </HashRouter>,
   document.getElementById("root")
 );
