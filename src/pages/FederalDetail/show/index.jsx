@@ -5,11 +5,14 @@ import api from "../../../config/api";
 import dayjs from "dayjs";
 import axios from "axios";
 import PubSubJS from "pubsub-js";
+import qs from "qs";
 
 class FederalDetail extends Component {
   constructor(props) {
     super(props);
-    const { cur } = this.props.location.state;
+    const search = props.location.search;
+    const cur = qs.parse(search.replace(/^\?/, ""));
+
     const startTime = dayjs(cur.startTime).format("YYYY/MM/DD hh:mm:ss");
     const endTime = dayjs(cur.endTime).format("YYYY/MM/DD hh:mm:ss");
     const duration = cur.duration / 1000;
@@ -233,13 +236,13 @@ class FederalDetail extends Component {
                   if (this.state.dataIndex !== -1) {
                     this.props.history.push({
                       pathname: "/federalDetail/detail",
-                      state: {
+                      search: qs.stringify({
                         name: this.state.names[this.state.dataIndex],
                         id,
                         role,
                         partyId,
-                        treeData: this.state.datas,
-                      },
+                        module: this.state.datas.module,
+                      }),
                     });
                   }
                 }}

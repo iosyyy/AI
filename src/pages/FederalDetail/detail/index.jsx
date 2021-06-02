@@ -12,13 +12,17 @@ import Metrics from "../derailComponents/metrics";
 import { message } from "antd/es";
 import ModelOutput from "../derailComponents/modelOutput";
 import SummaryBatch from "../derailComponents/summaryBatch";
+import qs from "qs";
 
 const { TabPane } = Tabs;
 
 class FederalDetailShow extends Component {
   constructor(props) {
     super(props);
-    const { name, id, partyId, role, treeData } = this.props.location.state;
+    const search = props.location.search;
+    const cur = qs.parse(search.replace(/^\?/, ""));
+
+    const { name, id, partyId, role, module } = cur;
     /**
      * @param isLoading 代表是否正在刷新的状态
      * @param role,id,partyId,role 代表所需的post_data的基本属性
@@ -37,7 +41,7 @@ class FederalDetailShow extends Component {
       names: [],
       loading: [],
       isLoading: false,
-      treeData,
+      module,
     };
   }
 
@@ -65,7 +69,7 @@ class FederalDetailShow extends Component {
   refresh = () => {
     this.setState({ isLoading: true });
 
-    const { id, name, partyId, role, treeData } = this.state;
+    const { id, name, partyId, role, module } = this.state;
     let data = {};
     let post_data = {
       component_name: name,
@@ -73,7 +77,7 @@ class FederalDetailShow extends Component {
       party_id: partyId,
       role: role,
     };
-    let namew = treeData.module;
+    let namew = module;
     this.setState({
       metric_namespace: namew,
     });

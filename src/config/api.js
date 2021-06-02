@@ -1,18 +1,20 @@
 //本地代理（代理需要在setupProxy.js中配置）
 const host = window.location.origin;
-const ws = "ws://8.136.225.205:8080";
+const baseHost = "http://8.136.225.205:9380";
+
+const ws = `ws://8.136.225.205:8080`;
 const e = {
   pageList: host + "/job/query/page/new", // 详情界面url
   showList: ws + "/websocket/progress/{jobId}/{role}/{partyId}",
   showDetailMetrics: host + "/v1/tracking/component/metrics",
   showDetailOutputModel: host + "/v1/tracking/component/output/model",
   showDetailParameters: host + "/v1/tracking/component/parameters",
-  taskUpload: host + "/v1/client/upload",
-  beginTrain: host + "/v1/client/submit/job",
+  taskUpload: baseHost + "/v1/client/upload",
+  beginTrain: baseHost + "/v1/client/submit/job",
   isTrainingDetail: host + "/job/query/status",
   logDetail: ws + "/log/new/{id}/{role}/{partyId}/default",
   jobUpdate: host + "/job/update",
-  downloadTemplate: host + "/v1/client/download/template",
+  downloadTemplate: baseHost + "/v1/client/download/template",
   stopJob: host + "/job/v1/pipeline/job/stop",
   getJobOutput: host + "/v1/tracking/component/output/model",
   metrics: host + "/v1/tracking/component/metrics",

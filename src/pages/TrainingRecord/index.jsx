@@ -16,6 +16,7 @@ import NoteImg from "../../img/Note.png";
 import NoteHover from "../../img/NoteHover.png";
 import api from "../../config/api";
 import PubSubJS from "pubsub-js";
+import qs from "qs";
 
 const { Option } = Select;
 
@@ -40,7 +41,15 @@ class TrainingRecord extends Component {
                 )[0];
                 this.props.history.push({
                   pathname: "/federalDetail/show",
-                  state: { cur },
+                  search: qs.stringify({
+                    id: cur.id,
+                    role: cur.role,
+                    partyId: cur.partyId,
+                    status: cur.status,
+                    startTime: cur.startTime,
+                    endTime: cur.endTime,
+                    duration: cur.duration,
+                  }),
                 });
               }}
             >
