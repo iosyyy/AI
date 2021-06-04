@@ -13,8 +13,8 @@ class FederalDetail extends Component {
     const search = props.location.search;
     const cur = qs.parse(search.replace(/^\?/, ""));
 
-    const startTime = dayjs(cur.startTime).format("YYYY/MM/DD hh:mm:ss");
-    const endTime = dayjs(cur.endTime).format("YYYY/MM/DD hh:mm:ss");
+    const startTime = new Date(cur.startTime).toLocaleTimeString();
+    const endTime = new Date(cur.endTime).toLocaleTimeString();
     const duration = cur.duration / 1000;
     this.state = {
       id: cur.id,

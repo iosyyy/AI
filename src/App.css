@@ -7,6 +7,14 @@
   box-shadow: 0 10px 6px rgb(158,199,210);
 
 }
+
+/* App.css */
+.diagram-component {
+  width: 400px;
+  height: 400px;
+  border: solid 1px black;
+  background-color: white;
+}
 .layout .logo {
   float: left;
   width: 120px;

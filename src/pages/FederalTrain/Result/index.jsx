@@ -66,7 +66,7 @@ class FederalResult extends Component {
     axios
       .post(api.taskUpload, formData)
       .then((r) => {
-        if (r.data.retcode === 0) {
+        if (r.data.code === 0 || r.data.retcode === 0) {
           message.success("上传成功");
           this.setState({
             isLoading,
