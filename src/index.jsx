@@ -4,6 +4,7 @@ import { BrowserRouter, HashRouter } from "react-router-dom";
 import App from "./App";
 import { ConfigProvider } from "antd";
 import zhCN from "antd/lib/locale/zh_CN";
+import MainGraph from "./components/MainGraph";
 require("./setupProxy");
 
 ReactDOM.render(

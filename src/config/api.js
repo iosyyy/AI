@@ -1,8 +1,16 @@
+import pack from "../../package.json";
 //本地代理（代理需要在setupProxy.js中配置）
 const host = window.location.origin;
-const baseHost = "http://8.136.225.205:9380";
+let baseHost = window.location.origin;
+let ws;
+if (pack.env === "dev") {
+  ws = `ws://${window.location.hostname}:${window.location.port}`;
+  baseHost = window.location.origin;
+} else {
+  ws = `ws://8.136.225.205:8080`;
+  baseHost = window.location.origin + "/api";
+}
 
-const ws = `ws://8.136.225.205:8080`;
 const e = {
   pageList: host + "/job/query/page/new", // 详情界面url
   showList: ws + "/websocket/progress/{jobId}/{role}/{partyId}",
