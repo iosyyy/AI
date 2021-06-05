@@ -17,6 +17,9 @@ export default class Loss extends Component {
     let option;
     let data1 = [],
       data2 = [];
+    if (!this.state.lossHistory) {
+      return;
+    }
     this.state.lossHistory.forEach((item, index) => {
       data1.push(String(index));
       data2.push(item);

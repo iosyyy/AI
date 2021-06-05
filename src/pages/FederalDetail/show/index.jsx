@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import axios from "axios";
 import PubSubJS from "pubsub-js";
 import qs from "qs";
+import MainGraph from "../../../components/MainGraph";
 
 class FederalDetail extends Component {
   constructor(props) {
@@ -29,8 +30,9 @@ class FederalDetail extends Component {
       treeData: [],
       d: {},
       loading: false,
-      dataIndex: -1,
+      dataIndex: "",
       datas: [],
+      component_list: [],
       isLoading: false,
     };
   }
@@ -42,15 +44,21 @@ class FederalDetail extends Component {
     });
     axios
       .post(api.showDetailParameters, {
-        component_name: this.state.names[index],
+        component_name: index,
         job_id: this.state.id,
         party_id: this.state.partyId,
         role: this.state.role,
       })
       .then((data) => {
-        const d = JSON.parse(data.data.data);
+        let d = JSON.parse(data.data.data);
         let treeData;
         treeData = this.getDeatilList([], d);
+        if (!d || Object.keys(d).length === 0) {
+          d = [{ title: "No Dates", key: "No Dates" }];
+          this.setState({ datas: d, loading: true, isLoading: false });
+          return;
+        }
+        console.log(d);
         this.setState({ datas: d, treeData, loading: false, isLoading: true });
       })
       .catch((_m) => {
@@ -119,10 +127,9 @@ class FederalDetail extends Component {
 
     socket.onmessage = (data) => {
       const d = JSON.parse(data.data);
-      const names = d.dependency_data.component_list.map(
-        (item) => item.component_name
-      );
-      this.setState({ names });
+      const { component_list } = d.dependency_data;
+      const names = component_list.map((item) => item.component_name);
+      this.setState({ names, component_list });
     };
   }
 
@@ -132,7 +139,7 @@ class FederalDetail extends Component {
   }
 
   render() {
-    const { id, role, partyId } = this.state;
+    const { id, role, partyId, component_list, names } = this.state;
 
     return (
       <div
@@ -192,11 +199,12 @@ class FederalDetail extends Component {
                   marginLeft: "3vh",
                   border: "1px solid",
                   backgroundColor: "rgb(240,240,240)",
-                  height: "65vh",
                 }}
               >
-                <Show
-                  names={this.state.names}
+                <MainGraph
+                  key={component_list}
+                  component_list={component_list}
+                  names={names}
                   symbolSize={60}
                   id="show"
                   change={this.onChange}
@@ -233,11 +241,11 @@ class FederalDetail extends Component {
               </Spin>
               <Button
                 onClick={(_e) => {
-                  if (this.state.dataIndex !== -1) {
+                  if (this.state.dataIndex !== "") {
                     this.props.history.push({
                       pathname: "/federalDetail/detail",
                       search: qs.stringify({
-                        name: this.state.names[this.state.dataIndex],
+                        name: this.state.dataIndex,
                         id,
                         role,
                         partyId,
