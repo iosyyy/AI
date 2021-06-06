@@ -39,24 +39,7 @@ class MainGraph extends Component {
       message.error("参数错误");
       return null;
     }
-    const success = component_list
-      .filter((v, i) => {
-        return (
-          v.status === "success" ||
-          v.status === "waiting" ||
-          v.status === "canceled"
-        );
-      })
-      .map((v, i) => {
-        return v.component_name;
-      });
-    const disabledChange = component_list
-      .filter((v, i) => {
-        return v.status === "canceled" || v.status === "waiting";
-      })
-      .map((v, i) => {
-        return v.component_name;
-      });
+
     const nodeColors = component_list.map((v, i) => {
       return `${
         v.status === "success"
@@ -122,7 +105,7 @@ class MainGraph extends Component {
         $(
           go.Shape,
           "RoundedRectangle",
-          { strokeWidth: 0, width: 85, height: 35 },
+          { margin: 10, strokeWidth: 0, width: 85, height: 35 },
           new go.Binding("fill", "color"),
           new go.Binding("fill", "isSelected", function (sel, node) {
             if (sel) {
@@ -154,8 +137,9 @@ class MainGraph extends Component {
 
       $(
         go.Picture,
-        { margin: 10, maxSize: new go.Size(50, 50), width: 15, height: 15 },
-        new go.Binding("source", "img")
+        { width: 15, height: 15 },
+        new go.Binding("source", "img"),
+        new go.Binding("angle")
       )
     );
     diagram.linkTemplate = $(
@@ -223,6 +207,8 @@ class MainGraph extends Component {
             node.elt(0).elt(0).fill,
             go.Brush.randomColor()
           );
+
+          animation.add(node.elt(1), "angle", 0, 361);
           animation.duration = 1000;
           animation.reversible = true; // Re-run backwards
           animation.runCount = Infinity; // Animate forever
