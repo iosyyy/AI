@@ -17,7 +17,6 @@
     "jschardet": "^2.3.0",
     "moment": "^2.29.1",
     "node-sass": "^5.0.0",
-    "prettier": "^2.2.1",
     "process": "^0.11.10",
     "pubsub-js": "^1.9.2",
     "qs": "^6.10.1",
@@ -52,7 +51,6 @@
   "devDependencies": {
     "@ant-design/icons": "^4.5.0",
     "antd": "^4.11.2",
-    "babel-eslint": "^10.1.0",
     "babel-plugin-import": "^1.13.3",
     "echarts": "^5.0.1",
     "echarts-for-react": "^2.0.16",
