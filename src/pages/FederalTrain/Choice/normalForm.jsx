@@ -5,8 +5,13 @@ import { withRouter } from "react-router-dom";
 class NormalForm extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      loading: false,
+    };
   }
   render() {
+    const { loading } = this.state;
+
     // 表单样式
     const tailLayout = {
       wrapperCol: { offset: 9 },
@@ -19,23 +24,33 @@ class NormalForm extends Component {
     return (
       <Form
         size={"middle"}
-        onFinish={e => {
+        onFinish={(e) => {
+          const { setLoading } = this.props;
+
+          this.setState({
+            loading: true,
+          });
+          setLoading(true);
           const formData = new FormData();
           formData.append("train_name", "123");
+          this.setState({
+            loading: false,
+          });
+          setLoading(false);
         }}
         {...layout}
       >
         <Form.Item
-          name='trainName'
-          label='任务名称'
+          name="trainName"
+          label="任务名称"
           rules={[
             { required: true, whitespace: true, message: "请输入任务名称" },
           ]}
         >
-          <Input placeholder='请输入任务名称' />
+          <Input placeholder="请输入任务名称" />
         </Form.Item>
 
-        <Form.Item name='trainType' label='任务类型' initialValue='single'>
+        <Form.Item name="trainType" label="任务类型" initialValue="single">
           <Radio.Group>
             <Radio value={"single"}>单机</Radio>
             <Radio value={"multi"}>多机</Radio>
@@ -43,18 +58,18 @@ class NormalForm extends Component {
         </Form.Item>
 
         <Form.Item
-          name='algorithm'
-          label='采用算法'
+          name="algorithm"
+          label="采用算法"
           rules={[
             { required: true, whitespace: true, message: "请输入采用算法" },
           ]}
         >
-          <Input placeholder='请输入采用算法' />
+          <Input placeholder="请输入采用算法" />
         </Form.Item>
 
         <Form.Item
-          name='algorithmParms'
-          label='算法参数'
+          name="algorithmParms"
+          label="算法参数"
           rules={[
             {
               required: true,
@@ -79,17 +94,17 @@ class NormalForm extends Component {
           />
         </Form.Item>
 
-        <Form.Item name='isScale' label='isScale' initialValue='true'>
+        <Form.Item name="isScale" label="isScale" initialValue="true">
           <Radio.Group>
             <Radio value={"true"}>是</Radio>
             <Radio value={"false"}>否</Radio>
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item name='postScript' label='备注信息'>
+        <Form.Item name="postScript" label="备注信息">
           <Input.TextArea
             style={{ resize: "none" }}
-            placeholder='备注信息可选'
+            placeholder="备注信息可选"
           />
         </Form.Item>
 
@@ -104,7 +119,7 @@ class NormalForm extends Component {
           </a>
         </Form.Item>
 
-        <Form.Item {...tailLayout} style={{ marginTop: "10vh" }}>
+        <Form.Item {...tailLayout} style={{ marginTop: "8vh" }}>
           <Space size={200}>
             <Button
               style={{ background: "rgb(201,201,201)" }}
@@ -113,11 +128,16 @@ class NormalForm extends Component {
                   pathname: "/federalTrain/result",
                 });
               }}
-              size='large'
+              size="large"
             >
               上一步
             </Button>
-            <Button type='primary' htmlType='submit' size='large'>
+            <Button
+              loading={loading}
+              type="primary"
+              htmlType="submit"
+              size="large"
+            >
               提交
             </Button>
           </Space>

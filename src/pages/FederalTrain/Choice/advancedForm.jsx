@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Form, Input, Button, Upload, message, Space } from "antd";
 import { withRouter } from "react-router-dom";
+import axios from "axios";
+import api from "../../../config/api";
 
 class AdvancedForm extends Component {
   constructor(props) {
@@ -9,9 +11,11 @@ class AdvancedForm extends Component {
       trainName: "homo_logistic_regression",
       fileList1: [],
       fileList2: [],
+      loading: false,
     };
   }
   render() {
+    const { loading } = this.state;
     // 表单样式
     const tailLayout = {
       wrapperCol: { offset: 9 },
@@ -25,8 +29,8 @@ class AdvancedForm extends Component {
     const { fileList1, fileList2 } = this.state;
     // upload组件属性
     const props1 = {
-      onRemove: file => {
-        this.setState(state => {
+      onRemove: (file) => {
+        this.setState((state) => {
           const index = state.fileList1.indexOf(file);
           const newFileList = state.fileList1.slice();
           newFileList.splice(index, 1);
@@ -35,8 +39,8 @@ class AdvancedForm extends Component {
           };
         });
       },
-      beforeUpload: file => {
-        this.setState(state => ({
+      beforeUpload: (file) => {
+        this.setState((state) => ({
           fileList1: [file],
         }));
         return false;
@@ -45,8 +49,8 @@ class AdvancedForm extends Component {
     };
     // upload组件属性
     const props2 = {
-      onRemove: file => {
-        this.setState(state => {
+      onRemove: (file) => {
+        this.setState((state) => {
           const index = state.fileList2.indexOf(file);
           const newFileList = state.fileList2.slice();
           newFileList.splice(index, 1);
@@ -55,8 +59,8 @@ class AdvancedForm extends Component {
           };
         });
       },
-      beforeUpload: file => {
-        this.setState(state => ({
+      beforeUpload: (file) => {
+        this.setState((state) => ({
           fileList2: [file],
         }));
         return false;
@@ -66,15 +70,21 @@ class AdvancedForm extends Component {
     return (
       <Form
         size={"middle"}
-        onFinish={e => {
+        onFinish={(e) => {
+          const { setLoading } = this.props;
+          this.setState({
+            loading: true,
+          });
+          setLoading(loading);
+
           let { trainName } = e;
           let { fileList1, fileList2 } = this.state;
           const formData = new FormData();
           formData.append("train_name", trainName);
-          fileList1.forEach(file => {
+          fileList1.forEach((file) => {
             formData.append("config_file", file);
           });
-          fileList2.forEach(file => {
+          fileList2.forEach((file) => {
             formData.append("dsl_file", file);
           });
           if (
@@ -88,7 +98,7 @@ class AdvancedForm extends Component {
               processData: false,
               data: formData,
             })
-              .then(res => {
+              .then((res) => {
                 this.setState({
                   fileList1: [],
                   fileList2: [],
@@ -99,19 +109,28 @@ class AdvancedForm extends Component {
                   state: { data: res.data },
                 });
               })
-              .catch(res => {
+              .catch((res) => {
+                this.setState({
+                  loading: false,
+                });
+                setLoading(loading);
+
                 message.error("上传失败");
                 console.error(res);
               });
           } else {
             message.error("请提交文件config文件与dsl文件");
+            this.setState({
+              loading: false,
+            });
+            setLoading(loading);
           }
         }}
         {...layout}
       >
         <Form.Item
-          name='trainName'
-          label='train_name'
+          name="trainName"
+          label="train_name"
           initialValue={this.state.trainName}
           rules={[{ required: true, message: "请输入任务名称" }]}
         >
@@ -119,8 +138,8 @@ class AdvancedForm extends Component {
         </Form.Item>
 
         <Form.Item
-          name='configFile'
-          label='config_file'
+          name="configFile"
+          label="config_file"
           rules={[{ required: true, message: "请添加config文件" }]}
         >
           <div
@@ -133,10 +152,10 @@ class AdvancedForm extends Component {
             }}
           >
             <Upload {...props1}>
-              <Button type='primary'>选择文件</Button>
+              <Button type="primary">选择文件</Button>
             </Upload>
             <Button
-              type='primary'
+              type="primary"
               style={{ width: "130px", position: "absolute", right: "10px" }}
               onClick={() => {
                 this.downloadTempalte("config_file");
@@ -148,8 +167,8 @@ class AdvancedForm extends Component {
         </Form.Item>
 
         <Form.Item
-          name='dslFile'
-          label='dsl_file'
+          name="dslFile"
+          label="dsl_file"
           rules={[{ required: true, message: "请添加dsl文件" }]}
         >
           <div
@@ -162,10 +181,10 @@ class AdvancedForm extends Component {
             }}
           >
             <Upload {...props2}>
-              <Button type='primary'>选择文件</Button>
+              <Button type="primary">选择文件</Button>
             </Upload>
             <Button
-              type='primary'
+              type="primary"
               style={{ width: "130px", position: "absolute", right: "10px" }}
               onClick={() => {
                 this.downloadTempalte("dsl_file");
@@ -196,11 +215,16 @@ class AdvancedForm extends Component {
                   pathname: "/federalTrain/result",
                 });
               }}
-              size='large'
+              size="large"
             >
               上一步
             </Button>
-            <Button type='primary' htmlType='submit' size='large'>
+            <Button
+              loading={loading}
+              type="primary"
+              htmlType="submit"
+              size="large"
+            >
               提交
             </Button>
           </Space>

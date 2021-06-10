@@ -1,5 +1,19 @@
 import React, { Component } from "react";
-import { Button, Col, Form, Input, Row, Space, Steps } from "antd";
+import {
+  Button,
+  Col,
+  Form,
+  Image,
+  Input,
+  message,
+  Row,
+  Space,
+  Steps,
+  Upload,
+} from "antd";
+import axios from "axios";
+import api from "../../../config/api";
+import FileImg from "../../../img/file.png";
 import "antd/dist/antd.css";
 import {
   CloudUploadOutlined,
@@ -13,32 +27,71 @@ import StepsTemplate from "../../../components/StepsTemplate";
 
 const { Step } = Steps;
 
-class FederalResult extends Component {
+class DataSourceUpload extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      hello: "hello it is an result",
       fileList: [[], []],
       uploadKey: 0,
       isLoading: [false],
+      namespaces: [],
+      tables: [],
       disables: [],
       uploadIng: false,
-      tableCode: [],
-      userID: [],
     };
   }
 
-  onFormFinish = (ew) => {};
-
-  toNextPage = () => {
-    this.props.history.push({
-      pathname: "/federalTrain/choice",
+  onFormFinish = (ew) => {
+    const { uploadKey, isLoading, namespaces, tables, disables } = this.state;
+    const e = ew.users[uploadKey];
+    const dis = disables.map((v, i) => {
+      return false;
     });
-  };
-
-  toLastPage = () => {
-    this.props.history.push({
-      pathname: "/federalTrain/form",
-    });
+    isLoading[uploadKey] = false;
+    const formData = new FormData();
+    if (tables[uploadKey] && e.dataset && tables[uploadKey]) {
+      formData.append("file", e.dataset.file);
+      formData.append("table_name", tables[uploadKey]);
+      formData.append("namespace", namespaces[uploadKey]);
+    } else {
+      message.error("数据填写错误,请重新填写");
+      this.setState({
+        isLoading,
+        disables: dis,
+        uploadIng: false,
+      });
+      return;
+    }
+    axios
+      .post(api.taskUpload, formData)
+      .then((r) => {
+        if (r.data.code === 0 || r.data.retcode === 0) {
+          message.success("上传成功");
+          this.setState({
+            isLoading,
+            disables: dis,
+            uploadIng: false,
+          });
+        } else {
+          message.error(r.data.retcode + ":" + r.data.retmsg).then((r) => {
+            console.log(r);
+          });
+          this.setState({
+            isLoading,
+            disables: dis,
+            uploadIng: false,
+          });
+        }
+      })
+      .catch((e) => {
+        message.error("服务器链接异常");
+        this.setState({
+          isLoading,
+          disables: dis,
+          uploadIng: false,
+        });
+      });
   };
 
   render() {
@@ -47,84 +100,86 @@ class FederalResult extends Component {
     const { uploadIng } = this.state;
     return (
       <div style={{ height: "80vh" }} className="site-layout-content">
-        <StepsTemplate
-          steps={[
-            { status: "finish", title: "联邦类型", icon: <FileOutlined /> },
-            {
-              status: "process",
-              title: "数据集选择",
-              icon: uploadIng ? <LoadingOutlined /> : <CloudUploadOutlined />,
-            },
-            {
-              status: "wait",
-              title: "参数配置",
-              icon: <DownloadOutlined />,
-            },
-          ]}
-        />
         <Row
           justify={"center"}
           className={"scrollContent"}
           style={{ height: "60vh" }}
         >
           <Col>
-            {/*TODO 目前处于测试阶段固禁用此表单*/}
-            <Form
-              disabled
-              size={"middle"}
-              onFinish={this.onFormFinish}
-              {...layout}
-            >
+            <Form size={"middle"} onFinish={this.onFormFinish} {...layout}>
               <Form.List rules={[{ required: true }]} name="users">
                 {(fields, { add, remove }) => (
                   <div>
                     {fields.map(({ key, name, fieldKey, ...restField }) => (
                       <Space
-                        size={15}
                         key={key}
                         style={{ display: "flex", marginBottom: 8 }}
                         align="baseline"
                       >
                         <Form.Item
+                          style={{ width: "18vw", marginTop: "1vh" }}
+                          name={[name, "dataset"]}
+                          fieldKey={[fieldKey, "dataset"]}
+                          label="数据集选择"
+                        >
+                          <Upload
+                            maxCount={1}
+                            beforeUpload={() => {
+                              return false;
+                            }}
+                            iconRender={() => {
+                              return (
+                                <Image
+                                  preview={false}
+                                  style={{ width: "13px" }}
+                                  src={FileImg}
+                                />
+                              );
+                            }}
+                          >
+                            <Button>选择文件</Button>
+                          </Upload>
+                        </Form.Item>
+                        <Form.Item
                           style={{ marginTop: "1vh" }}
                           name={[name, "table_name"]}
                           fieldKey={[fieldKey, "table_name"]}
-                          label={"成员ID"}
+                          label={"表名"}
                         >
                           <Input
                             value={this.state.tables}
                             onChange={(e) => {
-                              const { userID } = this.state;
-                              userID[key] = e.target.value;
+                              const { tables } = this.state;
+                              tables[key] = e.target.value;
                               this.setState({
-                                userID,
+                                tables,
                               });
                             }}
                             onPressEnter={(e) => {
                               e.preventDefault();
                             }}
-                            placeholder={"请输入成员ID"}
+                            placeholder={"请输入表名"}
                           />
                         </Form.Item>
                         <Form.Item
                           style={{ marginTop: "1vh" }}
                           name={[name, "namespace"]}
                           fieldKey={[fieldKey, "namespace"]}
-                          label={"数据表代码"}
+                          label={"命名空间"}
                         >
                           <Input
                             value={this.state.namespaces}
                             onChange={(e) => {
-                              const { tableCode } = this.state;
-                              tableCode[key] = e.target.value;
+                              const { namespaces } = this.state;
+                              namespaces[key] = e.target.value;
                               this.setState({
-                                tableCode,
+                                namespaces,
                               });
                             }}
                             onPressEnter={(e) => {
                               e.preventDefault();
                             }}
-                            placeholder={"请输入数据表代码"}
+                            placeholder={"请输入命名空间"}
                           />
                         </Form.Item>
                         <Form.Item style={{ marginTop: "1vh" }} {...tailLayout}>
@@ -171,7 +226,7 @@ class FederalResult extends Component {
                         block
                         icon={<PlusOutlined />}
                       >
-                        添加新的数据集选择
+                        添加新的数据集
                       </Button>
                     </Form.Item>
                   </div>
@@ -180,23 +235,9 @@ class FederalResult extends Component {
             </Form>
           </Col>
         </Row>
-        <Row style={{ marginTop: "30px" }} justify={"center"}>
-          <Space size={300}>
-            <Button
-              onClick={this.toLastPage}
-              style={{ background: "rgb(201,201,201)" }}
-              size="large"
-            >
-              上一步
-            </Button>
-            <Button onClick={this.toNextPage} type="primary" size="large">
-              下一步
-            </Button>
-          </Space>
-        </Row>
       </div>
     );
   }
 }
 
-export default FederalResult;
+export default DataSourceUpload;
