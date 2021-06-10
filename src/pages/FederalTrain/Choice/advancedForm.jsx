@@ -89,24 +89,15 @@ class AdvancedForm extends Component {
               data: formData,
             })
               .then(res => {
-                if (
-                  res.data.body instanceof "string"
-                    ? JSON.parse(res.data.body).retcode === 0
-                    : res.data.body.retcode === 0
-                ) {
-                  this.setState({
-                    fileList1: [],
-                    fileList2: [],
-                  });
-                  message.success("上传成功");
-                  this.props.history.push({
-                    pathname: "/training",
-                    state: { data: res.data },
-                  });
-                } else {
-                  message.error("上传失败");
-                  console.error(res);
-                }
+                this.setState({
+                  fileList1: [],
+                  fileList2: [],
+                });
+                message.success("上传成功");
+                this.props.history.push({
+                  pathname: "/training",
+                  state: { data: res.data },
+                });
               })
               .catch(res => {
                 message.error("上传失败");
@@ -119,17 +110,22 @@ class AdvancedForm extends Component {
         {...layout}
       >
         <Form.Item
-          name="trainName"
-          label="train_name"
+          name='trainName'
+          label='train_name'
           initialValue={this.state.trainName}
+          rules={[{ required: true, message: "请输入任务名称" }]}
         >
           <Input disabled />
         </Form.Item>
 
-        <Form.Item name="configFile" label="config_file">
+        <Form.Item
+          name='configFile'
+          label='config_file'
+          rules={[{ required: true, message: "请添加config文件" }]}
+        >
           <div
             style={{
-              width: "300px",
+              width: "260px",
               display: "flex",
               alignItems: "start",
               justifyContent: "space-between",
@@ -137,10 +133,10 @@ class AdvancedForm extends Component {
             }}
           >
             <Upload {...props1}>
-              <Button type="primary">选择文件</Button>
+              <Button type='primary'>选择文件</Button>
             </Upload>
             <Button
-              type="primary"
+              type='primary'
               style={{ width: "130px", position: "absolute", right: "10px" }}
               onClick={() => {
                 this.downloadTempalte("config_file");
@@ -151,10 +147,14 @@ class AdvancedForm extends Component {
           </div>
         </Form.Item>
 
-        <Form.Item name="dslFile" label="dsl_file">
+        <Form.Item
+          name='dslFile'
+          label='dsl_file'
+          rules={[{ required: true, message: "请添加dsl文件" }]}
+        >
           <div
             style={{
-              width: "300px",
+              width: "260px",
               display: "flex",
               alignItems: "start",
               justifyContent: "space-between",
@@ -162,10 +162,10 @@ class AdvancedForm extends Component {
             }}
           >
             <Upload {...props2}>
-              <Button type="primary">选择文件</Button>
+              <Button type='primary'>选择文件</Button>
             </Upload>
             <Button
-              type="primary"
+              type='primary'
               style={{ width: "130px", position: "absolute", right: "10px" }}
               onClick={() => {
                 this.downloadTempalte("dsl_file");
@@ -196,11 +196,11 @@ class AdvancedForm extends Component {
                   pathname: "/federalTrain/result",
                 });
               }}
-              size="large"
+              size='large'
             >
               上一步
             </Button>
-            <Button type="primary" htmlType="submit" size="large">
+            <Button type='primary' htmlType='submit' size='large'>
               提交
             </Button>
           </Space>
