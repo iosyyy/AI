@@ -60,6 +60,7 @@
     "force-graph": "^1.36.2",
     "gojs-react": "^1.0.10",
     "iconv-lite": "^0.6.2",
+    "mockjs": "^1.1.0",
     "ngx-echarts": "^6.0.0",
     "papaparse": "^5.3.0",
     "react-router": "^5.2.0",

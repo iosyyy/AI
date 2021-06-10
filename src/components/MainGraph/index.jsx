@@ -105,7 +105,7 @@ class MainGraph extends Component {
         $(
           go.Shape,
           "RoundedRectangle",
-          { margin: 10, strokeWidth: 0, width: 85, height: 35 },
+          { margin: 0, strokeWidth: 0, width: 85, height: 35 },
           new go.Binding("fill", "color"),
           new go.Binding("fill", "isSelected", function (sel, node) {
             if (sel) {
@@ -137,7 +137,7 @@ class MainGraph extends Component {
 
       $(
         go.Picture,
-        { width: 15, height: 15 },
+        { margin: 10, width: 15, height: 15 },
         new go.Binding("source", "img"),
         new go.Binding("angle")
       )

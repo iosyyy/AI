@@ -80,7 +80,7 @@ class App extends Component {
               </Menu.Item>
             </Menu>
           </Header>
-          <Content style={{ padding: "20px 50px" }}>
+          <Content style={{ padding: "2vh 3vw" }}>
             <Switch>
               <Route path="/federalTrain" component={FederalIndex} />
               <Route path="/normal" component={Normal} />

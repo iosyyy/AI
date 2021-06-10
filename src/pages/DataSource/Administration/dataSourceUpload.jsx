@@ -99,11 +99,11 @@ class DataSourceUpload extends Component {
     const layout = {};
     const { uploadIng } = this.state;
     return (
-      <div style={{ height: "80vh" }} className="site-layout-content">
+      <div style={{ height: "80vh", padding: 0 }}>
         <Row
           justify={"center"}
           className={"scrollContent"}
-          style={{ height: "60vh" }}
+          style={{ height: "75vh" }}
         >
           <Col>
             <Form size={"middle"} onFinish={this.onFormFinish} {...layout}>

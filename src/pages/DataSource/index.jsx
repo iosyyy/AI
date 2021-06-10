@@ -57,7 +57,7 @@ class DataSource extends Component {
             component={DatasourceHandle}
           />
 
-          <Redirect to="/datasource/datasourceHandle" />
+          <Redirect to="/datasource/administration" />
         </Switch>
       </Row>
     );
