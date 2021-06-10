@@ -3,7 +3,7 @@ import pack from "../../package.json";
 const host = window.location.origin;
 let baseHost = window.location.origin;
 let ws;
-if (pack.env === "dev") {
+if (pack.env === "build") {
   ws = `ws://${window.location.hostname}:${window.location.port}`;
   baseHost = window.location.origin;
 } else {

@@ -125,7 +125,8 @@ class FederalTrainChoice extends Component {
                 data: formData,
               })
                 .then((res) => {
-                  if (res.data.retcode === 0) {
+                  console.log(res)
+                  if (JSON.parse(res.data.body).retcode === 0) {
                     this.setState({
                       fileList1: [],
                       fileList2: [],
