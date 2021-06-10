@@ -52,8 +52,8 @@ class FederalResult extends Component {
     const formData = new FormData();
     if (tables[uploadKey] && e.dataset && tables[uploadKey]) {
       formData.append("file", e.dataset.file);
-      formData.append("table_name", namespaces[uploadKey]);
-      formData.append("namespace", tables[uploadKey]);
+      formData.append("table_name", tables[uploadKey]);
+      formData.append("namespace", namespaces[uploadKey]);
     } else {
       message.error("数据填写错误,请重新填写");
       this.setState({
@@ -111,7 +111,7 @@ class FederalResult extends Component {
     const layout = {};
     const { uploadIng } = this.state;
     return (
-      <div style={{ height: "80vh" }} className="site-layout-content">
+      <div style={{ height: "80vh" }} className='site-layout-content'>
         <StepsTemplate
           steps={[
             { status: "finish", title: "联邦类型", icon: <FileOutlined /> },
@@ -134,20 +134,20 @@ class FederalResult extends Component {
         >
           <Col>
             <Form size={"middle"} onFinish={this.onFormFinish} {...layout}>
-              <Form.List rules={[{ required: true }]} name="users">
-                {(fields, { add, remove }) =>
+              <Form.List rules={[{ required: true }]} name='users'>
+                {(fields, { add, remove }) => (
                   <div>
-                    {fields.map(({ key, name, fieldKey, ...restField }) =>
+                    {fields.map(({ key, name, fieldKey, ...restField }) => (
                       <Space
                         key={key}
                         style={{ display: "flex", marginBottom: 8 }}
-                        align="baseline"
+                        align='baseline'
                       >
                         <Form.Item
                           style={{ width: "18vw", marginTop: "1vh" }}
                           name={[name, "dataset"]}
                           fieldKey={[fieldKey, "dataset"]}
-                          label="数据集选择"
+                          label='数据集选择'
                         >
                           <Upload
                             maxCount={1}
@@ -227,18 +227,18 @@ class FederalResult extends Component {
                               });
                             }}
                             loading={this.state.isLoading[key]}
-                            type="primary"
-                            htmlType="submit"
+                            type='primary'
+                            htmlType='submit'
                           >
                             上传
                           </Button>
                         </Form.Item>
                         <MinusCircleOutlined onClick={() => remove(name)} />
                       </Space>
-                    )}
+                    ))}
                     <Form.Item>
                       <Button
-                        type="dashed"
+                        type='dashed'
                         disabled={this.state.uploadIng}
                         onClick={() => {
                           add();
@@ -256,7 +256,8 @@ class FederalResult extends Component {
                         添加新的数据集
                       </Button>
                     </Form.Item>
-                  </div>}
+                  </div>
+                )}
               </Form.List>
             </Form>
           </Col>
@@ -266,11 +267,11 @@ class FederalResult extends Component {
             <Button
               onClick={this.toLastPage}
               style={{ background: "rgb(201,201,201)" }}
-              size="large"
+              size='large'
             >
               上一步
             </Button>
-            <Button onClick={this.toNextPage} type="primary" size="large">
+            <Button onClick={this.toNextPage} type='primary' size='large'>
               下一步
             </Button>
           </Space>
