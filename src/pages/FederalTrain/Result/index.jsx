@@ -42,7 +42,7 @@ class FederalResult extends Component {
     };
   }
 
-  onFormFinish = (ew) => {
+  onFormFinish = ew => {
     const { uploadKey, isLoading, namespaces, tables, disables } = this.state;
     const e = ew.users[uploadKey];
     const dis = disables.map((v, i) => {
@@ -65,7 +65,7 @@ class FederalResult extends Component {
     }
     axios
       .post(api.taskUpload, formData)
-      .then((r) => {
+      .then(r => {
         if (r.data.code === 0 || r.data.retcode === 0) {
           message.success("上传成功");
           this.setState({
@@ -74,7 +74,7 @@ class FederalResult extends Component {
             uploadIng: false,
           });
         } else {
-          message.error(r.data.retcode + ":" + r.data.retmsg).then((r) => {
+          message.error(r.data.retcode + ":" + r.data.retmsg).then(r => {
             console.log(r);
           });
           this.setState({
@@ -84,7 +84,7 @@ class FederalResult extends Component {
           });
         }
       })
-      .catch((e) => {
+      .catch(e => {
         message.error("服务器链接异常");
         this.setState({
           isLoading,
@@ -135,9 +135,9 @@ class FederalResult extends Component {
           <Col>
             <Form size={"middle"} onFinish={this.onFormFinish} {...layout}>
               <Form.List rules={[{ required: true }]} name="users">
-                {(fields, { add, remove }) => (
-                  <>
-                    {fields.map(({ key, name, fieldKey, ...restField }) => (
+                {(fields, { add, remove }) =>
+                  <div>
+                    {fields.map(({ key, name, fieldKey, ...restField }) =>
                       <Space
                         key={key}
                         style={{ display: "flex", marginBottom: 8 }}
@@ -175,14 +175,14 @@ class FederalResult extends Component {
                         >
                           <Input
                             value={this.state.tables}
-                            onChange={(e) => {
+                            onChange={e => {
                               const { tables } = this.state;
                               tables[key] = e.target.value;
                               this.setState({
                                 tables,
                               });
                             }}
-                            onPressEnter={(e) => {
+                            onPressEnter={e => {
                               e.preventDefault();
                             }}
                             placeholder={"请输入表名"}
@@ -196,14 +196,14 @@ class FederalResult extends Component {
                         >
                           <Input
                             value={this.state.namespaces}
-                            onChange={(e) => {
+                            onChange={e => {
                               const { namespaces } = this.state;
                               namespaces[key] = e.target.value;
                               this.setState({
                                 namespaces,
                               });
                             }}
-                            onPressEnter={(e) => {
+                            onPressEnter={e => {
                               e.preventDefault();
                             }}
                             placeholder={"请输入命名空间"}
@@ -212,7 +212,7 @@ class FederalResult extends Component {
                         <Form.Item style={{ marginTop: "1vh" }} {...tailLayout}>
                           <Button
                             disabled={this.state.disables[key]}
-                            onClick={(e) => {
+                            onClick={e => {
                               let { isLoading, disables } = this.state;
                               isLoading[key] = true;
                               disables[key] = true;
@@ -235,7 +235,7 @@ class FederalResult extends Component {
                         </Form.Item>
                         <MinusCircleOutlined onClick={() => remove(name)} />
                       </Space>
-                    ))}
+                    )}
                     <Form.Item>
                       <Button
                         type="dashed"
@@ -256,8 +256,7 @@ class FederalResult extends Component {
                         添加新的数据集
                       </Button>
                     </Form.Item>
-                  </>
-                )}
+                  </div>}
               </Form.List>
             </Form>
           </Col>
@@ -267,10 +266,11 @@ class FederalResult extends Component {
             <Button
               onClick={this.toLastPage}
               style={{ background: "rgb(201,201,201)" }}
+              size="large"
             >
               上一步
             </Button>
-            <Button onClick={this.toNextPage} type="primary">
+            <Button onClick={this.toNextPage} type="primary" size="large">
               下一步
             </Button>
           </Space>
