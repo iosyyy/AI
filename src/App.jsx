@@ -12,6 +12,7 @@ import TrainingRecord from "./pages/TrainingRecord";
 import Training from "./pages/Training";
 import TrainingDetails from "./pages/Training/Detail";
 import FederalDetailAll from "./pages/FederalDetail";
+import DataSource from "./pages/DataSource";
 
 const { Header, Content } = Layout;
 
@@ -28,7 +29,7 @@ class App extends Component {
     return (
       <div>
         <Layout className="layout">
-          <Header>
+          <Header style={{ height: "9vh", background: "rgb(170,205,216)" }}>
             <div
               style={{
                 width: "180px",
@@ -50,7 +51,7 @@ class App extends Component {
               </span>
             </div>
             <Menu
-              theme="dark"
+              style={{ height: "9vh", background: "rgb(170,205,216)" }}
               mode="horizontal"
               selectedKeys={[this.state.page]}
               onSelect={(info) => {
@@ -74,6 +75,9 @@ class App extends Component {
               <Menu.Item style={{ float: "right" }} key="5">
                 <NavLink to="/training">正在训练</NavLink>
               </Menu.Item>
+              <Menu.Item style={{ float: "right" }} key="6">
+                <NavLink to="/datasource">数据集</NavLink>
+              </Menu.Item>
             </Menu>
           </Header>
           <Content style={{ padding: "20px 50px" }}>
@@ -85,7 +89,7 @@ class App extends Component {
               <Route path="/trainingRecord" component={TrainingRecord} />
               <Route path="/federalDetail" component={FederalDetailAll} />
               <Route path="/trainingDetails" component={TrainingDetails} />
-
+              <Route path="/datasource" component={DataSource} />
               <Redirect to="/federalTrain" />
             </Switch>
           </Content>
