@@ -27,7 +27,7 @@ export default class Loss extends Component {
     option = {
       tooltip: {
         trigger: "axis",
-        formatter: function (params) {
+        formatter: function(params) {
           let htmlStr = "<div>";
           htmlStr += "iteration：" + params[0].axisValue + "<br/>";
           htmlStr += "loss：" + params[0].value;
