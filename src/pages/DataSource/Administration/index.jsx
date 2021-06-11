@@ -30,7 +30,6 @@ class DataSourceAdministration extends Component {
         >
           上传数据源
         </Button>
-        <DataSourceTable />
         <Modal
           visible={visible}
           title="上传数据集"
