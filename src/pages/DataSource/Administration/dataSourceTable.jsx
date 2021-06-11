@@ -39,10 +39,15 @@ class DataSourceTable extends Component {
         dataIndex: "action",
         key: "action",
         render: (action) => {
-          return <a>{action}</a>;
+          return (
+            <div>
+              <a>查看</a>/<a>删除</a>
+            </div>
+          );
         },
       },
     ];
+
     const { dataSource } = Mock.mock({
       "dataSource|10": [
         {
@@ -57,6 +62,7 @@ class DataSourceTable extends Component {
     });
     return (
       <Table
+        bordered
         size="middle"
         Pagination={{ simple: true }}
         dataSource={dataSource}
