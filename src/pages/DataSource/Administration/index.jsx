@@ -39,6 +39,7 @@ class DataSourceAdministration extends Component {
             WebkitBoxShadow: "0 20px 15px #9B7468",
             MozBoxShadow: "0 20px 15px #9B7468",
             boxShadow: "0 6px 10px rgb(158,199,210)",
+            borderRadius: "5px",
           }}
           wrapClassName={"site-layout-content"}
           footer={null}

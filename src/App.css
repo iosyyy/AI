@@ -2,6 +2,8 @@
   min-height: 280px;
   padding: 24px;
   background: #fff;
+  border-radius: 5px ;
+
   -webkit-box-shadow: 0 20px 15px #9B7468;
   -moz-box-shadow: 0 20px 15px #9B7468;
   box-shadow: 0 10px 6px rgb(158,199,210);
@@ -48,7 +50,7 @@
 }
 .scrollContent{
   overflow-y: hidden;
-  margin-right: 8px;
+  margin-right: 6px;
 }
 
 
