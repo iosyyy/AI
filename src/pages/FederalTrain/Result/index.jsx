@@ -52,8 +52,8 @@ class FederalResult extends Component {
     const formData = new FormData();
     if (tables[uploadKey] && e.dataset && tables[uploadKey]) {
       formData.append("file", e.dataset.file);
-      formData.append("table_name", namespaces[uploadKey]);
-      formData.append("namespace", tables[uploadKey]);
+      formData.append("table_name", tables[uploadKey]);
+      formData.append("namespace", namespaces[uploadKey]);
     } else {
       message.error("数据填写错误,请重新填写");
       this.setState({

@@ -369,6 +369,7 @@ class TrainingRecord extends Component {
   };
 
   onTableChange = (pagination, filters, sorter) => {
+    console.log("请求地址：", api.pageList)
     if (
       Object.keys(sorter).length &&
       (this.state.sorter.columnKey !== sorter.columnKey ||
