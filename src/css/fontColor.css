@@ -1,5 +1,6 @@
 .colorWhite{
-    background-image: -webkit-linear-gradient(bottom, rgb(0, 0, 0), rgb(255, 255, 255));
+    /*TODO 此处可以把bottom改成top,感觉样式差不太多*/
+    background-image: -webkit-linear-gradient(bottom, rgb(65,89,209), rgb(239,236,235));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }

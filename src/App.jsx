@@ -29,7 +29,7 @@ class App extends Component {
     return (
       <div>
         <Layout className="layout">
-          <Header style={{ height: "9vh", background: "rgb(170,205,216)" }}>
+          <Header style={{ height: "9vh", background: "rgb(239,236,235)" }}>
             <div
               style={{
                 width: "180px",
@@ -54,7 +54,7 @@ class App extends Component {
               style={{
                 lineHeight: "8vh",
                 height: "9vh",
-                background: "rgb(170,205,216)",
+                background: "rgb(239,236,235)",
               }}
               mode="horizontal"
               selectedKeys={[this.state.page]}
