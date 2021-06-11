@@ -20,6 +20,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = { page: "1" };
+    // FIXME 目前使用pubsubjs监听页面跳转然后来改变Menu的选择后续可以通过当前连接更改,目前先这么写方便测试
     PubSubJS.subscribe("isRunning", (msg, data) => {
       this.setState({ page: data.page });
     });

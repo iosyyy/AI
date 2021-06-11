@@ -63,10 +63,10 @@ const COLUMNS = [
     key: "fieldType",
     render: (text, record, index) => {
       return (
-        <Select defaultValue='id'>
-          <Option value='id'>唯一标识(ID)</Option>
-          <Option value='integer'>数值型变量</Option>
-          <Option value='type'>分类型变量</Option>
+        <Select defaultValue="id">
+          <Option value="id">唯一标识(ID)</Option>
+          <Option value="integer">数值型变量</Option>
+          <Option value="type">分类型变量</Option>
         </Select>
       );
     },
@@ -78,9 +78,9 @@ const COLUMNS = [
     key: "use",
     render: (text, record, index) => {
       return (
-        <Select defaultValue='yes'>
-          <Option value='yes'>是</Option>
-          <Option value='no'>否</Option>
+        <Select defaultValue="yes">
+          <Option value="yes">是</Option>
+          <Option value="no">否</Option>
         </Select>
       );
     },
@@ -98,19 +98,13 @@ class DatasourceRuleTable extends Component {
     return (
       <div>
         <Table
+          style={{ marginLeft: "3vw", marginRight: "3vw" }}
           dataSource={dataSource}
           columns={COLUMNS}
-          size='small'
+          bordered
+          size="small"
           pagination={false}
-        ></Table>
-        <Space style={{ marginTop: "3vh" }} size='large'>
-          <Button size='large' type='primary'>
-            保存
-          </Button>
-          <Button size='large' type='primary'>
-            关闭
-          </Button>
-        </Space>
+        />
       </div>
     );
   }

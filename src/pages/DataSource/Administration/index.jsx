@@ -3,6 +3,7 @@ import { Button, Table } from "antd";
 import Modal from "antd/es/modal/Modal";
 import DataSourceUpload from "./dataSourceUpload";
 import DataSourceTable from "./dataSourceTable";
+import PubSubJS from "pubsub-js";
 
 class DataSourceAdministration extends Component {
   constructor(props) {
@@ -10,6 +11,10 @@ class DataSourceAdministration extends Component {
     this.state = {
       visible: false,
     };
+  }
+
+  componentDidMount() {
+    PubSubJS.publish("datasourcePage", { page: "1" });
   }
 
   render() {

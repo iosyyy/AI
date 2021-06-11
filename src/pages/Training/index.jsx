@@ -9,6 +9,8 @@ import { QuestionCircleOutlined } from "@ant-design/icons";
 class Training extends Component {
   constructor(props) {
     super(props);
+    PubSubJS.publish("isRunning", { page: "5" });
+
     this.state = {
       trainInfo: [],
     };
@@ -23,7 +25,6 @@ class Training extends Component {
 
   componentDidMount() {
     // eslint-disable-next-line no-unused-vars
-    PubSubJS.publish("isRunning", { page: "5" });
     this.getRunning();
 
     let numInterval = setInterval(() => {

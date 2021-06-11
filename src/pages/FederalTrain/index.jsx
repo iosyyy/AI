@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
-import FederalTrain from './Form';
-import FederalResult from './Result';
-import FederalTrainChoice from './Choice';
-import PubSubJS from 'pubsub-js';
+import React, { Component } from "react";
+import { Redirect, Route, Switch } from "react-router-dom";
+import FederalTrain from "./Form";
+import FederalResult from "./Result";
+import FederalTrainChoice from "./Choice";
+import PubSubJS from "pubsub-js";
 
 class FederalIndex extends Component {
-  componentDidMount() {
-    PubSubJS.publish('isRunning', { page: '1' });
+  constructor(props) {
+    super(props);
+    PubSubJS.publish("isRunning", { page: "1" });
   }
 
   render() {

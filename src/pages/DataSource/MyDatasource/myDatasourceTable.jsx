@@ -5,6 +5,27 @@ import Mock from "mockjs";
 class MyDatasourceTable extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      dataSource: [],
+    };
+  }
+
+  componentDidMount() {
+    const { dataSource } = Mock.mock({
+      "dataSource|10": [
+        {
+          "key|+1": 1,
+          "tableName|+1": ["横向联邦", "纵向联邦"],
+          "dataTableCode|+1": "code",
+          "namespace|+1": ["namespace", "namespaceTwo"], // 生成随机中文名字
+          "note|+1": "@cname()", // 生成随机时间戳
+          "action|+1": ["delete", "retry", "add"],
+        },
+      ],
+    });
+    this.setState({
+      dataSource,
+    });
   }
 
   render() {
@@ -47,19 +68,8 @@ class MyDatasourceTable extends Component {
         },
       },
     ];
+    const { dataSource } = this.state;
 
-    const { dataSource } = Mock.mock({
-      "dataSource|10": [
-        {
-          "key|+1": 1,
-          "tableName|+1": ["横向联邦", "纵向联邦"],
-          "dataTableCode|+1": "code",
-          "namespace|+1": ["namespace", "namespaceTwo"], // 生成随机中文名字
-          "note|+1": "@cname()", // 生成随机时间戳
-          "action|+1": ["delete", "retry", "add"],
-        },
-      ],
-    });
     return (
       <Table
         bordered

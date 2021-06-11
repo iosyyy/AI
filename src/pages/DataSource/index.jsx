@@ -9,13 +9,14 @@ import PubSubJS from "pubsub-js";
 class DataSource extends Component {
   constructor(props) {
     super(props);
+    PubSubJS.publish("isRunning", { page: "6" });
+    PubSubJS.subscribe("datasourcePage", (msg, data) => {
+      console.log(data);
+      this.setState({ page: data.page });
+    });
     this.state = {
       page: "1",
     };
-  }
-
-  componentDidMount() {
-    PubSubJS.publish("isRunning", { page: "6" });
   }
 
   render() {

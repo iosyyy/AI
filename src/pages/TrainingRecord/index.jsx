@@ -23,6 +23,8 @@ const { Option } = Select;
 class TrainingRecord extends Component {
   constructor(props) {
     super(props);
+    PubSubJS.publish("isRunning", { page: "4" });
+
     const columns = [
       {
         title: <div>ID</div>,
@@ -253,8 +255,6 @@ class TrainingRecord extends Component {
   }
 
   componentDidMount() {
-    PubSubJS.publish("isRunning", { page: "4" });
-
     axios
       .post(api.pageList, {
         fDescription: "",
