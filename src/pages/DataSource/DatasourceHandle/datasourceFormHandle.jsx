@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Col, Form, Input, Space, Row, Radio, Divider } from "antd";
+import { Col, Form, Input, Space, Row, Radio, Divider, Button } from "antd";
 
 class DatasourceFormHandle extends Component {
   constructor(props) {
     super(props);
     const { formData } = props;
+    console.log(formData);
     this.state = {
       formData,
     };
@@ -55,7 +56,7 @@ class DatasourceFormHandle extends Component {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item name="tableCode" label="数据代码">
+              <Form.Item name="dataTableCode" label="数据代码">
                 <Input disabled={disabled} placeholder={"请输入数据代码"} />
               </Form.Item>
             </Col>
@@ -79,6 +80,13 @@ class DatasourceFormHandle extends Component {
                   <Radio value={true}>是</Radio>
                   <Radio value={false}>否</Radio>
                 </Radio.Group>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>
+              <Form.Item name="deleteData" label="预处理后的数据">
+                <Button type={"link"}>点击下载</Button>
               </Form.Item>
             </Col>
           </Row>

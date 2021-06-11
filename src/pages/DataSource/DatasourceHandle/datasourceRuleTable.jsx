@@ -98,7 +98,7 @@ class DatasourceRuleTable extends Component {
     return (
       <div>
         <Table
-          style={{ marginLeft: "3vw", marginRight: "3vw" }}
+          style={{ marginLeft: "3vw", marginRight: "2vw" }}
           dataSource={dataSource}
           columns={COLUMNS}
           bordered
