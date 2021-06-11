@@ -33,7 +33,7 @@ class App extends Component {
             <div
               style={{
                 width: "180px",
-                lineHeight: "30px",
+                lineHeight: "4.5vh",
               }}
               className="logo"
             >
@@ -51,7 +51,11 @@ class App extends Component {
               </span>
             </div>
             <Menu
-              style={{ height: "9vh", background: "rgb(170,205,216)" }}
+              style={{
+                lineHeight: "8vh",
+                height: "9vh",
+                background: "rgb(170,205,216)",
+              }}
               mode="horizontal"
               selectedKeys={[this.state.page]}
               onSelect={(info) => {

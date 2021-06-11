@@ -19,7 +19,7 @@ class DataSourceAdministration extends Component {
         style={{ overflow: "auto", height: "83vh", width: "83vw" }}
         className="site-layout-content"
       >
-        <h2>数据源管理</h2>
+        <h2 className="colorWhite">数据源管理</h2>
         <Button
           style={{ margin: "1vh 0" }}
           onClick={() => {

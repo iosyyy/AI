@@ -55,7 +55,14 @@ class DataSourceTable extends Component {
         },
       ],
     });
-    return <Table dataSource={dataSource} columns={columns} />;
+    return (
+      <Table
+        size="middle"
+        Pagination={{ simple: true }}
+        dataSource={dataSource}
+        columns={columns}
+      />
+    );
   }
 }
 
