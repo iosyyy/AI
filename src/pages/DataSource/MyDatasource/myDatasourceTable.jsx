@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Divider, Select, Table } from "antd";
+import { Divider, Select, Table, Popconfirm } from "antd";
 import Mock from "mockjs";
 import DatasourceFormHandle from "../DatasourceHandle/datasourceFormHandle";
 import Modal from "antd/es/modal/Modal";
@@ -33,10 +33,10 @@ const COLUMNS = [
     key: "fieldType",
     render: (text, record, index) => {
       return (
-        <Select defaultValue="id">
-          <Option value="id">唯一标识(ID)</Option>
-          <Option value="integer">数值型变量</Option>
-          <Option value="type">分类型变量</Option>
+        <Select defaultValue='id'>
+          <Option value='id'>唯一标识(ID)</Option>
+          <Option value='integer'>数值型变量</Option>
+          <Option value='type'>分类型变量</Option>
         </Select>
       );
     },
@@ -48,9 +48,9 @@ const COLUMNS = [
     key: "use",
     render: (text, record, index) => {
       return (
-        <Select defaultValue="yes">
-          <Option value="yes">是</Option>
-          <Option value="no">否</Option>
+        <Select defaultValue='yes'>
+          <Option value='yes'>是</Option>
+          <Option value='no'>否</Option>
         </Select>
       );
     },
@@ -170,7 +170,16 @@ class MyDatasourceTable extends Component {
               >
                 查看
               </a>
-              /<a>删除</a>
+              <span>/</span>
+              <Popconfirm
+                title='确定要删除么?'
+                onConfirm={null}
+                onCancel={null}
+                okText='是'
+                cancelText='否'
+              >
+                <a>删除</a>
+              </Popconfirm>
             </div>
           );
         },
@@ -181,14 +190,14 @@ class MyDatasourceTable extends Component {
       <>
         <Table
           bordered
-          size="middle"
+          size='middle'
           Pagination={{ simple: true }}
           dataSource={dataSource}
           columns={columns}
         />
         <Modal
           visible={detailVisible}
-          title="已处理数据详情页"
+          title='已处理数据详情页'
           centered
           bodyStyle={{
             WebkitBoxShadow: "0 20px 15px #9B7468",
@@ -210,15 +219,15 @@ class MyDatasourceTable extends Component {
             });
           }}
         >
-          <Divider orientation="left">
+          <Divider orientation='left'>
             <h3 style={{ color: "rgb(93,176,215)" }}>基本信息</h3>
           </Divider>
           <DatasourceFormHandle
             formData={onShowDetail}
             disabled={true}
-            getFormData={(data) => {}}
+            getFormData={data => {}}
           />
-          <Divider orientation="left">
+          <Divider orientation='left'>
             <h3 style={{ color: "rgb(93,176,215)" }}>数据预处理字段规则定义</h3>
           </Divider>
           <div>
@@ -227,7 +236,7 @@ class MyDatasourceTable extends Component {
               dataSource={dataSource2}
               columns={COLUMNS}
               bordered
-              size="small"
+              size='small'
               pagination={false}
             />
           </div>

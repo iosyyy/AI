@@ -40,7 +40,7 @@ class DataSource extends Component {
             <NavLink to="/datasource/administration">数据源管理</NavLink>
           </Menu.Item>
           <Menu.Item key="2">
-            <NavLink to="/datasource/myDatasource">我的数据源</NavLink>
+            <NavLink to="/datasource/myDatasource">我的数据</NavLink>
           </Menu.Item>
           <Menu.Item key="3">
             <NavLink to="/datasource/datasourceHandle">数据源预处理</NavLink>

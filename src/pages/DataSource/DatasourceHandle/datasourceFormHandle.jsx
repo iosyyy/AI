@@ -4,6 +4,7 @@ import { Col, Form, Input, Space, Row, Radio, Divider, Button } from "antd";
 class DatasourceFormHandle extends Component {
   constructor(props) {
     super(props);
+    console.log(props);
     const { formData } = props;
     console.log(formData);
     this.state = {
@@ -32,7 +33,7 @@ class DatasourceFormHandle extends Component {
       <>
         <Form
           initialValues={formData}
-          onValuesChange={(e) => {
+          onValuesChange={e => {
             for (let key in e) {
               const { formData } = this.state;
               if (e.hasOwnProperty(key)) {
@@ -51,45 +52,51 @@ class DatasourceFormHandle extends Component {
         >
           <Row>
             <Col span={8}>
-              <Form.Item name="datasource" label="数据源">
+              <Form.Item name='datasource' label='数据源'>
                 <Input disabled={disabled} placeholder={"请输入数据源"} />
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item name="dataTableCode" label="数据代码">
+              <Form.Item name='dataTableCode' label='数据代码'>
                 <Input disabled={disabled} placeholder={"请输入数据代码"} />
               </Form.Item>
             </Col>
           </Row>
           <Row>
             <Col span={8}>
-              <Form.Item name="namespace" label="命名空间">
+              <Form.Item name='namespace' label='命名空间'>
                 <Input disabled={disabled} placeholder={"请输入命名空间"} />
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item name="tableName" label="表名">
+              <Form.Item name='tableName' label='表名'>
                 <Input disabled={disabled} placeholder={"请输入表名"} />
               </Form.Item>
             </Col>
           </Row>
+          {this.props.isSon === true ? null : (
+            <div>
+              <Row>
+                <Col span={8}>
+                  <Form.Item name='deleteData' label='是否清除残缺数据'>
+                    <Radio.Group disabled={disabled}>
+                      <Radio value={true}>是</Radio>
+                      <Radio value={false}>否</Radio>
+                    </Radio.Group>
+                  </Form.Item>
+                </Col>
+              </Row>
+            </div>
+          )}
+          {/* 这块没用上
           <Row>
             <Col span={8}>
-              <Form.Item name="deleteData" label="是否清除残缺数据">
-                <Radio.Group disabled={disabled}>
-                  <Radio value={true}>是</Radio>
-                  <Radio value={false}>否</Radio>
-                </Radio.Group>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8}>
-              <Form.Item name="deleteData" label="预处理后的数据">
+              <Form.Item name='deleteData' label='预处理后的数据'>
                 <Button type={"link"}>点击下载</Button>
               </Form.Item>
             </Col>
           </Row>
+          */}
         </Form>
       </>
     );
