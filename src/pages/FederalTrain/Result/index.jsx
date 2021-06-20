@@ -76,106 +76,122 @@ class FederalResult extends Component {
               {...layout}
             >
               <Form.List rules={[{ required: true }]} name="users">
-                {(fields, { add, remove }) => (
-                  <div>
-                    {fields.map(({ key, name, fieldKey, ...restField }) => (
-                      <Space
-                        size={15}
-                        key={key}
-                        style={{ display: "flex", marginBottom: 8 }}
-                        align="baseline"
-                      >
-                        <Form.Item
-                          style={{ marginTop: "1vh" }}
-                          name={[name, "table_name"]}
-                          fieldKey={[fieldKey, "table_name"]}
-                          label={"成员ID"}
-                        >
-                          <Input
-                            value={this.state.tables}
-                            onChange={(e) => {
-                              const { userID } = this.state;
-                              userID[key] = e.target.value;
-                              this.setState({
-                                userID,
-                              });
-                            }}
-                            onPressEnter={(e) => {
-                              e.preventDefault();
-                            }}
-                            placeholder={"请输入成员ID"}
-                          />
-                        </Form.Item>
-                        <Form.Item
-                          style={{ marginTop: "1vh" }}
-                          name={[name, "namespace"]}
-                          fieldKey={[fieldKey, "namespace"]}
-                          label={"数据表代码"}
-                        >
-                          <Input
-                            value={this.state.namespaces}
-                            onChange={(e) => {
-                              const { tableCode } = this.state;
-                              tableCode[key] = e.target.value;
-                              this.setState({
-                                tableCode,
-                              });
-                            }}
-                            onPressEnter={(e) => {
-                              e.preventDefault();
-                            }}
-                            placeholder={"请输入数据表代码"}
-                          />
-                        </Form.Item>
-                        <Form.Item style={{ marginTop: "1vh" }} {...tailLayout}>
-                          <Button
-                            disabled={this.state.disables[key]}
-                            onClick={(e) => {
-                              let { isLoading, disables } = this.state;
-                              isLoading[key] = true;
-                              disables[key] = true;
-                              disables = disables.map((v, k) => {
-                                return !v;
-                              });
-                              this.setState({
-                                uploadKey: key,
-                                isLoading,
-                                disables,
-                                uploadIng: true,
-                              });
-                            }}
-                            loading={this.state.isLoading[key]}
-                            type="primary"
-                            htmlType="submit"
+                {(fields, { add, remove }) => {
+                  if (fields.length === 0) {
+                    add();
+                    fields.push({
+                      fieldKey: 0,
+                      isListField: true,
+                      key: 0,
+                      name: 0,
+                    });
+                  }
+                  return (
+                    <div>
+                      {fields.map(({ key, name, fieldKey, ...restField }) => {
+                        return (
+                          <Space
+                            size={15}
+                            key={key}
+                            style={{ display: "flex", marginBottom: 8 }}
+                            align="baseline"
                           >
-                            上传
-                          </Button>
-                        </Form.Item>
-                        <MinusCircleOutlined onClick={() => remove(name)} />
-                      </Space>
-                    ))}
-                    <Form.Item>
-                      <Button
-                        type="dashed"
-                        disabled={this.state.uploadIng}
-                        onClick={() => {
-                          add();
-                          let { isLoading, disables, uploadIng } = this.state;
-                          isLoading.push(false);
-                          disables.push(false);
-                          this.setState({
-                            isLoading,
-                            disables,
-                          });
-                        }}
-                        block
-                        icon={<PlusOutlined />}
-                      >
-                        添加新的数据集选择
-                      </Button>
-                    </Form.Item>
-                  </div>
-                )}
+                            <Form.Item
+                              style={{ marginTop: "1vh" }}
+                              name={[name, "table_name"]}
+                              fieldKey={[fieldKey, "table_name"]}
+                              label={"成员ID"}
+                            >
+                              <Input
+                                value={this.state.tables}
+                                onChange={(e) => {
+                                  const { userID } = this.state;
+                                  userID[key] = e.target.value;
+                                  this.setState({
+                                    userID,
+                                  });
+                                }}
+                                onPressEnter={(e) => {
+                                  e.preventDefault();
+                                }}
+                                placeholder={"请输入成员ID"}
+                              />
+                            </Form.Item>
+                            <Form.Item
+                              style={{ marginTop: "1vh" }}
+                              name={[name, "namespace"]}
+                              fieldKey={[fieldKey, "namespace"]}
+                              label={"数据表代码"}
+                            >
+                              <Input
+                                value={this.state.namespaces}
+                                onChange={(e) => {
+                                  const { tableCode } = this.state;
+                                  tableCode[key] = e.target.value;
+                                  this.setState({
+                                    tableCode,
+                                  });
+                                }}
+                                onPressEnter={(e) => {
+                                  e.preventDefault();
+                                }}
+                                placeholder={"请输入数据表代码"}
+                              />
+                            </Form.Item>
+                            <Form.Item
+                              style={{ marginTop: "1vh" }}
+                              {...tailLayout}
+                            >
+                              <Button
+                                disabled={this.state.disables[key]}
+                                onClick={(e) => {
+                                  let { isLoading, disables } = this.state;
+                                  isLoading[key] = true;
+                                  disables[key] = true;
+                                  disables = disables.map((v, k) => {
+                                    return !v;
+                                  });
+                                  this.setState({
+                                    uploadKey: key,
+                                    isLoading,
+                                    disables,
+                                    uploadIng: true,
+                                  });
+                                }}
+                                loading={this.state.isLoading[key]}
+                                type="primary"
+                                htmlType="submit"
+                              >
+                                上传
+                              </Button>
+                            </Form.Item>
+                            <MinusCircleOutlined onClick={() => remove(name)} />
+                          </Space>
+                        );
+                      })}
+                      <Form.Item>
+                        <Button
+                          type="dashed"
+                          disabled={this.state.uploadIng}
+                          onClick={() => {
+                            add();
+                            let { isLoading, disables, uploadIng } = this.state;
+                            isLoading.push(false);
+                            disables.push(false);
+                            this.setState({
+                              isLoading,
+                              disables,
+                            });
+                          }}
+                          block
+                          icon={<PlusOutlined />}
+                        >
+                          添加新的数据集选择
+                        </Button>
+                      </Form.Item>
+                    </div>
+                  );
+                }}
               </Form.List>
             </Form>
           </Col>
