@@ -1,7 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
-import api from "../../../config/api";
-import FileSaver from "file-saver";
 import {
   CloudUploadOutlined,
   DownloadOutlined,
@@ -33,18 +30,6 @@ class FederalTrainChoice extends Component {
     });
   };
 
-  downloadTempalte(fileName) {
-    axios
-      .post(api.downloadTemplate, {
-        file_name: fileName,
-      })
-      .then((f) => {
-        let jsonObj = f.data;
-        let jsonStr = JSON.stringify(jsonObj, null, "  ");
-        let file = new Blob([jsonStr], { type: "" });
-        FileSaver.saveAs(file, fileName + ".json");
-      });
-  }
 
   render() {
     const { loading } = this.state;

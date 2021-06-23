@@ -8,8 +8,8 @@ import {
   Popconfirm,
   Card,
   message,
+  Spin,
 } from "antd";
-import Mock from "mockjs";
 import DataSourceUpload from "./dataSourceUpload";
 import Modal from "antd/es/modal/Modal";
 import DatasourceFormHandle from "../DatasourceHandle/datasourceFormHandle";
@@ -46,10 +46,10 @@ const COLUMNS = [
     key: "fieldType",
     render: (text, record, index) => {
       return (
-        <Select defaultValue="id">
-          <Option value="id">唯一标识(ID)</Option>
-          <Option value="integer">数值型变量</Option>
-          <Option value="type">分类型变量</Option>
+        <Select defaultValue='id'>
+          <Option value='id'>唯一标识(ID)</Option>
+          <Option value='integer'>数值型变量</Option>
+          <Option value='type'>分类型变量</Option>
         </Select>
       );
     },
@@ -61,9 +61,9 @@ const COLUMNS = [
     key: "use",
     render: (text, record, index) => {
       return (
-        <Select defaultValue="yes">
-          <Option value="yes">是</Option>
-          <Option value="no">否</Option>
+        <Select defaultValue='yes'>
+          <Option value='yes'>是</Option>
+          <Option value='no'>否</Option>
         </Select>
       );
     },
@@ -90,6 +90,7 @@ class DataSourceTable extends Component {
     this.state = {
       onShowDetail: {},
       detailVisible: false,
+      modelIsLoading: false,
       dataSource: [],
       dataSource2: [
         {
@@ -129,8 +130,7 @@ class DataSourceTable extends Component {
   componentDidMount() {
     axios
       .get(`${api.datasourceList}?data_type=0`)
-      .then((r) => {
-        console.log(r);
+      .then(r => {
         if (r.data.retcode !== 0) {
           message.error(r.data.retmsg);
         } else {
@@ -149,7 +149,7 @@ class DataSourceTable extends Component {
           });
         }
       })
-      .catch((e) => {
+      .catch(e => {
         message.error("服务器异常请重试");
       });
   }
@@ -177,7 +177,7 @@ class DataSourceTable extends Component {
         title: <div>工作类型</div>,
         dataIndex: "data_type",
         key: "data_type",
-        render: (data_type) => {
+        render: data_type => {
           return data_type ? "集群" : "单机";
         },
       },
@@ -195,30 +195,67 @@ class DataSourceTable extends Component {
             <div>
               <a
                 onClick={() => {
-                  console.log(obj.file);
-                  // TODO 这里下载有bug等待后续更改
+                  this.setState({
+                    detailVisible: true,
+                    modelIsLoading: true,
+                  });
+                  let curJobId = obj["job_id"];
+                  console.log(curJobId);
                   axios
-                    .post(api.downloadTemplate, {
-                      file_name: obj.file,
+                    .get(api.queryDatasource, { job_id: curJobId })
+                    .then(data => {
+                      this.setState({
+                        modelIsLoading: false,
+                      });
+                      console.log(data.data);
+                      let jsonObj = data.data.file;
+                      let jsonStr = JSON.stringify(jsonObj, null, "  ");
+                      let file = new Blob([jsonStr], { type: "" });
+
+                      this.setState({ curFile: file });
                     })
-                    .then((f) => {
-                      let jsonObj = f.data;
-                      // let jsonStr = JSON.stringify(jsonObj, null, "  ");
-                      // let file = new Blob([jsonStr], { type: "" });
-                      // FileSaver.saveAs(file, fileName + ".json");
-                      console.log(jsonObj);
+                    .catch(() => {
+                      message.error("数据获取失败,服务器异常!");
+                      setTimeout(() => {
+                        this.setState({
+                          detailVisible: false,
+                          modelIsLoading: false,
+                        });
+                      }, 1500);
                     });
                 }}
               >
-                下载
+                查询
               </a>
               <span>/</span>
               <Popconfirm
-                title="确定要删除么?"
-                onConfirm={null}
+                title='确定要删除么?'
+                onConfirm={() => {
+                  axios
+                    .get(api.queryDatasource, { job_id: curJobId })
+                    .then(data => {
+                      if (data.data.retcode == 0) {
+                        let curJobId = obj["job_id"];
+                        console.log(this.state.dataSource);
+                        let datasource = this.state.dataSource;
+                        let d = [
+                          ...dataSource.filter(
+                            item => item["job_id"] !== curJobId
+                          ),
+                        ];
+                        this.setState({ dataSource: d });
+                        message.info("数据源删除成功!");
+                      } else {
+                        message.info("数据源删除失败!");
+                      }
+                    })
+                    .catch(() => {
+                      message.error("数据源删除失败!");
+                    });
+                }}
                 onCancel={null}
-                okText="是"
-                cancelText="否"
+                okText='是'
+                cancelText='否'
               >
                 <a>删除</a>
               </Popconfirm>
@@ -231,14 +268,15 @@ class DataSourceTable extends Component {
       <>
         <Table
           bordered
-          size="middle"
+          size='middle'
           Pagination={{ simple: true }}
           dataSource={dataSource}
           columns={columns}
         />
+
         <Modal
           visible={detailVisible}
-          title="已处理数据详情页"
+          title='已处理数据详情页'
           centered
           bodyStyle={{
             WebkitBoxShadow: "0 20px 15px #9B7468",
@@ -260,41 +298,43 @@ class DataSourceTable extends Component {
             });
           }}
         >
-          <Divider orientation="left">
-            <h3 style={{ color: "rgb(93,176,215)" }}>基本信息</h3>
-          </Divider>
-          <DatasourceFormHandle
-            isSon={true}
-            formData={onShowDetail}
-            disabled={true}
-            getFormData={(data) => {}}
-          />
-          <div>
-            <Card style={{ padding: "1vh 3vw" }}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <span>文件名...</span>
-                <a>
-                  <VerticalAlignBottomOutlined />
-                </a>
-              </div>
-              <Divider></Divider>
-              {/*底下这个scroll要根据数据的多少来决定*/}
-              <Table
-                scroll={{ x: 1500, y: 300 }}
-                dataSource={dataSource2}
-                columns={COLUMNS}
-                bordered
-                size="small"
-                pagination={false}
-              />
-            </Card>
-          </div>
+          <Spin size='large' spinning={this.state.modelIsLoading}>
+            <Divider orientation='left'>
+              <h3 style={{ color: "rgb(93,176,215)" }}>基本信息</h3>
+            </Divider>
+            <DatasourceFormHandle
+              isSon={true}
+              formData={onShowDetail}
+              disabled={true}
+              getFormData={data => {}}
+            />
+            <div>
+              <Card style={{ padding: "1vh 3vw" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <span>文件名...</span>
+                  <a>
+                    <VerticalAlignBottomOutlined />
+                  </a>
+                </div>
+                <Divider></Divider>
+                {/*底下这个scroll要根据数据的多少来决定*/}
+                <Table
+                  scroll={{ x: 1500, y: 300 }}
+                  dataSource={dataSource2}
+                  columns={COLUMNS}
+                  bordered
+                  size='small'
+                  pagination={false}
+                />
+              </Card>
+            </div>
+          </Spin>
         </Modal>
       </>
     );

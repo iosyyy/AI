@@ -7,7 +7,7 @@ if (pack.env === "build") {
   ws = `ws://${window.location.hostname}:${window.location.port}`;
   baseHost = window.location.origin;
 } else {
-  ws = `ws://8.136.225.205:8080`;
+  ws = `ws://1.117.28.22:8080`;
   baseHost = window.location.origin + "/api";
 }
 
@@ -31,6 +31,8 @@ const e = {
   log: ws + "/log/new/{id}/{role}/{partyId}/{name}",
   batch: host + "/v1/tracking/component/metric_data/batch",
   datasourceList: baseHost + "/v1/preprocess/data/list",
+  queryDatasource: baseHost + "/v1/preprocess/data/find",
+  delDatasource: baseHost + "/v1/preprocess/data/del"
 };
 
 export default e;
