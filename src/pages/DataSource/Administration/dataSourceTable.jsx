@@ -46,10 +46,10 @@ const COLUMNS = [
     key: "fieldType",
     render: (text, record, index) => {
       return (
-        <Select defaultValue='id'>
-          <Option value='id'>唯一标识(ID)</Option>
-          <Option value='integer'>数值型变量</Option>
-          <Option value='type'>分类型变量</Option>
+        <Select defaultValue="id">
+          <Option value="id">唯一标识(ID)</Option>
+          <Option value="integer">数值型变量</Option>
+          <Option value="type">分类型变量</Option>
         </Select>
       );
     },
@@ -61,9 +61,9 @@ const COLUMNS = [
     key: "use",
     render: (text, record, index) => {
       return (
-        <Select defaultValue='yes'>
-          <Option value='yes'>是</Option>
-          <Option value='no'>否</Option>
+        <Select defaultValue="yes">
+          <Option value="yes">是</Option>
+          <Option value="no">否</Option>
         </Select>
       );
     },
@@ -130,7 +130,7 @@ class DataSourceTable extends Component {
   componentDidMount() {
     axios
       .get(`${api.datasourceList}?data_type=0`)
-      .then(r => {
+      .then((r) => {
         if (r.data.retcode !== 0) {
           message.error(r.data.retmsg);
         } else {
@@ -149,7 +149,7 @@ class DataSourceTable extends Component {
           });
         }
       })
-      .catch(e => {
+      .catch((e) => {
         message.error("服务器异常请重试");
       });
   }
@@ -177,7 +177,7 @@ class DataSourceTable extends Component {
         title: <div>工作类型</div>,
         dataIndex: "data_type",
         key: "data_type",
-        render: data_type => {
+        render: (data_type) => {
           return data_type ? "集群" : "单机";
         },
       },
@@ -198,12 +198,16 @@ class DataSourceTable extends Component {
                   this.setState({
                     detailVisible: true,
                     modelIsLoading: true,
+                    onShowDetail: obj,
                   });
                   let curJobId = obj["job_id"];
-                  console.log(curJobId);
+                  const formData = new FormData();
+                  formData.append("job_id", curJobId);
                   axios
-                    .get(api.queryDatasource, { job_id: curJobId })
-                    .then(data => {
+                    .post(api.queryDatasource, formData)
+                    .then((data) => {
+                      //TODO 要把file传到api.downloadTemplate这个接口里面然后下载
+                      // 后端传过来的是个字符串然后做字符串split就行了
                       this.setState({
                         modelIsLoading: false,
                       });
@@ -229,18 +233,21 @@ class DataSourceTable extends Component {
               </a>
               <span>/</span>
               <Popconfirm
-                title='确定要删除么?'
+                title="确定要删除么?"
                 onConfirm={() => {
+                  // TODO 删除是有接口额使用接口进行删除而且接口是post方法的
+                  let curJobId = obj["job_id"];
+
                   axios
-                    .get(api.queryDatasource, { job_id: curJobId })
-                    .then(data => {
-                      if (data.data.retcode == 0) {
+                    .post(api.queryDatasource, { job_id: curJobId })
+                    .then((data) => {
+                      if (data.data.retcode === 0) {
                         let curJobId = obj["job_id"];
                         console.log(this.state.dataSource);
                         let datasource = this.state.dataSource;
                         let d = [
                           ...dataSource.filter(
-                            item => item["job_id"] !== curJobId
+                            (item) => item["job_id"] !== curJobId
                           ),
                         ];
                         this.setState({ dataSource: d });
@@ -254,8 +261,8 @@ class DataSourceTable extends Component {
                     });
                 }}
                 onCancel={null}
-                okText='是'
-                cancelText='否'
+                okText="是"
+                cancelText="否"
               >
                 <a>删除</a>
               </Popconfirm>
@@ -268,7 +275,7 @@ class DataSourceTable extends Component {
       <>
         <Table
           bordered
-          size='middle'
+          size="middle"
           Pagination={{ simple: true }}
           dataSource={dataSource}
           columns={columns}
@@ -276,7 +283,7 @@ class DataSourceTable extends Component {
 
         <Modal
           visible={detailVisible}
-          title='已处理数据详情页'
+          title="已处理数据详情页"
           centered
           bodyStyle={{
             WebkitBoxShadow: "0 20px 15px #9B7468",
@@ -298,15 +305,15 @@ class DataSourceTable extends Component {
             });
           }}
         >
-          <Spin size='large' spinning={this.state.modelIsLoading}>
-            <Divider orientation='left'>
+          <Spin size="large" spinning={this.state.modelIsLoading}>
+            <Divider orientation="left">
               <h3 style={{ color: "rgb(93,176,215)" }}>基本信息</h3>
             </Divider>
             <DatasourceFormHandle
               isSon={true}
               formData={onShowDetail}
               disabled={true}
-              getFormData={data => {}}
+              getFormData={(data) => {}}
             />
             <div>
               <Card style={{ padding: "1vh 3vw" }}>
@@ -329,7 +336,7 @@ class DataSourceTable extends Component {
                   dataSource={dataSource2}
                   columns={COLUMNS}
                   bordered
-                  size='small'
+                  size="small"
                   pagination={false}
                 />
               </Card>

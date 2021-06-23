@@ -172,6 +172,7 @@ class MyDatasourceTable extends Component {
         dataIndex: "action",
         key: "action",
         render: (action, obj) => {
+          // TODO 这里的删除和查看都要加
           return (
             <div>
               <a
