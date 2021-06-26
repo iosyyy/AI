@@ -21,7 +21,7 @@ class FederalTrain extends Component {
             { status: "process", title: "联邦类型", icon: <FileOutlined /> },
             {
               status: "wait",
-              title: "数据上传",
+              title: "任务参与方选择",
               icon: <CloudUploadOutlined />,
             },
             {

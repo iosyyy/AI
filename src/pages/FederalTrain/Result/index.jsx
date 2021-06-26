@@ -6,7 +6,6 @@ import {
   DownloadOutlined,
   FileOutlined,
   LoadingOutlined,
-  MinusCircleOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
 import StepsTemplate from "../../../components/StepsTemplate";
@@ -22,16 +21,63 @@ class FederalResult extends Component {
       isLoading: [false],
       disables: [],
       uploadIng: false,
-      tableCode: [],
-      userID: [],
+      table_name: [""],
+      namespace: [""],
+      role: ["guest"],
+      party_id: [""],
     };
   }
 
-  onFormFinish = (ew) => {};
+  onFormFinish = (ew) => {
+    console.log(1111);
+    console.log(ew);
+  };
+
+  ableToUp = () => {
+    const { party_id, role, namespace, table_name } = this.state;
+
+    for (const party of party_id) {
+      console.log(party % 1);
+      if ((isNaN(party) && party) || party % 1 !== 0) {
+        return false;
+      }
+    }
+    for (const party of namespace) {
+      if (!party) {
+        return false;
+      }
+    }
+    for (const party of table_name) {
+      if (!party) {
+        return false;
+      }
+    }
+    return true;
+  };
 
   toNextPage = () => {
+    const { party_id, role, namespace, table_name } = this.state;
+    if (!this.ableToUp()) {
+      return;
+    }
+    const data = {};
+    data.guest = {
+      party_id: parseInt(party_id[0]),
+      table_name: table_name[0],
+      namespace: namespace[0],
+    };
+    data.host = party_id.slice(1).map((v, i) => {
+      return {
+        party_id: parseInt(party_id[i + 1]),
+        table_name: table_name[i + 1],
+        namespace: namespace[i + 1],
+      };
+    });
     this.props.history.push({
       pathname: "/federalTrain/choice",
+      state: {
+        data,
+      },
     });
   };
 
@@ -42,7 +88,9 @@ class FederalResult extends Component {
   };
 
   render() {
-    const tailLayout = {};
+    const tailLayout = {
+      wrapperCol: { offset: 8 },
+    };
     const layout = {};
     const { uploadIng } = this.state;
     return (
@@ -52,7 +100,7 @@ class FederalResult extends Component {
             { status: "finish", title: "联邦类型", icon: <FileOutlined /> },
             {
               status: "process",
-              title: "数据集选择",
+              title: "任务参与方选择",
               icon: uploadIng ? <LoadingOutlined /> : <CloudUploadOutlined />,
             },
             {
@@ -68,14 +116,17 @@ class FederalResult extends Component {
           style={{ height: "60vh" }}
         >
           <Col>
-            {/*TODO 目前处于测试阶段固禁用此表单*/}
             <Form
-              disabled
               size={"middle"}
-              onFinish={this.onFormFinish}
+              onFinish={() => {
+                console.log(1000);
+              }}
+              onFinishFailed={() => {
+                this.setState({});
+              }}
               {...layout}
             >
-              <Form.List rules={[{ required: true }]} name="users">
+              <Form.List rules={[{ required: true }]} name="partys">
                 {(fields, { add, remove }) => {
                   if (fields.length === 0) {
                     add();
@@ -87,7 +138,7 @@ class FederalResult extends Component {
                     });
                   }
                   return (
-                    <div>
+                    <>
                       {fields.map(({ key, name, fieldKey, ...restField }) => {
                         return (
                           <Space
@@ -98,74 +149,93 @@ class FederalResult extends Component {
                           >
                             <Form.Item
                               style={{ marginTop: "1vh" }}
+                              name={[name, "role"]}
+                              label={"角色类型"}
+                              fieldKey={[fieldKey, "role"]}
+                            >
+                              <div>
+                                <Input
+                                  value={key === 0 ? "主导方" : "参与方"}
+                                />
+                              </div>
+                            </Form.Item>
+                            <Form.Item
+                              style={{ marginTop: "1vh" }}
+                              name={[name, "party_id"]}
+                              fieldKey={[fieldKey, "party_id"]}
+                              label={"成员ID"}
+                              onChange={(e) => {
+                                const { party_id } = this.state;
+                                party_id[key] = e.target.value;
+                                this.setState({
+                                  party_id,
+                                });
+                              }}
+                              rules={[
+                                {
+                                  required: true,
+                                  validator: (_, value) => {
+                                    if (
+                                      (isNaN(value) && value) ||
+                                      value % 1 !== 0
+                                    ) {
+                                      return Promise.reject(
+                                        new Error("请输入一个整数作为成员的ID")
+                                      );
+                                    }
+                                  },
+                                },
+                              ]}
+                            >
+                              <Input placeholder={"输入成员ID(必须为整数)"} />
+                            </Form.Item>
+                            <Form.Item
+                              style={{ marginTop: "1vh" }}
                               name={[name, "table_name"]}
                               fieldKey={[fieldKey, "table_name"]}
-                              label={"成员ID"}
+                              label={"数据表名称"}
+                              onChange={(e) => {
+                                const { table_name } = this.state;
+                                table_name[key] = e.target.value;
+                                this.setState({
+                                  table_name,
+                                });
+                              }}
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "数据表名称不能为空",
+                                },
+                              ]}
                             >
-                              <Input
-                                value={this.state.tables}
-                                onChange={(e) => {
-                                  const { userID } = this.state;
-                                  userID[key] = e.target.value;
-                                  this.setState({
-                                    userID,
-                                  });
-                                }}
-                                onPressEnter={(e) => {
-                                  e.preventDefault();
-                                }}
-                                placeholder={"请输入成员ID"}
-                              />
+                              <Input placeholder={"请输入数据表名称"} />
                             </Form.Item>
                             <Form.Item
                               style={{ marginTop: "1vh" }}
                               name={[name, "namespace"]}
                               fieldKey={[fieldKey, "namespace"]}
-                              label={"数据表代码"}
+                              label={"请输入命名空间"}
+                              onChange={(e) => {
+                                const { namespace } = this.state;
+                                namespace[key] = e.target.value;
+                                this.setState({
+                                  namespace,
+                                });
+                              }}
+                              rules={[
+                                { required: true, message: "命名空间不能为空" },
+                              ]}
                             >
                               <Input
-                                value={this.state.namespaces}
-                                onChange={(e) => {
-                                  const { tableCode } = this.state;
-                                  tableCode[key] = e.target.value;
-                                  this.setState({
-                                    tableCode,
-                                  });
-                                }}
-                                onPressEnter={(e) => {
-                                  e.preventDefault();
-                                }}
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "请输入数据表代码",
+                                  },
+                                ]}
                                 placeholder={"请输入数据表代码"}
                               />
                             </Form.Item>
-                            <Form.Item
-                              style={{ marginTop: "1vh" }}
-                              {...tailLayout}
-                            >
-                              <Button
-                                disabled={this.state.disables[key]}
-                                onClick={(e) => {
-                                  let { isLoading, disables } = this.state;
-                                  isLoading[key] = true;
-                                  disables[key] = true;
-                                  disables = disables.map((v, k) => {
-                                    return !v;
-                                  });
-                                  this.setState({
-                                    uploadKey: key,
-                                    isLoading,
-                                    disables,
-                                    uploadIng: true,
-                                  });
-                                }}
-                                loading={this.state.isLoading[key]}
-                                type="primary"
-                                htmlType="submit"
-                              >
-                                上传
-                              </Button>
-                            </Form.Item>
-                            <MinusCircleOutlined onClick={() => remove(name)} />
                           </Space>
                         );
                       })}
@@ -175,40 +245,59 @@ class FederalResult extends Component {
                           disabled={this.state.uploadIng}
                           onClick={() => {
                             add();
-                            let { isLoading, disables, uploadIng } = this.state;
+                            let {
+                              isLoading,
+                              disables,
+                              uploadIng,
+                              role,
+                              party_id,
+                              namespace,
+                              table_name,
+                            } = this.state;
                             isLoading.push(false);
                             disables.push(false);
+                            party_id.push("");
+                            namespace.push("");
+                            table_name.push("");
+                            role.push("host");
                             this.setState({
                               isLoading,
                               disables,
+                              role,
                             });
                           }}
                           block
                           icon={<PlusOutlined />}
                         >
-                          添加新的数据集选择
+                          新增参与方
                         </Button>
                       </Form.Item>
-                    </div>
+                    </>
                   );
                 }}
               </Form.List>
+              <Form.Item {...tailLayout} style={{ marginTop: "8vh" }}>
+                <Space style={{ marginTop: "30px" }} size={300}>
+                  <Button
+                    htmlType="button"
+                    onClick={this.toLastPage}
+                    style={{ background: "rgb(201,201,201)" }}
+                    size="large"
+                  >
+                    上一步
+                  </Button>
+                  <Button
+                    onClick={this.toNextPage}
+                    type="primary"
+                    htmlType="submit"
+                    size="large"
+                  >
+                    下一步
+                  </Button>
+                </Space>
+              </Form.Item>
             </Form>
           </Col>
-        </Row>
-        <Row style={{ marginTop: "30px" }} justify={"center"}>
-          <Space size={300}>
-            <Button
-              onClick={this.toLastPage}
-              style={{ background: "rgb(201,201,201)" }}
-              size="large"
-            >
-              上一步
-            </Button>
-            <Button onClick={this.toNextPage} type="primary" size="large">
-              下一步
-            </Button>
-          </Space>
         </Row>
       </div>
     );

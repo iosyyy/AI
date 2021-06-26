@@ -12,6 +12,7 @@ import NormalForm from "./normalForm";
 class FederalTrainChoice extends Component {
   constructor(props) {
     super(props);
+    console.log(this.props.history.location.state);
     this.state = {
       showAdvancedConfiguration: false,
       loading: false,
@@ -30,7 +31,6 @@ class FederalTrainChoice extends Component {
     });
   };
 
-
   render() {
     const { loading } = this.state;
 
@@ -41,7 +41,7 @@ class FederalTrainChoice extends Component {
             { status: "finish", title: "联邦类型", icon: <FileOutlined /> },
             {
               status: "finish",
-              title: "数据集选择",
+              title: "任务参与方选择",
               icon: <CloudUploadOutlined />,
             },
             {
