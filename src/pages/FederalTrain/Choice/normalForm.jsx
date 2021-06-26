@@ -74,7 +74,7 @@ class NormalForm extends Component {
             {
               required: true,
               validator: (_, value) => {
-                if (!value || value.trim() == "") {
+                if (!value || value.trim() === "") {
                   return Promise.reject(new Error("请输入算法参数"));
                 }
                 let jsonVal = "{" + value + "}";

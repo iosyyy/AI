@@ -37,7 +37,8 @@ class FederalResult extends Component {
     const { party_id, role, namespace, table_name } = this.state;
 
     for (const party of party_id) {
-      if (isNaN(party)) {
+      console.log(party % 1);
+      if ((isNaN(party) && party) || party % 1 !== 0) {
         return false;
       }
     }
@@ -61,13 +62,13 @@ class FederalResult extends Component {
     }
     const data = {};
     data.guest = {
-      party_id: party_id[0],
+      party_id: parseInt(party_id[0]),
       table_name: table_name[0],
       namespace: namespace[0],
     };
     data.host = party_id.slice(1).map((v, i) => {
       return {
-        party_id: party_id[i + 1],
+        party_id: parseInt(party_id[i + 1]),
         table_name: table_name[i + 1],
         namespace: namespace[i + 1],
       };
@@ -153,7 +154,9 @@ class FederalResult extends Component {
                               fieldKey={[fieldKey, "role"]}
                             >
                               <div>
-                                <Input value={this.state.role[key]} />
+                                <Input
+                                  value={key === 0 ? "主导方" : "参与方"}
+                                />
                               </div>
                             </Form.Item>
                             <Form.Item
@@ -172,16 +175,19 @@ class FederalResult extends Component {
                                 {
                                   required: true,
                                   validator: (_, value) => {
-                                    if (isNaN(value)) {
+                                    if (
+                                      (isNaN(value) && value) ||
+                                      value % 1 !== 0
+                                    ) {
                                       return Promise.reject(
-                                        new Error("请输入一个数字作为参数")
+                                        new Error("请输入一个整数作为成员的ID")
                                       );
                                     }
                                   },
                                 },
                               ]}
                             >
-                              <Input placeholder={"请输入成员ID"} />
+                              <Input placeholder={"输入成员ID(必须为整数)"} />
                             </Form.Item>
                             <Form.Item
                               style={{ marginTop: "1vh" }}
@@ -196,7 +202,10 @@ class FederalResult extends Component {
                                 });
                               }}
                               rules={[
-                                { required: true, message: "请输入数据表名称" },
+                                {
+                                  required: true,
+                                  message: "数据表名称不能为空",
+                                },
                               ]}
                             >
                               <Input placeholder={"请输入数据表名称"} />
@@ -214,7 +223,7 @@ class FederalResult extends Component {
                                 });
                               }}
                               rules={[
-                                { required: true, message: "请输入命名空间" },
+                                { required: true, message: "命名空间不能为空" },
                               ]}
                             >
                               <Input
