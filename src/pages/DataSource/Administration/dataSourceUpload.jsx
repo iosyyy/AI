@@ -61,7 +61,13 @@ class DataSourceUpload extends Component {
     });
     isLoading[uploadKey] = false;
     const formData = new FormData();
-    if (!e.dataset.file) {
+    if (
+      !e ||
+      !tables[uploadKey] ||
+      !namespaces[uploadKey] ||
+      !description[uploadKey] ||
+      (!work_mode[uploadKey] && work_mode[uploadKey] !== 0)
+    ) {
       message.error("数据填写错误,请重新填写");
       this.setState({
         isLoading,
@@ -136,7 +142,11 @@ class DataSourceUpload extends Component {
         >
           <Col>
             <Form size={"middle"} onFinish={this.onFormFinish} {...layout}>
-              <Form.List rules={[{ required: true }]} name="users">
+              <Form.List
+                initialValues={{ work_mode: 0 }}
+                rules={[{ required: true }]}
+                name="users"
+              >
                 {(fields, { add, remove }) => {
                   if (fields.length === 0) {
                     add();

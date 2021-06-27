@@ -21,10 +21,10 @@ class FederalResult extends Component {
       isLoading: [false],
       disables: [],
       uploadIng: false,
-      table_name: [""],
-      namespace: [""],
-      role: ["guest"],
-      party_id: [""],
+      table_name: ["", ""],
+      namespace: ["", ""],
+      party_id: ["", ""],
+      role: ["guest", "host"],
     };
   }
 
@@ -135,6 +135,13 @@ class FederalResult extends Component {
                       isListField: true,
                       key: 0,
                       name: 0,
+                    });
+                    add();
+                    fields.push({
+                      fieldKey: 1,
+                      isListField: true,
+                      key: 1,
+                      name: 1,
                     });
                   }
                   return (
