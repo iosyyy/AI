@@ -16,148 +16,16 @@ import DatasourceFormHandle from "../DatasourceHandle/datasourceFormHandle";
 import { VerticalAlignBottomOutlined } from "@ant-design/icons";
 import axios from "axios";
 import api from "../../../config/api";
-const { Option } = Select;
+import FileSaver from "file-saver";
 
-const COLUMNS = [
-  {
-    title: "这个表头",
-    dataIndex: "index",
-    key: "index",
-    render: (text, record, index) => {
-      return <h1>{index}</h1>;
-    },
-    width: "5vw",
-  },
-  {
-    title: "等后端",
-    dataIndex: "fieldLabel",
-    key: "fieldLabel",
-    width: "10vw",
-  },
-  {
-    title: "api",
-    dataIndex: "fieldName",
-    key: "fieldName",
-    width: "10vw",
-  },
-  {
-    title: "整完了",
-    dataIndex: "fieldType",
-    key: "fieldType",
-    render: (text, record, index) => {
-      return (
-        <Select defaultValue="id">
-          <Option value="id">唯一标识(ID)</Option>
-          <Option value="integer">数值型变量</Option>
-          <Option value="type">分类型变量</Option>
-        </Select>
-      );
-    },
-    width: "10vw",
-  },
-  {
-    title: "再整",
-    dataIndex: "use",
-    key: "use",
-    render: (text, record, index) => {
-      return (
-        <Select defaultValue="yes">
-          <Option value="yes">是</Option>
-          <Option value="no">否</Option>
-        </Select>
-      );
-    },
-    width: "10vw",
-  },
-  {
-    title: "因为大量数据要写的太多了",
-    dataIndex: "map",
-    key: "map",
-    width: "10vw",
-  },
-  {
-    title: "到时候还要删了重新写",
-    dataIndex: "a",
-    key: "a",
-    width: "10vw",
-  },
-];
+const { Option } = Select;
 
 class DataSourceTable extends Component {
   constructor(props) {
     super(props);
     console.log(props);
-    this.state = {
-      onShowDetail: {},
-      detailVisible: false,
-      modelIsLoading: false,
-      dataSource: [],
-      dataSource2: [
-        {
-          key: "1",
-          fieldLabel: "...",
-          fieldName: "...",
-          map: "",
-        },
-        {
-          key: "2",
-          fieldLabel: "...",
-          fieldName: "...",
-          map: "",
-        },
-        {
-          key: "3",
-          fieldLabel: "...",
-          fieldName: "...",
-          map: "",
-        },
-        {
-          key: "4",
-          fieldLabel: "...",
-          fieldName: "...",
-          map: "",
-        },
-        {
-          key: "5",
-          fieldLabel: "...",
-          fieldName: "...",
-          map: "",
-        },
-      ],
-    };
-  }
 
-  componentDidMount() {
-    axios
-      .get(`${api.datasourceList}?data_type=0`)
-      .then((r) => {
-        if (r.data.retcode !== 0) {
-          message.error(r.data.retmsg);
-        } else {
-          const { data } = r.data;
-          const dataSource = data.map((v, k) => {
-            return {
-              ...v,
-              note: v.description,
-              tableName: v.name,
-              key: v.job_id,
-            };
-          });
-
-          this.setState({
-            dataSource,
-          });
-        }
-      })
-      .catch((e) => {
-        message.error("服务器异常请重试");
-      });
-  }
-
-  render() {
-    const { dataSource2, dataSource, detailVisible, onShowDetail } = this.state;
-
-    const columns = [
+    const columnsT = [
       {
         title: <div>key</div>,
         dataIndex: "key",
@@ -206,17 +74,72 @@ class DataSourceTable extends Component {
                   axios
                     .post(api.queryDatasource, formData)
                     .then((data) => {
-                      //TODO 要把file传到api.downloadTemplate这个接口里面然后下载
-                      // 后端传过来的是个字符串然后做字符串split就行了
-                      this.setState({
-                        modelIsLoading: false,
-                      });
-                      console.log(data.data);
-                      let jsonObj = data.data.file;
-                      let jsonStr = JSON.stringify(jsonObj, null, "  ");
-                      let file = new Blob([jsonStr], { type: "" });
+                      const { retcode, retmsg } = data.data;
+                      if (retcode !== 0) {
+                        message.error(retmsg);
+                      }
+                      const jsonData = data.data.data;
 
-                      this.setState({ curFile: file });
+                      console.log(jsonData);
+                      let file = jsonData.file;
+                      axios
+                        .post(api.downloadTemplate, {
+                          file_name: file,
+                        })
+                        .then((r) => {
+                          console.log(r);
+                          const fileData = r.data;
+                          if (!fileData) {
+                            message.error("空数据异常");
+                            this.setState({
+                              disabled: true,
+                            });
+                          } else {
+                            const fileArray = fileData.split("\n");
+                            const fileFirstLine = fileArray[0].split(",");
+                            const column = fileFirstLine.map((v, i) => {
+                              return {
+                                title: <div>{v}</div>,
+                                dataIndex: v,
+                                key: v,
+                              };
+                            });
+                            const slice = fileArray.slice(1);
+                            const dataSource = slice.map((v, i) => {
+                              const dataLine = v.split(",");
+                              const dataLineObj = {};
+                              dataLine.forEach((v, i) => {
+                                dataLineObj[
+                                  fileFirstLine[i] === "id"
+                                    ? "key"
+                                    : fileFirstLine[i]
+                                ] = v;
+                              });
+                              return dataLineObj;
+                            });
+                            const regFile = /[/][\S\s]*[/]/i;
+                            const fileName = file.replace(regFile, "");
+                            this.setState({
+                              curFile: fileName,
+                              file: fileData,
+                              columns: column,
+                              dataSource2: dataSource,
+                              disabled: false,
+                            });
+                          }
+                          this.setState({
+                            modelIsLoading: false,
+                          });
+                        })
+                        .catch(() => {
+                          message.error("数据获取失败,服务器异常!");
+                          setTimeout(() => {
+                            this.setState({
+                              detailVisible: false,
+                              modelIsLoading: false,
+                            });
+                          }, 1500);
+                        });
                     })
                     .catch(() => {
                       message.error("数据获取失败,服务器异常!");
@@ -271,6 +194,58 @@ class DataSourceTable extends Component {
         },
       },
     ];
+    this.state = {
+      onShowDetail: {},
+      detailVisible: false,
+      modelIsLoading: false,
+      columns: [],
+      dataSource: [],
+      columnsT,
+      disabled: false,
+      file: {},
+      dataSource2: [],
+    };
+  }
+
+  componentDidMount() {
+    axios
+      .get(`${api.datasourceList}?data_type=0`)
+      .then((r) => {
+        if (r.data.retcode !== 0) {
+          message.error(r.data.retmsg);
+        } else {
+          const { data } = r.data;
+          const dataSource = data.map((v, k) => {
+            return {
+              ...v,
+              note: v.description,
+              tableName: v.name,
+              key: v.job_id,
+            };
+          });
+
+          this.setState({
+            dataSource,
+          });
+        }
+      })
+      .catch((e) => {
+        message.error("服务器异常请重试");
+      });
+  }
+
+  render() {
+    const {
+      dataSource2,
+      dataSource,
+      detailVisible,
+      onShowDetail,
+      columns,
+      curFile,
+      columnsT,
+      file,
+    } = this.state;
+
     return (
       <>
         <Table
@@ -278,7 +253,7 @@ class DataSourceTable extends Component {
           size="middle"
           Pagination={{ simple: true }}
           dataSource={dataSource}
-          columns={columns}
+          columns={columnsT}
         />
 
         <Modal
@@ -324,17 +299,25 @@ class DataSourceTable extends Component {
                     alignItems: "center",
                   }}
                 >
-                  <span>文件名...</span>
-                  <a>
+                  <span>{curFile}</span>
+                  <a
+                    onClick={() => {
+                      const exportContent = "\uFEFF";
+                      const blob = new Blob([exportContent + file], {
+                        type: "text/plain;charset=utf-8",
+                      });
+                      FileSaver.saveAs(blob, curFile);
+                    }}
+                  >
                     <VerticalAlignBottomOutlined />
                   </a>
                 </div>
-                <Divider></Divider>
+                <Divider />
                 {/*底下这个scroll要根据数据的多少来决定*/}
                 <Table
                   scroll={{ x: 1500, y: 300 }}
                   dataSource={dataSource2}
-                  columns={COLUMNS}
+                  columns={columns}
                   bordered
                   size="small"
                   pagination={false}
