@@ -1,29 +1,14 @@
 import React, { Component } from "react";
-import {
-  Button,
-  Divider,
-  Select,
-  Space,
-  Table,
-  Popconfirm,
-  Card,
-  message,
-  Spin,
-} from "antd";
-import DataSourceUpload from "./dataSourceUpload";
+import { Divider, Table, Popconfirm, Card, message, Spin } from "antd";
 import Modal from "antd/es/modal/Modal";
 import DatasourceFormHandle from "../DatasourceHandle/datasourceFormHandle";
 import { VerticalAlignBottomOutlined } from "@ant-design/icons";
 import axios from "axios";
 import api from "../../../config/api";
 import FileSaver from "file-saver";
-
-const { Option } = Select;
-
 class DataSourceTable extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
 
     const columnsT = [
       {
@@ -63,124 +48,75 @@ class DataSourceTable extends Component {
             <div>
               <a
                 onClick={() => {
-                  this.setState({
-                    detailVisible: true,
-                    modelIsLoading: true,
-                    onShowDetail: obj,
-                  });
-                  let curJobId = obj["job_id"];
-                  const formData = new FormData();
-                  formData.append("job_id", curJobId);
                   axios
-                    .post(api.queryDatasource, formData)
-                    .then((data) => {
-                      const { retcode, retmsg } = data.data;
-                      if (retcode !== 0) {
-                        message.error(retmsg);
-                      }
-                      const jsonData = data.data.data;
-
-                      console.log(jsonData);
-                      let file = jsonData.file;
-                      axios
-                        .post(api.downloadTemplate, {
-                          file_name: file,
-                        })
-                        .then((r) => {
-                          console.log(r);
-                          const fileData = r.data;
-                          if (!fileData) {
-                            message.error("空数据异常");
-                            this.setState({
-                              disabled: true,
-                            });
-                          } else {
-                            const fileArray = fileData.split("\n");
-                            const fileFirstLine = fileArray[0].split(",");
-                            const column = fileFirstLine.map((v, i) => {
-                              return {
-                                title: <div>{v}</div>,
-                                dataIndex: v,
-                                key: v,
-                              };
-                            });
-                            const slice = fileArray.slice(1);
-                            const dataSource = slice.map((v, i) => {
-                              const dataLine = v.split(",");
-                              const dataLineObj = {};
-                              dataLine.forEach((v, i) => {
-                                dataLineObj[
-                                  fileFirstLine[i] === "id"
-                                    ? "key"
-                                    : fileFirstLine[i]
-                                ] = v;
-                              });
-                              return dataLineObj;
-                            });
-                            const regFile = /[/][\S\s]*[/]/i;
-                            const fileName = file.replace(regFile, "");
-                            this.setState({
-                              curFile: fileName,
-                              file: fileData,
-                              columns: column,
-                              dataSource2: dataSource,
-                              disabled: false,
-                            });
-                          }
-                          this.setState({
-                            modelIsLoading: false,
-                          });
-                        })
-                        .catch(() => {
-                          message.error("数据获取失败,服务器异常!");
-                          setTimeout(() => {
-                            this.setState({
-                              detailVisible: false,
-                              modelIsLoading: false,
-                            });
-                          }, 1500);
-                        });
+                    .post(api.downloadTemplate, { file_name: obj.file })
+                    .then((r) => {
+                      const { data } = r;
+                      const exportContent = "\uFEFF";
+                      const blob = new Blob([exportContent + data], {
+                        type: "text/plain;charset=utf-8",
+                      });
+                      const regFile = /[/][\S\s]*[/]/i;
+                      const curFile = obj.file.replace(regFile, "");
+                      FileSaver.saveAs(blob, curFile);
                     })
-                    .catch(() => {
-                      message.error("数据获取失败,服务器异常!");
-                      setTimeout(() => {
-                        this.setState({
-                          detailVisible: false,
-                          modelIsLoading: false,
-                        });
-                      }, 1500);
+                    .catch((r) => {
+                      message.error("文件下载失败请重试并检查网络连接");
                     });
                 }}
               >
-                查询
+                下载
               </a>
               <span>/</span>
               <Popconfirm
                 title="确定要删除么?"
                 onConfirm={() => {
-                  // TODO 删除是有接口额使用接口进行删除而且接口是post方法的
                   let curJobId = obj["job_id"];
-
+                  const formData = new FormData();
+                  formData.append("job_id", curJobId);
                   axios
-                    .post(api.queryDatasource, { job_id: curJobId })
+                    .post(api.delDatasource, formData)
                     .then((data) => {
-                      if (data.data.retcode === 0) {
-                        let curJobId = obj["job_id"];
-                        console.log(this.state.dataSource);
-                        let datasource = this.state.dataSource;
-                        let d = [
-                          ...dataSource.filter(
-                            (item) => item["job_id"] !== curJobId
-                          ),
-                        ];
-                        this.setState({ dataSource: d });
-                        message.info("数据源删除成功!");
+                      const { retcode, retmsg } = data.data;
+                      if (retcode === 0) {
+                        message.success("数据源删除成功!");
+                        this.setState({
+                          tableIsLoading: true,
+                        });
+                        axios
+                          .get(`${api.datasourceList}?data_type=0`)
+                          .then((r) => {
+                            if (r.data.retcode !== 0) {
+                              message.error(r.data.retmsg);
+                            } else {
+                              const { data } = r.data;
+                              const dataSource = data.map((v, k) => {
+                                return {
+                                  ...v,
+                                  note: v.description,
+                                  tableName: v.name,
+                                  key: v.job_id,
+                                };
+                              });
+
+                              this.setState({
+                                dataSource,
+                                tableIsLoading: false,
+                              });
+                            }
+                          })
+                          .catch((e) => {
+                            message.error("服务器异常请重试");
+                            this.setState({
+                              tableIsLoading: false,
+                            });
+                          });
                       } else {
-                        message.info("数据源删除失败!");
+                        message.error(retmsg);
                       }
                     })
                     .catch(() => {
-                      message.error("数据源删除失败!");
+                      message.error("数据源删除失败!请检查网络连接");
                     });
                 }}
                 onCancel={null}
@@ -204,10 +140,14 @@ class DataSourceTable extends Component {
       disabled: false,
       file: {},
       dataSource2: [],
+      tableIsLoading: false,
     };
   }
 
   componentDidMount() {
+    this.setState({
+      tableIsLoading: true,
+    });
     axios
       .get(`${api.datasourceList}?data_type=0`)
       .then((r) => {
@@ -226,11 +166,15 @@ class DataSourceTable extends Component {
 
           this.setState({
             dataSource,
+            tableIsLoading: false,
           });
         }
       })
       .catch((e) => {
         message.error("服务器异常请重试");
+        this.setState({
+          tableIsLoading: false,
+        });
       });
   }
 
@@ -243,6 +187,7 @@ class DataSourceTable extends Component {
       columns,
       curFile,
       columnsT,
+      tableIsLoading,
       file,
     } = this.state;
 
@@ -250,6 +195,7 @@ class DataSourceTable extends Component {
       <>
         <Table
           bordered
+          loading={tableIsLoading}
           size="middle"
           Pagination={{ simple: true }}
           dataSource={dataSource}
@@ -258,7 +204,7 @@ class DataSourceTable extends Component {
 
         <Modal
           visible={detailVisible}
-          title="已处理数据详情页"
+          title="数据源详情信息"
           centered
           bodyStyle={{
             WebkitBoxShadow: "0 20px 15px #9B7468",
@@ -315,7 +261,7 @@ class DataSourceTable extends Component {
                 <Divider />
                 {/*底下这个scroll要根据数据的多少来决定*/}
                 <Table
-                  scroll={{ x: 1500, y: 300 }}
+                  scroll={{ x: "95vw" }}
                   dataSource={dataSource2}
                   columns={columns}
                   bordered

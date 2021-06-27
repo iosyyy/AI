@@ -109,9 +109,7 @@ class DataSourceUpload extends Component {
             uploadIng: false,
           });
         } else {
-          message.error(r.data.retcode + ":" + r.data.retmsg).then((r) => {
-            console.log(r);
-          });
+          message.error(r.data.retcode + ":" + r.data.retmsg).then((r) => {});
           this.setState({
             isLoading,
             disables: dis,
