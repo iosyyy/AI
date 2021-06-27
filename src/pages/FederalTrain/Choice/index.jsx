@@ -20,12 +20,12 @@ class FederalTrainChoice extends Component {
   }
 
   changeForm = () => {
-    this.setState((state) => ({
+    this.setState(state => ({
       showAdvancedConfiguration: !state.showAdvancedConfiguration,
     }));
   };
 
-  setLoading = (loading) => {
+  setLoading = loading => {
     this.setState({
       loading,
     });
@@ -33,9 +33,9 @@ class FederalTrainChoice extends Component {
 
   render() {
     const { loading } = this.state;
-
+    let { guest, host } = this.props.history.location.state.data;
     return (
-      <div style={{ height: "80vh" }} className="site-layout-content">
+      <div style={{ height: "80vh" }} className='site-layout-content'>
         <StepsTemplate
           steps={[
             { status: "finish", title: "联邦类型", icon: <FileOutlined /> },
@@ -61,6 +61,8 @@ class FederalTrainChoice extends Component {
         ) : (
           <NormalForm
             setLoading={this.setLoading}
+            host={host}
+            guest={guest}
             changeForm={() => {
               this.changeForm();
             }}

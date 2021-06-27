@@ -95,7 +95,8 @@ class AdvancedForm extends Component {
           let { trainName } = e;
           let { fileList1, fileList2 } = this.state;
           const formData = new FormData();
-          formData.append("train_name", trainName);
+          formData.append("train_algorithm_name", trainName);
+          formData.append("config_type", 1);
           fileList1.forEach(file => {
             formData.append("config_file", file);
           });
@@ -105,34 +106,42 @@ class AdvancedForm extends Component {
           if (
             formData.get("config_file") &&
             formData.get("dsl_file") &&
-            formData.get("train_name")
+            formData.get("train_algorithm_name")
           ) {
-            axios({
-              url: api.beginTrain,
-              method: "post",
-              processData: false,
-              data: formData,
-            })
-              .then(res => {
-                this.setState({
-                  fileList1: [],
-                  fileList2: [],
-                });
-                message.success("上传成功");
-                this.props.history.push({
-                  pathname: "/training",
-                  state: { data: res.data },
-                });
+            console.log(api.beginTrain);
+            axios
+              .post(api.beginTrain, formData, {
+                headers: { "Content-Type": "multipart/form-data" },
               })
-              .catch(res => {
-                this.setState({
-                  loading: false,
-                });
-                setLoading(loading);
-
-                message.error("上传失败");
-                console.error(res);
-              });
+              .then(
+                res => {
+                  console.log(res);
+                  if (res.data.retcode == 0) {
+                    this.setState({
+                      fileList1: [],
+                      fileList2: [],
+                    });
+                    message.success("上传成功");
+                    this.props.history.push({
+                      pathname: "/training",
+                      state: { data: res.data },
+                    });
+                  } else {
+                    this.setState({
+                      loading: false,
+                    });
+                    message.error("上传失败1");
+                  }
+                },
+                res => {
+                  this.setState({
+                    loading: false,
+                  });
+                  setLoading(loading);
+                  message.error("上传失败2");
+                  console.error(res);
+                }
+              );
           } else {
             message.error("请提交文件config文件与dsl文件");
             this.setState({
