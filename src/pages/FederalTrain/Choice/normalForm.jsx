@@ -37,47 +37,28 @@ class NormalForm extends Component {
             });
             setLoading(true);
             const formData = new FormData();
-            console.log(e);
-
+            let guest = this.props.guest;
+            let host = this.props.host;
             let algorithmParms = e.algorithmParms
               ? JSON.parse("{" + e.algorithmParms + "}")
               : {};
             let percent = parseFloat(e.percent);
             let jobDescription = e.postScript ? e.postScript : "";
-
-            console.log("guest:", this.props.guest);
-            console.log("host:", this.props.host);
-            console.log("job_name:", e.trainName);
-            console.log("job_description:", jobDescription);
-            console.log("work_mode:", e.trainType);
-            console.log("config_type:", 0);
-            console.log("train_algorithm_name:", e.algorithm);
-            console.log("algorithm_parameters:", algorithmParms);
-            console.log("isScale:", e.isScale);
-            console.log("test_size:", percent);
-
-            formData.append("guest", this.props.guest);
-            formData.append("host", this.props.host);
-            formData.append("job_name", e.trainName);
-            formData.append(
-              "job_description",
-              e.postScript ? "" : e.postScript
-            );
-            formData.append("work_mode", e.trainType);
-            formData.append("config_type", 0);
-            formData.append("train_algorithm_name", e.algorithm);
-            formData.append("algorithm_parameters", algorithmParms);
-            formData.append("isScale", e.isScale);
-            formData.append("test_size", percent);
-
+            
             axios({
-              url: api.beginTrain,
+              url: api.beginNormalTrain,
               method: "post",
-              data: formData,
-              processData: false,
-              headers: {
-                "Content-Type": "application/json",
-                "Accept":"*/*"
+              data: {
+                guest: guest,
+                host: host,
+                job_name: e.trainName,
+                job_description: jobDescription,
+                work_mode: e.trainType,
+                config_type: 0,
+                train_algorithm_name: e.algorithm,
+                algorithm_parameters: algorithmParms,
+                isScale: e.isScale,
+                test_size: percent,
               },
             }).then(
               data => {

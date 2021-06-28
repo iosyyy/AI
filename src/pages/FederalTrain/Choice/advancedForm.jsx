@@ -16,16 +16,16 @@ class AdvancedForm extends Component {
     };
   }
 
-  downloadTempalte(fileName) {
+  downloadTempalte(path, fileName) {
     axios
       .post(api.downloadTemplate, {
-        file_name: fileName,
+        file_name: path + "/" + fileName,
       })
       .then(f => {
         let jsonObj = f.data;
         let jsonStr = JSON.stringify(jsonObj, null, "  ");
         let file = new Blob([jsonStr], { type: "" });
-        FileSaver.saveAs(file, fileName + ".json");
+        FileSaver.saveAs(file, fileName);
       });
   }
 
@@ -109,39 +109,35 @@ class AdvancedForm extends Component {
             formData.get("train_algorithm_name")
           ) {
             console.log(api.beginTrain);
-            axios
-              .post(api.beginTrain, formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-              })
-              .then(
-                res => {
-                  console.log(res);
-                  if (res.data.retcode == 0) {
-                    this.setState({
-                      fileList1: [],
-                      fileList2: [],
-                    });
-                    message.success("上传成功");
-                    this.props.history.push({
-                      pathname: "/training",
-                      state: { data: res.data },
-                    });
-                  } else {
-                    this.setState({
-                      loading: false,
-                    });
-                    message.error("上传失败1");
-                  }
-                },
-                res => {
+            axios.post(api.beginHighTrain, formData).then(
+              res => {
+                console.log(res);
+                if (res.data.retcode == 0) {
+                  this.setState({
+                    fileList1: [],
+                    fileList2: [],
+                  });
+                  message.success("上传成功");
+                  this.props.history.push({
+                    pathname: "/training",
+                    state: { data: res.data },
+                  });
+                } else {
                   this.setState({
                     loading: false,
                   });
-                  setLoading(loading);
-                  message.error("上传失败2");
-                  console.error(res);
+                  message.error("上传失败");
                 }
-              );
+              },
+              res => {
+                this.setState({
+                  loading: false,
+                });
+                setLoading(loading);
+                message.error("上传失败");
+                console.error(res);
+              }
+            );
           } else {
             message.error("请提交文件config文件与dsl文件");
             this.setState({
@@ -182,7 +178,10 @@ class AdvancedForm extends Component {
               type='primary'
               style={{ width: "130px", position: "absolute", right: "10px" }}
               onClick={() => {
-                this.downloadTempalte("config_file");
+                this.downloadTempalte(
+                  "/fate/examples/dsl/v1/homo_logistic_regression",
+                  "test_homolr_train_job_conf.json"
+                );
               }}
             >
               下载config模版
@@ -211,7 +210,10 @@ class AdvancedForm extends Component {
               type='primary'
               style={{ width: "130px", position: "absolute", right: "10px" }}
               onClick={() => {
-                this.downloadTempalte("dsl_file");
+                this.downloadTempalte(
+                  "/fate/examples/dsl/v1/homo_logistic_regression",
+                  "test_homolr_train_job_dsl.json"
+                );
               }}
             >
               下载dsl模版
