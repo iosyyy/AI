@@ -163,7 +163,8 @@ export default class index extends Component {
         (item) => item.component_name
       );
       const percent = d.process;
-      const time = parseInt(d.summary_date.job.fElapsed);
+
+      const time = parseInt(d.duration);
       const seconds = Math.round((time / 1000) % 60);
       const minutes = Math.round((time / 1000 / 60) % 60);
       const hour = Math.round((time / 1000 / 60 / 60) % 60);

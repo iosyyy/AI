@@ -27,9 +27,9 @@ class NormalForm extends Component {
     return (
       <div>
         <Form
-          name='normalConfig'
+          name="normalConfig"
           size={"middle"}
-          onFinish={e => {
+          onFinish={(e) => {
             const { setLoading } = this.props;
 
             this.setState({
@@ -61,9 +61,9 @@ class NormalForm extends Component {
                 test_size: percent,
               },
             }).then(
-              data => {
+              (data) => {
                 console.log(data);
-                if (data.data.code === 0) {
+                if (data.data.retcode === 0 || data.data.code === 0) {
                   message.success("上传成功");
                   this.props.history.push({
                     pathname: "/training",
@@ -84,23 +84,23 @@ class NormalForm extends Component {
             setLoading(false);
           }}
           {...layout}
-          onFinishFailed={e => {
+          onFinishFailed={(e) => {
             console.log(e);
           }}
         >
           <Form.Item
-            name='trainName'
-            label='任务名称'
+            name="trainName"
+            label="任务名称"
             rules={[
               { required: true, whitespace: true, message: "请输入任务名称" },
             ]}
           >
-            <Input placeholder='请输入任务名称' />
+            <Input placeholder="请输入任务名称" />
           </Form.Item>
 
           <Form.Item
-            name='trainType'
-            label='任务类型'
+            name="trainType"
+            label="任务类型"
             rules={[{ required: true, message: "请选择任务类型" }]}
           >
             <Radio.Group>
@@ -111,19 +111,19 @@ class NormalForm extends Component {
 
           {/* 采用算法是上个页面传过来的,目前写死为 homo_logistic_regression */}
           <Form.Item
-            name='algorithm'
-            label='采用算法'
-            initialValue='homo_logistic_regression'
+            name="algorithm"
+            label="采用算法"
+            initialValue="homo_logistic_regression"
             rules={[
               { required: true, whitespace: true, message: "请输入采用算法" },
             ]}
           >
-            <Input placeholder='请输入采用算法' disabled />
+            <Input placeholder="请输入采用算法" disabled />
           </Form.Item>
 
           <Form.Item
-            name='algorithmParms'
-            label='算法参数'
+            name="algorithmParms"
+            label="算法参数"
             rules={[
               {
                 validator: (_, value) => {
@@ -148,8 +148,8 @@ class NormalForm extends Component {
           </Form.Item>
 
           <Form.Item
-            name='isScale'
-            label='isScale'
+            name="isScale"
+            label="isScale"
             rules={[{ required: true, message: "请选择isScale" }]}
           >
             <Radio.Group>
@@ -159,8 +159,8 @@ class NormalForm extends Component {
           </Form.Item>
 
           <Form.Item
-            name='percent'
-            label='测试数据集百分比'
+            name="percent"
+            label="测试数据集百分比"
             rules={[
               {
                 required: true,
@@ -169,18 +169,18 @@ class NormalForm extends Component {
             ]}
           >
             <Input
-              type='number'
-              placeholder='请输入小数,如0.1'
-              max='1'
-              min='0'
-              step='0.1'
+              type="number"
+              placeholder="请输入小数,如0.1"
+              max="1"
+              min="0"
+              step="0.1"
             ></Input>
           </Form.Item>
 
-          <Form.Item name='postScript' label='备注信息'>
+          <Form.Item name="postScript" label="备注信息">
             <Input.TextArea
               style={{ resize: "none" }}
-              placeholder='备注信息可选'
+              placeholder="备注信息可选"
             />
           </Form.Item>
 
@@ -204,15 +204,15 @@ class NormalForm extends Component {
                     pathname: "/federalTrain/result",
                   });
                 }}
-                size='large'
+                size="large"
               >
                 上一步
               </Button>
               <Button
                 loading={loading}
-                type='primary'
-                htmlType='submit'
-                size='large'
+                type="primary"
+                htmlType="submit"
+                size="large"
               >
                 提交
               </Button>
