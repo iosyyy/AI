@@ -44,7 +44,7 @@ class NormalForm extends Component {
               : {};
             let percent = parseFloat(e.percent);
             let jobDescription = e.postScript ? e.postScript : "";
-            
+
             axios({
               url: api.beginNormalTrain,
               method: "post",
@@ -63,7 +63,7 @@ class NormalForm extends Component {
             }).then(
               data => {
                 console.log(data);
-                if (data.data.retcode == 0) {
+                if (data.data.code === 0) {
                   message.success("上传成功");
                   this.props.history.push({
                     pathname: "/training",
@@ -153,8 +153,8 @@ class NormalForm extends Component {
             rules={[{ required: true, message: "请选择isScale" }]}
           >
             <Radio.Group>
-              <Radio value={"True"}>是</Radio>
-              <Radio value={"False"}>否</Radio>
+              <Radio value={true}>是</Radio>
+              <Radio value={false}>否</Radio>
             </Radio.Group>
           </Form.Item>
 

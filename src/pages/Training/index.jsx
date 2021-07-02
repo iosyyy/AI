@@ -70,7 +70,7 @@ class Training extends Component {
         });
       })
       .catch(_m => {
-        message.error("服务器异常");
+        message.error("网络状态不好");
       });
   }
 

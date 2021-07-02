@@ -112,7 +112,7 @@ class AdvancedForm extends Component {
             axios.post(api.beginHighTrain, formData).then(
               res => {
                 console.log(res);
-                if (res.data.retcode == 0) {
+                if (res.data.code === 0) {
                   this.setState({
                     fileList1: [],
                     fileList2: [],
