@@ -134,7 +134,13 @@ class NormalForm extends Component {
                   try {
                     JSON.parse(jsonVal);
                   } catch {
-                    return Promise.reject(new Error("算法参数不符合格式要求"));
+                    try {
+                      JSON.parse(value);
+                    } catch {
+                      return Promise.reject(
+                        new Error("算法参数不符合格式要求")
+                      );
+                    }
                   }
                   return Promise.resolve();
                 },
