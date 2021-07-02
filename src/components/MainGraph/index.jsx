@@ -35,6 +35,7 @@ class MainGraph extends Component {
   };
   componentDidMount() {
     const { component_list } = this.props;
+    console.log(component_list);
     if (!component_list) {
       message.error("参数错误");
       return null;

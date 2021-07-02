@@ -34,6 +34,7 @@ class FederalDetail extends Component {
       datas: [],
       component_list: [],
       isLoading: false,
+      key: this.generateUUID(),
     };
   }
 
@@ -129,7 +130,20 @@ class FederalDetail extends Component {
       const d = JSON.parse(data.data);
       const { component_list } = d.dependency_data;
       const names = component_list.map((item) => item.component_name);
-      this.setState({ names, component_list });
+      let change = false;
+      for (const item in component_list) {
+        if (
+          (component_list.hasOwnProperty(item) &&
+            this.state.component_list.length === 0) ||
+          component_list[item].status !== this.state.component_list[item]
+        ) {
+          change = true;
+
+          break;
+        }
+      }
+      console.log(component_list);
+      this.setState({ names, component_list, key: this.generateUUID() });
     };
   }
 
@@ -139,7 +153,7 @@ class FederalDetail extends Component {
   }
 
   render() {
-    const { id, role, partyId, component_list, names } = this.state;
+    const { id, role, partyId, component_list, names, key } = this.state;
 
     return (
       <div
@@ -202,7 +216,7 @@ class FederalDetail extends Component {
                 }}
               >
                 <MainGraph
-                  key={component_list}
+                  key={key}
                   component_list={component_list}
                   names={names}
                   symbolSize={60}

@@ -39,11 +39,10 @@ class Training extends Component {
   getRunning() {
     axios
       .get(api.isTrainingDetail)
-      .then(r => {
+      .then((r) => {
         const { data } = r.data;
-        let curTrainInfo = this.state.trainInfo;
 
-        const newTrainInfo = data.map(v => {
+        const newTrainInfo = data.map((v) => {
           return {
             id: v.fJobId,
             percent: v.fProgress,
@@ -52,24 +51,11 @@ class Training extends Component {
           };
         });
 
-        for (let i = 0; i < newTrainInfo.length; i++) {
-          let flag = 0;
-          for (let j = 0; j < curTrainInfo.length; j++) {
-            if (newTrainInfo[i].id == curTrainInfo[j].id) {
-              curTrainInfo[j].percent = newTrainInfo[i].percent;
-              flag = 1;
-              break;
-            }
-          }
-          if (flag == 0) {
-            curTrainInfo.push(newTrainInfo[i]);
-          }
-        }
         this.setState({
-          trainInfo: [...curTrainInfo],
+          trainInfo: newTrainInfo,
         });
       })
-      .catch(_m => {
+      .catch((_m) => {
         message.error("网络状态不好");
       });
   }
@@ -78,7 +64,7 @@ class Training extends Component {
     const trainList = this.state.trainInfo.map((item, index) => (
       <Card
         hoverable
-        className='training-list-item'
+        className="training-list-item"
         key={index.toString()}
         onDoubleClick={() => {
           this.props.history.push({
@@ -103,23 +89,23 @@ class Training extends Component {
             status={item.percent === 100 ? "succcess" : "active"}
           />
           <Popconfirm
-            title='Are you sure to delete this job?'
+            title="Are you sure to delete this job?"
             onConfirm={() => {
               axios
                 .post(api.stopJob, { job_id: item.id })
-                .then(r => {
+                .then((r) => {
                   if (r.data.code === 0) {
                     message.success(r.data.msg);
                   } else {
                     message.error(r.data.msg);
                   }
                 })
-                .catch(_e => {
+                .catch((_e) => {
                   message.error("服务器异常");
                 });
             }}
-            okText='Yes'
-            cancelText='No'
+            okText="Yes"
+            cancelText="No"
             icon={<QuestionCircleOutlined style={{ color: "red" }} />}
           >
             <Button
@@ -135,8 +121,8 @@ class Training extends Component {
 
     return (
       <div>
-        <h1 className='colorWhite'>正在训练</h1>
-        <div className='training-list'>
+        <h1 className="colorWhite">正在训练</h1>
+        <div className="training-list">
           {trainList.length !== 0 ? (
             trainList
           ) : (

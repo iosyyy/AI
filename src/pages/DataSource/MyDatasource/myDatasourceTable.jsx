@@ -72,7 +72,13 @@ class MyDatasourceTable extends Component {
                           file_name: file,
                         })
                         .then((r) => {
-                          const fileData = r.data;
+                          let fileData;
+                          if (r.data.data) {
+                            fileData = r.data.data;
+                          } else {
+                            fileData = r.data;
+                          }
+                          console.log(fileData);
                           if (!fileData) {
                             message.error("空数据异常");
                           } else {
@@ -185,6 +191,31 @@ class MyDatasourceTable extends Component {
     };
   }
 
+  setData = (data) => {
+    console.log(data);
+    if (data.retcode !== 0) {
+      message.error(data.retmsg);
+      this.setState({
+        loading: false,
+      });
+    } else {
+      const data2 = data.data;
+      const dataSource = data2.map((v, k) => {
+        return {
+          ...v,
+          note: v.description,
+          tableName: v.name,
+          key: v.job_id,
+        };
+      });
+
+      this.setState({
+        dataSource,
+        loading: false,
+      });
+    }
+  };
+
   componentDidMount() {
     this.setState({
       loading: true,
@@ -192,26 +223,10 @@ class MyDatasourceTable extends Component {
     axios
       .get(`${api.datasourceList}?data_type=1`)
       .then((r) => {
-        if (r.data.retcode !== 0) {
-          message.error(r.data.retmsg);
-          this.setState({
-            loading: false,
-          });
+        if (r.data.data) {
+          this.setData(r.data.data);
         } else {
-          const { data } = r.data;
-          const dataSource = data.map((v, k) => {
-            return {
-              ...v,
-              note: v.description,
-              tableName: v.name,
-              key: v.job_id,
-            };
-          });
-
-          this.setState({
-            dataSource,
-            loading: false,
-          });
+          this.setData(r.data);
         }
       })
       .catch((e) => {

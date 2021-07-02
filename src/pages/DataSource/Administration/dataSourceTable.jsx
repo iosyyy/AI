@@ -144,6 +144,31 @@ class DataSourceTable extends Component {
     };
   }
 
+  setData = (data) => {
+    console.log(data);
+    if (data.retcode !== 0) {
+      message.error(data.retmsg);
+      this.setState({
+        tableIsLoading: false,
+      });
+    } else {
+      const data2 = data.data;
+      const dataSource = data2.map((v, k) => {
+        return {
+          ...v,
+          note: v.description,
+          tableName: v.name,
+          key: v.job_id,
+        };
+      });
+
+      this.setState({
+        dataSource,
+        tableIsLoading: false,
+      });
+    }
+  };
+
   componentDidMount() {
     this.setState({
       tableIsLoading: true,
@@ -151,23 +176,10 @@ class DataSourceTable extends Component {
     axios
       .get(`${api.datasourceList}?data_type=0`)
       .then((r) => {
-        if (r.data.retcode !== 0) {
-          message.error(r.data.retmsg);
+        if (r.data.data) {
+          this.setData(r.data.data);
         } else {
-          const { data } = r.data;
-          const dataSource = data.map((v, k) => {
-            return {
-              ...v,
-              note: v.description,
-              tableName: v.name,
-              key: v.job_id,
-            };
-          });
-
-          this.setState({
-            dataSource,
-            tableIsLoading: false,
-          });
+          this.setData(r.data);
         }
       })
       .catch((e) => {
