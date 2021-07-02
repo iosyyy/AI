@@ -31,26 +31,23 @@ class TrainingRecord extends Component {
         dataIndex: "id",
         key: "id",
         width: "16vw",
-        render: (id) => (
+        render: (id, obj) => (
           <div>
             <div
               style={{
                 color: "rgb(65,89,209)",
               }}
               onClick={(_e) => {
-                const cur = this.state.dataSource.filter(
-                  (item) => item.id === id
-                )[0];
                 this.props.history.push({
                   pathname: "/federalDetail/show",
                   search: qs.stringify({
-                    id: cur.id,
-                    role: cur.role,
-                    partyId: cur.partyId,
-                    status: cur.status,
-                    startTime: cur.startTime,
-                    endTime: cur.endTime,
-                    duration: cur.duration,
+                    id: obj.id,
+                    role: obj.role,
+                    partyId: obj.partyId,
+                    status: obj.status,
+                    startTime: obj.startTime,
+                    endTime: obj.endTime,
+                    duration: obj.duration,
                   }),
                 });
               }}

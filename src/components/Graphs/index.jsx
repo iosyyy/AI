@@ -5,6 +5,7 @@ import * as echarts from "echarts";
 import axios from "axios";
 import _ from "underscore";
 import api from "../../config/api";
+import { message } from "antd/es";
 
 const { TabPane } = Tabs;
 
@@ -84,8 +85,9 @@ export default class Graphs extends Component {
           let { code, msg } = r.data;
           if (code !== 0) {
             message.error(`${code}: ${msg}`);
+            return;
           }
-          data = r.data.data.train["homo_lr_0_roc"].data;
+          if (r.data.data) data = r.data.data.train["homo_lr_0_roc"].data;
           thresholds = r.data.data.train["homo_lr_0_roc"].meta.thresholds;
           let RocData = {
             state: 0,

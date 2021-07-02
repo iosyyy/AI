@@ -122,6 +122,7 @@ class Metrics extends Component {
       f1_scores: [],
       thresholds: [],
       TABLE_COLUMNS1,
+      isEmpty: true,
     };
   }
 
@@ -146,12 +147,19 @@ class Metrics extends Component {
       })
       .then((r) => {
         let { code, msg } = r.data;
-        if (code !== 0) {
-          message.error(`${code}: ${msg}`);
-        }
-        if (Object.keys(r.data.data).length === 0) {
+        if (
+          code !== 0 ||
+          Object.keys(r.data.data).length === 0 ||
+          !r.data.data.train ||
+          Object.keys(r.data.data.train).length === 0
+        ) {
+          message.error(`空数据异常`);
+          this.setState({
+            isEmpty: true,
+          });
           return;
         }
+
         const dataset = Object.keys(r.data.data)[0];
         const {
           homo_lr_0_quantile_pr,
@@ -246,6 +254,8 @@ class Metrics extends Component {
         tableDataSource2.push(dataSource3);
 
         this.setState({
+          isEmpty: false,
+
           TABLE_COLUMNS1,
           tableDataSource1,
           tableDataSource2,
@@ -307,6 +317,7 @@ class Metrics extends Component {
       tableDataSource1,
       tableDataSource2,
       TABLE_COLUMNS1,
+      isEmpty,
     } = this.state;
 
     return (
@@ -314,72 +325,87 @@ class Metrics extends Component {
         className={"scrollContent"}
         style={{ height: "65vh", padding: "2vh" }}
       >
-        <h2>Evaluation scores</h2>
-        <Row>
-          <Col span={4}>
-            <Slider
-              min={0}
-              max={1}
-              step={0.05}
-              onChange={this.onChange1}
-              value={inputValue1}
+        {isEmpty ? (
+          <>
+            <Row
+              style={{ height: "65vh", marginTop: "2vh" }}
+              justify={"center"}
+            >
+              <Col>
+                <h1>There is no data</h1>
+              </Col>
+            </Row>
+          </>
+        ) : (
+          <>
+            {" "}
+            <h2>Evaluation scores</h2>
+            <Row>
+              <Col span={4}>
+                <Slider
+                  min={0}
+                  max={1}
+                  step={0.05}
+                  onChange={this.onChange1}
+                  value={inputValue1}
+                />
+              </Col>
+              <Col>
+                <InputNumber
+                  min={0}
+                  max={1}
+                  step={0.05}
+                  style={{ margin: "0 16px" }}
+                  value={inputValue1}
+                  onChange={this.onChange1}
+                />
+              </Col>
+            </Row>
+            <Table
+              columns={TABLE_COLUMNS1}
+              bordered={false}
+              size={"small"}
+              pagination={false}
+              dataSource={tableDataSource1}
             />
-          </Col>
-          <Col>
-            <InputNumber
-              min={0}
-              max={1}
-              step={0.05}
-              style={{ margin: "0 16px" }}
-              value={inputValue1}
-              onChange={this.onChange1}
+            <Divider style={{ margin: "3vh 0", height: "5px" }} />
+            <h2>Confusion Matrix</h2>
+            <Row>
+              <Col span={4}>
+                <Slider
+                  min={0}
+                  max={1}
+                  step={0.01}
+                  onChange={this.onChange2}
+                  value={inputValue2}
+                />
+              </Col>
+              <Col>
+                <InputNumber
+                  min={0}
+                  max={1}
+                  step={0.01}
+                  style={{ margin: "0 16px" }}
+                  value={inputValue2}
+                  onChange={this.onChange2}
+                />
+              </Col>
+            </Row>
+            <Divider style={{ margin: "3vh 0", height: "5px" }} />
+            <Table
+              columns={TABLE_COLUMNS2}
+              bordered={false}
+              size={"small"}
+              pagination={false}
+              dataSource={tableDataSource2}
             />
-          </Col>
-        </Row>
-        <Table
-          columns={TABLE_COLUMNS1}
-          bordered={false}
-          size={"small"}
-          pagination={false}
-          dataSource={tableDataSource1}
-        />
-        <Divider style={{ margin: "3vh 0", height: "5px" }} />
-
-        <h2>Confusion Matrix</h2>
-        <Row>
-          <Col span={4}>
-            <Slider
-              min={0}
-              max={1}
-              step={0.01}
-              onChange={this.onChange2}
-              value={inputValue2}
+            <Divider style={{ margin: "3vh 0", height: "5px" }} />
+            <Graphs
+              metrics={this.props.metrics}
+              post_data={this.props.post_data}
             />
-          </Col>
-          <Col>
-            <InputNumber
-              min={0}
-              max={1}
-              step={0.01}
-              style={{ margin: "0 16px" }}
-              value={inputValue2}
-              onChange={this.onChange2}
-            />
-          </Col>
-        </Row>
-        <Divider style={{ margin: "3vh 0", height: "5px" }} />
-
-        <Table
-          columns={TABLE_COLUMNS2}
-          bordered={false}
-          size={"small"}
-          pagination={false}
-          dataSource={tableDataSource2}
-        />
-
-        <Divider style={{ margin: "3vh 0", height: "5px" }} />
-
-        <Graphs metrics={this.props.metrics} post_data={this.props.post_data} />
+          </>
+        )}
       </div>
     );
   }
