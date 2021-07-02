@@ -94,7 +94,7 @@ class FederalResult extends Component {
     const layout = {};
     const { uploadIng } = this.state;
     return (
-      <div style={{ height: "80vh" }} className="site-layout-content">
+      <div style={{ height: "83vh" }} className="site-layout-content">
         <StepsTemplate
           steps={[
             { status: "finish", title: "联邦类型", icon: <FileOutlined /> },
@@ -237,10 +237,10 @@ class FederalResult extends Component {
                                 rules={[
                                   {
                                     required: true,
-                                    message: "请输入数据表代码",
+                                    message: "命名空间不能为空",
                                   },
                                 ]}
-                                placeholder={"请输入数据表代码"}
+                                placeholder={"请输入命名空间"}
                               />
                             </Form.Item>
                           </Space>

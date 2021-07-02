@@ -15,7 +15,7 @@ class FederalTrain extends Component {
 
   render() {
     return (
-      <div style={{ height: "80vh" }} className="site-layout-content">
+      <div style={{ height: "83vh" }} className="site-layout-content">
         <StepsTemplate
           steps={[
             { status: "process", title: "联邦类型", icon: <FileOutlined /> },

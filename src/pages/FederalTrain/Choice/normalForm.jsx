@@ -25,7 +25,7 @@ class NormalForm extends Component {
       wrapperCol: { span: 8 },
     };
     return (
-      <div>
+      <div style={{ overflow: "auto" }}>
         <Form
           name="normalConfig"
           size={"middle"}
@@ -174,7 +174,7 @@ class NormalForm extends Component {
               max="1"
               min="0"
               step="0.1"
-            ></Input>
+            />
           </Form.Item>
 
           <Form.Item name="postScript" label="备注信息">
@@ -195,7 +195,7 @@ class NormalForm extends Component {
             </a>
           </Form.Item>
 
-          <Form.Item {...tailLayout} style={{ marginTop: "4vh" }}>
+          <Form.Item {...tailLayout}>
             <Space size={200}>
               <Button
                 style={{ background: "rgb(201,201,201)" }}
