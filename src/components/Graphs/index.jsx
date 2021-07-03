@@ -67,18 +67,17 @@ export default class Graphs extends Component {
     }
   };
   drewRoc = () => {
+    console.log(this.props);
     const keyName = Object.keys(this.props.metrics)[0];
-    console.log(keyName);
     let train = this.props.metrics[keyName].slice(8, 9);
+    let postData = {};
+    postData[`${keyName}`] = train;
     let that = this;
     let data;
     let option;
     let thresholds;
     let { RocData } = this.state;
-    let postData = {};
-    postData[`${keyName}`] = train;
-    console.log(train);
-    console.log(postData);
+
     if (RocData.state === -1) {
       axios
         .post(api.batch, {
@@ -87,7 +86,8 @@ export default class Graphs extends Component {
             ...postData,
           },
         })
-        .then((r) => {
+        .then(r => {
+          console.log(r);
           let { code, msg } = r.data;
           if (code !== 0) {
             message.error(`${code}: ${msg}`);
@@ -147,34 +147,35 @@ export default class Graphs extends Component {
     myChart.setOption({ ...option }, 200);
   };
   drewKS = () => {
-    let train = _.intersection(
-      ["homo_lr_0_ks_fpr", "homo_lr_0_ks_tpr"],
-      this.props.metrics.train
-    );
+    const keyName = Object.keys(this.props.metrics)[0];
+    let train = this.props.metrics[keyName].slice(1, 3);
+    let postData = {};
+    postData[`${keyName}`] = train;
     let that = this;
-
     let tpr, fpr;
     let option;
-    let thresholds;
 
+    let thresholds;
     let { KSData } = this.state;
+
     if (KSData.state === -1) {
       axios
         .post(api.batch, {
           ...this.props.post_data,
           metrics: {
-            train,
+            ...postData,
           },
         })
-        .then((r) => {
+        .then(r => {
+          console.log(r);
           let { code, msg } = r.data;
           if (code !== 0) {
             message.error(`${code}: ${msg}`);
           }
 
-          tpr = r.data.data.train["homo_lr_0_ks_tpr"].data;
-          fpr = r.data.data.train["homo_lr_0_ks_fpr"].data;
-          thresholds = r.data.data.train["homo_lr_0_ks_tpr"].meta.thresholds;
+          tpr = r.data.data[keyName][train[0]].data;
+          fpr = r.data.data[keyName][train[1]].data;
+          thresholds = r.data.data[keyName][train[0]].meta.thresholds;
 
           that.setState({
             KSData: {
@@ -195,7 +196,7 @@ export default class Graphs extends Component {
         trigger: "axis",
         displayMode: "single",
         formatter: function (params) {
-          let dataset = that.props.metrics.train[0];
+          let dataset = that.props.metrics[keyName][0];
           let htmlStr = "<div>";
           // params[0]是tpr
           // params[1]是fpr
@@ -236,9 +237,13 @@ export default class Graphs extends Component {
     myChart.setOption({ ...option }, 200);
   };
   drewLift = () => {
-    let train = _.intersection(["homo_lr_0_lift"], this.props.metrics.train);
-    let that = this;
+    const keyName = Object.keys(this.props.metrics)[0];
+    let train = this.props.metrics[keyName].slice(3, 4);
+    let postData = {};
+    postData[`${keyName}`] = train;
+    console.log(keyName);
 
+    let that = this;
     let lift;
     let option;
     let thresholds;
@@ -249,17 +254,18 @@ export default class Graphs extends Component {
         .post(api.batch, {
           ...this.props.post_data,
           metrics: {
-            train,
+            ...postData,
           },
         })
-        .then((r) => {
+        .then(r => {
+          console.log(r);
           let { code, msg } = r.data;
           if (code !== 0) {
             message.error(`${code}: ${msg}`);
           }
 
-          lift = r.data.data.train["homo_lr_0_lift"].data;
-          thresholds = r.data.data.train["homo_lr_0_lift"].meta.thresholds;
+          lift = r.data.data[keyName][train[0]].data;
+          thresholds = r.data.data[keyName][train[0]].meta.thresholds;
           that.setState({
             LiftData: {
               state: 0,
@@ -277,7 +283,7 @@ export default class Graphs extends Component {
         trigger: "axis",
         displayMode: "single",
         formatter: function (params) {
-          let dataset = that.props.metrics.train[0];
+          let dataset = that.props.metrics[keyName][0];
           let htmlStr = "<div>";
           params.forEach((item, index) => {
             htmlStr +=
@@ -312,7 +318,10 @@ export default class Graphs extends Component {
     myChart.setOption({ ...option }, 200);
   };
   drewGain = () => {
-    let train = _.intersection(["homo_lr_0_gain"], this.props.metrics.train);
+    const keyName = Object.keys(this.props.metrics)[0];
+    let train = this.props.metrics[keyName].slice(4, 5);
+    let postData = {};
+    postData[`${keyName}`] = train;
     let that = this;
 
     let gain;
@@ -325,17 +334,17 @@ export default class Graphs extends Component {
         .post(api.batch, {
           ...this.props.post_data,
           metrics: {
-            train,
+            ...postData,
           },
         })
-        .then((r) => {
+        .then(r => {
           let { code, msg } = r.data;
           if (code !== 0) {
             message.error(`${code}: ${msg}`);
           }
 
-          gain = r.data.data.train["homo_lr_0_gain"].data;
-          thresholds = r.data.data.train["homo_lr_0_gain"].meta.thresholds;
+          gain = r.data.data[keyName][train[0]].data;
+          thresholds = r.data.data[keyName][train[0]].meta.thresholds;
           that.setState({
             GainData: {
               state: 0,
@@ -353,7 +362,7 @@ export default class Graphs extends Component {
         trigger: "axis",
         displayMode: "single",
         formatter: function (params) {
-          let dataset = that.props.metrics.train[0];
+          let dataset = that.props.metrics[keyName][0];
           let htmlStr = "<div>";
           params.forEach((item, index) => {
             htmlStr +=
@@ -388,10 +397,10 @@ export default class Graphs extends Component {
     myChart.setOption({ ...option }, 200);
   };
   drewPrecisionRecall = () => {
-    let train = _.intersection(
-      ["homo_lr_0_precision", "homo_lr_0_recall"],
-      this.props.metrics.train
-    );
+    const keyName = Object.keys(this.props.metrics)[0];
+    let train = this.props.metrics[keyName].slice(6, 8);
+    let postData = {};
+    postData[`${keyName}`] = train;
     let that = this;
 
     let precision;
@@ -405,18 +414,18 @@ export default class Graphs extends Component {
         .post(api.batch, {
           ...this.props.post_data,
           metrics: {
-            train,
+            ...postData,
           },
         })
-        .then((r) => {
+        .then(r => {
           let { code, msg } = r.data;
           if (code !== 0) {
             message.error(`${code}: ${msg}`);
           }
 
-          precision = r.data.data.train["homo_lr_0_precision"].data;
-          recall = r.data.data.train["homo_lr_0_recall"].data;
-          thresholds = r.data.data.train["homo_lr_0_precision"].meta.thresholds;
+          precision = r.data.data[keyName][train[0]].data;
+          recall = r.data.data[keyName][train[1]].data;
+          thresholds = r.data.data[keyName][train[0]].meta.thresholds;
 
           that.setState({
             PrecisionRecallData: {
@@ -437,7 +446,7 @@ export default class Graphs extends Component {
         trigger: "axis",
         displayMode: "single",
         formatter: function (params) {
-          let dataset = that.props.metrics.train[0];
+          let dataset = that.props.metrics[keyName][0];
           let htmlStr = "<div>";
           params.forEach((item, _index) => {
             htmlStr +=
@@ -471,10 +480,10 @@ export default class Graphs extends Component {
     myChart.setOption({ ...option }, 200);
   };
   drewAccuracy = () => {
-    let train = _.intersection(
-      ["homo_lr_0_accuracy"],
-      this.props.metrics.train
-    );
+    const keyName = Object.keys(this.props.metrics)[0];
+    let train = this.props.metrics[keyName].slice(5, 6);
+    let postData = {};
+    postData[`${keyName}`] = train;
     let that = this;
 
     let accuracy;
@@ -487,17 +496,17 @@ export default class Graphs extends Component {
         .post(api.batch, {
           ...this.props.post_data,
           metrics: {
-            train,
+            ...postData,
           },
         })
-        .then((r) => {
+        .then(r => {
           let { code, msg } = r.data;
           if (code !== 0) {
             message.error(`${code}: ${msg}`);
           }
 
-          accuracy = r.data.data.train["homo_lr_0_accuracy"].data;
-          thresholds = r.data.data.train["homo_lr_0_accuracy"].meta.thresholds;
+          accuracy = r.data.data[keyName][train[0]].data;
+          thresholds = r.data.data[keyName][train[0]].meta.thresholds;
 
           that.setState({
             AccuracyData: {
@@ -516,7 +525,7 @@ export default class Graphs extends Component {
         trigger: "axis",
         displayMode: "single",
         formatter: function (params) {
-          let dataset = that.props.metrics.train[0];
+          let dataset = that.props.metrics[keyName][0];
           let htmlStr = "<div>";
           params.forEach((item, _index) => {
             htmlStr +=
@@ -565,7 +574,7 @@ export default class Graphs extends Component {
     this.drew();
   }
 
-  changeCur = (key) => {
+  changeCur = key => {
     if (key == this.state.cur) return;
     let title;
     let cur;
@@ -609,20 +618,20 @@ export default class Graphs extends Component {
         <Tabs
           defaultActiveKey={graphType.Roc}
           onChange={this.changeCur}
-          size="large"
+          size='large'
         >
-          <TabPane tab="Roc" key={graphType.Roc} />
-          <TabPane tab="K-S" key={graphType["K-S"]} />
-          <TabPane tab="Lift" key={graphType.Lift} />
-          <TabPane tab="Gain" key={graphType.Gain} />
-          <TabPane tab="Precision Recall" key={graphType["Precision Recall"]} />
-          <TabPane tab="Accuracy" key={graphType.Accuracy} />
+          <TabPane tab='Roc' key={graphType.Roc} />
+          <TabPane tab='K-S' key={graphType["K-S"]} />
+          <TabPane tab='Lift' key={graphType.Lift} />
+          <TabPane tab='Gain' key={graphType.Gain} />
+          <TabPane tab='Precision Recall' key={graphType["Precision Recall"]} />
+          <TabPane tab='Accuracy' key={graphType.Accuracy} />
         </Tabs>
 
-        <Row align="middle">
+        <Row align='middle'>
           <Space>
             <font style={{ fontSize: "xx-large" }}>{this.state.title}</font>
-            <Button type="primary">train</Button>
+            <Button type='primary'>train</Button>
             <a
               onClick={() => {
                 this.drew();
@@ -633,7 +642,7 @@ export default class Graphs extends Component {
             </a>
           </Space>
         </Row>
-        <div id="metricsGraphs" style={{ width: "88vw", height: "70vh" }} />
+        <div id='metricsGraphs' style={{ width: "88vw", height: "70vh" }} />
       </div>
     );
   }
