@@ -150,11 +150,11 @@ class Metrics extends Component {
         }
         const metricArray = metrics[Object.keys(metrics)[0]];
         const homo_lr_0 = datas[metricArray[0]];
-        const homo_lr_0_quantile_pr = datas[metricArray[8]];
-        const homo_lr_0_f1_score = datas[metricArray[9]];
-        const homo_lr_0_confusion_mat = datas[metricArray[10]];
+        const homo_lr_0_confusion_mat = datas[metricArray[9]];
+        const homo_lr_0_f1_score = datas[metricArray[10]];
+        const homo_lr_0_quantile_pr = datas[metricArray[11]];
         const dataset = Object.keys(r.data.data)[0];
-        console.log(homo_lr_0_quantile_pr);
+        console.log(metricArray[10]);
         const { p_scores, r_scores, thresholds } = homo_lr_0_quantile_pr.meta;
         // fn右下,tn右上,fp左上,tp左下
         const { fn, fp, tn, tp } = homo_lr_0_confusion_mat.meta;
@@ -205,6 +205,7 @@ class Metrics extends Component {
             width: "10vw",
           }
         );
+
         dataSource1["precision"] = p_scores[10][1];
         dataSource1["recall"] = r_scores[10][1];
         dataSource1["key"] = 1;
