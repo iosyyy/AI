@@ -128,30 +128,19 @@ class Metrics extends Component {
 
   componentDidMount() {
     const { post_data, metrics } = this.props;
-    // 求交集
-    let train = _.intersection(
-      [
-        "homo_lr_0",
-        "homo_lr_0_confusion_mat",
-        "homo_lr_0_f1_score",
-        "homo_lr_0_quantile_pr",
-      ],
-      metrics.train
-    );
     axios
       .post(api.batch, {
         ...post_data,
-        metrics: {
-          train,
-        },
+        metrics,
       })
       .then((r) => {
         let { code, msg } = r.data;
+        const datas = r.data.data[Object.keys(r.data.data)[0]];
         if (
           code !== 0 ||
           Object.keys(r.data.data).length === 0 ||
-          !r.data.data.train ||
-          Object.keys(r.data.data.train).length === 0
+          !datas ||
+          Object.keys(datas).length === 0
         ) {
           message.error(`空数据异常`);
           this.setState({
@@ -159,14 +148,13 @@ class Metrics extends Component {
           });
           return;
         }
-
+        const metricArray = metrics[Object.keys(metrics)[0]];
+        const homo_lr_0 = datas[metricArray[0]];
+        const homo_lr_0_quantile_pr = datas[metricArray[8]];
+        const homo_lr_0_f1_score = datas[metricArray[9]];
+        const homo_lr_0_confusion_mat = datas[metricArray[10]];
         const dataset = Object.keys(r.data.data)[0];
-        const {
-          homo_lr_0_quantile_pr,
-          homo_lr_0,
-          homo_lr_0_f1_score,
-          homo_lr_0_confusion_mat,
-        } = r.data.data[dataset];
+        console.log(homo_lr_0_quantile_pr);
         const { p_scores, r_scores, thresholds } = homo_lr_0_quantile_pr.meta;
         // fn右下,tn右上,fp左上,tp左下
         const { fn, fp, tn, tp } = homo_lr_0_confusion_mat.meta;

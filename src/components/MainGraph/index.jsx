@@ -106,7 +106,7 @@ class MainGraph extends Component {
         $(
           go.Shape,
           "RoundedRectangle",
-          { margin: 0, strokeWidth: 0, width: 85, height: 35 },
+          { margin: 0, strokeWidth: 0, width: 121, height: 30 },
           new go.Binding("fill", "color"),
           new go.Binding("fill", "isSelected", function (sel, node) {
             if (sel) {
