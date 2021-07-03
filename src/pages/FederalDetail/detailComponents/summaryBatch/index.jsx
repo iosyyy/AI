@@ -46,6 +46,9 @@ class SummaryBatch extends Component {
 
   componentDidMount() {
     const { post_data, metrics } = this.props;
+    post_data.metrics = metrics;
+    let keyName = Object.keys(metrics)[0];
+    let train = metrics[keyName]
     console.log(post_data);
     console.log(metrics);
     if (Object.keys(metrics).length !== 0) {
@@ -66,10 +69,13 @@ class SummaryBatch extends Component {
             });
             return;
           }
-          console.log(1);
-          const { reader_name } = r.data.data.reader_namespace;
-          console.log(2);
-          const tableInfo = reader_name.meta.table_info;
+          let data = r.data.data[keyName][train[0]];
+
+          // TODO:改bug
+          // 这块往下的要改
+          // 要动态获取data中的信息
+          // 应该是根据keyName
+          const tableInfo = data.meta.table_info;
           let dataSource = [];
           let index = 1;
           for (let variable in tableInfo) {
@@ -84,7 +90,7 @@ class SummaryBatch extends Component {
             }
           }
           this.setState({
-            data: reader_name,
+            data: data,
             dataSource,
             dataSources: dataSource,
           });
