@@ -67,18 +67,24 @@ export default class Graphs extends Component {
     }
   };
   drewRoc = () => {
-    let train = _.intersection(["homo_lr_0_roc"], this.props.metrics.train);
+    const keyName = Object.keys(this.props.metrics)[0];
+    console.log(keyName);
+    let train = this.props.metrics[keyName].slice(8, 9);
     let that = this;
     let data;
     let option;
     let thresholds;
     let { RocData } = this.state;
+    let postData = {};
+    postData[`${keyName}`] = train;
+    console.log(train);
+    console.log(postData);
     if (RocData.state === -1) {
       axios
         .post(api.batch, {
           ...this.props.post_data,
           metrics: {
-            train,
+            ...postData,
           },
         })
         .then((r) => {
@@ -87,8 +93,8 @@ export default class Graphs extends Component {
             message.error(`${code}: ${msg}`);
             return;
           }
-          if (r.data.data) data = r.data.data.train["homo_lr_0_roc"].data;
-          thresholds = r.data.data.train["homo_lr_0_roc"].meta.thresholds;
+          if (r.data.data) data = r.data.data[keyName][train[0]].data;
+          thresholds = r.data.data[keyName][train[0]].meta.thresholds;
           let RocData = {
             state: 0,
             data,
@@ -107,7 +113,7 @@ export default class Graphs extends Component {
         trigger: "axis",
         displayMode: "single",
         formatter: function (params) {
-          let dataset = that.props.metrics.train[0];
+          let dataset = that.props.metrics[keyName][0];
           let htmlStr = "<div>";
           params.forEach((item, index) => {
             htmlStr += "Thresholds：" + thresholds[item["dataIndex"]] + "<br/>";
