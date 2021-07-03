@@ -17,7 +17,7 @@ class MainGraph extends Component {
       linkArray: [],
     };
   }
-  handleDiagramEvent = (e) => {
+  handleDiagramEvent = e => {
     const name = e.name;
     switch (name) {
       case "ChangedSelection": {
@@ -226,7 +226,7 @@ class MainGraph extends Component {
       <div>
         <ReactDiagram
           initDiagram={this.initDiagram}
-          divClassName="diagram-component"
+          divClassName='diagram-component'
           nodeDataArray={nodeArray}
           linkDataArray={linkArray}
           handleDiagramEvent={this.handleDiagramEvent}

@@ -14,7 +14,7 @@ class SummaryBatch extends Component {
         key: "index",
         align: "center",
 
-        render: (index) => {
+        render: index => {
           return <div>{index}</div>;
         },
       },
@@ -46,13 +46,16 @@ class SummaryBatch extends Component {
 
   componentDidMount() {
     const { post_data, metrics } = this.props;
+    console.log(post_data);
+    console.log(metrics);
     if (Object.keys(metrics).length !== 0) {
       axios
         .post(api.batch, {
           ...post_data,
           metrics,
         })
-        .then((r) => {
+        .then(r => {
+          console.log(r);
           if (r.data.code !== 0) {
             message.error(`${r.data.code}:${r.data.msg}`);
             return;
@@ -63,7 +66,9 @@ class SummaryBatch extends Component {
             });
             return;
           }
+          console.log(1);
           const { reader_name } = r.data.data.reader_namespace;
+          console.log(2);
           const tableInfo = reader_name.meta.table_info;
           let dataSource = [];
           let index = 1;
@@ -143,8 +148,8 @@ class SummaryBatch extends Component {
         <div className={"scrollContent"} style={{ height: "65vh" }}>
           <div>{dataDetail}</div>
           <Search
-            onSearch={(value) => {
-              let datas = dataSources.filter((data) => {
+            onSearch={value => {
+              let datas = dataSources.filter(data => {
                 return data.variable
                   .toString()
                   .toLowerCase()
