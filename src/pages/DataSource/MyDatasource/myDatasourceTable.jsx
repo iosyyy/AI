@@ -78,7 +78,6 @@ class MyDatasourceTable extends Component {
                           } else {
                             fileData = r.data;
                           }
-                          console.log(fileData);
                           if (!fileData) {
                             message.error("空数据异常");
                           } else {
@@ -191,7 +190,6 @@ class MyDatasourceTable extends Component {
   }
 
   setData = (data) => {
-    console.log(data);
     if (data.retcode !== 0) {
       message.error(data.retmsg);
       this.setState({

@@ -36,13 +36,14 @@ class App extends Component {
                 width: "180px",
                 lineHeight: "5vh",
               }}
-              className='logo'
+              className="logo"
             >
               <span
                 style={{
                   WebkitBackgroundClip: "text",
-                  color: "transparent",
+                  color: "rgb(218,218,224)",
                   textAlign: "center",
+                  userSelect: "none",
                   backgroundImage:
                     "-webkit-linear-gradient(45deg, rgb(106,65,195), rgb(225,143,143)" +
                     ", rgb(224,43,122), rgb(150,55,187))",
@@ -57,9 +58,9 @@ class App extends Component {
                 height: "9vh",
                 background: "rgb(10,73,123)",
               }}
-              mode='horizontal'
+              mode="horizontal"
               selectedKeys={[this.state.page]}
-              onSelect={info => {
+              onSelect={(info) => {
                 this.setState({
                   page: info.key,
                 });
@@ -67,8 +68,8 @@ class App extends Component {
             >
               <Menu.Item key="1">
                 <NavLink
-                  activeStyle={{ color: "rgb(96,185,234)" }}
-                  style={{ color: "rgb(204,210,204)" }}
+                  activeStyle={{ userSelect: "none", color: "rgb(96,185,234)" }}
+                  style={{ userSelect: "none", color: "rgb(204,210,204)" }}
                   to="/federalTrain"
                 >
                   联邦训练
@@ -76,8 +77,8 @@ class App extends Component {
               </Menu.Item>
               <Menu.Item key="2">
                 <NavLink
-                  activeStyle={{ color: "rgb(96,185,234)" }}
-                  style={{ color: "rgb(204,210,204)" }}
+                  activeStyle={{ userSelect: "none", color: "rgb(96,185,234)" }}
+                  style={{ userSelect: "none", color: "rgb(204,210,204)" }}
                   to="/normal"
                 >
                   联邦攻防
@@ -85,8 +86,8 @@ class App extends Component {
               </Menu.Item>
               <Menu.Item key="3">
                 <NavLink
-                  activeStyle={{ color: "rgb(96,185,234)" }}
-                  style={{ color: "rgb(204,210,204)" }}
+                  activeStyle={{ userSelect: "none", color: "rgb(96,185,234)" }}
+                  style={{ userSelect: "none", color: "rgb(204,210,204)" }}
                   to="/federal"
                 >
                   联邦攻击
@@ -94,8 +95,8 @@ class App extends Component {
               </Menu.Item>
               <Menu.Item style={{ float: "right" }} key="4">
                 <NavLink
-                  activeStyle={{ color: "rgb(96,185,234)" }}
-                  style={{ color: "rgb(204,210,204)" }}
+                  activeStyle={{ userSelect: "none", color: "rgb(96,185,234)" }}
+                  style={{ userSelect: "none", color: "rgb(204,210,204)" }}
                   to="/trainingRecord"
                 >
                   训练记录
@@ -103,8 +104,8 @@ class App extends Component {
               </Menu.Item>
               <Menu.Item style={{ float: "right" }} key="5">
                 <NavLink
-                  activeStyle={{ color: "rgb(96,185,234)" }}
-                  style={{ color: "rgb(204,210,204)" }}
+                  activeStyle={{ userSelect: "none", color: "rgb(96,185,234)" }}
+                  style={{ userSelect: "none", color: "rgb(204,210,204)" }}
                   to="/training"
                 >
                   正在训练
@@ -112,8 +113,8 @@ class App extends Component {
               </Menu.Item>
               <Menu.Item style={{ float: "right" }} key="6">
                 <NavLink
-                  activeStyle={{ color: "rgb(96,185,234)" }}
-                  style={{ color: "rgb(204,210,204)" }}
+                  activeStyle={{ userSelect: "none", color: "rgb(96,185,234)" }}
+                  style={{ userSelect: "none", color: "rgb(204,210,204)" }}
                   to="/datasource"
                 >
                   数据集
@@ -123,15 +124,15 @@ class App extends Component {
           </Header>
           <Content style={{ padding: "2vh 3vw" }}>
             <Switch>
-              <Route path='/federalTrain' component={FederalIndex} />
-              <Route path='/normal' component={Normal} />
-              <Route path='/federal' component={Federal} />
-              <Route path='/training' component={Training} />
-              <Route path='/trainingRecord' component={TrainingRecord} /> 
-              <Route path='/federalDetail' component={FederalDetailAll} />
-              <Route path='/trainingDetails' component={TrainingDetails} />
-              <Route path='/datasource' component={DataSource} />
-              <Redirect to='/federalTrain' />
+              <Route path="/federalTrain" component={FederalIndex} />
+              <Route path="/normal" component={Normal} />
+              <Route path="/federal" component={Federal} />
+              <Route path="/training" component={Training} />
+              <Route path="/trainingRecord" component={TrainingRecord} />
+              <Route path="/federalDetail" component={FederalDetailAll} />
+              <Route path="/trainingDetails" component={TrainingDetails} />
+              <Route path="/datasource" component={DataSource} />
+              <Redirect to="/federalTrain" />
             </Switch>
           </Content>
           <div

@@ -65,7 +65,6 @@ export default class index extends Component {
   };
 
   sendLogRequest() {
-    console.log("run...");
     socket.onopen = (_data) => {
       socket.send(
         JSON.stringify({ type: "partyError", begin: 0, end: 999999 })
@@ -105,7 +104,6 @@ export default class index extends Component {
 
     socket.onmessage = (data) => {
       let messageLog = JSON.parse(data.data);
-      console.log(messageLog);
       let msg;
       switch (messageLog.type) {
         case "logSize":

@@ -12,7 +12,6 @@ import NormalForm from "./normalForm";
 class FederalTrainChoice extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props.history.location.state);
     this.state = {
       showAdvancedConfiguration: false,
       loading: false,

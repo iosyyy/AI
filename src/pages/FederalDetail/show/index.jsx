@@ -59,7 +59,6 @@ class FederalDetail extends Component {
           this.setState({ datas: d, loading: true, isLoading: false });
           return;
         }
-        console.log(d);
         this.setState({ datas: d, treeData, loading: false, isLoading: true });
       })
       .catch((_m) => {
@@ -142,7 +141,6 @@ class FederalDetail extends Component {
           break;
         }
       }
-      console.log(component_list);
       this.setState({ names, component_list, key: this.generateUUID() });
     };
   }

@@ -115,7 +115,7 @@ class FederalDetailOutput extends Component {
     return (
       <div style={{ height: "64vh" }} className="scrollContent">
         <Select
-          defaultValue="train"
+          defaultValue={0}
           style={{ width: 120 }}
           onChange={this.handleChange}
         >

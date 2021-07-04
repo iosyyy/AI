@@ -108,10 +108,8 @@ class AdvancedForm extends Component {
             formData.get("dsl_file") &&
             formData.get("train_algorithm_name")
           ) {
-            console.log(api.beginTrain);
             axios.post(api.beginHighTrain, formData).then(
               (res) => {
-                console.log(res);
                 if (res.data.retcode === 0 || res.data.code === 0) {
                   this.setState({
                     fileList1: [],
@@ -135,7 +133,6 @@ class AdvancedForm extends Component {
                 });
                 setLoading(loading);
                 message.error("上传失败");
-                console.error(res);
               }
             );
           } else {

@@ -62,7 +62,6 @@ class NormalForm extends Component {
               },
             }).then(
               (data) => {
-                console.log(data);
                 if (data.data.retcode === 0 || data.data.code === 0) {
                   message.success("上传成功");
                   this.props.history.push({
@@ -84,9 +83,7 @@ class NormalForm extends Component {
             setLoading(false);
           }}
           {...layout}
-          onFinishFailed={(e) => {
-            console.log(e);
-          }}
+          onFinishFailed={(e) => {}}
         >
           <Form.Item
             name="trainName"
