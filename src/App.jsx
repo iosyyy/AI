@@ -29,14 +29,14 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Layout className="layout">
+        <Layout className='layout'>
           <Header style={{ height: "9vh", background: "rgb(239,236,235)" }}>
             <div
               style={{
                 width: "180px",
                 lineHeight: "4.5vh",
               }}
-              className="logo"
+              className='logo'
             >
               <span
                 style={{
@@ -57,45 +57,45 @@ class App extends Component {
                 height: "9vh",
                 background: "rgb(239,236,235)",
               }}
-              mode="horizontal"
+              mode='horizontal'
               selectedKeys={[this.state.page]}
-              onSelect={(info) => {
+              onSelect={info => {
                 this.setState({
                   page: info.key,
                 });
               }}
             >
-              <Menu.Item key="1">
-                <NavLink to="/federalTrain">联邦训练</NavLink>
+              <Menu.Item key='1'>
+                <NavLink to='/federalTrain'>联邦训练</NavLink>
               </Menu.Item>
-              <Menu.Item key="2">
-                <NavLink to="/normal">联邦攻防</NavLink>
+              <Menu.Item key='2'>
+                <NavLink to='/normal'>联邦攻防</NavLink>
               </Menu.Item>
-              <Menu.Item key="3">
-                <NavLink to="/federal">联邦攻击</NavLink>
+              <Menu.Item key='3'>
+                <NavLink to='/federal'>联邦攻击</NavLink>
               </Menu.Item>
-              <Menu.Item style={{ float: "right" }} key="4">
-                <NavLink to="/trainingRecord">训练记录</NavLink>
+              <Menu.Item style={{ float: "right" }} key='4'>
+                <NavLink to='/trainingRecord'>训练记录</NavLink>
               </Menu.Item>
-              <Menu.Item style={{ float: "right" }} key="5">
-                <NavLink to="/training">正在训练</NavLink>
+              <Menu.Item style={{ float: "right" }} key='5'>
+                <NavLink to='/training'>正在训练</NavLink>
               </Menu.Item>
-              <Menu.Item style={{ float: "right" }} key="6">
-                <NavLink to="/datasource">数据集</NavLink>
+              <Menu.Item style={{ float: "right" }} key='6'>
+                <NavLink to='/datasource'>数据集</NavLink>
               </Menu.Item>
             </Menu>
           </Header>
           <Content style={{ padding: "2vh 3vw" }}>
             <Switch>
-              <Route path="/federalTrain" component={FederalIndex} />
-              <Route path="/normal" component={Normal} />
-              <Route path="/federal" component={Federal} />
-              <Route path="/training" component={Training} />
-              <Route path="/trainingRecord" component={TrainingRecord} />
-              <Route path="/federalDetail" component={FederalDetailAll} />
-              <Route path="/trainingDetails" component={TrainingDetails} />
-              <Route path="/datasource" component={DataSource} />
-              <Redirect to="/federalTrain" />
+              <Route path='/federalTrain' component={FederalIndex} />
+              <Route path='/normal' component={Normal} />
+              <Route path='/federal' component={Federal} />
+              <Route path='/training' component={Training} />
+              <Route path='/trainingRecord' component={TrainingRecord} /> 
+              <Route path='/federalDetail' component={FederalDetailAll} />
+              <Route path='/trainingDetails' component={TrainingDetails} />
+              <Route path='/datasource' component={DataSource} />
+              <Redirect to='/federalTrain' />
             </Switch>
           </Content>
           <div

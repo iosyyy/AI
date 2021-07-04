@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table } from "antd";
+import { Table, Select } from "antd";
 import axios from "axios";
 import api from "../../../../config/api";
 import { message } from "antd/es";
@@ -10,21 +10,28 @@ class FederalDetailOutput extends Component {
     super(props);
     const { post_data } = props;
     const columns = [];
-    const dataSource = [];
+    const dataSource1 = [];
+    const dataSource2 = [];
+    const dataSource3 = [];
     this.state = {
       columns,
-      dataSource,
+      dataSource1,
+      dataSource2,
+      dataSource3,
       post_data,
       loading: true,
       total: 0,
+      curOption: "train",
     };
   }
 
   componentDidMount() {
+    console.log(this.props);
     const { post_data } = this.state;
     axios
       .post(api.data_output, post_data)
-      .then((r) => {
+      .then(r => {
+        console.log(r);
         if (r.data.code !== 0) {
           message.error(`${r.data.code}:${r.data.msg}`);
           return;
@@ -44,7 +51,29 @@ class FederalDetailOutput extends Component {
           };
         });
         let dataDeatil = data.data;
-        const dataSource = dataDeatil[0].map((v, i) => {
+        const dataSource1 = dataDeatil[0].map((v, i) => {
+          let obj = {};
+          for (let key in v) {
+            if (v.hasOwnProperty(key)) {
+              obj[header[0][key]] = v[key];
+              obj["key"] = i;
+            }
+          }
+          obj["key"] = this.generateUUID();
+          return obj;
+        });
+        const dataSource2 = dataDeatil[1].map((v, i) => {
+          let obj = {};
+          for (let key in v) {
+            if (v.hasOwnProperty(key)) {
+              obj[header[0][key]] = v[key];
+              obj["key"] = i;
+            }
+          }
+          obj["key"] = this.generateUUID();
+          return obj;
+        });
+        const dataSource3 = dataDeatil[2].map((v, i) => {
           let obj = {};
           for (let key in v) {
             if (v.hasOwnProperty(key)) {
@@ -57,7 +86,9 @@ class FederalDetailOutput extends Component {
         });
         this.setState({
           columns,
-          dataSource,
+          dataSource1,
+          dataSource2,
+          dataSource3,
           loading: false,
           total: data.meta.total,
         });
@@ -90,12 +121,79 @@ class FederalDetailOutput extends Component {
       }
     );
   }
+  handleChange = value => {
+    this.setState({
+      curOption: value,
+    });
+  };
 
   render() {
-    const { loading, dataSource, columns, total } = this.state;
+    const {
+      loading,
+      dataSource1,
+      dataSource2,
+      dataSource3,
+      columns,
+      total,
+      curOption,
+    } = this.state;
+    const table1 =
+      dataSource1.length !== 0 ? (
+        <Table
+          loading={loading}
+          bordered={false}
+          size={"middle"}
+          dataSource={dataSource1}
+          columns={columns}
+          pagination={false}
+        />
+      ) : (
+        <h1>
+          <a>暂无数据</a>
+        </h1>
+      );
+    const table2 =
+      dataSource2.length !== 0 ? (
+        <Table
+          loading={loading}
+          bordered={false}
+          size={"middle"}
+          dataSource={dataSource2}
+          columns={columns}
+          pagination={false}
+        />
+      ) : (
+        <h1>
+          <a>暂无数据</a>
+        </h1>
+      );
+    const table3 =
+      dataSource3.length !== 0 ? (
+        <Table
+          loading={loading}
+          bordered={false}
+          size={"middle"}
+          dataSource={dataSource3}
+          columns={columns}
+          pagination={false}
+        />
+      ) : (
+        <h1>
+          <a>暂无数据</a>
+        </h1>
+      );
 
     return (
-      <div style={{ height: "65vh" }} className="scrollContent">
+      <div style={{ height: "65vh" }} className='scrollContent'>
+        <Select
+          defaultValue='train'
+          style={{ width: 120 }}
+          onChange={this.handleChange}
+        >
+          <Select.Option value='train'>train</Select.Option>
+          <Select.Option value='validate'>validate</Select.Option>
+          <Select.Option value='test'>test</Select.Option>
+        </Select>
         <div
           style={{
             fontSize: "small",
@@ -105,14 +203,11 @@ class FederalDetailOutput extends Component {
         >
           {`Outputting ${total} instances (only 100 instances are shown in the table)`}
         </div>
-        <Table
-          loading={loading}
-          bordered={false}
-          size={"middle"}
-          dataSource={dataSource}
-          columns={columns}
-          pagination={false}
-        />
+        {curOption === "train"
+          ? table1
+          : curOption === "validate"
+          ? table2
+          : table3}
       </div>
     );
   }

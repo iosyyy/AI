@@ -74,12 +74,13 @@ class ModelOutput extends Component {
         <Table
           columns={TABLE_COLUMNS}
           dataSource={this.state.dataSource}
-          size="small"
+          size='small'
           pagination={{ pageSize: 10 }}
         />
         <Divider />
-
-        <Loss lossHistory={this.props.model.data.data.data.lossHistory} />
+        {this.props.model.data.data.data.lossHistory.length !== 0 ? (
+          <Loss lossHistory={this.props.model.data.data.data.lossHistory} />
+        ) : null}
       </div>
     );
   }

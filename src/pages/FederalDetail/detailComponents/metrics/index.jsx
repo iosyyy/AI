@@ -327,7 +327,6 @@ class Metrics extends Component {
           </>
         ) : (
           <>
-            {" "}
             <h2>Evaluation scores</h2>
             <Row>
               <Col span={4}>
