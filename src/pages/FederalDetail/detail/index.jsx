@@ -13,6 +13,7 @@ import { message } from "antd/es";
 import ModelOutput from "../detailComponents/modelOutput";
 import SummaryBatch from "../detailComponents/summaryBatch";
 import qs from "qs";
+import SummaryBatchDataSplit from "../detailComponents/summaryDataSplit";
 
 const { TabPane } = Tabs;
 
@@ -127,6 +128,43 @@ class FederalDetailShow extends Component {
              */
             switch (namew) {
               // 这里通过metric_namespace选择不同的tabs
+              case "HomoDataSplit":
+                names = [
+                  {
+                    name: "summary",
+                    component: (
+                      <SummaryBatchDataSplit
+                        key={this.generateUUID()}
+                        metric_name={metric_name}
+                        metric_namespace={metric_namespace}
+                        model={model}
+                        post_data={post_data}
+                        metrics={metrics}
+                      />
+                    ),
+                  },
+                  {
+                    name: "data output",
+                    component: (
+                      <FederalDetailOutput
+                        key={this.generateUUID()}
+                        model={model}
+                        post_data={post_data}
+                      />
+                    ),
+                  },
+                  {
+                    name: "log",
+                    component: (
+                      <Log
+                        key={this.generateUUID()}
+                        model={model}
+                        post_data={post_data}
+                      />
+                    ),
+                  },
+                ];
+                break;
               case "Upload":
                 names = [
                   {

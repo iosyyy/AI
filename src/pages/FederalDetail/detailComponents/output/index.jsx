@@ -95,7 +95,7 @@ class FederalDetailOutput extends Component {
     const { loading, dataSource, columns, total } = this.state;
 
     return (
-      <div style={{ height: "65vh" }} className="scrollContent">
+      <div style={{ height: "64vh" }} className="scrollContent">
         <div
           style={{
             fontSize: "small",

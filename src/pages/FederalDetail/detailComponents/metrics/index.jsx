@@ -312,7 +312,7 @@ class Metrics extends Component {
     return (
       <div
         className={"scrollContent"}
-        style={{ height: "65vh", padding: "2vh" }}
+        style={{ height: "64vh", padding: "2vh" }}
       >
         {isEmpty ? (
           <>

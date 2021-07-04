@@ -20,7 +20,7 @@ class Summary extends Component {
         metric_name,
         ...post_data,
       })
-      .then(r => {
+      .then((r) => {
         console.log(r);
         if (r.data.code !== 0) {
           message.error(`${r.data.code}:${r.data.msg}`);
@@ -74,7 +74,7 @@ class Summary extends Component {
       );
     }
     return (
-      <div className={"scrollContent"} style={{ height: "65vh" }}>
+      <div className={"scrollContent"} style={{ height: "64vh" }}>
         {dataDetail}
       </div>
     );

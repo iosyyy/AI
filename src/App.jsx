@@ -30,11 +30,11 @@ class App extends Component {
     return (
       <div>
         <Layout className="layout">
-          <Header style={{ height: "9vh", background: "rgb(239,236,235)" }}>
+          <Header style={{ height: "8.9vh", background: "rgb(10,73,123)" }}>
             <div
               style={{
                 width: "180px",
-                lineHeight: "4.5vh",
+                lineHeight: "5vh",
               }}
               className="logo"
             >
@@ -55,7 +55,7 @@ class App extends Component {
               style={{
                 lineHeight: "8vh",
                 height: "9vh",
-                background: "rgb(239,236,235)",
+                background: "rgb(10,73,123)",
               }}
               mode="horizontal"
               selectedKeys={[this.state.page]}
@@ -66,22 +66,58 @@ class App extends Component {
               }}
             >
               <Menu.Item key="1">
-                <NavLink to="/federalTrain">联邦训练</NavLink>
+                <NavLink
+                  activeStyle={{ color: "rgb(96,185,234)" }}
+                  style={{ color: "rgb(204,210,204)" }}
+                  to="/federalTrain"
+                >
+                  联邦训练
+                </NavLink>
               </Menu.Item>
               <Menu.Item key="2">
-                <NavLink to="/normal">联邦攻防</NavLink>
+                <NavLink
+                  activeStyle={{ color: "rgb(96,185,234)" }}
+                  style={{ color: "rgb(204,210,204)" }}
+                  to="/normal"
+                >
+                  联邦攻防
+                </NavLink>
               </Menu.Item>
               <Menu.Item key="3">
-                <NavLink to="/federal">联邦攻击</NavLink>
+                <NavLink
+                  activeStyle={{ color: "rgb(96,185,234)" }}
+                  style={{ color: "rgb(204,210,204)" }}
+                  to="/federal"
+                >
+                  联邦攻击
+                </NavLink>
               </Menu.Item>
               <Menu.Item style={{ float: "right" }} key="4">
-                <NavLink to="/trainingRecord">训练记录</NavLink>
+                <NavLink
+                  activeStyle={{ color: "rgb(96,185,234)" }}
+                  style={{ color: "rgb(204,210,204)" }}
+                  to="/trainingRecord"
+                >
+                  训练记录
+                </NavLink>
               </Menu.Item>
               <Menu.Item style={{ float: "right" }} key="5">
-                <NavLink to="/training">正在训练</NavLink>
+                <NavLink
+                  activeStyle={{ color: "rgb(96,185,234)" }}
+                  style={{ color: "rgb(204,210,204)" }}
+                  to="/training"
+                >
+                  正在训练
+                </NavLink>
               </Menu.Item>
               <Menu.Item style={{ float: "right" }} key="6">
-                <NavLink to="/datasource">数据集</NavLink>
+                <NavLink
+                  activeStyle={{ color: "rgb(96,185,234)" }}
+                  style={{ color: "rgb(204,210,204)" }}
+                  to="/datasource"
+                >
+                  数据集
+                </NavLink>
               </Menu.Item>
             </Menu>
           </Header>

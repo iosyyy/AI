@@ -14,7 +14,7 @@ class SummaryBatch extends Component {
         key: "index",
         align: "center",
 
-        render: index => {
+        render: (index) => {
           return <div>{index}</div>;
         },
       },
@@ -48,7 +48,7 @@ class SummaryBatch extends Component {
     const { post_data, metrics } = this.props;
     post_data.metrics = metrics;
     let keyName = Object.keys(metrics)[0];
-    let train = metrics[keyName]
+    let train = metrics[keyName];
     console.log(post_data);
     console.log(metrics);
     if (Object.keys(metrics).length !== 0) {
@@ -57,7 +57,7 @@ class SummaryBatch extends Component {
           ...post_data,
           metrics,
         })
-        .then(r => {
+        .then((r) => {
           console.log(r);
           if (r.data.code !== 0) {
             message.error(`${r.data.code}:${r.data.msg}`);
@@ -75,7 +75,8 @@ class SummaryBatch extends Component {
           // 这块往下的要改
           // 要动态获取data中的信息
           // 应该是根据keyName
-          const tableInfo = data.meta.table_info;
+          const meta = data.meta;
+          const tableInfo = meta[keyName];
           let dataSource = [];
           let index = 1;
           for (let variable in tableInfo) {
@@ -151,11 +152,11 @@ class SummaryBatch extends Component {
       );
     } else {
       return (
-        <div className={"scrollContent"} style={{ height: "65vh" }}>
+        <div className={"scrollContent"} style={{ height: "64vh" }}>
           <div>{dataDetail}</div>
           <Search
-            onSearch={value => {
-              let datas = dataSources.filter(data => {
+            onSearch={(value) => {
+              let datas = dataSources.filter((data) => {
                 return data.variable
                   .toString()
                   .toLowerCase()
