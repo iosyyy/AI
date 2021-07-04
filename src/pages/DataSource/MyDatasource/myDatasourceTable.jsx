@@ -143,7 +143,6 @@ class MyDatasourceTable extends Component {
               <Popconfirm
                 title="确定要删除么?"
                 onConfirm={() => {
-                  // TODO 删除是有接口额使用接口进行删除而且接口是post方法的
                   let curJobId = obj["job_id"];
 
                   axios

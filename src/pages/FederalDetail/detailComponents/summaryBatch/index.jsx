@@ -49,8 +49,6 @@ class SummaryBatch extends Component {
     post_data.metrics = metrics;
     let keyName = Object.keys(metrics)[0];
     let train = metrics[keyName];
-    console.log(post_data);
-    console.log(metrics);
     if (Object.keys(metrics).length !== 0) {
       axios
         .post(api.batch, {
@@ -58,7 +56,6 @@ class SummaryBatch extends Component {
           metrics,
         })
         .then((r) => {
-          console.log(r);
           if (r.data.code !== 0) {
             message.error(`${r.data.code}:${r.data.msg}`);
             return;
@@ -71,10 +68,6 @@ class SummaryBatch extends Component {
           }
           let data = r.data.data[keyName][train[0]];
 
-          // TODO:改bug
-          // 这块往下的要改
-          // 要动态获取data中的信息
-          // 应该是根据keyName
           const meta = data.meta;
           const tableInfo = meta[keyName];
           let dataSource = [];
