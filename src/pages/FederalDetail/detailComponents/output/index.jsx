@@ -184,7 +184,7 @@ class FederalDetailOutput extends Component {
       );
 
     return (
-      <div style={{ height: "65vh" }} className='scrollContent'>
+      <div style={{ height: "64vh" }} className='scrollContent'>
         <Select
           defaultValue='train'
           style={{ width: 120 }}

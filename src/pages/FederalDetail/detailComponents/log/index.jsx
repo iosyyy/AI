@@ -59,7 +59,7 @@ class Log extends Component {
 
   render() {
     return (
-      <div style={{ height: "65vh" }}>
+      <div style={{ height: "64vh" }}>
         <TextArea
           className={"scrollContent"}
           style={{
