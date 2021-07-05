@@ -72,12 +72,7 @@ class NormalForm extends Component {
                 test_size: percent,
               },
             }).then(
-<<<<<<< HEAD
-              data => {
-                console.log(data);
-=======
               (data) => {
->>>>>>> 62807ddfe2dfaaf00532ec921777c7665636c30e
                 if (data.data.retcode === 0 || data.data.code === 0) {
                   message.success("上传成功");
                   this.props.history.push({
