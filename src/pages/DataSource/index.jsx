@@ -11,7 +11,6 @@ class DataSource extends Component {
     super(props);
     PubSubJS.publish("isRunning", { page: "6" });
     PubSubJS.subscribe("datasourcePage", (msg, data) => {
-      console.log(data);
       this.setState({ page: data.page });
     });
     this.state = {

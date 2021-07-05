@@ -154,7 +154,6 @@ class Metrics extends Component {
         const homo_lr_0_f1_score = datas[metricArray[10]];
         const homo_lr_0_quantile_pr = datas[metricArray[11]];
         const dataset = Object.keys(r.data.data)[0];
-        console.log(metricArray[10]);
         const { p_scores, r_scores, thresholds } = homo_lr_0_quantile_pr.meta;
         // fn右下,tn右上,fp左上,tp左下
         const { fn, fp, tn, tp } = homo_lr_0_confusion_mat.meta;

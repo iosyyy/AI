@@ -27,17 +27,10 @@ class FederalResult extends Component {
       role: ["guest", "host"],
     };
   }
-
-  onFormFinish = (ew) => {
-    console.log(1111);
-    console.log(ew);
-  };
-
   ableToUp = () => {
     const { party_id, role, namespace, table_name } = this.state;
 
     for (const party of party_id) {
-      console.log(party % 1);
       if ((isNaN(party) && party) || party % 1 !== 0) {
         return false;
       }
@@ -118,9 +111,7 @@ class FederalResult extends Component {
           <Col>
             <Form
               size={"middle"}
-              onFinish={() => {
-                console.log(1000);
-              }}
+              onFinish={() => {}}
               onFinishFailed={() => {
                 this.setState({});
               }}

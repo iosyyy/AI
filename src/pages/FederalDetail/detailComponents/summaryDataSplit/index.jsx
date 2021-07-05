@@ -15,7 +15,6 @@ export default class SummaryBatchDataSplit extends Component {
   componentDidMount() {
     const { post_data, metrics } = this.props;
     post_data.metrics = metrics;
-    console.log(this.props);
     let keyName = Object.keys(metrics)[0];
     let train = metrics[keyName];
     if (Object.keys(metrics).length !== 0) {
@@ -45,10 +44,9 @@ export default class SummaryBatchDataSplit extends Component {
           const testRatio = meta.data_split_ratio_info.test;
           const validateRatio = meta.data_split_ratio_info.validate;
 
-          console.log(meta);
           const dataSource = label_names.map((v, i) => {
             return {
-              key: i,
+              key: this.generateUUID() + v,
               layer: v,
               originalCount: original[i],
               trainCount: train[i],
@@ -166,6 +164,21 @@ export default class SummaryBatchDataSplit extends Component {
           });
         });
     }
+  }
+
+  generateUUID() {
+    let d = new Date().getTime();
+    if (window.performance && typeof window.performance.now === "function") {
+      d += performance.now(); //use high-precision timer if available
+    }
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        var r = (d + Math.random() * 16) % 16 | 0;
+        d = Math.floor(d / 16);
+        return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+      }
+    );
   }
 
   render() {

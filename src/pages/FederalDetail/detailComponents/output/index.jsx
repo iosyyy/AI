@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Select } from "antd";
+import { Table, Select, Col, Row } from "antd";
 import axios from "axios";
 import api from "../../../../config/api";
 import { message } from "antd/es";
@@ -10,28 +10,22 @@ class FederalDetailOutput extends Component {
     super(props);
     const { post_data } = props;
     const columns = [];
-    const dataSource1 = [];
-    const dataSource2 = [];
-    const dataSource3 = [];
     this.state = {
       columns,
-      dataSource1,
-      dataSource2,
-      dataSource3,
+      dataSources: [[]],
       post_data,
       loading: true,
       total: 0,
-      curOption: "train",
+      curOption: 0,
+      names: [],
     };
   }
 
   componentDidMount() {
-    console.log(this.props);
     const { post_data } = this.state;
     axios
       .post(api.data_output, post_data)
-      .then(r => {
-        console.log(r);
+      .then((r) => {
         if (r.data.code !== 0) {
           message.error(`${r.data.code}:${r.data.msg}`);
           return;
@@ -40,7 +34,7 @@ class FederalDetailOutput extends Component {
           return;
         }
         let { data } = r.data;
-        const { header } = data.meta;
+        const { header, names } = data.meta;
         const columns = header[0].map((v, _i) => {
           return {
             title: v,
@@ -51,46 +45,28 @@ class FederalDetailOutput extends Component {
           };
         });
         let dataDeatil = data.data;
-        const dataSource1 = dataDeatil[0].map((v, i) => {
-          let obj = {};
-          for (let key in v) {
-            if (v.hasOwnProperty(key)) {
-              obj[header[0][key]] = v[key];
-              obj["key"] = i;
+        const dataSources = [];
+        for (let datas of dataDeatil) {
+          const dataSource = datas.map((v, i) => {
+            let obj = {};
+            for (let key in v) {
+              if (v.hasOwnProperty(key)) {
+                obj[header[0][key]] = v[key];
+                obj["key"] = i;
+              }
             }
-          }
-          obj["key"] = this.generateUUID();
-          return obj;
-        });
-        const dataSource2 = dataDeatil[1].map((v, i) => {
-          let obj = {};
-          for (let key in v) {
-            if (v.hasOwnProperty(key)) {
-              obj[header[0][key]] = v[key];
-              obj["key"] = i;
-            }
-          }
-          obj["key"] = this.generateUUID();
-          return obj;
-        });
-        const dataSource3 = dataDeatil[2].map((v, i) => {
-          let obj = {};
-          for (let key in v) {
-            if (v.hasOwnProperty(key)) {
-              obj[header[0][key]] = v[key];
-              obj["key"] = i;
-            }
-          }
-          obj["key"] = this.generateUUID();
-          return obj;
-        });
+            obj["key"] = this.generateUUID();
+            return obj;
+          });
+          dataSources.push(dataSource);
+        }
+
         this.setState({
           columns,
-          dataSource1,
-          dataSource2,
-          dataSource3,
+          dataSources,
           loading: false,
           total: data.meta.total,
+          names,
         });
       })
       .catch(() => {
@@ -121,7 +97,7 @@ class FederalDetailOutput extends Component {
       }
     );
   }
-  handleChange = value => {
+  handleChange = (value) => {
     this.setState({
       curOption: value,
     });
@@ -130,69 +106,26 @@ class FederalDetailOutput extends Component {
   render() {
     const {
       loading,
-      dataSource1,
-      dataSource2,
-      dataSource3,
+      dataSources,
       columns,
       total,
       curOption,
+      names,
     } = this.state;
-    const table1 =
-      dataSource1.length !== 0 ? (
-        <Table
-          loading={loading}
-          bordered={false}
-          size={"middle"}
-          dataSource={dataSource1}
-          columns={columns}
-          pagination={false}
-        />
-      ) : (
-        <h1>
-          <a>暂无数据</a>
-        </h1>
-      );
-    const table2 =
-      dataSource2.length !== 0 ? (
-        <Table
-          loading={loading}
-          bordered={false}
-          size={"middle"}
-          dataSource={dataSource2}
-          columns={columns}
-          pagination={false}
-        />
-      ) : (
-        <h1>
-          <a>暂无数据</a>
-        </h1>
-      );
-    const table3 =
-      dataSource3.length !== 0 ? (
-        <Table
-          loading={loading}
-          bordered={false}
-          size={"middle"}
-          dataSource={dataSource3}
-          columns={columns}
-          pagination={false}
-        />
-      ) : (
-        <h1>
-          <a>暂无数据</a>
-        </h1>
-      );
-
     return (
-      <div style={{ height: "64vh" }} className='scrollContent'>
+      <div style={{ height: "64vh" }} className="scrollContent">
         <Select
-          defaultValue='train'
+          defaultValue={0}
           style={{ width: 120 }}
           onChange={this.handleChange}
         >
-          <Select.Option value='train'>train</Select.Option>
-          <Select.Option value='validate'>validate</Select.Option>
-          <Select.Option value='test'>test</Select.Option>
+          {names.map((v, i) => {
+            return (
+              <Select.Option key={i} value={i}>
+                {v}
+              </Select.Option>
+            );
+          })}
         </Select>
         <div
           style={{
@@ -201,13 +134,27 @@ class FederalDetailOutput extends Component {
             marginBottom: "1vh",
           }}
         >
-          {`Outputting ${total} instances (only 100 instances are shown in the table)`}
+          {`Outputting ${total[curOption]} instances (only 100 instances are shown in the table)`}
         </div>
-        {curOption === "train"
-          ? table1
-          : curOption === "validate"
-          ? table2
-          : table3}
+        {dataSources[curOption] &&
+        dataSources[curOption].length !== 0 &&
+        !loading ? (
+          <Table
+            empty={true}
+            loading={loading}
+            bordered={false}
+            size={"middle"}
+            dataSource={dataSources[curOption]}
+            columns={columns}
+            pagination={false}
+          />
+        ) : (
+          <Row style={{ marginTop: "2vh", height: "63vh" }} justify={"center"}>
+            <Col>
+              <h1>There is no data</h1>
+            </Col>
+          </Row>
+        )}
       </div>
     );
   }

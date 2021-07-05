@@ -338,7 +338,6 @@ class TrainingRecord extends Component {
     }
     let { sorter } = this.state;
     let orderField, orderRule;
-    console.log(sorter);
     if (Object.keys(sorter).length) {
       orderField = `f_${sorter.columnKey}`;
       orderRule = `${sorter.order === `ascend` ? `asc` : `desc`}`;
@@ -535,7 +534,6 @@ class TrainingRecord extends Component {
               axios
                 .post(api.pageList, this.getData(page))
                 .then((r) => {
-                  console.log(page);
                   const { list } = r.data.data;
                   const pageSize = r.data.data.totalRecord;
                   const dataSource = this.getDataSourceByDataList(list);

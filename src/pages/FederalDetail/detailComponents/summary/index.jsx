@@ -21,7 +21,6 @@ class Summary extends Component {
         ...post_data,
       })
       .then((r) => {
-        console.log(r);
         if (r.data.code !== 0) {
           message.error(`${r.data.code}:${r.data.msg}`);
           return;
