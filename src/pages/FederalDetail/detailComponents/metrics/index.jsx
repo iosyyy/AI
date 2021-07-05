@@ -316,7 +316,7 @@ class Metrics extends Component {
         {isEmpty ? (
           <>
             <Row
-              style={{ height: "65vh", marginTop: "2vh" }}
+              style={{ height: "62vh", marginTop: "2vh" }}
               justify={"center"}
             >
               <Col>

@@ -149,7 +149,7 @@ class FederalDetailOutput extends Component {
             pagination={false}
           />
         ) : (
-          <Row style={{ marginTop: "2vh", height: "63vh" }} justify={"center"}>
+          <Row style={{ marginTop: "2vh", height: "62vh" }} justify={"center"}>
             <Col>
               <h1>There is no data</h1>
             </Col>

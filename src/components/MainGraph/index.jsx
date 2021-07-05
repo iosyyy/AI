@@ -17,7 +17,7 @@ class MainGraph extends Component {
       linkArray: [],
     };
   }
-  handleDiagramEvent = e => {
+  handleDiagramEvent = (e) => {
     const name = e.name;
     switch (name) {
       case "ChangedSelection": {
@@ -199,7 +199,8 @@ class MainGraph extends Component {
           status &&
           status !== "success" &&
           status !== "canceled" &&
-          status !== "waiting"
+          status !== "waiting" &&
+          status !== "failed"
         ) {
           const animation = new go.Animation();
           animation.add(
@@ -226,7 +227,7 @@ class MainGraph extends Component {
       <div>
         <ReactDiagram
           initDiagram={this.initDiagram}
-          divClassName='diagram-component'
+          divClassName="diagram-component"
           nodeDataArray={nodeArray}
           linkDataArray={linkArray}
           handleDiagramEvent={this.handleDiagramEvent}

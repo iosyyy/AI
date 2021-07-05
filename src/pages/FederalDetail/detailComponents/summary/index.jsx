@@ -65,7 +65,7 @@ class Summary extends Component {
       });
     } else {
       dataDetail = (
-        <Row style={{ height: "65vh", marginTop: "2vh" }} justify={"center"}>
+        <Row style={{ height: "62vh", marginTop: "2vh" }} justify={"center"}>
           <Col>
             <h1>There is no data</h1>
           </Col>

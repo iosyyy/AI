@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Col, Row, Spin, Tabs } from "antd";
+import { Button, Col, Image, Row, Spin, Tabs } from "antd";
 import "./change.css";
 import axios from "axios";
 import api from "../../../config/api";
@@ -14,7 +14,7 @@ import ModelOutput from "../detailComponents/modelOutput";
 import SummaryBatch from "../detailComponents/summaryBatch";
 import qs from "qs";
 import SummaryBatchDataSplit from "../detailComponents/summaryDataSplit";
-
+import returns from "../../../img/return.png";
 const { TabPane } = Tabs;
 
 class FederalDetailShow extends Component {
@@ -374,6 +374,9 @@ class FederalDetailShow extends Component {
               >
                 刷新
               </Button>
+              {/*<Button type="link">*/}
+              {/*  <Image width={15} height={15} src={returns} preview={false} />*/}
+              {/*</Button>*/}
             </Col>
           </Row>
           <Tabs disabled={isLoading} defaultActiveKey="1">

@@ -145,6 +145,7 @@ class DataSourceTable extends Component {
   }
 
   setData = (data) => {
+    console.log(data);
     if (data.retcode !== 0) {
       message.error(data.retmsg);
       this.setState({
@@ -175,7 +176,7 @@ class DataSourceTable extends Component {
     axios
       .get(`${api.datasourceList}?data_type=0`)
       .then((r) => {
-        if (r.data.data) {
+        if (r.data.data.data) {
           this.setData(r.data.data);
         } else {
           this.setData(r.data);

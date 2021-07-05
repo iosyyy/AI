@@ -57,30 +57,43 @@ class ModelOutput extends Component {
         key: "weight",
       },
     ];
+    const data = this.props.model.data.data.data;
     return (
       <div className={"scrollContent"} style={{ height: "64vh" }}>
-        <Row>
-          <font style={{ color: "rgb(127,125,142)", fontSize: "small" }}>
-            iterations: {this.state.iterations}
-          </font>
-        </Row>
-        <Row>
-          <Col>
-            <font style={{ color: "rgb(127,125,142)", fontSize: "small" }}>
-              converged: {this.state.isConverged ? "true" : "false"}
-            </font>
-          </Col>
-        </Row>
-        <Table
-          columns={TABLE_COLUMNS}
-          dataSource={this.state.dataSource}
-          size='small'
-          pagination={{ pageSize: 10 }}
-        />
-        <Divider />
-        {this.props.model.data.data.data.lossHistory.length !== 0 ? (
-          <Loss lossHistory={this.props.model.data.data.data.lossHistory} />
-        ) : null}
+        {data && Object.keys(data).length !== 0 ? (
+          <>
+            <Row>
+              <font style={{ color: "rgb(127,125,142)", fontSize: "small" }}>
+                iterations: {this.state.iterations}
+              </font>
+            </Row>
+            <Row>
+              <Col>
+                <font style={{ color: "rgb(127,125,142)", fontSize: "small" }}>
+                  converged: {this.state.isConverged ? "true" : "false"}
+                </font>
+              </Col>
+            </Row>
+            <Table
+              columns={TABLE_COLUMNS}
+              dataSource={this.state.dataSource}
+              size="small"
+              pagination={{ pageSize: 10 }}
+            />
+            <Divider />
+            {data.lossHistory && data.lossHistory.length !== 0 ? (
+              <Loss lossHistory={data.lossHistory} />
+            ) : (
+              <></>
+            )}
+          </>
+        ) : (
+          <Row style={{ marginTop: "2vh", height: "62vh" }} justify={"center"}>
+            <Col>
+              <h1>There is no data</h1>
+            </Col>
+          </Row>
+        )}
       </div>
     );
   }
