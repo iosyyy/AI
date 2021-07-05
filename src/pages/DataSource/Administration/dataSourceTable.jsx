@@ -51,7 +51,13 @@ class DataSourceTable extends Component {
                   axios
                     .post(api.downloadTemplate, { file_name: obj.file })
                     .then((r) => {
-                      const { data } = r;
+                      const { code } = r.data;
+                      if (code !== 0) {
+                        message.error("当前文件下载错误请重试");
+                        return;
+                      }
+                      const { data } = r.data;
+
                       const exportContent = "\uFEFF";
                       const blob = new Blob([exportContent + data], {
                         type: "text/plain;charset=utf-8",

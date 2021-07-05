@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Select, Col, Row } from "antd";
+import { Table, Select, Col, Row, Tooltip } from "antd";
 import axios from "axios";
 import api from "../../../../config/api";
 import { message } from "antd/es";
@@ -9,7 +9,7 @@ class FederalDetailOutput extends Component {
   constructor(props) {
     super(props);
     const { post_data } = props;
-    const columns = [];
+    const columns = [[]];
     this.state = {
       columns,
       dataSources: [[]],
@@ -35,15 +35,44 @@ class FederalDetailOutput extends Component {
         }
         let { data } = r.data;
         const { header, names } = data.meta;
-        const columns = header[0].map((v, _i) => {
-          return {
-            title: v,
-            dataIndex: v,
-            key: v,
-            align: "center",
-            width: "9vw",
-          };
-        });
+        const columns = [];
+        for (let head of header) {
+          let column;
+          if (head) {
+            column = head.map((v, _i) => {
+              return {
+                title: v,
+                dataIndex: v,
+                key: v,
+                align: "center",
+                width: "9vw",
+                render: (value, obj) => {
+                  if (value.length >= 30) {
+                    return (
+                      <Tooltip color="rgb(175,178,173)" title={value}>
+                        <span>{value.substring(0, 30)}</span>
+                        <span
+                          style={{
+                            color: "rgb(127,125,142)",
+                            fontSize: "small",
+                          }}
+                        >
+                          ···
+                        </span>
+                      </Tooltip>
+                    );
+                  } else {
+                    return value;
+                  }
+                },
+              };
+            });
+          } else {
+            column = [];
+          }
+          columns.push(column);
+        }
+
         let dataDeatil = data.data;
         const dataSources = [];
         for (let datas of dataDeatil) {
@@ -51,7 +80,7 @@ class FederalDetailOutput extends Component {
             let obj = {};
             for (let key in v) {
               if (v.hasOwnProperty(key)) {
-                obj[header[0][key]] = v[key];
+                obj[header[0][key]] = JSON.stringify(v[key]);
                 obj["key"] = i;
               }
             }
@@ -60,7 +89,6 @@ class FederalDetailOutput extends Component {
           });
           dataSources.push(dataSource);
         }
-
         this.setState({
           columns,
           dataSources,
@@ -145,7 +173,7 @@ class FederalDetailOutput extends Component {
             bordered={false}
             size={"middle"}
             dataSource={dataSources[curOption]}
-            columns={columns}
+            columns={columns[curOption]}
             pagination={false}
           />
         ) : (
