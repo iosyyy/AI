@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Menu } from "antd";
+import { Button, Collapse, Dropdown, Layout, Menu } from "antd";
 import { NavLink, Redirect, Route, Switch } from "react-router-dom";
 import PubSubJS from "pubsub-js";
 import Normal from "./pages/Normal";
@@ -13,6 +13,10 @@ import Training from "./pages/Training";
 import TrainingDetails from "./pages/Training/Detail";
 import FederalDetailAll from "./pages/FederalDetail";
 import DataSource from "./pages/DataSource";
+import Avatar from "antd/es/avatar/avatar";
+import { UserOutlined } from "@ant-design/icons";
+import Reasoning from "./pages/Reasoning";
+const { Panel } = Collapse;
 
 const { Header, Content } = Layout;
 
@@ -27,13 +31,29 @@ class App extends Component {
   }
 
   render() {
+    const fontStyle = {
+      fontWeight: 900,
+      color: "rgb(127,125,142)",
+    };
+    const menu = (
+      <div className="user-login-extend" style={{ background: "white" }}>
+        <div style={fontStyle}>ID: 9000</div>
+        <div style={fontStyle}>Role: host</div>
+      </div>
+    );
     return (
       <div>
         <Layout className="layout">
-          <Header style={{ height: "8.9vh", background: "rgb(10,73,123)" }}>
+          <Header
+            style={{
+              padding: "0px 30px",
+              height: "8.9vh",
+              background: "rgb(10,73,123)",
+            }}
+          >
             <div
               style={{
-                width: "180px",
+                width: "200px",
                 lineHeight: "5vh",
               }}
               className="logo"
@@ -44,12 +64,9 @@ class App extends Component {
                   color: "rgb(218,218,224)",
                   textAlign: "center",
                   userSelect: "none",
-                  backgroundImage:
-                    "-webkit-linear-gradient(45deg, rgb(106,65,195), rgb(225,143,143)" +
-                    ", rgb(224,43,122), rgb(150,55,187))",
                 }}
               >
-                数据价值多方安全共享平台
+                金融数据价值多方安全共享平台
               </span>
             </div>
             <Menu
@@ -93,6 +110,28 @@ class App extends Component {
                   联邦攻击
                 </NavLink>
               </Menu.Item>
+              <Menu.Item key="7">
+                <NavLink
+                  activeStyle={{ userSelect: "none", color: "rgb(96,185,234)" }}
+                  style={{ userSelect: "none", color: "rgb(204,210,204)" }}
+                  to="/reasoning"
+                >
+                  在线推理
+                </NavLink>
+              </Menu.Item>
+              <div
+                style={{
+                  float: "right",
+                  display: "inline-block",
+                  lineHeight: "8vh",
+                  height: "9vh",
+                  marginLeft: "10px",
+                }}
+              >
+                <Dropdown placement="bottomCenter" arrow overlay={menu}>
+                  <Avatar size={38} icon={<UserOutlined />} />
+                </Dropdown>
+              </div>
               <Menu.Item style={{ float: "right" }} key="4">
                 <NavLink
                   activeStyle={{ userSelect: "none", color: "rgb(96,185,234)" }}
@@ -132,21 +171,10 @@ class App extends Component {
               <Route path="/federalDetail" component={FederalDetailAll} />
               <Route path="/trainingDetails" component={TrainingDetails} />
               <Route path="/datasource" component={DataSource} />
+              <Route path="/reasoning" component={Reasoning} />
               <Redirect to="/federalTrain" />
             </Switch>
           </Content>
-          <div
-            style={{
-              width: "100%",
-              textAlign: "center",
-              position: "fixed",
-              bottom: 0,
-            }}
-          >
-            <p>
-              AI Demo ©2021 Created by Hrbust Science and Technology University
-            </p>
-          </div>
         </Layout>
       </div>
     );

@@ -9,7 +9,14 @@
   box-shadow: 0 10px 6px rgb(158,199,210);
 
 }
+.user-login-extend{
+  padding: 12px;
+  background: #fff;
 
+  box-shadow: 2px 2px 2px 2px rgb(193,193,195);
+  border-radius: 10px ;
+
+}
 /* App.css */
 .diagram-component {
   width: 100%;
@@ -30,9 +37,8 @@
   width: 150px;
   font-weight: bolder;
   border-radius:25px;
-
+  font-family: Consolas, FangSong, serif;
   text-align: center;
-  background-image:-webkit-linear-gradient(45deg, #00a0e9, #10d39d, #00a0e9, #10d39d) ;
 }
 
 .ant-row-rtl #components-layout-demo-top .logo {
