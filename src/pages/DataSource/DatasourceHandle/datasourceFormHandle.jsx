@@ -9,7 +9,7 @@ class DatasourceFormHandle extends Component {
     this.state = {
       formData,
       type,
-      canControll: isDisabled,
+      canControll: isDisabled
     };
   }
 
@@ -21,12 +21,12 @@ class DatasourceFormHandle extends Component {
 
   render() {
     const tailLayout = {
-      wrapperCol: { offset: 7 },
+      wrapperCol: { offset: 7 }
     };
     // 表单样式
     const layout = {
       labelCol: { span: 12 },
-      wrapperCol: { span: 20 },
+      wrapperCol: { span: 20 }
     };
     const { formData, canControll } = this.state;
     const { setFormData } = this.props;
@@ -42,7 +42,7 @@ class DatasourceFormHandle extends Component {
               }
               setFormData(formData);
               this.setState({
-                formData,
+                formData
               });
             }
           }}
@@ -58,14 +58,22 @@ class DatasourceFormHandle extends Component {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item name='tableName' label='数据表名'>
-                <Input readOnly={canControll} placeholder={"请输入数据代码"} />
+              <Form.Item
+                name='tableName'
+                label='数据表名'
+                rules={[{ required: true, message: "请输入数据表名" }]}
+              >
+                <Input readOnly={canControll} placeholder={"请输入数据表名"} />
               </Form.Item>
             </Col>
           </Row>
           <Row>
             <Col span={8}>
-              <Form.Item name='namespace' label='命名空间'>
+              <Form.Item
+                name='namespace'
+                label='命名空间'
+                rules={[{ required: true, message: "请输入命名空间" }]}
+              >
                 <Input readOnly={canControll} placeholder={"请输入命名空间"} />
               </Form.Item>
             </Col>

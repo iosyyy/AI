@@ -21,14 +21,14 @@ class DatasourceHandle extends Component {
             tableName: "",
             namespace: "",
             description: "",
-            work_mode: 0,
+            work_mode: 0
           }
         : {
             originalDatasource: data.history_table_name,
             tableName: data.tableName,
             namespace: data.namespace,
             description: data.note,
-            work_mode: data.work_mode,
+            work_mode: data.work_mode
           };
 
     this.state = {
@@ -38,7 +38,7 @@ class DatasourceHandle extends Component {
       curJobId: data["job_id"],
       datasource: [],
       isLoading: false,
-      tableInfo,
+      tableInfo
     };
   }
 
@@ -52,7 +52,7 @@ class DatasourceHandle extends Component {
 
   setFormData = data => {
     this.setState({
-      formData: data,
+      formData: data
     });
   };
 
@@ -90,20 +90,25 @@ class DatasourceHandle extends Component {
               <Button
                 type='primary'
                 onClick={() => {
-                  this.setState({
-                    isLoading: true,
-                  });
                   let { datasource, filepath, formData } = this.state;
+                  if (formData.namespace === "" || formData.tableName === "") {
+                    message.error("数据表名或命名空间没有填写");
+                    return;
+                  }
+                  this.setState({
+                    isLoading: true
+                  });
                   datasource = datasource.map(item => ({
                     label: item.label,
                     description: item.description,
                     is_use: item.is_use,
                     type: item.type,
-                    content: item.content,
+                    content: item.content
                   }));
                   console.log(formData);
                   console.log(filepath);
                   console.log(datasource);
+
                   axios
                     .post(api.preprocess, {
                       file_path: filepath,
@@ -112,7 +117,7 @@ class DatasourceHandle extends Component {
                       namespace: formData.namespace,
                       description: formData.description,
                       work_mode: formData.work_mode,
-                      label_info: datasource,
+                      label_info: datasource
                     })
                     .then(data => {
                       if (data.data.retcode === 0) {
@@ -120,7 +125,7 @@ class DatasourceHandle extends Component {
 
                         setTimeout(() => {
                           this.setState({
-                            isLoading: false,
+                            isLoading: false
                           });
                           this.props.history.push(
                             "/datasource/datasourceManage"
@@ -129,14 +134,14 @@ class DatasourceHandle extends Component {
                       } else {
                         message.error("保存失败");
                         this.setState({
-                          isLoading: false,
+                          isLoading: false
                         });
                       }
                     })
                     .catch(e => {
                       message.error("保存失败");
                       this.setState({
-                        isLoading: false,
+                        isLoading: false
                       });
                     });
                 }}
