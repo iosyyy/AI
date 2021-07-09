@@ -289,9 +289,7 @@ class TrainingRecord extends Component {
 
   componentWillUnmount() {
     //处理逻辑
-    this.setState = (state, callback) => {
-      return;
-    };
+    this.setState = (_state, _callback) => {};
   }
 
   getDataSourceByDataList(list) {
@@ -400,6 +398,8 @@ class TrainingRecord extends Component {
   };
 
   render() {
+    const fontStyle = { fontWeight: 900, color: "rgb(127,125,142)" };
+
     return (
       <div className="site-layout-content">
         <div style={{ float: "right" }}>
@@ -434,34 +434,16 @@ class TrainingRecord extends Component {
                 });
             }}
           >
-            <Form.Item
-              label={
-                <div style={{ fontWeight: 900, color: "rgb(127,125,142)" }}>
-                  Job ID
-                </div>
-              }
-              name="id"
-            >
+            <Form.Item label={<div style={fontStyle}>Job ID</div>} name="id">
               <Input />
             </Form.Item>
             <Form.Item
-              label={
-                <div style={{ fontWeight: 900, color: "rgb(127,125,142)" }}>
-                  Party ID
-                </div>
-              }
+              label={<div style={fontStyle}>Party ID</div>}
               name="partyId"
             >
               <Input />
             </Form.Item>
-            <Form.Item
-              label={
-                <div style={{ fontWeight: 900, color: "rgb(127,125,142)" }}>
-                  规则
-                </div>
-              }
-              name="role"
-            >
+            <Form.Item label={<div style={fontStyle}>规则</div>} name="role">
               <Select
                 mode="multiple"
                 placeholder="选择规则"
@@ -474,14 +456,7 @@ class TrainingRecord extends Component {
               </Select>
             </Form.Item>
 
-            <Form.Item
-              label={
-                <div style={{ fontWeight: 900, color: "rgb(127,125,142)" }}>
-                  结果
-                </div>
-              }
-              name="status"
-            >
+            <Form.Item label={<div style={fontStyle}>结果</div>} name="status">
               <Select
                 mode="multiple"
                 placeholder="选择结果"
@@ -494,14 +469,7 @@ class TrainingRecord extends Component {
                 <Option value="canceled">canceled</Option>
               </Select>
             </Form.Item>
-            <Form.Item
-              label={
-                <div style={{ fontWeight: 900, color: "rgb(127,125,142)" }}>
-                  记录
-                </div>
-              }
-              name="note"
-            >
+            <Form.Item label={<div style={fontStyle}>记录</div>} name="note">
               <Input />
             </Form.Item>
             <Form.Item>

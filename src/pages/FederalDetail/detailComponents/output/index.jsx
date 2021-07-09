@@ -80,8 +80,11 @@ class FederalDetailOutput extends Component {
             let obj = {};
             for (let key in v) {
               if (v.hasOwnProperty(key)) {
-                obj[header[0][key]] = JSON.stringify(v[key]);
-                obj["key"] = i;
+                if (isNaN(v[key])) {
+                  obj[header[0][key]] = JSON.stringify(v[key]);
+                } else {
+                  obj[header[0][key]] = v[key];
+                }
               }
             }
             obj["key"] = this.generateUUID();
