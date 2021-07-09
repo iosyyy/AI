@@ -18,12 +18,12 @@ const e = {
   showDetailOutputModel: host + "/v1/tracking/component/output/model",
   showDetailParameters: host + "/v1/tracking/component/parameters",
   taskUpload: baseHost + "/v1/client/upload",
-  beginHighTrain: baseHost + "/v1/client/submit/job/high",
-  beginNormalTrain: baseHost + "/v1/client/submit/job/general",
+  beginHighTrain: host + "/v1/client/submit/job/high",
+  beginNormalTrain: host + "/v1/client/submit/job/general",
   isTrainingDetail: host + "/job/query/status",
   logDetail: ws + "/log/new/{id}/{role}/{partyId}/default",
   jobUpdate: host + "/job/update",
-  downloadTemplate: baseHost + "/v1/client/download/template",
+  downloadTemplate: host + "/v1/client/download/template",
   stopJob: host + "/job/v1/pipeline/job/stop",
   getJobOutput: host + "/v1/tracking/component/output/model",
   metrics: host + "/v1/tracking/component/metrics",
@@ -31,10 +31,10 @@ const e = {
   data_output: host + "/v1/tracking/component/output/data",
   log: ws + "/log/new/{id}/{role}/{partyId}/{name}",
   batch: host + "/v1/tracking/component/metric_data/batch",
-  datasourceList: baseHost + "/v1/preprocess/data/list",
-  queryDatasource: baseHost + "/v1/preprocess/data/find",
-  delDatasource: baseHost + "/v1/preprocess/data/del",
-  
+  datasourceList: host + "/v1/preprocess/data/list",
+  queryDatasource: host + "/v1/preprocess/data/find",
+  delDatasource: host + "/v1/preprocess/data/del",
+  preprocess: baseHost + "/v1/preprocess/data/preprocess",
 };
 
 export default e;

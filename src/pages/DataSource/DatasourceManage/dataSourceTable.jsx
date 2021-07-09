@@ -6,13 +6,14 @@ import { VerticalAlignBottomOutlined } from "@ant-design/icons";
 import axios from "axios";
 import api from "../../../config/api";
 import FileSaver from "file-saver";
+import { withRouter } from "react-router-dom";
 class DataSourceTable extends Component {
   constructor(props) {
     super(props);
 
     const columnsT = [
       {
-        title: <div>key</div>,
+        title: <div>job_id</div>,
         dataIndex: "key",
         key: "key",
       },
@@ -27,12 +28,11 @@ class DataSourceTable extends Component {
         key: "namespace",
       },
       {
-        title: <div>工作类型</div>,
-        dataIndex: "work_model",
-        key: "work_model",
-        render: work_model => {
-          console.log(work_model);
-          return work_model === "1" ? "集群" : "单机";
+        title: <div>任务类型</div>,
+        dataIndex: "work_mode",
+        key: "work_mode",
+        render: work_mode => {
+          return work_mode === "1" ? "集群" : "单机";
         },
       },
       {
@@ -47,6 +47,20 @@ class DataSourceTable extends Component {
         render: (action, obj, value) => {
           return (
             <div>
+              <a
+                onClick={() => {
+                  this.props.history.push({
+                    pathname: "/datasource/datasourceHandle",
+                    state: {
+                      data: obj,
+                      type: 0,
+                    },
+                  });
+                }}
+              >
+                预处理
+              </a>
+              <span>/</span>
               <a
                 onClick={() => {
                   axios
@@ -296,4 +310,4 @@ class DataSourceTable extends Component {
   }
 }
 
-export default DataSourceTable;
+export default withRouter(DataSourceTable);

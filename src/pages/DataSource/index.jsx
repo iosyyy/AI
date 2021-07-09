@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Menu, Row } from "antd";
 import { NavLink, Redirect, Route, Switch } from "react-router-dom";
-import DataSourceAdministration from "./Administration";
+import DataSourceAdministration from "./DatasourceManage";
 import DatasourceHandle from "./DatasourceHandle";
-import MyDatasource from "./MyDatasource";
+import Preprocessing from "./Preprocessing";
 import PubSubJS from "pubsub-js";
 
 class DataSource extends Component {
@@ -29,35 +29,32 @@ class DataSource extends Component {
             width: "8vw",
           }}
           selectedKeys={[this.state.page]}
-          onSelect={(info) => {
+          onSelect={info => {
             this.setState({
               page: info.key,
             });
           }}
         >
-          <Menu.Item key="1">
-            <NavLink to="/datasource/administration">数据源管理</NavLink>
+          <Menu.Item key='1'>
+            <NavLink to='/datasource/datasourceManage'>数据源管理</NavLink>
           </Menu.Item>
-          <Menu.Item key="2">
-            <NavLink to="/datasource/myDatasource">我的数据</NavLink>
-          </Menu.Item>
-          <Menu.Item key="3">
-            <NavLink to="/datasource/datasourceHandle">数据源预处理</NavLink>
+          <Menu.Item key='2'>
+            <NavLink to='/datasource/myDatasource'>预处理数据管理</NavLink>
           </Menu.Item>
         </Menu>
 
         <Switch>
           <Route
-            path="/datasource/administration"
+            path='/datasource/datasourceManage'
             component={DataSourceAdministration}
           />
-          <Route path="/datasource/myDatasource" component={MyDatasource} />
+          <Route path='/datasource/myDatasource' component={Preprocessing} />
           <Route
-            path="/datasource/datasourceHandle"
+            path='/datasource/datasourceHandle'
             component={DatasourceHandle}
           />
 
-          <Redirect to="/datasource/administration" />
+          <Redirect to='/datasource/datasourceManage' />
         </Switch>
       </Row>
     );

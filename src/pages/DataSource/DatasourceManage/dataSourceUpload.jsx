@@ -240,7 +240,7 @@ class DataSourceUpload extends Component {
                               style={{ marginTop: "1vh" }}
                               name={[name, "description"]}
                               fieldKey={[fieldKey, "description"]}
-                              label={"数据集描述"}
+                              label={"任务类型"}
                             >
                               <Input
                                 onChange={(e) => {
