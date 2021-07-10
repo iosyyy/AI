@@ -66,7 +66,7 @@ class App extends Component {
               }}
               className="logo"
             >
-              <Image width={400} preview={false} view={false} src={logo} />
+              <Image width={400} preview={false} src={logo} />
             </div>
             <Menu
               style={{

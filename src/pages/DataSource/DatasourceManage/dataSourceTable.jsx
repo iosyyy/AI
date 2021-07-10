@@ -98,7 +98,7 @@ class DataSourceTable extends Component {
                   axios
                     .post(api.delDatasource, formData)
                     .then((data) => {
-                      const { retcode, retmsg } = data.data;
+                      const { retcode, retmsg } = data.data.data;
                       if (retcode === 0) {
                         message.success("数据源删除成功!");
                         this.setState({
@@ -133,7 +133,7 @@ class DataSourceTable extends Component {
                             });
                           });
                       } else {
-                        message.error(11111);
+                        message.error(retmsg);
                         this.setState({
                           tableIsLoading: false,
                         });

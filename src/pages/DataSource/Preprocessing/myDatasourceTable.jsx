@@ -68,14 +68,14 @@ class MyDatasourceTable extends Component {
                   axios
                     .post(api.delDatasource, formData)
                     .then((data) => {
-                      const { retcode, retmsg } = data.data;
+                      const { retcode, retmsg } = data.data.data;
                       if (retcode === 0) {
                         message.success("数据源删除成功!");
                         this.setState({
                           tableIsLoading: true,
                         });
                         axios
-                          .get(`${api.datasourceList}?data_type=1`)
+                          .get(`${api.datasourceList}?data_type=0`)
                           .then((r) => {
                             if (r.data.data.retcode !== 0) {
                               message.error(r.data.data.retmsg);
@@ -103,7 +103,7 @@ class MyDatasourceTable extends Component {
                             });
                           });
                       } else {
-                        message.error(11111);
+                        message.error(retmsg);
                         this.setState({
                           tableIsLoading: false,
                         });

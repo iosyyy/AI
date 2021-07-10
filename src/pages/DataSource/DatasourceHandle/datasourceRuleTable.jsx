@@ -20,7 +20,7 @@ class DatasourceRuleTable extends Component {
       .post(api.downloadTemplate, {
         file_name: filepath,
       })
-      .then(r => {
+      .then((r) => {
         let fileData;
         if (r.data.data) {
           fileData = r.data.data;
@@ -106,25 +106,25 @@ class DatasourceRuleTable extends Component {
           if (this.state.type === 0) {
             return (
               <Input
-                placeholder='请输入字段描述'
-                onChange={e => {
+                placeholder="请输入字段描述"
+                onChange={(e) => {
                   let datasource = this.props.datasource;
                   datasource[parseInt(index)].description = e.target.value;
                   this.props.setDatasource(datasource);
                 }}
-              ></Input>
+              />
             );
           } else {
             return (
               <Input
                 readOnly={this.state.isDisabled}
                 value={record.description}
-                onChange={e => {
+                onChange={(e) => {
                   let datasource = this.props.datasource;
                   datasource[parseInt(index)].description = e.target.value;
                   this.props.setDatasource(datasource);
                 }}
-              ></Input>
+              />
             );
           }
         },
@@ -139,7 +139,7 @@ class DatasourceRuleTable extends Component {
               <Select
                 defaultValue={0}
                 style={{ width: 200 }}
-                onChange={e => {
+                onChange={(e) => {
                   let datasource = this.props.datasource;
                   datasource[parseInt(index)].type = e;
                   this.props.setDatasource(datasource);
@@ -156,7 +156,7 @@ class DatasourceRuleTable extends Component {
                 defaultValue={record.type}
                 disabled={this.state.isDisabled}
                 style={{ width: 200 }}
-                onChange={e => {
+                onChange={(e) => {
                   let datasource = this.props.datasource;
                   datasource[parseInt(index)].type = e;
                   this.props.setDatasource(datasource);
@@ -180,7 +180,7 @@ class DatasourceRuleTable extends Component {
             return (
               <Select
                 defaultValue={true}
-                onChange={e => {
+                onChange={(e) => {
                   let datasource = this.props.datasource;
                   datasource[parseInt(index)].is_use = e;
                   this.props.setDatasource(datasource);
@@ -195,7 +195,7 @@ class DatasourceRuleTable extends Component {
               <Select
                 defaultValue={record.is_use}
                 disabled={this.state.isDisabled}
-                onChange={e => {
+                onChange={(e) => {
                   let datasource = this.props.datasource;
                   datasource[parseInt(index)].is_use = e;
                   this.props.setDatasource(datasource);
@@ -218,13 +218,13 @@ class DatasourceRuleTable extends Component {
     ];
     return (
       <div>
-        <Spin size='large' spinning={this.state.isLoading}>
+        <Spin size="large" spinning={this.state.isLoading}>
           <Table
             style={{ marginLeft: "3vw", marginRight: "2vw" }}
             dataSource={this.props.datasource}
             columns={COLUMNS}
             bordered
-            size='small'
+            size="small"
             pagination={false}
           />
         </Spin>
