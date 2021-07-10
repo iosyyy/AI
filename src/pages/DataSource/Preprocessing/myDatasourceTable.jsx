@@ -27,7 +27,7 @@ class MyDatasourceTable extends Component {
         title: <div>工作类型</div>,
         dataIndex: "work_mode",
         key: "work_mode",
-        render: work_mode => {
+        render: (work_mode) => {
           console.log(work_mode);
           return work_mode === 0 ? "单机" : "集群";
         },
@@ -59,34 +59,63 @@ class MyDatasourceTable extends Component {
               </a>
               <span>/</span>
               <Popconfirm
-                title='确定要删除么?'
+                title="确定要删除么?"
                 onConfirm={() => {
                   let curJobId = obj["job_id"];
+                  const formData = new FormData();
+                  formData.append("job_id", curJobId);
 
                   axios
-                    .post(api.queryDatasource, { job_id: curJobId })
-                    .then(data => {
-                      if (data.data.retcode === 0) {
-                        let curJobId = obj["job_id"];
-                        let datasource = this.state.dataSource;
-                        let d = [
-                          ...dataSource.filter(
-                            item => item["job_id"] !== curJobId
-                          ),
-                        ];
-                        this.setState({ dataSource: d });
-                        message.info("数据源删除成功!");
+                    .post(api.delDatasource, formData)
+                    .then((data) => {
+                      const { retcode, retmsg } = data.data;
+                      if (retcode === 0) {
+                        message.success("数据源删除成功!");
+                        this.setState({
+                          tableIsLoading: true,
+                        });
+                        axios
+                          .get(`${api.datasourceList}?data_type=1`)
+                          .then((r) => {
+                            if (r.data.data.retcode !== 0) {
+                              message.error(r.data.data.retmsg);
+                            } else {
+                              const { data } = r.data.data;
+                              const dataSource = data.map((v, k) => {
+                                return {
+                                  ...v,
+                                  note: v.description,
+                                  tableName: v.name,
+                                  key: v.job_id,
+                                };
+                              });
+
+                              this.setState({
+                                dataSource,
+                                tableIsLoading: false,
+                              });
+                            }
+                          })
+                          .catch((e) => {
+                            message.error("服务器异常请重试");
+                            this.setState({
+                              tableIsLoading: false,
+                            });
+                          });
                       } else {
-                        message.info("数据源删除失败!");
+                        message.error(11111);
+                        this.setState({
+                          tableIsLoading: false,
+                        });
                       }
                     })
                     .catch(() => {
-                      message.error("数据源删除失败!");
+                      message.error("数据源删除失败!请检查网络连接");
                     });
                 }}
                 onCancel={null}
-                okText='是'
-                cancelText='否'
+                okText="是"
+                cancelText="否"
               >
                 <a>删除</a>
               </Popconfirm>
@@ -108,7 +137,7 @@ class MyDatasourceTable extends Component {
     };
   }
 
-  setData = data => {
+  setData = (data) => {
     if (data.retcode !== 0) {
       message.error(data.retmsg);
       this.setState({
@@ -142,14 +171,14 @@ class MyDatasourceTable extends Component {
     });
     axios
       .get(`${api.datasourceList}?data_type=1`)
-      .then(r => {
+      .then((r) => {
         if (r.data.data) {
           this.setData(r.data.data);
         } else {
           this.setData(r.data);
         }
       })
-      .catch(e => {
+      .catch((e) => {
         message.error("服务器异常请重试");
         this.setState({
           loading: false,
@@ -175,7 +204,7 @@ class MyDatasourceTable extends Component {
         <Table
           loading={loading}
           bordered
-          size='middle'
+          size="middle"
           Pagination={{ simple: true }}
           dataSource={dataSource}
           columns={COLUMNS}
