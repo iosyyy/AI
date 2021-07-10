@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { Button, Collapse, Dropdown, Layout, Menu } from "antd";
+import { Button, Collapse, Dropdown, Image, Layout, Menu } from "antd";
 import { NavLink, Redirect, Route, Switch } from "react-router-dom";
 import PubSubJS from "pubsub-js";
 import Normal from "./pages/Normal";
 import Federal from "./pages/Federal";
-
+import logo from "./img/logo.png";
 import "./App.css";
 import "antd/dist/antd.css";
 import FederalIndex from "./pages/FederalTrain";
@@ -35,6 +35,10 @@ class App extends Component {
       fontWeight: 900,
       color: "rgb(127,125,142)",
     };
+    const linkStyle = {
+      activeStyle: { userSelect: "none", color: "rgb(96,185,234)" },
+      style: { userSelect: "none", color: "rgb(227,227,227)" },
+    };
     const menu = (
       <div className="user-login-extend" style={{ background: "white" }}>
         <div style={fontStyle}>ID: 9000</div>
@@ -46,28 +50,23 @@ class App extends Component {
         <Layout className="layout">
           <Header
             style={{
-              padding: "0px 30px",
+              padding: "0px 32px 0px 15px",
               height: "8.9vh",
               background: "rgb(10,73,123)",
             }}
           >
             <div
               style={{
-                width: "200px",
+                width: "250px",
+                height: "100%",
                 lineHeight: "5vh",
+                margin: "0px 0px 0px 0px",
+                display: "flex",
+                alignItems: "center",
               }}
               className="logo"
             >
-              <span
-                style={{
-                  WebkitBackgroundClip: "text",
-                  color: "rgb(218,218,224)",
-                  textAlign: "center",
-                  userSelect: "none",
-                }}
-              >
-                金融数据价值多方安全共享平台
-              </span>
+              <Image width={400} preview={false} view={false} src={logo} />
             </div>
             <Menu
               style={{
@@ -84,38 +83,22 @@ class App extends Component {
               }}
             >
               <Menu.Item key="1">
-                <NavLink
-                  activeStyle={{ userSelect: "none", color: "rgb(96,185,234)" }}
-                  style={{ userSelect: "none", color: "rgb(204,210,204)" }}
-                  to="/federalTrain"
-                >
+                <NavLink {...linkStyle} to="/federalTrain">
                   联邦训练
                 </NavLink>
               </Menu.Item>
               <Menu.Item key="2">
-                <NavLink
-                  activeStyle={{ userSelect: "none", color: "rgb(96,185,234)" }}
-                  style={{ userSelect: "none", color: "rgb(204,210,204)" }}
-                  to="/normal"
-                >
+                <NavLink {...linkStyle} to="/normal">
                   联邦攻防
                 </NavLink>
               </Menu.Item>
               <Menu.Item key="3">
-                <NavLink
-                  activeStyle={{ userSelect: "none", color: "rgb(96,185,234)" }}
-                  style={{ userSelect: "none", color: "rgb(204,210,204)" }}
-                  to="/federal"
-                >
+                <NavLink {...linkStyle} to="/federal">
                   联邦攻击
                 </NavLink>
               </Menu.Item>
               <Menu.Item key="7">
-                <NavLink
-                  activeStyle={{ userSelect: "none", color: "rgb(96,185,234)" }}
-                  style={{ userSelect: "none", color: "rgb(204,210,204)" }}
-                  to="/reasoning"
-                >
+                <NavLink {...linkStyle} to="/reasoning">
                   在线推理
                 </NavLink>
               </Menu.Item>
@@ -133,29 +116,17 @@ class App extends Component {
                 </Dropdown>
               </div>
               <Menu.Item style={{ float: "right" }} key="4">
-                <NavLink
-                  activeStyle={{ userSelect: "none", color: "rgb(96,185,234)" }}
-                  style={{ userSelect: "none", color: "rgb(204,210,204)" }}
-                  to="/trainingRecord"
-                >
+                <NavLink {...linkStyle} to="/trainingRecord">
                   训练记录
                 </NavLink>
               </Menu.Item>
               <Menu.Item style={{ float: "right" }} key="5">
-                <NavLink
-                  activeStyle={{ userSelect: "none", color: "rgb(96,185,234)" }}
-                  style={{ userSelect: "none", color: "rgb(204,210,204)" }}
-                  to="/training"
-                >
+                <NavLink {...linkStyle} to="/training">
                   正在训练
                 </NavLink>
               </Menu.Item>
               <Menu.Item style={{ float: "right" }} key="6">
-                <NavLink
-                  activeStyle={{ userSelect: "none", color: "rgb(96,185,234)" }}
-                  style={{ userSelect: "none", color: "rgb(204,210,204)" }}
-                  to="/datasource"
-                >
+                <NavLink {...linkStyle} to="/datasource">
                   数据集
                 </NavLink>
               </Menu.Item>
