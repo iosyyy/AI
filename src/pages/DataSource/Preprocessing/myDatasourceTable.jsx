@@ -28,7 +28,6 @@ class MyDatasourceTable extends Component {
         dataIndex: "work_mode",
         key: "work_mode",
         render: (work_mode) => {
-          console.log(work_mode);
           return work_mode === 0 ? "单机" : "集群";
         },
       },
@@ -145,7 +144,6 @@ class MyDatasourceTable extends Component {
       });
     } else {
       const data2 = data.data;
-      console.log("data2", data2);
       const dataSource = data2.map((v, k) => {
         return {
           key: k,

@@ -17,7 +17,7 @@ const e = {
   showDetailMetrics: host + "/v1/tracking/component/metrics",
   showDetailOutputModel: host + "/v1/tracking/component/output/model",
   showDetailParameters: host + "/v1/tracking/component/parameters",
-  taskUpload: baseHost + "/v1/client/upload",
+  taskUpload: host + "/v1/client/upload",
   beginHighTrain: host + "/v1/client/submit/job/high",
   beginNormalTrain: host + "/v1/client/submit/job/general",
   isTrainingDetail: host + "/job/query/status",
@@ -34,7 +34,7 @@ const e = {
   datasourceList: host + "/v1/preprocess/data/list",
   queryDatasource: host + "/v1/preprocess/data/find",
   delDatasource: host + "/v1/preprocess/data/del",
-  preprocess: baseHost + "/v1/preprocess/data/preprocess",
+  preprocess: host + "/v1/preprocess/data/preprocess",
 };
 
 export default e;

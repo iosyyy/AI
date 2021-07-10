@@ -10,7 +10,6 @@ import api from "../../../config/api";
 class DatasourceHandle extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     let data = props.location.state.data;
     let type = props.location.state.type;
     let tableInfo = data.obj;
@@ -21,14 +20,14 @@ class DatasourceHandle extends Component {
             tableName: "",
             namespace: "",
             description: "",
-            work_mode: 0
+            work_mode: 0,
           }
         : {
             originalDatasource: data.history_table_name,
             tableName: data.tableName,
             namespace: data.namespace,
             description: data.note,
-            work_mode: data.work_mode
+            work_mode: data.work_mode,
           };
 
     this.state = {
@@ -38,7 +37,7 @@ class DatasourceHandle extends Component {
       curJobId: data["job_id"],
       datasource: [],
       isLoading: false,
-      tableInfo
+      tableInfo,
     };
   }
 
@@ -46,27 +45,27 @@ class DatasourceHandle extends Component {
     PubSubJS.publish("datasourcePage", { page: "3" });
   }
 
-  setDatasource = datasource => {
+  setDatasource = (datasource) => {
     this.setState({ datasource });
   };
 
-  setFormData = data => {
+  setFormData = (data) => {
     this.setState({
-      formData: data
+      formData: data,
     });
   };
 
   render() {
     return (
-      <Spin size='large' spinning={this.state.isLoading}>
+      <Spin size="large" spinning={this.state.isLoading}>
         <div
           style={{ height: "83vh", width: "83vw", overflow: "scroll" }}
-          className='site-layout-content'
+          className="site-layout-content"
         >
-          <h2 style={{ marginBottom: "3vh" }} className='colorWhite'>
+          <h2 style={{ marginBottom: "3vh" }} className="colorWhite">
             {this.state.type === 0 ? "数据源预处理" : "预处理数据查询"}
           </h2>
-          <Divider orientation='left'>
+          <Divider orientation="left">
             <h3 style={{ color: "rgb(93,176,215)" }}>基本信息</h3>
           </Divider>
           <DatasourceFormHandle
@@ -74,7 +73,7 @@ class DatasourceHandle extends Component {
             type={this.state.type}
             setFormData={this.setFormData}
           />
-          <Divider orientation='left'>
+          <Divider orientation="left">
             <h3 style={{ color: "rgb(93,176,215)" }}>数据预处理字段规则定义</h3>
           </Divider>
           <DatasourceRuleTable
@@ -88,7 +87,7 @@ class DatasourceHandle extends Component {
           <Space size={30} style={{ marginTop: "2vh", marginLeft: "3vw" }}>
             {this.state.type === 0 ? (
               <Button
-                type='primary'
+                type="primary"
                 onClick={() => {
                   let { datasource, filepath, formData } = this.state;
                   if (formData.namespace === "" || formData.tableName === "") {
@@ -96,19 +95,15 @@ class DatasourceHandle extends Component {
                     return;
                   }
                   this.setState({
-                    isLoading: true
+                    isLoading: true,
                   });
-                  datasource = datasource.map(item => ({
+                  datasource = datasource.map((item) => ({
                     label: item.label,
                     description: item.description,
                     is_use: item.is_use,
                     type: item.type,
-                    content: item.content
+                    content: item.content,
                   }));
-                  console.log(formData);
-                  console.log(filepath);
-                  console.log(datasource);
-
                   axios
                     .post(api.preprocess, {
                       file_path: filepath,
@@ -117,15 +112,15 @@ class DatasourceHandle extends Component {
                       namespace: formData.namespace,
                       description: formData.description,
                       work_mode: formData.work_mode,
-                      label_info: datasource
+                      label_info: datasource,
                     })
-                    .then(data => {
+                    .then((data) => {
                       if (data.data.retcode === 0) {
                         message.success("保存成功");
 
                         setTimeout(() => {
                           this.setState({
-                            isLoading: false
+                            isLoading: false,
                           });
                           this.props.history.push(
                             "/datasource/datasourceManage"
@@ -134,14 +129,14 @@ class DatasourceHandle extends Component {
                       } else {
                         message.error("保存失败");
                         this.setState({
-                          isLoading: false
+                          isLoading: false,
                         });
                       }
                     })
-                    .catch(e => {
+                    .catch((e) => {
                       message.error("保存失败");
                       this.setState({
-                        isLoading: false
+                        isLoading: false,
                       });
                     });
                 }}
@@ -150,7 +145,7 @@ class DatasourceHandle extends Component {
               </Button>
             ) : null}
             <Button
-              type='primary'
+              type="primary"
               onClick={() => {
                 if (this.state.type === 0) {
                   this.props.history.push("/datasource/datasourceManage");

@@ -57,7 +57,6 @@ class DatasourceRuleTable extends Component {
       ...item,
       key: index,
     }));
-    console.log(datasource);
     this.props.setDatasource(datasource);
   };
 
@@ -65,10 +64,10 @@ class DatasourceRuleTable extends Component {
     let { type } = this.props;
 
     if (type === 0) {
-      console.log("预处理");
+      // 预处理
       this.preHandle();
     } else {
-      console.log("显示信息");
+      // 显示信息
       this.showInfo();
     }
     let isDisabled = this.props.type === 0 ? false : true;
@@ -102,7 +101,6 @@ class DatasourceRuleTable extends Component {
         key: "description",
         width: "10vw",
         render: (text, record, index) => {
-          console.log(record);
           if (this.state.type === 0) {
             return (
               <Input
