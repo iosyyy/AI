@@ -80,10 +80,11 @@ class FederalDetailOutput extends Component {
             let obj = {};
             for (let key in v) {
               if (v.hasOwnProperty(key)) {
-                if (isNaN(v[key])) {
-                  obj[header[0][key]] = JSON.stringify(v[key]);
+                const data = v[key];
+                if (isNaN(data) && typeof data !== "string") {
+                  obj[header[0][key]] = JSON.stringify(data);
                 } else {
-                  obj[header[0][key]] = v[key];
+                  obj[header[0][key]] = data;
                 }
               }
             }
