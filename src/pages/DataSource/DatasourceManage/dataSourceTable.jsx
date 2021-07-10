@@ -31,7 +31,7 @@ class DataSourceTable extends Component {
         title: <div>任务类型</div>,
         dataIndex: "work_mode",
         key: "work_mode",
-        render: work_mode => {
+        render: (work_mode) => {
           return work_mode === "1" ? "集群" : "单机";
         },
       },
@@ -65,7 +65,7 @@ class DataSourceTable extends Component {
                 onClick={() => {
                   axios
                     .post(api.downloadTemplate, { file_name: obj.file })
-                    .then(r => {
+                    .then((r) => {
                       const { code } = r.data;
                       if (code !== 0) {
                         message.error("当前文件下载错误请重试");
@@ -81,7 +81,7 @@ class DataSourceTable extends Component {
                       const curFile = obj.file.replace(regFile, "");
                       FileSaver.saveAs(blob, curFile);
                     })
-                    .catch(r => {
+                    .catch((r) => {
                       message.error("文件下载失败请重试并检查网络连接");
                     });
                 }}
@@ -90,14 +90,14 @@ class DataSourceTable extends Component {
               </a>
               <span>/</span>
               <Popconfirm
-                title='确定要删除么?'
+                title="确定要删除么?"
                 onConfirm={() => {
                   let curJobId = obj["job_id"];
                   const formData = new FormData();
                   formData.append("job_id", curJobId);
                   axios
                     .post(api.delDatasource, formData)
-                    .then(data => {
+                    .then((data) => {
                       const { retcode, retmsg } = data.data;
                       if (retcode === 0) {
                         message.success("数据源删除成功!");
@@ -106,11 +106,11 @@ class DataSourceTable extends Component {
                         });
                         axios
                           .get(`${api.datasourceList}?data_type=0`)
-                          .then(r => {
-                            if (r.data.retcode !== 0) {
-                              message.error(r.data.retmsg);
+                          .then((r) => {
+                            if (r.data.data.retcode !== 0) {
+                              message.error(r.data.data.retmsg);
                             } else {
-                              const { data } = r.data;
+                              const { data } = r.data.data;
                               const dataSource = data.map((v, k) => {
                                 return {
                                   ...v,
@@ -126,14 +126,17 @@ class DataSourceTable extends Component {
                               });
                             }
                           })
-                          .catch(e => {
+                          .catch((e) => {
                             message.error("服务器异常请重试");
                             this.setState({
                               tableIsLoading: false,
                             });
                           });
                       } else {
-                        message.error(retmsg);
+                        message.error(11111);
+                        this.setState({
+                          tableIsLoading: false,
+                        });
                       }
                     })
                     .catch(() => {
@@ -141,8 +144,8 @@ class DataSourceTable extends Component {
                     });
                 }}
                 onCancel={null}
-                okText='是'
-                cancelText='否'
+                okText="是"
+                cancelText="否"
               >
                 <a>删除</a>
               </Popconfirm>
@@ -165,7 +168,7 @@ class DataSourceTable extends Component {
     };
   }
 
-  setData = data => {
+  setData = (data) => {
     console.log(data);
     if (data.retcode !== 0) {
       message.error(data.retmsg);
@@ -196,14 +199,14 @@ class DataSourceTable extends Component {
     });
     axios
       .get(`${api.datasourceList}?data_type=0`)
-      .then(r => {
+      .then((r) => {
         if (r.data.data.data) {
           this.setData(r.data.data);
         } else {
           this.setData(r.data);
         }
       })
-      .catch(e => {
+      .catch((e) => {
         message.error("服务器异常请重试");
         this.setState({
           tableIsLoading: false,
@@ -229,7 +232,7 @@ class DataSourceTable extends Component {
         <Table
           bordered
           loading={tableIsLoading}
-          size='middle'
+          size="middle"
           Pagination={{ simple: true }}
           dataSource={dataSource}
           columns={columnsT}
@@ -237,7 +240,7 @@ class DataSourceTable extends Component {
 
         <Modal
           visible={detailVisible}
-          title='数据源详情信息'
+          title="数据源详情信息"
           centered
           bodyStyle={{
             WebkitBoxShadow: "0 20px 15px #9B7468",
@@ -259,15 +262,15 @@ class DataSourceTable extends Component {
             });
           }}
         >
-          <Spin size='large' spinning={this.state.modelIsLoading}>
-            <Divider orientation='left'>
+          <Spin size="large" spinning={this.state.modelIsLoading}>
+            <Divider orientation="left">
               <h3 style={{ color: "rgb(93,176,215)" }}>基本信息</h3>
             </Divider>
             <DatasourceFormHandle
               isSon={true}
               formData={onShowDetail}
               disabled={true}
-              getFormData={data => {}}
+              getFormData={(data) => {}}
             />
             <div>
               <Card style={{ padding: "1vh 3vw" }}>
@@ -298,7 +301,7 @@ class DataSourceTable extends Component {
                   dataSource={dataSource2}
                   columns={columns}
                   bordered
-                  size='small'
+                  size="small"
                   pagination={false}
                 />
               </Card>

@@ -33,7 +33,7 @@ const e = {
   batch: host + "/v1/tracking/component/metric_data/batch",
   datasourceList: host + "/v1/preprocess/data/list",
   queryDatasource: host + "/v1/preprocess/data/find",
-  delDatasource: host + "/v1/preprocess/data/del",
+  delDatasource: baseHost + "/v1/preprocess/data/del",
   preprocess: baseHost + "/v1/preprocess/data/preprocess",
 };
 
