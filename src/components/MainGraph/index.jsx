@@ -17,6 +17,7 @@ class MainGraph extends Component {
       linkArray: [],
     };
   }
+
   handleDiagramEvent = (e) => {
     const name = e.name;
     switch (name) {
@@ -33,9 +34,9 @@ class MainGraph extends Component {
         break;
     }
   };
+
   componentDidMount() {
     const { component_list } = this.props;
-    console.log(component_list);
     if (!component_list) {
       message.error("参数错误");
       return null;
@@ -56,6 +57,7 @@ class MainGraph extends Component {
         status: v.status,
         key: v.component_name,
         color: nodeColors[i],
+        color1: "rgb(240,240,240)",
         img:
           v.status === "success"
             ? finish
@@ -73,6 +75,8 @@ class MainGraph extends Component {
         to: component_list[i + 1].component_name,
         color1: nodeColors[i],
         color2: nodeColors[i + 1],
+        fromPort: "A",
+        toPort: "E",
       });
     }
 
@@ -88,6 +92,8 @@ class MainGraph extends Component {
       "undoManager.isEnabled": false, // enable undo & redo
       model: $(go.GraphLinksModel, {
         linkKeyProperty: "key", // IMPORTANT! must be defined for merges and data sync when using GraphLinksModel
+        linkFromPortIdProperty: "fromPort", // required information:
+        linkToPortIdProperty: "toPort",
       }),
       layout: $(
         go.TreeLayout, // specify a Diagram.layout that arranges trees
@@ -98,44 +104,188 @@ class MainGraph extends Component {
 
     diagram.nodeTemplate = $(
       go.Node,
-      { selectionAdorned: false },
+      {
+        selectionAdorned: false,
+      },
       "Horizontal",
       $(
         go.Panel,
-        "Auto",
+        "Vertical",
         $(
-          go.Shape,
-          "RoundedRectangle",
-          { margin: 0, strokeWidth: 0, width: 121, height: 30 },
-          new go.Binding("fill", "color"),
-          new go.Binding("fill", "isSelected", function (sel, node) {
-            if (sel) {
-              change(node.Zj.nb.key);
-              if (node.Zj.nb.status === "success") {
-                return "rgb(39,153,255)";
-              } else if (node.Zj.nb.status === "canceled") {
-                return "rgb(39,153,255)";
-              } else {
-                return "rgb(216,44,128)";
+          go.Panel,
+          "Table",
+          $(go.RowColumnDefinition, { column: 0, alignment: go.Spot.Left }),
+          $(go.RowColumnDefinition, { column: 2, alignment: go.Spot.Right }),
+          $(
+            go.Panel,
+            "Auto",
+            { column: 0, row: 0, width: 25, height: 6 },
+            new go.Binding("fill", "color"),
+
+            $(go.Shape, "RoundedRectangle", new go.Binding("fill", "color1"), {
+              width: 6,
+              height: 6,
+              portId: "D",
+              stroke: "rgb(240,240,240)",
+
+              toSpot: go.Spot.Left,
+            })
+          ),
+          $(
+            go.Panel,
+            "Auto",
+            { column: 2, row: 0, width: 25 },
+            $(go.TextBlock),
+            $(
+              go.Shape,
+              "RoundedRectangle",
+              new go.Binding("fill", "color1"),
+              {
+                // define a tooltip for each node that displays the color as text
+                toolTip: $(
+                  "ToolTip",
+                  $(
+                    go.TextBlock,
+                    { margin: 4 },
+                    new go.Binding("text", "color")
+                  )
+                ), // end of Adornment
+              },
+              {
+                width: 6,
+                height: 6,
+                portId: "E",
+                fromSpot: go.Spot.Right,
+                stroke: "rgb(240,240,240)",
               }
-            } else {
-              if (node.Zj.nb.status === "success") {
-                return "rgb(14,199,165)";
-              } else if (node.Zj.nb.status === "canceled") {
-                return "red";
-              } else {
-                return "rgb(187,187,200)";
+            )
+          ),
+          $(
+            go.Panel,
+            "Auto",
+            { column: 1, row: 0, rowSpan: 2, width: 25 },
+            $(go.TextBlock),
+            $(
+              go.Shape,
+              "RoundedRectangle",
+              new go.Binding("fill", "color1"),
+
+              {
+                width: 6,
+                height: 6,
+                stroke: "rgb(240,240,240)",
+                portId: "F",
+                fromSpot: go.Spot.Right,
               }
-            }
-          }).ofObject("")
+            )
+          )
         ),
         $(
-          go.TextBlock,
-          { margin: 10, stroke: "white" },
-          new go.Binding("text", "key")
+          go.Panel,
+          "Auto",
+          $(
+            go.Shape,
+            "RoundedRectangle",
+            { margin: 0, width: 140, height: 33 },
+
+            new go.Binding("fill", "color"),
+            new go.Binding("fill", "isSelected", function (sel, node) {
+              if (sel) {
+                change(node.Zj.nb.key);
+                if (node.Zj.nb.status === "success") {
+                  return "rgb(39,153,255)";
+                } else if (node.Zj.nb.status === "canceled") {
+                  return "rgb(39,153,255)";
+                } else {
+                  return "rgb(216,44,128)";
+                }
+              } else {
+                if (node.Zj.nb.status === "success") {
+                  return "rgb(14,199,165)";
+                } else if (node.Zj.nb.status === "canceled") {
+                  return "red";
+                } else {
+                  return "rgb(187,187,200)";
+                }
+              }
+            }).ofObject("")
+          ),
+
+          $(
+            go.TextBlock,
+            {
+              column: 0,
+              row: 0,
+              columnSpan: 3,
+              alignment: go.Spot.Center,
+              stroke: "white",
+            },
+            new go.Binding("text", "key")
+          )
+        ),
+        $(
+          go.Panel,
+          "Table",
+          $(go.RowColumnDefinition, { column: 0, alignment: go.Spot.Left }),
+          $(go.RowColumnDefinition, { column: 2, alignment: go.Spot.Right }),
+          $(
+            go.Panel,
+            "Auto",
+            { column: 0, row: 0, width: 25, height: 6 },
+            $(
+              go.Shape,
+              "RoundedRectangle",
+              new go.Binding("fill", "color1"),
+
+              {
+                width: 6,
+                stroke: "rgb(240,240,240)",
+                height: 6,
+                portId: "A",
+                toSpot: go.Spot.Left,
+              }
+            )
+          ),
+          $(
+            go.Panel,
+            "Auto",
+            { column: 2, row: 0, width: 25 },
+            $(go.TextBlock),
+            $(
+              go.Shape,
+              "RoundedRectangle",
+              new go.Binding("fill", "color1"),
+
+              {
+                width: 6,
+                height: 6,
+                portId: "B",
+                stroke: "rgb(240,240,240)",
+                fromSpot: go.Spot.Right,
+              }
+            )
+          ),
+          $(
+            go.Panel,
+            "Auto",
+            { column: 1, row: 0, width: 25 },
+            $(go.TextBlock),
+            $(
+              go.Shape,
+              "RoundedRectangle",
+              new go.Binding("fill", "color1"),
+
+              {
+                width: 6,
+                height: 6,
+                portId: "C",
+                stroke: "rgb(240,240,240)",
+                fromSpot: go.Spot.Right,
+              }
+            )
+          )
         )
       ),
-
       $(
         go.Picture,
         { margin: 10, width: 15, height: 15 },
@@ -145,30 +295,8 @@ class MainGraph extends Component {
     );
     diagram.linkTemplate = $(
       go.Link,
-      $(go.Shape, { strokeWidth: 2 }),
-      // The label
-      $(
-        go.Shape,
-        "RoundedRectangle",
-        {
-          segmentIndex: 0,
-          width: 7,
-          height: 7,
-          fill: "rgb(14,199,165)",
-        },
-        new go.Binding("fill", "color1")
-      ),
-      $(
-        go.Shape,
-        "RoundedRectangle",
-        {
-          segmentIndex: -1,
-          width: 7,
-          height: 7,
-          fill: "rgb(230,178,88)",
-        },
-        new go.Binding("fill", "color2")
-      )
+      { routing: go.Link.Orthogonal, corner: 3 },
+      $(go.Shape)
     );
 
     // This presumes the object to be animated is a label within a Link
@@ -194,7 +322,7 @@ class MainGraph extends Component {
 
     setTimeout(() => {
       diagram.nodes.each(function (node) {
-        const status = node.elt(0).elt(0).Zj.nb.status;
+        const status = node.elt(0).Zj.nb.status;
         if (
           status &&
           status !== "success" &&
@@ -204,9 +332,9 @@ class MainGraph extends Component {
         ) {
           const animation = new go.Animation();
           animation.add(
-            node.elt(0).elt(0),
+            node.elt(0),
             "fill",
-            node.elt(0).elt(0).fill,
+            node.elt(0).fill,
             go.Brush.randomColor()
           );
 

@@ -7,7 +7,7 @@ if (pack.env === "build") {
   ws = `ws://${window.location.hostname}:${window.location.port}`;
   baseHost = window.location.origin;
 } else {
-  ws = `ws://1.117.28.22:8080`;
+  ws = `ws://1.117.25.66:8080`;
   baseHost = window.location.origin + "/api";
 }
 
