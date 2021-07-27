@@ -35,6 +35,7 @@ class FederalDetail extends Component {
       component_list: [],
       isLoading: false,
       key: this.generateUUID(),
+      dependencies: {},
     };
   }
 
@@ -127,7 +128,7 @@ class FederalDetail extends Component {
 
     socket.onmessage = (data) => {
       const d = JSON.parse(data.data);
-      const { component_list } = d.dependency_data;
+      const { component_list, dependencies } = d.dependency_data;
       const names = component_list.map((item) => item.component_name);
       let change = false;
       for (const item in component_list) {
@@ -137,11 +138,15 @@ class FederalDetail extends Component {
           component_list[item].status !== this.state.component_list[item]
         ) {
           change = true;
-
           break;
         }
       }
-      this.setState({ names, component_list, key: this.generateUUID() });
+      this.setState({
+        names,
+        component_list,
+        key: this.generateUUID(),
+        dependencies,
+      });
     };
   }
 
@@ -151,7 +156,15 @@ class FederalDetail extends Component {
   }
 
   render() {
-    const { id, role, partyId, component_list, names, key } = this.state;
+    const {
+      id,
+      role,
+      partyId,
+      component_list,
+      names,
+      key,
+      dependencies,
+    } = this.state;
 
     return (
       <div
@@ -214,6 +227,7 @@ class FederalDetail extends Component {
                 }}
               >
                 <MainGraph
+                  dependencies={dependencies}
                   key={key}
                   component_list={component_list}
                   names={names}

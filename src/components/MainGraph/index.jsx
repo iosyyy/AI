@@ -36,11 +36,12 @@ class MainGraph extends Component {
   };
 
   componentDidMount() {
-    const { component_list } = this.props;
-    if (!component_list) {
+    const { component_list, dependencies } = this.props;
+    if (!component_list || !dependencies) {
       message.error("参数错误");
       return null;
     }
+    const color = "rgb(187,187,200)";
 
     const nodeColors = component_list.map((v, i) => {
       return `${
@@ -48,16 +49,22 @@ class MainGraph extends Component {
           ? "rgb(14,199,165)"
           : v.status === "canceled"
           ? "red"
-          : "rgb(187,187,200)"
+          : color
       }`;
     });
+    const colorBack = "rgb(240,240,240)";
     const nodeArray = component_list.map((v, i) => {
       return {
         index: i,
         status: v.status,
         key: v.component_name,
         color: nodeColors[i],
-        color1: "rgb(240,240,240)",
+        colorA: colorBack,
+        colorB: colorBack,
+        colorC: colorBack,
+        colorD: colorBack,
+        colorE: colorBack,
+        colorF: colorBack,
         img:
           v.status === "success"
             ? finish
@@ -68,18 +75,39 @@ class MainGraph extends Component {
     });
 
     const linkArray = [];
-
-    for (let i = 0; i < component_list.length - 1; i++) {
-      linkArray.push({
-        from: component_list[i].component_name,
-        to: component_list[i + 1].component_name,
-        color1: nodeColors[i],
-        color2: nodeColors[i + 1],
-        fromPort: "A",
-        toPort: "E",
-      });
+    const fromPorts = ["A", "B", "C"];
+    const toPorts = ["D", "E", "F"];
+    for (let dependencie in dependencies) {
+      if (dependencies.hasOwnProperty(dependencie)) {
+        for (let den of dependencies[dependencie]) {
+          const { component_name, up_output_info } = den;
+          const isModel = den.type === "model";
+          const color = isModel ? "rgb(39,153,255)" : "rgb(127,199,165)";
+          let fromPort = fromPorts[up_output_info[1]];
+          let toPort = toPorts[up_output_info[1]];
+          den.type === "model" ? (fromPort = "B") : "A";
+          den.type === "model" ? (toPort = "E") : "F";
+          linkArray.push({
+            from: component_name,
+            to: dependencie,
+            color,
+            fromPort,
+            toPort,
+          });
+          const node = nodeArray.find((v, i) => {
+            return v.key === component_name;
+          });
+          const index = node.index;
+          nodeArray[index][`color${fromPort}`] = color;
+          const nodeTo = nodeArray.find((v, i) => {
+            return v.key === dependencie;
+          });
+          const indexTo = nodeTo.index;
+          nodeArray[indexTo][`color${toPort}`] = color;
+        }
+      }
     }
-
+    console.log(linkArray);
     this.setState({
       nodeArray,
       linkArray,
@@ -122,7 +150,7 @@ class MainGraph extends Component {
             { column: 0, row: 0, width: 25, height: 6 },
             new go.Binding("fill", "color"),
 
-            $(go.Shape, "RoundedRectangle", new go.Binding("fill", "color1"), {
+            $(go.Shape, "RoundedRectangle", new go.Binding("fill", "colorD"), {
               width: 6,
               height: 6,
               portId: "D",
@@ -139,7 +167,7 @@ class MainGraph extends Component {
             $(
               go.Shape,
               "RoundedRectangle",
-              new go.Binding("fill", "color1"),
+              new go.Binding("fill", "colorE"),
               {
                 // define a tooltip for each node that displays the color as text
                 toolTip: $(
@@ -168,7 +196,7 @@ class MainGraph extends Component {
             $(
               go.Shape,
               "RoundedRectangle",
-              new go.Binding("fill", "color1"),
+              new go.Binding("fill", "colorF"),
 
               {
                 width: 6,
@@ -235,7 +263,7 @@ class MainGraph extends Component {
             $(
               go.Shape,
               "RoundedRectangle",
-              new go.Binding("fill", "color1"),
+              new go.Binding("fill", "colorA"),
 
               {
                 width: 6,
@@ -254,7 +282,7 @@ class MainGraph extends Component {
             $(
               go.Shape,
               "RoundedRectangle",
-              new go.Binding("fill", "color1"),
+              new go.Binding("fill", "colorB"),
 
               {
                 width: 6,
@@ -273,7 +301,7 @@ class MainGraph extends Component {
             $(
               go.Shape,
               "RoundedRectangle",
-              new go.Binding("fill", "color1"),
+              new go.Binding("fill", "colorC"),
 
               {
                 width: 6,
@@ -293,12 +321,20 @@ class MainGraph extends Component {
         new go.Binding("angle")
       )
     );
+    // diagram.linkTemplate = $(
+    //   go.Link,
+    //   { routing: go.Link.Orthogonal, corner: 3 },
+    //   $(go.Shape, { fill: "rgb(127,127,127)" })
+    // );
     diagram.linkTemplate = $(
       go.Link,
-      { routing: go.Link.Orthogonal, corner: 3 },
-      $(go.Shape)
+      { routing: go.Link.AvoidsNodes, corner: 10 },
+      $(
+        go.Shape,
+        { strokeWidth: 3, stroke: "rgb(14,199,165)" },
+        new go.Binding("stroke", "color")
+      )
     );
-
     // This presumes the object to be animated is a label within a Link
     go.AnimationManager.defineAnimationEffect(
       "fraction",

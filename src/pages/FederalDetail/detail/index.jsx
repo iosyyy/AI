@@ -15,6 +15,7 @@ import SummaryBatch from "../detailComponents/summaryBatch";
 import qs from "qs";
 import SummaryBatchDataSplit from "../detailComponents/summaryDataSplit";
 import returns from "../../../img/return.png";
+import BoostModelOutput from "../detailComponents/boostModelOutput";
 const { TabPane } = Tabs;
 
 class FederalDetailShow extends Component {
@@ -128,6 +129,41 @@ class FederalDetailShow extends Component {
              */
             switch (namew) {
               // 这里通过metric_namespace选择不同的tabs
+              case "HomoSecureboost":
+                names = [
+                  {
+                    name: "model output",
+                    component: (
+                      <BoostModelOutput
+                        key={this.generateUUID()}
+                        model={model}
+                        post_data={post_data}
+                        metrics={metrics}
+                      />
+                    ),
+                  },
+                  {
+                    name: "data output",
+                    component: (
+                      <FederalDetailOutput
+                        key={this.generateUUID()}
+                        model={model}
+                        post_data={post_data}
+                      />
+                    ),
+                  },
+                  {
+                    name: "log",
+                    component: (
+                      <Log
+                        key={this.generateUUID()}
+                        model={model}
+                        post_data={post_data}
+                      />
+                    ),
+                  },
+                ];
+                break;
               case "HomoDataSplit":
                 names = [
                   {
