@@ -29,7 +29,7 @@ class FederalDetail extends Component {
       names: [],
       treeData: [],
       d: {},
-      loading: false,
+      loading: true,
       dataIndex: "",
       datas: [],
       component_list: [],
@@ -42,6 +42,7 @@ class FederalDetail extends Component {
   onChange = (index) => {
     this.setState({
       loading: true,
+      isLoading: false,
       dataIndex: index,
     });
     axios
