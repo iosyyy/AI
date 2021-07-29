@@ -4,6 +4,7 @@ import axios from 'axios';
 import api from '../../../../config/api';
 import PrecisionRecall from './precisionRecall';
 import Loss from '../../../../components/Loss';
+import TreeGraph from '../../../../components/TreeGraph';
 
 const { Column } = Table;
 
@@ -11,11 +12,13 @@ class BoostModelOutput extends Component {
   constructor(props) {
     super(props);
     let metricsKeys = Object.keys(props.metrics);
-
     this.state = {
       metricsKeys,
       maxFeature: 0,
       featureDatasouce: [],
+      trees: props.model.data.data.data.trees,
+      index: 0,
+      id: 0,
     };
   }
 
@@ -88,12 +91,24 @@ class BoostModelOutput extends Component {
         featureDatasource,
         performanceScoresDatasource,
         metricsKeys,
+        index,
+        trees,
+        id,
       } = this.state;
       return (
         <div>
           <h1 style={{ fontSize: 24, fontWeight: 'bold', display: 'block' }}>
             Tree
           </h1>
+          <div className={'scrollContent'} style={{ height: '64vh' }}>
+            {/* 参数解释: colors[0]代表顶层颜色,colors[1]代表底层颜色,其他参数先写成固定为3个*/}
+            <TreeGraph
+              colors={['rgb(50,100,250)', 'rgb(10,200,60)']}
+              id={id}
+              index={index}
+              trees={trees}
+            />
+          </div>
 
           <Divider />
 

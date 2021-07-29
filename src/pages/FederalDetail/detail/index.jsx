@@ -129,6 +129,42 @@ class FederalDetailShow extends Component {
              */
             switch (namew) {
               // 这里通过metric_namespace选择不同的tabs
+              case "Intersection":
+                names = [
+                  {
+                    name: "summary",
+                    component: (
+                      <Summary
+                        key={this.generateUUID()}
+                        model={model}
+                        post_data={post_data}
+                        metric_name={metric_name}
+                        metric_namespace={metric_namespace}
+                      />
+                    ),
+                  },
+                  {
+                    name: "data output",
+                    component: (
+                      <FederalDetailOutput
+                        key={this.generateUUID()}
+                        model={model}
+                        post_data={post_data}
+                      />
+                    ),
+                  },
+                  {
+                    name: "log",
+                    component: (
+                      <Log
+                        key={this.generateUUID()}
+                        model={model}
+                        post_data={post_data}
+                      />
+                    ),
+                  },
+                ];
+                break;
               case "HomoSecureboost":
                 names = [
                   {

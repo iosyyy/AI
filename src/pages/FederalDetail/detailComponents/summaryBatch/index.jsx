@@ -67,9 +67,8 @@ class SummaryBatch extends Component {
             return;
           }
           let data = r.data.data[keyName][train[0]];
-
           const meta = data.meta;
-          const tableInfo = meta[keyName];
+          const tableInfo = meta["table_info"];
           let dataSource = [];
           let index = 1;
           for (let variable in tableInfo) {
@@ -112,20 +111,13 @@ class SummaryBatch extends Component {
     if (Object.keys(data).length !== 0) {
       const names = data.meta;
       for (let key in names) {
-        if (
-          names.hasOwnProperty(key) &&
-          key !== "table_info" &&
-          key !== "name" &&
-          key !== "namespace" &&
-          key !== "table_info" &&
-          key !== "table_name"
-        )
+        if (names.hasOwnProperty(key) && key !== "name" && key !== "table_info")
           dataDetail.push(
             <div
               key={key}
               style={{
                 fontSize: "small",
-                fontWeight: 10,
+                fontWeight: 30,
                 marginBottom: "1vh",
                 color: "rgb(127, 125, 142)",
               }}
@@ -148,6 +140,7 @@ class SummaryBatch extends Component {
         <div className={"scrollContent"} style={{ height: "64vh" }}>
           <div>{dataDetail}</div>
           <Search
+            placeholder={"search variable"}
             onSearch={(value) => {
               let datas = dataSources.filter((data) => {
                 return data.variable
