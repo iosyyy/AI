@@ -1,16 +1,24 @@
-import React, { Component } from "react";
-import { Row, Col, Button, Space } from "antd";
-import { SyncOutlined } from "@ant-design/icons";
-import * as echarts from "echarts";
+import React, { Component } from 'react';
+import { Row, Col, Button, Space } from 'antd';
+import { SyncOutlined } from '@ant-design/icons';
+import axios from 'axios';
+import api from '../../config/api';
+import * as echarts from 'echarts';
 
 let myChart;
 
 export default class Loss extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      lossHistory: props.lossHistory,
-    };
+    if (props.lossHistory) {
+      this.state = {
+        lossHistory: props.lossHistory,
+      };
+    } else {
+      this.state = {
+        lossHistory: [],
+      };
+    }
   }
 
   drew() {
@@ -26,37 +34,49 @@ export default class Loss extends Component {
     });
     option = {
       tooltip: {
-        trigger: "axis",
-        formatter: function(params) {
-          let htmlStr = "<div>";
-          htmlStr += "iteration：" + params[0].axisValue + "<br/>";
-          htmlStr += "loss：" + params[0].value;
-          htmlStr += "</div>";
+        trigger: 'axis',
+        formatter: function (params) {
+          let htmlStr = '<div>';
+          htmlStr += 'iteration：' + params[0].axisValue + '<br/>';
+          htmlStr += 'loss：' + params[0].value;
+          htmlStr += '</div>';
           return htmlStr;
         },
       },
       legend: {
-        data: ["loss"],
+        data: ['loss'],
       },
       xAxis: {
-        type: "category",
+        type: 'category',
         boundaryGap: false,
-        name: "iter",
+        name: 'iter',
         data: data1,
       },
       yAxis: {
-        type: "value",
-        name: "loss",
+        type: 'value',
+        name: 'loss',
       },
-      series: [{ name: "loss", data: data2, type: "line" }],
+      series: [{ name: 'loss', data: data2, type: 'line' }],
     };
 
     myChart.setOption({ ...option }, 200);
   }
 
   componentDidMount() {
-    let dom = document.getElementById("loss");
-    if (myChart != null && myChart !== "" && myChart !== undefined) {
+    const { metricsKeys, post_data } = this.props;
+    let metrics = {};
+    metrics[metricsKeys[0]] = ['loss'];
+    let postData = { ...post_data, metrics };
+    console.log(postData);
+    axios.post(api.batch, postData).then(data => {
+      console.log(data);
+      let lossHistory = data.data.data[metricsKeys[0]]['loss'].data;
+      this.setState({
+        lossHistory,
+      });
+    });
+    let dom = document.getElementById('loss');
+    if (myChart != null && myChart !== '' && myChart !== undefined) {
       myChart.dispose(); //销毁
     }
     myChart = echarts.init(dom);
@@ -77,17 +97,17 @@ export default class Loss extends Component {
   render() {
     return (
       <div>
-        <Row align="middle">
+        <Row align='middle'>
           <Space>
-            <font style={{ fontSize: "xx-large" }}>LOSS</font>
-            <Button type="primary">train</Button>
+            <font style={{ fontSize: 'xx-large' }}>LOSS</font>
+            <Button type='primary'>train</Button>
             <a
               onClick={() => {
-                let dom = document.getElementById("loss");
+                let dom = document.getElementById('loss');
                 myChart.clear();
                 if (
                   myChart != null &&
-                  myChart !== "" &&
+                  myChart !== '' &&
                   myChart !== undefined
                 ) {
                   myChart.dispose(); //销毁
@@ -101,7 +121,7 @@ export default class Loss extends Component {
             </a>
           </Space>
         </Row>
-        <div id="loss" style={{ width: "89vw", height: "70vh" }} />
+        <div id='loss' style={{ width: '89vw', height: '70vh' }} />
       </div>
     );
   }

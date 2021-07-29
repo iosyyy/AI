@@ -1,22 +1,22 @@
-import React, { Component } from "react";
-import { Button, Row, Space, Tabs } from "antd";
-import { SyncOutlined } from "@ant-design/icons";
-import * as echarts from "echarts";
-import axios from "axios";
-import _ from "underscore";
-import api from "../../config/api";
-import { message } from "antd/es";
+import React, { Component } from 'react';
+import { Button, Row, Space, Tabs } from 'antd';
+import { SyncOutlined } from '@ant-design/icons';
+import * as echarts from 'echarts';
+import axios from 'axios';
+import _ from 'underscore';
+import api from '../../config/api';
+import { message } from 'antd/es';
 
 const { TabPane } = Tabs;
 
 let myChart;
 const graphType = {
-  Roc: "1",
-  "K-S": "2",
-  Lift: "3",
-  Gain: "4",
-  "Precision Recall": "5",
-  Accuracy: "6",
+  Roc: '1',
+  'K-S': '2',
+  Lift: '3',
+  Gain: '4',
+  'Precision Recall': '5',
+  Accuracy: '6',
 };
 
 export default class Graphs extends Component {
@@ -24,7 +24,7 @@ export default class Graphs extends Component {
     super(props);
     this.state = {
       cur: graphType.Roc,
-      title: "Roc",
+      title: 'Roc',
       RocData: { state: -1 },
       KSData: { state: -1 },
       LiftData: { state: -1 },
@@ -35,9 +35,9 @@ export default class Graphs extends Component {
   }
 
   drew = () => {
-    let dom = document.getElementById("metricsGraphs");
+    let dom = document.getElementById('metricsGraphs');
     myChart.clear();
-    if (myChart != null && myChart !== "" && myChart !== undefined) {
+    if (myChart != null && myChart !== '' && myChart !== undefined) {
       myChart.dispose(); //销毁
     }
     myChart = echarts.init(dom);
@@ -45,7 +45,7 @@ export default class Graphs extends Component {
       case graphType.Roc:
         this.drewRoc();
         break;
-      case graphType["K-S"]:
+      case graphType['K-S']:
         this.drewKS();
         break;
       case graphType.Lift:
@@ -54,7 +54,7 @@ export default class Graphs extends Component {
       case graphType.Gain:
         this.drewGain();
         break;
-      case graphType["Precision Recall"]:
+      case graphType['Precision Recall']:
         this.drewPrecisionRecall();
         break;
       case graphType.Accuracy:
@@ -110,35 +110,35 @@ export default class Graphs extends Component {
     }
     option = {
       tooltip: {
-        trigger: "axis",
-        displayMode: "single",
+        trigger: 'axis',
+        displayMode: 'single',
         formatter: function (params) {
           let dataset = that.props.metrics[keyName][0];
-          let htmlStr = "<div>";
+          let htmlStr = '<div>';
           params.forEach((item, index) => {
-            htmlStr += "Thresholds：" + thresholds[item["dataIndex"]] + "<br/>";
-            htmlStr += `Tpr(${dataset})：` + item.value + "<br/>";
-            htmlStr += `Fpr(${dataset})：` + item.axisValue + "<br/>";
+            htmlStr += 'Thresholds：' + thresholds[item['dataIndex']] + '<br/>';
+            htmlStr += `Tpr(${dataset})：` + item.value + '<br/>';
+            htmlStr += `Fpr(${dataset})：` + item.axisValue + '<br/>';
             if (index != params.length - 1) {
-              htmlStr += "<br/>";
+              htmlStr += '<br/>';
             }
           });
-          htmlStr += "</div>";
+          htmlStr += '</div>';
           return htmlStr;
         },
       },
       xAxis: {
-        type: "value",
-        name: "fpr",
+        type: 'value',
+        name: 'fpr',
       },
       yAxis: {
-        type: "value",
-        name: "tpr",
+        type: 'value',
+        name: 'tpr',
       },
       series: [
         {
-          name: "Roc",
-          type: "line",
+          name: 'Roc',
+          type: 'line',
           data: data,
           areaStyle: {},
         },
@@ -193,44 +193,44 @@ export default class Graphs extends Component {
     }
     option = {
       tooltip: {
-        trigger: "axis",
-        displayMode: "single",
+        trigger: 'axis',
+        displayMode: 'single',
         formatter: function (params) {
           let dataset = that.props.metrics[keyName][0];
-          let htmlStr = "<div>";
+          let htmlStr = '<div>';
           // params[0]是tpr
           // params[1]是fpr
           htmlStr +=
             `Thresholds(${dataset})：` +
-            thresholds[params[0]["dataIndex"]] +
-            "<br/>";
-          htmlStr += `homo_lr_0_ks_fpr：` + params[0].value[1] + "<br/>";
-          htmlStr += `homo_lr_0_ks_tpr：` + params[1].value[1] + "<br/>";
+            thresholds[params[0]['dataIndex']] +
+            '<br/>';
+          htmlStr += `homo_lr_0_ks_fpr：` + params[0].value[1] + '<br/>';
+          htmlStr += `homo_lr_0_ks_tpr：` + params[1].value[1] + '<br/>';
           htmlStr +=
-            `K-S：` + (params[0].value[1] - params[1].value[1]) + "<br/>";
-          htmlStr += "</div>";
+            `K-S：` + (params[0].value[1] - params[1].value[1]) + '<br/>';
+          htmlStr += '</div>';
           return htmlStr;
         },
       },
       xAxis: {
-        type: "value",
+        type: 'value',
       },
       yAxis: {
-        type: "value",
-        name: "tpr,fpr",
+        type: 'value',
+        name: 'tpr,fpr',
       },
       series: [
         {
-          name: "tpr",
-          type: "line",
+          name: 'tpr',
+          type: 'line',
           data: tpr,
-          symbol: "none",
+          symbol: 'none',
         },
         {
-          name: "fpr",
-          type: "line",
+          name: 'fpr',
+          type: 'line',
           data: fpr,
-          symbol: "none",
+          symbol: 'none',
         },
       ],
     };
@@ -280,38 +280,38 @@ export default class Graphs extends Component {
     }
     option = {
       tooltip: {
-        trigger: "axis",
-        displayMode: "single",
+        trigger: 'axis',
+        displayMode: 'single',
         formatter: function (params) {
           let dataset = that.props.metrics[keyName][0];
-          let htmlStr = "<div>";
+          let htmlStr = '<div>';
           params.forEach((item, index) => {
             htmlStr +=
               `Thresholds(${dataset})：` +
-              thresholds[item["dataIndex"]] +
-              "<br/>";
-            htmlStr += `Lift(${dataset})：` + item.value[1] + "<br/>";
+              thresholds[item['dataIndex']] +
+              '<br/>';
+            htmlStr += `Lift(${dataset})：` + item.value[1] + '<br/>';
             if (index != params.length - 1) {
-              htmlStr += "<br/>";
+              htmlStr += '<br/>';
             }
           });
-          htmlStr += "</div>";
+          htmlStr += '</div>';
           return htmlStr;
         },
       },
       xAxis: {
-        type: "value",
+        type: 'value',
       },
       yAxis: {
-        type: "value",
-        name: "lift",
+        type: 'value',
+        name: 'lift',
       },
       series: [
         {
-          name: "lift",
-          type: "line",
+          name: 'lift',
+          type: 'line',
           data: lift,
-          symbol: "none",
+          symbol: 'none',
         },
       ],
     };
@@ -359,38 +359,38 @@ export default class Graphs extends Component {
     }
     option = {
       tooltip: {
-        trigger: "axis",
-        displayMode: "single",
+        trigger: 'axis',
+        displayMode: 'single',
         formatter: function (params) {
           let dataset = that.props.metrics[keyName][0];
-          let htmlStr = "<div>";
+          let htmlStr = '<div>';
           params.forEach((item, index) => {
             htmlStr +=
               `Thresholds(${dataset})：` +
-              thresholds[item["dataIndex"]] +
-              "<br/>";
-            htmlStr += `Gain(${dataset})：` + item.value[1] + "<br/>";
+              thresholds[item['dataIndex']] +
+              '<br/>';
+            htmlStr += `Gain(${dataset})：` + item.value[1] + '<br/>';
             if (index != params.length - 1) {
-              htmlStr += "<br/>";
+              htmlStr += '<br/>';
             }
           });
-          htmlStr += "</div>";
+          htmlStr += '</div>';
           return htmlStr;
         },
       },
       xAxis: {
-        type: "value",
+        type: 'value',
       },
       yAxis: {
-        type: "value",
-        name: "gain",
+        type: 'value',
+        name: 'gain',
       },
       series: [
         {
-          name: "gain",
-          type: "line",
+          name: 'gain',
+          type: 'line',
           data: gain,
-          symbol: "none",
+          symbol: 'none',
         },
       ],
     };
@@ -443,37 +443,37 @@ export default class Graphs extends Component {
     }
     option = {
       tooltip: {
-        trigger: "axis",
-        displayMode: "single",
+        trigger: 'axis',
+        displayMode: 'single',
         formatter: function (params) {
           let dataset = that.props.metrics[keyName][0];
-          let htmlStr = "<div>";
+          let htmlStr = '<div>';
           params.forEach((item, _index) => {
             htmlStr +=
               `Thresholds(${dataset})：` +
-              thresholds[item["dataIndex"]] +
-              "<br/>";
-            htmlStr += `Precision(${dataset})：` + item.value[1] + "<br/>";
+              thresholds[item['dataIndex']] +
+              '<br/>';
+            htmlStr += `Precision(${dataset})：` + item.value[1] + '<br/>';
             htmlStr +=
-              `Recall(${dataset})：` + recall[item["dataIndex"]][1] + "<br/>";
+              `Recall(${dataset})：` + recall[item['dataIndex']][1] + '<br/>';
           });
-          htmlStr += "</div>";
+          htmlStr += '</div>';
           return htmlStr;
         },
       },
       xAxis: {
-        type: "value",
+        type: 'value',
       },
       yAxis: {
-        type: "value",
-        name: "precision",
+        type: 'value',
+        name: 'precision',
       },
       series: [
         {
-          name: "precision",
-          type: "line",
+          name: 'precision',
+          type: 'line',
           data: precision,
-          symbol: "none",
+          symbol: 'none',
         },
       ],
     };
@@ -522,35 +522,35 @@ export default class Graphs extends Component {
     }
     option = {
       tooltip: {
-        trigger: "axis",
-        displayMode: "single",
+        trigger: 'axis',
+        displayMode: 'single',
         formatter: function (params) {
           let dataset = that.props.metrics[keyName][0];
-          let htmlStr = "<div>";
+          let htmlStr = '<div>';
           params.forEach((item, _index) => {
             htmlStr +=
               `Thresholds(${dataset})：` +
-              thresholds[item["dataIndex"]] +
-              "<br/>";
-            htmlStr += `Accuracy(${dataset})：` + item.value[1] + "<br/>";
+              thresholds[item['dataIndex']] +
+              '<br/>';
+            htmlStr += `Accuracy(${dataset})：` + item.value[1] + '<br/>';
           });
-          htmlStr += "</div>";
+          htmlStr += '</div>';
           return htmlStr;
         },
       },
       xAxis: {
-        type: "value",
+        type: 'value',
       },
       yAxis: {
-        type: "value",
-        name: "accuracy",
+        type: 'value',
+        name: 'accuracy',
       },
       series: [
         {
-          name: "accuracy",
-          type: "line",
+          name: 'accuracy',
+          type: 'line',
           data: accuracy,
-          symbol: "none",
+          symbol: 'none',
         },
       ],
     };
@@ -558,7 +558,7 @@ export default class Graphs extends Component {
   };
 
   componentDidMount() {
-    let dom = document.getElementById("metricsGraphs");
+    let dom = document.getElementById('metricsGraphs');
     myChart = echarts.init(dom);
     this.drewRoc();
   }
@@ -581,32 +581,32 @@ export default class Graphs extends Component {
     switch (key) {
       case graphType.Roc:
         cur = graphType.Roc;
-        title = "Roc";
+        title = 'Roc';
         break;
-      case graphType["K-S"]:
-        cur = graphType["K-S"];
-        title = "K-S";
+      case graphType['K-S']:
+        cur = graphType['K-S'];
+        title = 'K-S';
         break;
       case graphType.Lift:
         cur = graphType.Lift;
-        title = "Lift";
+        title = 'Lift';
         break;
       case graphType.Gain:
         cur = graphType.Gain;
-        title = "Gain";
+        title = 'Gain';
         break;
-      case graphType["Precision Recall"]:
-        cur = graphType["Precision Recall"];
-        title = "Precision Recall";
+      case graphType['Precision Recall']:
+        cur = graphType['Precision Recall'];
+        title = 'Precision Recall';
         break;
       case graphType.Accuracy:
         cur = graphType.Accuracy;
-        title = "Accuracy";
+        title = 'Accuracy';
         break;
 
       default:
         cur = graphType.Roc;
-        title = "Roc";
+        title = 'Roc';
         break;
     }
     this.setState({ title, cur });
@@ -621,16 +621,16 @@ export default class Graphs extends Component {
           size='large'
         >
           <TabPane tab='Roc' key={graphType.Roc} />
-          <TabPane tab='K-S' key={graphType["K-S"]} />
+          <TabPane tab='K-S' key={graphType['K-S']} />
           <TabPane tab='Lift' key={graphType.Lift} />
           <TabPane tab='Gain' key={graphType.Gain} />
-          <TabPane tab='Precision Recall' key={graphType["Precision Recall"]} />
+          <TabPane tab='Precision Recall' key={graphType['Precision Recall']} />
           <TabPane tab='Accuracy' key={graphType.Accuracy} />
         </Tabs>
 
         <Row align='middle'>
           <Space>
-            <font style={{ fontSize: "xx-large" }}>{this.state.title}</font>
+            <font style={{ fontSize: 'xx-large' }}>{this.state.title}</font>
             <Button type='primary'>train</Button>
             <a
               onClick={() => {
@@ -642,7 +642,7 @@ export default class Graphs extends Component {
             </a>
           </Space>
         </Row>
-        <div id='metricsGraphs' style={{ width: "88vw", height: "70vh" }} />
+        <div id='metricsGraphs' style={{ width: '88vw', height: '70vh' }} />
       </div>
     );
   }
