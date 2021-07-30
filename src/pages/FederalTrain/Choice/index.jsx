@@ -59,6 +59,7 @@ class FederalTrainChoice extends Component {
           />
         ) : (
           <NormalForm
+            selectValue={this.props.location.state.selectValue}
             setLoading={this.setLoading}
             host={host}
             guest={guest}

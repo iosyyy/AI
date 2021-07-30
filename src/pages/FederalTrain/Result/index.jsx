@@ -70,6 +70,7 @@ class FederalResult extends Component {
       pathname: "/federalTrain/choice",
       state: {
         data,
+        selectValue: this.props.location.state.selectValue,
       },
     });
   };
