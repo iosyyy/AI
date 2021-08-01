@@ -35,7 +35,7 @@ const e = {
   queryDatasource: host + "/v1/preprocess/data/find",
   delDatasource: host + "/v1/preprocess/data/del",
   preprocess: host + "/v1/preprocess/data/preprocess",
-  getClientInfo: baseHost + "/v1/client/info",
+  getClientInfo: host + "/v1/client/info",
 };
 
 export default e;
