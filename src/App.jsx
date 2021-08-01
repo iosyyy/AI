@@ -36,10 +36,10 @@ class App extends Component {
     axios
       .get(api.getClientInfo)
       .then((r) => {
-        if (r.data.data.code) {
+        if (r.data.data.retcode || r.data.data.code) {
           message.error("服务验证失败,请重试");
         } else {
-          const { party_name, party_id } = r.data.data.data;
+          const { party_name, party_id } = r.data.data.data || r.data.data;
           this.setState({
             party_name,
             party_id,
