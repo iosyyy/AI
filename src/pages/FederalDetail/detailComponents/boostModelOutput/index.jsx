@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { Divider, Row, Space, Table, Progress } from 'antd';
-import axios from 'axios';
-import api from '../../../../config/api';
-import PrecisionRecall from './precisionRecall';
-import Loss from '../../../../components/Loss';
-import TreeGraph from '../../../../components/TreeGraph';
+import React, { Component } from "react";
+import { Divider, Row, Space, Table, Progress } from "antd";
+import axios from "axios";
+import api from "../../../../config/api";
+import PrecisionRecall from "./precisionRecall";
+import Loss from "../../../../components/Loss";
+import TreeGraph from "../../../../components/TreeGraph";
 
 const { Column } = Table;
 
@@ -26,12 +26,12 @@ class BoostModelOutput extends Component {
     const { post_data } = this.props;
     let metricsKeys = Object.keys(this.props.metrics);
 
-    if (post_data.role === 'arbiter') {
+    if (post_data.role === "arbiter" || metricsKeys) {
       return;
     }
-    let metricsForPerformanceScores = this.props.metrics[metricsKeys[0]].filter(
-      item => item.match(/^iteration_([0-9]$)/g)
-    );
+    let metricsForPerformanceScores = this.props.metrics[
+      metricsKeys[0]
+    ].filter((item) => item.match(/^iteration_([0-9]$)/g));
 
     // getPerformanceScoresDatasource
     let metrics = {};
@@ -41,7 +41,7 @@ class BoostModelOutput extends Component {
     let postData = { ...post_data, metrics };
     axios
       .post(api.batch, postData)
-      .then(data => {
+      .then((data) => {
         let performanceScoresDatasource = [];
         for (let key of metricsForPerformanceScores) {
           for (let metricsKey of metricsKeys) {
@@ -51,7 +51,7 @@ class BoostModelOutput extends Component {
             performanceScoresData.performanceScores = key;
             let trainData = data.data.data[metricsKey][key].data;
             trainData.forEach(
-              item => (performanceScoresData[item[0]] = item[1])
+              (item) => (performanceScoresData[item[0]] = item[1])
             );
 
             performanceScoresDatasource.push(performanceScoresData);
@@ -59,19 +59,20 @@ class BoostModelOutput extends Component {
         }
         this.setState({ performanceScoresDatasource });
       })
-      .catch(e => {
+      .catch((e) => {
         console.error(e);
       });
 
     // getFeatureSourceDatasource
-    let featureDatasource =
-      this.props.model.data.data.data.featureImportances.map((item, index) => ({
+    let featureDatasource = this.props.model.data.data.data.featureImportances.map(
+      (item, index) => ({
         key: index,
         featureName: item.fullname,
         value: item.fid,
-      }));
+      })
+    );
     let maxFeature = -1;
-    featureDatasource.forEach(item => {
+    featureDatasource.forEach((item) => {
       if (item.value > maxFeature) maxFeature = item.value;
     });
 
@@ -85,7 +86,25 @@ class BoostModelOutput extends Component {
 
   render() {
     const { post_data } = this.props;
-    if (post_data.role !== 'arbiter') {
+    if (this.state.metricsKeys) {
+      return (
+        <div style={{ height: "64vh" }}>
+          <h1 style={{ fontSize: 24, fontWeight: "bold", display: "block" }}>
+            Tree
+          </h1>
+          <div className={"scrollContent"} style={{ height: "64vh" }}>
+            {/* 参数解释: colors[0]代表顶层颜色,colors[1]代表底层颜色,其他参数先写成固定为3个*/}
+            <TreeGraph
+              colors={["rgb(50,100,250)", "rgb(10,200,60)"]}
+              id={this.state.id}
+              index={this.state.index}
+              trees={this.state.trees}
+            />
+          </div>
+        </div>
+      );
+    }
+    if (post_data.role !== "arbiter") {
       const {
         maxFeature,
         featureDatasource,
@@ -96,36 +115,35 @@ class BoostModelOutput extends Component {
         id,
       } = this.state;
       return (
-        <div>
-          <h1 style={{ fontSize: 24, fontWeight: 'bold', display: 'block' }}>
+        <div style={{ height: "64vh" }}>
+          <h1 style={{ fontSize: 24, fontWeight: "bold", display: "block" }}>
             Tree
           </h1>
-          <div className={'scrollContent'} style={{ height: '64vh' }}>
+          <div className={"scrollContent"} style={{ height: "64vh" }}>
             {/* 参数解释: colors[0]代表顶层颜色,colors[1]代表底层颜色,其他参数先写成固定为3个*/}
             <TreeGraph
-              colors={['rgb(50,100,250)', 'rgb(10,200,60)']}
+              colors={["rgb(50,100,250)", "rgb(10,200,60)"]}
               id={id}
               index={index}
               trees={trees}
             />
           </div>
-
           <Divider />
 
-          <h1 style={{ fontSize: 24, fontWeight: 'bold', display: 'block' }}>
+          <h1 style={{ fontSize: 24, fontWeight: "bold", display: "block" }}>
             Performance scores
           </h1>
           <Table
-            bordered='true'
+            bordered="true"
             pagination={false}
-            size='small'
+            size="small"
             dataSource={performanceScoresDatasource}
           >
             <Column
-              key='performanceScores'
-              dataIndex='performanceScores'
-              title=''
-              width='15vw'
+              key="performanceScores"
+              dataIndex="performanceScores"
+              title=""
+              width="15vw"
               render={(text, _record, index) => {
                 let l = metricsKeys.length;
 
@@ -147,53 +165,53 @@ class BoostModelOutput extends Component {
               }}
             ></Column>
             <Column
-              key='dataset'
-              dataIndex='dataset'
-              title='dataset'
-              width='15vw'
+              key="dataset"
+              dataIndex="dataset"
+              title="dataset"
+              width="15vw"
             ></Column>
             <Column
-              key='accuracy'
-              dataIndex='accuracy'
-              title='accuracy'
-              width='15vw'
+              key="accuracy"
+              dataIndex="accuracy"
+              title="accuracy"
+              width="15vw"
             ></Column>
             <Column
-              key='precision'
-              dataIndex='precision'
-              title='precision'
-              width='15vw'
+              key="precision"
+              dataIndex="precision"
+              title="precision"
+              width="15vw"
             ></Column>
             <Column
-              key='recall'
-              dataIndex='recall'
-              title='recall'
-              width='15vw'
+              key="recall"
+              dataIndex="recall"
+              title="recall"
+              width="15vw"
             ></Column>
           </Table>
 
           <Divider />
 
-          <h1 style={{ fontSize: 24, fontWeight: 'bold', display: 'block' }}>
+          <h1 style={{ fontSize: 24, fontWeight: "bold", display: "block" }}>
             Feature Importance
           </h1>
 
           <Table
-            bordered='true'
+            bordered="true"
             dataSource={featureDatasource}
             pagination={false}
-            size='small'
+            size="small"
           >
             <Column
-              key='featureName'
-              dataIndex='featureName'
-              title='FEATURE'
-              width='15vw'
+              key="featureName"
+              dataIndex="featureName"
+              title="FEATURE"
+              width="15vw"
             ></Column>
             <Column
-              key='value'
-              dataIndex='value'
-              title=''
+              key="value"
+              dataIndex="value"
+              title=""
               render={(text, record) => {
                 let per = (record.value / maxFeature) * 100;
                 return (
@@ -201,12 +219,12 @@ class BoostModelOutput extends Component {
                     <Row>
                       <Progress
                         strokeColor={{
-                          '0%': '#108ee9',
-                          '100%': '#87d068',
+                          "0%": "#108ee9",
+                          "100%": "#87d068",
                         }}
                         showInfo={false}
                         percent={per}
-                        style={{ width: '95%', marginRight: '2%' }}
+                        style={{ width: "95%", marginRight: "2%" }}
                       ></Progress>
                       <span>{record.value}</span>
                     </Row>

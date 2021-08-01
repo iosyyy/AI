@@ -1,24 +1,28 @@
-import React, { Component } from 'react';
-import * as echarts from 'echarts';
-import { Button } from 'antd';
-import { ReloadOutlined } from '@ant-design/icons';
-import axios from 'axios';
-import api from '../../../../../config/api';
+import React, { Component } from "react";
+import * as echarts from "echarts";
+import { Button } from "antd";
+import { ReloadOutlined } from "@ant-design/icons";
+import axios from "axios";
+import api from "../../../../../config/api";
 
 let myChart;
 export default class PrecisionRecall extends Component {
   constructor(props) {
     super(props);
     const { allMetrics, metricsKeys } = props;
+    console.log(props);
     let metricsKey = metricsKeys[0];
-    let metricsForPrecisionRecall = allMetrics[metricsKey].filter(item =>
-      item.match(/^iteration_[0-9]_(precision)|(recall)$/g)
-    );
+    let metricsForPrecisionRecall = {};
+    if (metricsKey && allMetrics) {
+      metricsForPrecisionRecall = allMetrics[metricsKey].filter((item) =>
+        item.match(/^iteration_[0-9]_(precision)|(recall)$/g)
+      );
+    }
     this.state = {
       metricsForPrecisionRecall,
     };
   }
-  drew = type => {
+  drew = (type) => {
     const { metricsKeys } = this.props;
     let { datas, metricsForPrecisionRecall } = this.state;
     console.log(type);
@@ -30,11 +34,11 @@ export default class PrecisionRecall extends Component {
       ...this.props.postData,
       metrics,
     };
-    console.log('postdata:', postData);
+    console.log("postdata:", postData);
     let option;
     let d;
 
-    axios.post(api.batch, postData).then(r => {
+    axios.post(api.batch, postData).then((r) => {
       d = r.data.data[metricsKey];
 
       let dKeys = Object.keys(d);
@@ -43,33 +47,33 @@ export default class PrecisionRecall extends Component {
       for (let dKey of dKeys) {
         series.push({
           name:
-            d[dKey].meta.ordinate_name + '(' + d[dKey].meta.curve_name + ')',
-          type: 'line',
+            d[dKey].meta.ordinate_name + "(" + d[dKey].meta.curve_name + ")",
+          type: "line",
           data: d[dKey].data,
-          symbol: 'none',
+          symbol: "none",
         });
       }
       option = {
         tooltip: {
-          trigger: 'axis',
-          displayMode: 'single',
+          trigger: "axis",
+          displayMode: "single",
           formatter: function (params) {
-            let htmlStr = '<div>';
+            let htmlStr = "<div>";
             htmlStr += `Class:${params[0].axisValue} <br/>`;
             for (let i = 0; i < params.length; i++) {
               htmlStr += `${params[i].seriesName}:${params[i].data[1]} <br/>`;
             }
-            htmlStr += '</div>';
+            htmlStr += "</div>";
             return htmlStr;
           },
         },
         xAxis: {
-          type: 'value',
-          name: 'class',
+          type: "value",
+          name: "class",
         },
         yAxis: {
-          type: 'value',
-          name: 'precision,recall',
+          type: "value",
+          name: "precision,recall",
         },
         series,
       };
@@ -78,7 +82,7 @@ export default class PrecisionRecall extends Component {
   };
 
   componentDidMount() {
-    let dom = document.getElementById('precisionRecall');
+    let dom = document.getElementById("precisionRecall");
     myChart = echarts.init(dom);
     this.drew();
   }
@@ -92,8 +96,8 @@ export default class PrecisionRecall extends Component {
     for (let key of metricsKeys) {
       buttonArr.push(
         <Button
-          type='primary'
-          style={{ marginRight: '2px' }}
+          type="primary"
+          style={{ marginRight: "2px" }}
           onClick={() => {
             this.drew(key);
           }}
@@ -107,16 +111,16 @@ export default class PrecisionRecall extends Component {
         <span
           style={{
             fontSize: 24,
-            fontWeight: 'bold',
-            display: 'inline-block',
-            marginRight: '5px',
+            fontWeight: "bold",
+            display: "inline-block",
+            marginRight: "5px",
           }}
         >
           Precision Recall
         </span>
         {buttonArr}
         <Button
-          type='link'
+          type="link"
           onClick={() => {
             this.drew();
           }}
@@ -125,8 +129,8 @@ export default class PrecisionRecall extends Component {
           refresh
         </Button>
         <div
-          id='precisionRecall'
-          style={{ width: '88vw', height: '70vh' }}
+          id="precisionRecall"
+          style={{ width: "88vw", height: "70vh" }}
         ></div>
       </div>
     );

@@ -11,6 +11,7 @@ class TreeGraph extends Component {
       index: 0,
       id: props.id,
       colors: props.colors,
+      data: [],
     };
   }
 
@@ -112,6 +113,9 @@ class TreeGraph extends Component {
       },
       200
     );
+    this.setState({
+      data,
+    });
   };
 
   componentDidMount() {
@@ -124,7 +128,7 @@ class TreeGraph extends Component {
   }
 
   render() {
-    const { id, trees } = this.state;
+    const { id, data, trees } = this.state;
     return (
       <div>
         <div
@@ -136,7 +140,7 @@ class TreeGraph extends Component {
           }}
         >
           <b>
-            Tree ID: {id} Tree Size: {trees.length}
+            Tree ID: {id} Tree Size: {trees[0].tree.length}
           </b>
         </div>
         <div style={{ width: "88vw", height: "40vh" }} id={"metricsGraphs"} />

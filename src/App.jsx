@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Collapse, Dropdown, Image, Layout, Menu } from "antd";
+import { Button, Collapse, Dropdown, Image, Layout, Menu, message } from "antd";
 import { NavLink, Redirect, Route, Switch } from "react-router-dom";
 import PubSubJS from "pubsub-js";
 import Normal from "./pages/Normal";
@@ -16,6 +16,8 @@ import DataSource from "./pages/DataSource";
 import Avatar from "antd/es/avatar/avatar";
 import { UserOutlined } from "@ant-design/icons";
 import Reasoning from "./pages/Reasoning";
+import axios from "axios";
+import api from "./config/api";
 const { Panel } = Collapse;
 
 const { Header, Content } = Layout;
@@ -23,11 +25,30 @@ const { Header, Content } = Layout;
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { page: "1" };
+    this.state = { page: "1", party_name: "", party_id: 0 };
     // FIXME 目前使用pubsubjs监听页面跳转然后来改变Menu的选择后续可以通过当前连接更改,目前先这么写方便测试
     PubSubJS.subscribe("isRunning", (msg, data) => {
       this.setState({ page: data.page });
     });
+  }
+
+  componentDidMount() {
+    axios
+      .get(api.getClientInfo)
+      .then((r) => {
+        if (r.data.retcode) {
+          message.error("服务验证失败,请重试");
+        } else {
+          const { party_name, party_id } = r.data.data;
+          this.setState({
+            party_name,
+            party_id,
+          });
+        }
+      })
+      .catch((r) => {
+        message.error("链接服务器失败请重试");
+      });
   }
 
   render() {
@@ -41,8 +62,8 @@ class App extends Component {
     };
     const menu = (
       <div className="user-login-extend" style={{ background: "white" }}>
-        <div style={fontStyle}>ID: 9000</div>
-        <div style={fontStyle}>Role: host</div>
+        <div style={fontStyle}>ID: {this.state.party_id}</div>
+        <div style={fontStyle}>Role: {this.state.party_name}</div>
       </div>
     );
     return (
@@ -109,6 +130,7 @@ class App extends Component {
                   lineHeight: "8vh",
                   height: "9vh",
                   marginLeft: "10px",
+                  marginRight: "10px",
                 }}
               >
                 <Dropdown placement="bottomCenter" arrow overlay={menu}>
