@@ -240,7 +240,7 @@ class DataSourceUpload extends Component {
                               style={{ marginTop: "1vh" }}
                               name={[name, "description"]}
                               fieldKey={[fieldKey, "description"]}
-                              label={"任务类型"}
+                              label={"数据集描述"}
                             >
                               <Input
                                 onChange={(e) => {
@@ -260,7 +260,7 @@ class DataSourceUpload extends Component {
                               style={{ marginTop: "1vh" }}
                               name={[name, "work_mode"]}
                               fieldKey={[fieldKey, "work_mode"]}
-                              label={"数据集描述"}
+                              label={"任务类型"}
                             >
                               <Radio.Group
                                 onChange={(e) => {
