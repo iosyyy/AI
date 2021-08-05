@@ -57,8 +57,8 @@ class App extends Component {
       color: "rgb(127,125,142)",
     };
     const linkStyle = {
-      activeStyle: { userSelect: "none", color: "rgb(96,185,234)" },
-      style: { userSelect: "none", color: "rgb(227,227,227)" },
+      activeStyle: { userSelect: "none", color: "rgb(59,160,255)" },
+      style: { userSelect: "none", color: "rgb(113,119,124)" },
     };
     const menu = (
       <div className="user-login-extend" style={{ background: "white" }}>
@@ -73,7 +73,7 @@ class App extends Component {
             style={{
               padding: "0px 32px 0px 15px",
               height: "8.9vh",
-              background: "rgb(10,73,123)",
+              background: "rgb(255,255,255)",
             }}
           >
             <div
@@ -93,7 +93,7 @@ class App extends Component {
               style={{
                 lineHeight: "8vh",
                 height: "9vh",
-                background: "rgb(10,73,123)",
+                background: "rgb(255,255,255)",
               }}
               mode="horizontal"
               selectedKeys={[this.state.page]}
