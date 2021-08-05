@@ -57,8 +57,8 @@ class App extends Component {
       color: "rgb(127,125,142)",
     };
     const linkStyle = {
-      activeStyle: { userSelect: "none", color: "rgb(59,160,255)" },
-      style: { userSelect: "none", color: "rgb(113,119,124)" },
+      activeStyle: { userSelect: "none", color: "rgb(211,234,251)" },
+      style: { userSelect: "none", color: "rgb(255,255,255)" },
     };
     const menu = (
       <div className="user-login-extend" style={{ background: "white" }}>
@@ -73,7 +73,7 @@ class App extends Component {
             style={{
               padding: "0px 32px 0px 15px",
               height: "8.9vh",
-              background: "rgb(255,255,255)",
+              background: "rgb(36,150,237)",
             }}
           >
             <div
@@ -93,7 +93,9 @@ class App extends Component {
               style={{
                 lineHeight: "8vh",
                 height: "9vh",
-                background: "rgb(255,255,255)",
+                background: "rgb(36,150,237)",
+                fontWeight: 600,
+                fontSize: "14px",
               }}
               mode="horizontal"
               selectedKeys={[this.state.page]}
@@ -154,7 +156,9 @@ class App extends Component {
               </Menu.Item>
             </Menu>
           </Header>
-          <Content style={{ padding: "2vh 3vw" }}>
+          <Content
+            style={{ padding: "2vh 3vw", background: "rgb(246,246,246)" }}
+          >
             <Switch>
               <Route path="/federalTrain" component={FederalIndex} />
               <Route path="/normal" component={Normal} />
