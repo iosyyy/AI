@@ -1,12 +1,15 @@
 .site-layout-content {
   min-height: 280px;
   padding: 24px;
-  background: #fff;
-  border-radius: 5px ;
-
+  border-radius: 8px;
+  -moz-border-radius: 7px;
   -webkit-box-shadow: 0 20px 15px #9B7468;
   -moz-box-shadow: 0 20px 15px #9B7468;
-  box-shadow: 0 10px 6px rgb(158,199,210);
+  box-shadow: 0 8px 8px rgba(96,185,234,.24),0 0 8px rgba(96,185,234,.12);
+  text-decoration: none;
+
+  background: #fff ;
+;
 
 }
 .user-login-extend{
