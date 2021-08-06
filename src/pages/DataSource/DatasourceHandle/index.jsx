@@ -115,7 +115,7 @@ class DatasourceHandle extends Component {
                       label_info: datasource,
                     })
                     .then((data) => {
-                      if (data.data.retcode === 0) {
+                      if (data.data.code === 0 || data.data.retcode === 0) {
                         message.success("保存成功");
 
                         setTimeout(() => {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Divider, Select, Table, Popconfirm, message, Card } from "antd";
+import { message, Popconfirm, Table } from "antd";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import api from "../../../config/api";
@@ -55,6 +55,34 @@ class MyDatasourceTable extends Component {
                 }}
               >
                 查询
+              </a>
+              <span>/</span>
+              <a
+                onClick={() => {
+                  axios
+                    .post(api.downloadTemplate, { file_name: obj.file })
+                    .then((r) => {
+                      const { code } = r.data;
+                      if (code !== 0) {
+                        message.error("当前文件下载错误请重试");
+                        return;
+                      }
+                      const { data } = r.data;
+
+                      const exportContent = "\uFEFF";
+                      const blob = new Blob([exportContent + data], {
+                        type: "text/plain;charset=utf-8",
+                      });
+                      const regFile = /[/][\S\s]*[/]/i;
+                      const curFile = obj.file.replace(regFile, "");
+                      FileSaver.saveAs(blob, curFile);
+                    })
+                    .catch((r) => {
+                      message.error("文件下载失败请重试并检查网络连接");
+                    });
+                }}
+              >
+                下载
               </a>
               <span>/</span>
               <Popconfirm

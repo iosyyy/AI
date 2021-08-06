@@ -169,7 +169,7 @@ class DataSourceTable extends Component {
   }
 
   setData = (data) => {
-    if (data.retcode !== 0) {
+    if (data.code !== 0 && data.retcode !== 0) {
       message.error(data.retmsg);
       this.setState({
         tableIsLoading: false,

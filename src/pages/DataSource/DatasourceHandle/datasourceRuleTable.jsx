@@ -70,7 +70,7 @@ class DatasourceRuleTable extends Component {
       // 显示信息
       this.showInfo();
     }
-    let isDisabled = this.props.type === 0 ? false : true;
+    let isDisabled = this.props.type !== 0;
 
     this.setState({
       isLoading: false,
