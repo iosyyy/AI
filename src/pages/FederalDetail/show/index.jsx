@@ -289,7 +289,12 @@ class FederalDetail extends Component {
                     });
                   }
                 }}
-                style={{ height: "7vh", marginTop: "5vh", width: "100%" }}
+                style={{
+                  height: "7vh",
+                  marginTop: "5vh",
+                  width: "100%",
+                  borderRadius: "6px",
+                }}
                 type="primary"
                 loading={!this.state.isLoading}
               >
