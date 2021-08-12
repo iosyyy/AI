@@ -36,6 +36,7 @@ class FederalDetail extends Component {
       isLoading: false,
       key: this.generateUUID(),
       dependencies: {},
+      component_need_run: {},
     };
   }
 
@@ -129,7 +130,11 @@ class FederalDetail extends Component {
 
     socket.onmessage = (data) => {
       const d = JSON.parse(data.data);
-      const { component_list, dependencies } = d.dependency_data;
+      const {
+        component_list,
+        dependencies,
+        component_need_run,
+      } = d.dependency_data;
       const names = component_list.map((item) => item.component_name);
       let change = false;
       for (const item in component_list) {
@@ -147,6 +152,7 @@ class FederalDetail extends Component {
         component_list,
         key: this.generateUUID(),
         dependencies,
+        component_need_run,
       });
     };
   }
@@ -165,6 +171,7 @@ class FederalDetail extends Component {
       names,
       key,
       dependencies,
+      component_need_run,
     } = this.state;
 
     return (
@@ -228,6 +235,7 @@ class FederalDetail extends Component {
                 }}
               >
                 <MainGraph
+                  component_need_run={component_need_run}
                   dependencies={dependencies}
                   key={key}
                   component_list={component_list}

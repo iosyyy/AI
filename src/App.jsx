@@ -53,7 +53,8 @@ class App extends Component {
 
   render() {
     const fontStyle = {
-      z,
+      fontWeight: 900,
+      color: "rgb(127,125,142)",
     };
     const linkStyle = {
       activeStyle: { userSelect: "none", color: "rgb(211,234,251)" },

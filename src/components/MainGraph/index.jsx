@@ -8,11 +8,12 @@ import failed from "../../img/failed.png";
 class MainGraph extends Component {
   constructor(props) {
     super(props);
-    const { component_list } = this.props;
-
+    const { component_list, component_need_run } = this.props;
+    console.log(component_need_run);
     this.state = {
       diagram: {},
       component_list,
+      component_need_run,
       nodeArray: [],
       linkArray: [],
     };
@@ -36,7 +37,7 @@ class MainGraph extends Component {
   };
 
   componentDidMount() {
-    const { component_list, dependencies } = this.props;
+    const { component_list, dependencies, component_need_run } = this.props;
     if (!component_list || !dependencies) {
       message.error("参数错误");
       return null;
@@ -45,11 +46,7 @@ class MainGraph extends Component {
 
     const nodeColors = component_list.map((v, i) => {
       return `${
-        v.status === "success"
-          ? "rgb(14,199,165)"
-          : v.status === "canceled"
-          ? "red"
-          : color
+        !component_need_run[v.component_name] ? "rgb(14,199,165)" : color
       }`;
     });
     const colorBack = "rgb(240,240,240)";
@@ -57,6 +54,7 @@ class MainGraph extends Component {
       return {
         index: i,
         status: v.status,
+        is_need_run: !component_need_run[v.component_name],
         key: v.component_name,
         color: nodeColors[i],
         colorA: colorBack,
@@ -214,24 +212,20 @@ class MainGraph extends Component {
           $(
             go.Shape,
             "RoundedRectangle",
-            { margin: 0, width: 140, height: 33 },
+            { margin: 0, width: 150, height: 33 },
 
             new go.Binding("fill", "color"),
             new go.Binding("fill", "isSelected", function (sel, node) {
               if (sel) {
                 change(node.Zj.nb.key);
-                if (node.Zj.nb.status === "success") {
-                  return "rgb(39,153,255)";
-                } else if (node.Zj.nb.status === "canceled") {
+                if (node.Zj.nb.is_need_run) {
                   return "rgb(39,153,255)";
                 } else {
                   return "rgb(216,44,128)";
                 }
               } else {
-                if (node.Zj.nb.status === "success") {
+                if (node.Zj.nb.is_need_run) {
                   return "rgb(14,199,165)";
-                } else if (node.Zj.nb.status === "canceled") {
-                  return "red";
                 } else {
                   return "rgb(187,187,200)";
                 }
