@@ -46,7 +46,7 @@ class MainGraph extends Component {
 
     const nodeColors = component_list.map((v, i) => {
       return `${
-        !component_need_run[v.component_name] ? "rgb(14,199,165)" : color
+        component_need_run[v.component_name] ? "rgb(14,199,165)" : color
       }`;
     });
     const colorBack = "rgb(240,240,240)";
@@ -54,7 +54,7 @@ class MainGraph extends Component {
       return {
         index: i,
         status: v.status,
-        is_need_run: !component_need_run[v.component_name],
+        is_need_run: component_need_run[v.component_name],
         key: v.component_name,
         color: nodeColors[i],
         colorA: colorBack,
