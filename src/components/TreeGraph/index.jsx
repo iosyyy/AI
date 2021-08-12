@@ -8,7 +8,7 @@ class TreeGraph extends Component {
 
     this.state = {
       trees: props.trees,
-      index: 0,
+      index: props.index,
       id: props.id,
       colors: props.colors,
       data: [],

@@ -1,70 +1,153 @@
-# Getting Started with Create React App
+**TODO-LIST**
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- [ ] 修改主页面的算法选择逻辑问题
+- [ ] 修改页面标题
+- [ ] 增加组件树
 
-## Available Scripts
+首先如何构建一个组件树.
 
-In the project directory, you can run:
+主要使用的工具在 `src/components/TreeGraph/index.jsx` ,通过 `myChart` 构建树结构,根据传进来的trees和id和index定义一个树结构,主要通过递归的方式完成树的结构.其中传进来的trees包括以下几个参数;
 
-### `npm start`
+1. `id`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+   代表当前选择节点的id
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+2. `isLeaf`
 
-### `npm test`
+   代表树节点是否为最底层的叶节点
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. `leftNodeid`
 
-### `npm run build`
+   代表左节点的id
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+4. `rightNodeid`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+   代表右节点的id
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+通过这些参数我们就可以构建出一个完整的树结构.
 
-### `npm run eject`
+然后我们先创建一个`myChart` ,然后调用drew方法重新绘制.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```jsx
+componentDidMount() {
+  let dom = document.getElementById("metricsGraphs");
+  if (myChart != null && myChart !== "" && myChart !== undefined) {
+    myChart.dispose(); //销毁
+  }
+  myChart = echarts.init(dom);
+  this.drew();
+}
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+`drew` 方法中主要绘制这个树并且定义一些变量
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```jsx
+drew = () => {
+  const { trees, index, id } = this.state;
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+  const data = this.parseTreesToData(trees[index * 3 + id].tree, 0, []);
+  myChart.setOption(
+    {
+      tooltip: {
+        formatter: function (params) {
+          const { name } = params.data;
+          const names = name.split("\n");
+          let divs = "";
+          names.forEach((v, i) => {
+            divs += `<div style='text-align: center'>${v}</div>`;
+          });
+          return `<div style='text-align: center'>${divs}</div>`;
+        },
+        trigger: "item",
+        triggerOn: "mousemove",
+      },
+      borderWidth: 0, //设置边框粗细
 
-## Learn More
+      series: [
+        {
+          type: "tree",
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+          data,
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+          left: "2%",
+          right: "2%",
 
-### Code Splitting
+          symbol: "roundRect",
+          symbolSize: [60, 60],
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+          orient: "vertical",
 
-### Analyzing the Bundle Size
+          expandAndCollapse: true,
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+          label: {
+            position: "inside",
+            verticalAlign: "middle",
+            fontSize: 8,
+          },
 
-### Making a Progressive Web App
+          leaves: {
+            label: {
+              position: "inside",
+              verticalAlign: "middle",
+            },
+          },
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+          animationDurationUpdate: 750,
+        },
+      ],
+    },
+    200
+  );
+  this.setState({
+    data,
+  });
+};
+```
 
-### Advanced Configuration
+`this.parseTreesToData`就是获取data使用的通过递归的方法把树变成echart所接受的树变量
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```jsx
+parseTreesToData = (tree, index, data) => {
+  const { colors } = this.state;
+  let color,
+    name,
+    left = -1,
+    right = -1;
+  const { id, fid, bid, weight, leftNodeid, rightNodeid } = tree[index];
+  if (!tree[index].isLeaf) {
+    color = colors[0];
+    name = `ID:${id}\n x${fid} <= ${bid.toFixed(5)}`;
+    left = leftNodeid;
+    right = rightNodeid;
+  } else {
+    color = colors[1];
+    name = `ID:${id}\n weight = ${weight.toFixed(5)}`;
+  }
+  let leftData;
+  let rightData;
 
-### Deployment
+  if (left !== -1) {
+    leftData = this.parseTreesToData(tree, left, []);
+  }
+  if (right !== -1) {
+    rightData = this.parseTreesToData(tree, right, []);
+  }
+  let concat = [];
+  if (leftData) {
+    concat = leftData.concat(rightData);
+  } else {
+    concat = rightData;
+  }
+  data.push({
+    name,
+    itemStyle: {
+      color,
+      borderWidth: 0, //设置边框粗细
+    },
+    children: concat,
+  });
+  return data;
+};
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+然后我们会发现树组件构建完成
