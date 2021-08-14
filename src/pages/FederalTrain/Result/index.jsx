@@ -77,7 +77,7 @@ class FederalResult extends Component {
 
   toLastPage = () => {
     this.props.history.push({
-      pathname: "/federalTrain/form",
+      pathname: "/federalTrain/type",
     });
   };
 

@@ -14,6 +14,7 @@ class NormalForm extends Component {
     };
   }
   render() {
+    console.log(this.props);
     // 表单样式
     const tailLayout = {
       wrapperCol: { offset: 9 },
@@ -24,6 +25,7 @@ class NormalForm extends Component {
       wrapperCol: { span: 8 },
     };
     return (
+      
       <div style={{ overflow: "auto" }}>
         <Spin spinning={this.state.loading} size="large">
           <Form
