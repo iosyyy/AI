@@ -40,30 +40,26 @@ class FederalTrain extends Component {
           </Row>
           <Row style={{ marginBottom: "5vh" }} gutter={[0, 24]}>
             <Col offset={8} span={8}>
-              <Select
+            <Select
                 style={{ width: "100%" }}
                 onChange={(e) => {
-                  this.setState({ selectValue: e });
+                  if (e === "homo_lr") {
+                    this.setState({
+                      type: true,
+                      selectValue:e
+                    });
+                  } else {
+                    this.setState({
+                      type: false,
+                      selectValue:e
+                    });
+                  }
                 }}
-                value={this.state.selectValue}
+                value={this.state.type ? "homo_lr" : "hetero_lr"}
               >
-                {this.state.type ? (
-                  <>
-                    <Select.Option value="homo_lr">横向逻辑回归</Select.Option>
-                    <Select.Option value="homo_secure_boost">
-                      横向安全提升树
-                    </Select.Option>
-                  </>
-                ) : (
-                  <>
-                    <Select.Option value="hetero_lr">
-                      纵向逻辑回归
-                    </Select.Option>
-                    <Select.Option value="hetero_secure_boost">
-                      纵向安全提升树
-                    </Select.Option>
-                  </>
-                )}
+                    <Select.Option value="homo_lr">横向联邦</Select.Option>
+                    <Select.Option value="hetero_lr">纵向联邦</Select.Option>
+                 
               </Select>
             </Col>
           </Row>
@@ -71,9 +67,8 @@ class FederalTrain extends Component {
             <Col
               onClick={() => {
                 this.setState({
-                  selectValue: "homo_lr",
-
                   type: true,
+                  selectValue:"homo_lr"
                 });
               }}
               span={6}
@@ -106,9 +101,8 @@ class FederalTrain extends Component {
             <Col
               onClick={() =>
                 this.setState({
-                  selectValue: "hetero_lr",
-
                   type: false,
+                  selectValue:"hetero_lr"
                 })
               }
               span={6}
@@ -145,11 +139,13 @@ class FederalTrain extends Component {
             <Col offset={11} span={12}>
               <Button
                 onClick={() => {
+                  localStorage.setItem("value",this.state.selectValue);
+                  localStorage.setItem("status",this.state.type);
                   this.props.history.push({
-                    pathname: "/federalTrain/result",
+                    pathname: "/federalTrain/type",
                     state: {
                       status: this.state.type,
-                      selectValue: this.state.selectValue,
+                      value:this.state.selectValue
                     },
                   });
                 }}
