@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Card, Col, Row, Select,Form,Space } from "antd";
+import { Button, Card, Col, Row, Select, Form, Space } from "antd";
 import "antd/dist/antd.css";
 import StepsTemplate from "../../../components/StepsTemplate";
 import {
@@ -8,33 +8,40 @@ import {
   FileOutlined,
   LoadingOutlined,
 } from "@ant-design/icons";
-const data=[
+const data = [
   {
-    value:"homo_lr",
-    title:"横向逻辑回归"
-  },{
-    value:"homo_secure_boost",
-    title:"横向安全提升树"
-  },{
-    value:"homo_nn",
-    title:"横向循环神经网络"
-  },{
-    value:"hetero_lr",
-    title:"纵向逻辑回归"
-  },{
-    value:"hetero_secure_boost",
-    title:"纵向安全提升树"
-    
-  },{
-    value:"hetero_nn",
-    title:"纵向循环神经网络"
-  }
-]
+    value: "homo_lr",
+    title: "横向逻辑回归",
+  },
+  {
+    value: "homo_secure_boost",
+    title: "横向安全提升树",
+  },
+  {
+    value: "homo_nn",
+    title: "横向循环神经网络",
+  },
+  {
+    value: "hetero_lr",
+    title: "纵向逻辑回归",
+  },
+  {
+    value: "hetero_secure_boost",
+    title: "纵向安全提升树",
+  },
+  {
+    value: "hetero_nn",
+    title: "纵向循环神经网络",
+  },
+];
 class FederalTrain extends Component {
   state = {
-    type:localStorage.getItem("status"),
-    selectValue:localStorage.getItem("value"),
-    title:localStorage.getItem("status")==='true'?"横向逻辑回归":"纵向逻辑回归",
+    type: localStorage.getItem("status"),
+    selectValue: localStorage.getItem("value"),
+    title:
+      localStorage.getItem("status") === "true"
+        ? "横向逻辑回归"
+        : "纵向逻辑回归",
   };
   toLastPage = () => {
     this.props.history.push({
@@ -70,23 +77,21 @@ class FederalTrain extends Component {
               <Select
                 style={{ width: "100%" }}
                 onChange={(e) => {
-                  data.map((val,index)=>{
-                    if(val.value===e){
+                  data.map((val, index) => {
+                    if (val.value === e) {
                       this.setState({
-                        title:val.title,
-                      })
+                        title: val.title,
+                      });
                       return false;
                     }
-                  })
+                  });
                   this.setState({ selectValue: e });
                 }}
                 value={this.state.selectValue}
               >
-                {this.state.type=='true' ? (
+                {this.state.type == "true" ? (
                   <>
-                    <Select.Option value="homo_lr">
-                      横向逻辑回归
-                      </Select.Option>
+                    <Select.Option value="homo_lr">横向逻辑回归</Select.Option>
                     <Select.Option value="homo_secure_boost">
                       横向安全提升树
                     </Select.Option>
@@ -110,12 +115,9 @@ class FederalTrain extends Component {
               </Select>
             </Col>
           </Row>
-          <Row style={{ marginBottom: "4vh" }} gutter={[80, 10]}> 
-            <Col
-              span={8}
-              offset={8}
-            >
-              <Card
+          <Row style={{ marginBottom: "4vh" }} gutter={[80, 10]}>
+            <Col span={8} offset={8}>
+              {/* <Card
                 style={{
                   backgroundColor:"RGB(96,185,234)" ,
                   height: "37vh",
@@ -136,43 +138,46 @@ class FederalTrain extends Component {
                   }}
                 >
                 </div>
-              </Card>
+              </Card>*/}
             </Col>
-            </Row>
+          </Row>
           <Row gutter={48}>
             <Col offset={5} span={6}>
-            <Space style={{ marginTop: "15px" }} size={300}>
-                  <Button
-                    htmlType="button"
-                    onClick={this.toLastPage}
-                    style={{ background: "rgb(201,201,201)" }}
-                    size="large"
-                  >
-                    上一步
-                  </Button>
-                  </Space>
-                  </Col>
-                  <Col offset={1} span={6}>
-                  <Space style={{ marginTop: "15px",marginLeft:"240px" }} size={300}>
-                  <Button
-                    onClick={() => {
-                      this.props.history.push({
-                        pathname: "/federalTrain/result",
-                        state: {
-                          status: this.state.type,
-                          selectValue: this.state.selectValue,
-                        },
-                      });
-                    }}
-                type="primary"
-                htmlType="submit"
-                size="large"
-              >
-                下一步
-              </Button>
-                </Space>
+              <Space style={{ marginTop: "15px" }} size={300}>
+                <Button
+                  htmlType="button"
+                  onClick={this.toLastPage}
+                  style={{ background: "rgb(201,201,201)" }}
+                  size="large"
+                >
+                  上一步
+                </Button>
+              </Space>
             </Col>
-          </Row>           
+            <Col offset={1} span={6}>
+              <Space
+                style={{ marginTop: "15px", marginLeft: "240px" }}
+                size={300}
+              >
+                <Button
+                  onClick={() => {
+                    this.props.history.push({
+                      pathname: "/federalTrain/result",
+                      state: {
+                        status: this.state.type,
+                        selectValue: this.state.selectValue,
+                      },
+                    });
+                  }}
+                  type="primary"
+                  htmlType="submit"
+                  size="large"
+                >
+                  下一步
+                </Button>
+              </Space>
+            </Col>
+          </Row>
         </div>
       </div>
     );

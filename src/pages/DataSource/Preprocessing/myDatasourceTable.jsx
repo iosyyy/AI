@@ -3,6 +3,7 @@ import { message, Popconfirm, Table } from "antd";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import api from "../../../config/api";
+import FileSaver from "file-saver";
 
 class MyDatasourceTable extends Component {
   constructor(props) {
@@ -78,6 +79,7 @@ class MyDatasourceTable extends Component {
                       FileSaver.saveAs(blob, curFile);
                     })
                     .catch((r) => {
+                      console.log(r);
                       message.error("文件下载失败请重试并检查网络连接");
                     });
                 }}
@@ -181,6 +183,7 @@ class MyDatasourceTable extends Component {
           namespace: v.namespace,
           obj: v.custom_table,
           history_table_name: v.history_table_name,
+          file: v.file,
         };
       });
 

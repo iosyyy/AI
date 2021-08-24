@@ -122,9 +122,7 @@ class DatasourceHandle extends Component {
                           this.setState({
                             isLoading: false,
                           });
-                          this.props.history.push(
-                            "/datasource/datasourceManage"
-                          );
+                          this.props.history.push("/training");
                         }, 1000);
                       } else {
                         message.error("保存失败");
