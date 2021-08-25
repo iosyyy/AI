@@ -1,22 +1,14 @@
 import React, { Component } from "react";
-import { Button, Col, Image, Row, Spin, Tabs } from "antd";
+import { Button, Col, Row, Spin, Tabs } from "antd";
 import "./change.css";
 import axios from "axios";
 import api from "../../../config/api";
-import FederalDetailOutput from "../detailComponents/output";
-import Summary from "../detailComponents/summary";
-import Log from "../detailComponents/log";
 import PubSubJS from "pubsub-js";
 import { Loading3QuartersOutlined } from "@ant-design/icons";
-import Metrics from "../detailComponents/metrics";
 import { message } from "antd/es";
-import ModelOutput from "../detailComponents/modelOutput";
-import SummaryBatch from "../detailComponents/summaryBatch";
-import LossOutput from "../detailComponents/lossOutput";
 import qs from "qs";
-import SummaryBatchDataSplit from "../detailComponents/summaryDataSplit";
-import returns from "../../../img/return.png";
-import BoostModelOutput from "../detailComponents/boostModelOutput";
+import getFederalDeatilCom from "../../../util/getFederalDeatilCom";
+
 const { TabPane } = Tabs;
 
 class FederalDetailShow extends Component {
@@ -121,329 +113,21 @@ class FederalDetailShow extends Component {
               metric_namespace = Object.keys(data)[0];
             }
 
-            let names; // names中的name代表tab的标题,component代表tab对应的组件
+            // names中的name代表tab的标题,component代表tab对应的组件
             /**
              * props解释
              * post_data代表所传axios所需要的基本参数有job_id,party_id,role,component_name
              * metric_name代表上面说到的名字,metric_namespace上面也有提到
              * metrics代表api.metrics返回的data数据
              */
-            switch (namew) {
-              // 这里通过metric_namespace选择不同的tabs
-              case "HeteroNN":
-                names = [
-                  {
-                    name: "model output",
-                    component: (
-                      <LossOutput
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                        metrics={metrics}
-                      />
-                    ),
-                  },
-                  {
-                    name: "data output",
-                    component: (
-                      <FederalDetailOutput
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                      />
-                    ),
-                  },
-                  {
-                    name: "log",
-                    component: (
-                      <Log
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                      />
-                    ),
-                  },
-                ];
-                break;
-              case "Intersection":
-                names = [
-                  {
-                    name: "summary",
-                    component: (
-                      <Summary
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                        metric_name={metric_name}
-                        metric_namespace={metric_namespace}
-                      />
-                    ),
-                  },
-                  {
-                    name: "data output",
-                    component: (
-                      <FederalDetailOutput
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                      />
-                    ),
-                  },
-                  {
-                    name: "log",
-                    component: (
-                      <Log
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                      />
-                    ),
-                  },
-                ];
-                break;
-              case "HomoSecureboost":
-                names = [
-                  {
-                    name: "model output",
-                    component: (
-                      <BoostModelOutput
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                        metrics={metrics}
-                      />
-                    ),
-                  },
-                  {
-                    name: "data output",
-                    component: (
-                      <FederalDetailOutput
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                      />
-                    ),
-                  },
-                  {
-                    name: "log",
-                    component: (
-                      <Log
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                      />
-                    ),
-                  },
-                ];
-                break;
-              case "HomoDataSplit":
-                names = [
-                  {
-                    name: "summary",
-                    component: (
-                      <SummaryBatchDataSplit
-                        key={this.generateUUID()}
-                        metric_name={metric_name}
-                        metric_namespace={metric_namespace}
-                        model={model}
-                        post_data={post_data}
-                        metrics={metrics}
-                      />
-                    ),
-                  },
-                  {
-                    name: "data output",
-                    component: (
-                      <FederalDetailOutput
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                      />
-                    ),
-                  },
-                  {
-                    name: "log",
-                    component: (
-                      <Log
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                      />
-                    ),
-                  },
-                ];
-                break;
-              case "Upload":
-                names = [
-                  {
-                    name: "summary",
-                    component: (
-                      <Summary
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                        metric_name={metric_name}
-                        metric_namespace={metric_namespace}
-                      />
-                    ),
-                  },
-                  {
-                    name: "data output",
-                    component: (
-                      <FederalDetailOutput
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                      />
-                    ),
-                  },
-                  {
-                    name: "log",
-                    component: (
-                      <Log
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                      />
-                    ),
-                  },
-                ];
-                break;
-              case "Evaluation":
-                names = [
-                  {
-                    name: "metrics",
-                    component: (
-                      <Metrics
-                        key={this.generateUUID()}
-                        model={model}
-                        metrics={metrics}
-                        post_data={post_data}
-                      />
-                    ),
-                  },
-                  {
-                    name: "log",
-                    component: (
-                      <Log
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                      />
-                    ),
-                  },
-                ];
-                break;
-              case "HomoLR":
-                names = [
-                  {
-                    name: "model output",
-                    component: (
-                      <ModelOutput
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                        metrics={metrics}
-                      />
-                    ),
-                  },
-                  {
-                    name: "data output",
-                    component: (
-                      <FederalDetailOutput
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                      />
-                    ),
-                  },
-                  {
-                    name: "log",
-                    component: (
-                      <Log
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                      />
-                    ),
-                  },
-                ];
-                break;
-              case "Reader":
-                names = [
-                  {
-                    name: "summary",
-                    component: (
-                      <SummaryBatch
-                        key={this.generateUUID()}
-                        metric_name={metric_name}
-                        metric_namespace={metric_namespace}
-                        model={model}
-                        post_data={post_data}
-                        metrics={metrics}
-                      />
-                    ),
-                  },
-                  {
-                    name: "data output",
-                    component: (
-                      <FederalDetailOutput
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                      />
-                    ),
-                  },
-                  {
-                    name: "log",
-                    component: (
-                      <Log
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                      />
-                    ),
-                  },
-                ];
-                break;
-              default:
-                names = [
-                  {
-                    name: "summary",
-                    component: (
-                      <SummaryBatch
-                        key={this.generateUUID()}
-                        metric_name={metric_name}
-                        metric_namespace={metric_namespace}
-                        model={model}
-                        post_data={post_data}
-                        metrics={metrics}
-                      />
-                    ),
-                  },
-                  {
-                    name: "data output",
-                    component: (
-                      <FederalDetailOutput
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                      />
-                    ),
-                  },
-                  {
-                    name: "log",
-                    component: (
-                      <Log
-                        key={this.generateUUID()}
-                        model={model}
-                        post_data={post_data}
-                      />
-                    ),
-                  },
-                ];
-                break;
-            }
+            const names = getFederalDeatilCom(
+              namew,
+              metrics,
+              metric_namespace,
+              metric_name,
+              post_data,
+              model
+            );
             this.setState({ names });
             setTimeout(() => {
               this.setState({ isLoading: false });

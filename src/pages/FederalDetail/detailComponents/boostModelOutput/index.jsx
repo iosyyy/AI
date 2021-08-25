@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Divider, Row, Space, Table, Progress, Select, Form } from "antd";
+import { Divider, Progress, Row, Select, Table } from "antd";
 import axios from "axios";
 import api from "../../../../config/api";
 import PrecisionRecall from "./precisionRecall";
@@ -12,19 +12,29 @@ const colors = [
   ["rgb(36,150,237)", "rgb(198,107,164)"],
   ["rgb(229,192,123)", "rgb(152,195,121)"],
 ];
+
 class BoostModelOutput extends Component {
   constructor(props) {
     super(props);
     let metricsKeys = Object.keys(props.metrics);
+    const {
+      trees,
+      treeNum,
+      treeDim,
+      featureNameFidMapping,
+      numClasses,
+    } = props.model.data.data.data;
     this.state = {
       metricsKeys,
       maxFeature: 0,
       featureDatasouce: [],
-      trees: props.model.data.data.data.trees,
-      treeNum: props.model.data.data.data.treeNum,
+      trees,
+      treeNum,
+      featureNameFidMapping,
+      numClasses,
       index: 0,
       id: 0,
-      treeDim: props.model.data.data.data.treeDim,
+      treeDim,
     };
   }
 
@@ -92,7 +102,15 @@ class BoostModelOutput extends Component {
 
   render() {
     const { post_data } = this.props;
-    const { treeNum, treeDim, trees, index, id } = this.state;
+    const {
+      treeNum,
+      treeDim,
+      trees,
+      index,
+      id,
+      featureNameFidMapping,
+      numClasses,
+    } = this.state;
 
     const treeSelect = new Array(treeNum).fill("").map((_v, i) => {
       return (
@@ -179,6 +197,8 @@ class BoostModelOutput extends Component {
           <div className={"scrollContent"} style={{ height: "64vh" }}>
             {/* 参数解释: colors[0]代表顶层颜色,colors[1]代表底层颜色,其他参数先写成固定为3个*/}
             <TreeGraph
+              numClasses={numClasses}
+              featureNameFidMapping={featureNameFidMapping}
               treeDim={treeDim}
               key={index * treeDim + id}
               colors={colors[index]}
@@ -270,6 +290,8 @@ class BoostModelOutput extends Component {
           <div className={"scrollContent"} style={{ height: "64vh" }}>
             {/* 参数解释: colors[0]代表顶层颜色,colors[1]代表底层颜色,其他参数先写成固定为3个*/}
             <TreeGraph
+              numClasses={numClasses}
+              featureNameFidMapping={featureNameFidMapping}
               treeDim={treeDim}
               key={index * treeDim + id}
               colors={colors[index]}
@@ -313,31 +335,31 @@ class BoostModelOutput extends Component {
                   };
                 }
               }}
-            ></Column>
+            />
             <Column
               key="dataset"
               dataIndex="dataset"
               title="dataset"
               width="15vw"
-            ></Column>
+            />
             <Column
               key="accuracy"
               dataIndex="accuracy"
               title="accuracy"
               width="15vw"
-            ></Column>
+            />
             <Column
               key="precision"
               dataIndex="precision"
               title="precision"
               width="15vw"
-            ></Column>
+            />
             <Column
               key="recall"
               dataIndex="recall"
               title="recall"
               width="15vw"
-            ></Column>
+            />
           </Table>
 
           <Divider />
@@ -357,7 +379,7 @@ class BoostModelOutput extends Component {
               dataIndex="featureName"
               title="FEATURE"
               width="15vw"
-            ></Column>
+            />
             <Column
               key="value"
               dataIndex="value"
@@ -375,13 +397,13 @@ class BoostModelOutput extends Component {
                         showInfo={false}
                         percent={per}
                         style={{ width: "95%", marginRight: "2%" }}
-                      ></Progress>
+                      />
                       <span>{record.value}</span>
                     </Row>
                   </>
                 );
               }}
-            ></Column>
+            />
           </Table>
 
           <Divider />

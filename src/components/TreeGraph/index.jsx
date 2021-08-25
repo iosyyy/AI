@@ -12,34 +12,55 @@ class TreeGraph extends Component {
       id: props.id,
       colors: props.colors,
       treeDim: props.treeDim,
+      numClasses: props.numClasses,
+      featureNameFidMapping: props.featureNameFidMapping,
       data: [],
     };
   }
 
-  parseTreesToData = (tree, index, data) => {
-    const { colors } = this.state;
+  parseTreesToData = (tree, index, data, splitMaskdict) => {
+    const { colors, featureNameFidMapping, numClasses } = this.state;
     let color,
       name,
       left = -1,
       right = -1;
-    const { id, fid, bid, weight, leftNodeid, rightNodeid } = tree[index];
+    const { id, fid, bid, weight, leftNodeid, rightNodeid, sitename } = tree[
+      index
+    ];
     if (!tree[index].isLeaf) {
       color = colors[0];
-      name = `ID:${id}\n x${fid} <= ${bid.toFixed(5)}`;
       left = leftNodeid;
       right = rightNodeid;
+      if (numClasses === 1) {
+        name = `ID:${id}\n ${featureNameFidMapping[fid]} <= ${bid.toFixed(5)}`;
+      } else {
+        if (splitMaskdict.hasOwnProperty(id)) {
+          console.log(id);
+          name = `ID:${id}\n ${featureNameFidMapping[fid]} <=${splitMaskdict[
+            id
+          ].toFixed(5)} `;
+        } else {
+          name = `ID:${id}\n ${sitename.toLocaleUpperCase()}`;
+        }
+      }
     } else {
       color = colors[1];
-      name = `ID:${id}\n weight = ${weight.toFixed(5)}`;
+      if (numClasses === 1) {
+        name = `ID:${id}\n weight = ${weight.toFixed(5)}`;
+      } else {
+        name = `ID:${id}\n weight = ${weight.toFixed(
+          5
+        )}\n ${sitename.toLocaleUpperCase()}`;
+      }
     }
     let leftData;
     let rightData;
 
     if (left !== -1) {
-      leftData = this.parseTreesToData(tree, left, []);
+      leftData = this.parseTreesToData(tree, left, [], splitMaskdict);
     }
     if (right !== -1) {
-      rightData = this.parseTreesToData(tree, right, []);
+      rightData = this.parseTreesToData(tree, right, [], splitMaskdict);
     }
     let concat = [];
     if (leftData) {
@@ -61,7 +82,12 @@ class TreeGraph extends Component {
   drew = () => {
     const { trees, index, id, treeDim } = this.state;
 
-    const data = this.parseTreesToData(trees[index * treeDim + id].tree, 0, []);
+    const data = this.parseTreesToData(
+      trees[index * treeDim + id].tree,
+      0,
+      [],
+      trees[index * treeDim + id].splitMaskdict
+    );
     myChart.setOption(
       {
         tooltip: {
