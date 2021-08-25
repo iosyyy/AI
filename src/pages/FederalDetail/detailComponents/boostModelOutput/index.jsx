@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Divider, Row, Space, Table, Progress } from "antd";
+import { Divider, Row, Space, Table, Progress, Select, Form } from "antd";
 import axios from "axios";
 import api from "../../../../config/api";
 import PrecisionRecall from "./precisionRecall";
@@ -7,7 +7,11 @@ import Loss from "../../../../components/Loss";
 import TreeGraph from "../../../../components/TreeGraph";
 
 const { Column } = Table;
-
+const colors = [
+  ["rgb(50,100,250)", "rgb(10,200,60)"],
+  ["rgb(36,150,237)", "rgb(198,107,164)"],
+  ["rgb(229,192,123)", "rgb(152,195,121)"],
+];
 class BoostModelOutput extends Component {
   constructor(props) {
     super(props);
@@ -17,8 +21,10 @@ class BoostModelOutput extends Component {
       maxFeature: 0,
       featureDatasouce: [],
       trees: props.model.data.data.data.trees,
+      treeNum: props.model.data.data.data.treeNum,
       index: 0,
       id: 0,
+      treeDim: props.model.data.data.data.treeDim,
     };
   }
 
@@ -86,19 +92,99 @@ class BoostModelOutput extends Component {
 
   render() {
     const { post_data } = this.props;
+    const { treeNum, treeDim, trees, index, id } = this.state;
+
+    const treeSelect = new Array(treeNum).fill("").map((_v, i) => {
+      return (
+        <Select.Option key={i} v={i}>
+          {i}
+        </Select.Option>
+      );
+    });
+    const indexSelect = new Array(treeDim).fill("").map((_v, i) => {
+      return (
+        <Select.Option key={i} v={i}>
+          {i} : {i}
+        </Select.Option>
+      );
+    });
     if (this.state.metricsKeys) {
       return (
         <div style={{ height: "64vh" }}>
           <h1 style={{ fontSize: 24, fontWeight: "bold", display: "block" }}>
             Tree
           </h1>
+          <div
+            style={{
+              color: "rgb(127,125,142)",
+              fontSize: "17px",
+              fontWeight: "bold",
+              lineHeight: "5vh",
+            }}
+          >
+            <span
+              style={{
+                color: "rgb(127,125,142)",
+                fontSize: "17px",
+                fontWeight: "bold",
+              }}
+            >
+              Tree index:{" "}
+            </span>
+            <Select
+              onChange={(e) => {
+                console.log(e);
+                this.setState({
+                  index: Number(e),
+                });
+              }}
+              defaultValue={"0 : 0"}
+            >
+              {indexSelect}
+            </Select>
+          </div>
+
+          <div
+            style={{
+              color: "rgb(127,125,142)",
+              fontSize: "17px",
+              fontWeight: "bold",
+              lineHeight: "5vh",
+            }}
+          >
+            <span
+              style={{
+                color: "rgb(127,125,142)",
+                fontSize: "17px",
+                fontWeight: "bold",
+              }}
+            >
+              Tree ID:{" "}
+            </span>
+
+            <Select
+              onChange={(e) => {
+                console.log(e);
+                this.setState({
+                  id: Number(e),
+                });
+              }}
+              defaultValue={0}
+            >
+              {treeSelect}
+            </Select>
+
+            <b> Tree Size: {trees[index * treeDim + id].tree.length}</b>
+          </div>
           <div className={"scrollContent"} style={{ height: "64vh" }}>
             {/* 参数解释: colors[0]代表顶层颜色,colors[1]代表底层颜色,其他参数先写成固定为3个*/}
             <TreeGraph
-              colors={["rgb(50,100,250)", "rgb(10,200,60)"]}
-              id={this.state.id}
-              index={this.state.index}
-              trees={this.state.trees}
+              treeDim={treeDim}
+              key={index * treeDim + id}
+              colors={colors[index]}
+              id={id}
+              index={index}
+              trees={trees}
             />
           </div>
         </div>
@@ -119,10 +205,74 @@ class BoostModelOutput extends Component {
           <h1 style={{ fontSize: 24, fontWeight: "bold", display: "block" }}>
             Tree
           </h1>
+          <div
+            style={{
+              color: "rgb(127,125,142)",
+              fontSize: "17px",
+              fontWeight: "bold",
+              lineHeight: "5vh",
+            }}
+          >
+            <span
+              style={{
+                color: "rgb(127,125,142)",
+                fontSize: "17px",
+                fontWeight: "bold",
+              }}
+            >
+              Tree index:{" "}
+            </span>
+            <Select
+              onChange={(e) => {
+                console.log(e);
+                this.setState({
+                  index: Number(e),
+                });
+              }}
+              defaultValue={"0 : 0"}
+            >
+              {indexSelect}
+            </Select>
+          </div>
+
+          <div
+            style={{
+              color: "rgb(127,125,142)",
+              fontSize: "17px",
+              fontWeight: "bold",
+              lineHeight: "5vh",
+            }}
+          >
+            <span
+              style={{
+                color: "rgb(127,125,142)",
+                fontSize: "17px",
+                fontWeight: "bold",
+              }}
+            >
+              Tree ID:{" "}
+            </span>
+
+            <Select
+              onChange={(e) => {
+                console.log(e);
+                this.setState({
+                  id: Number(e),
+                });
+              }}
+              defaultValue={0}
+            >
+              {treeSelect}
+            </Select>
+
+            <b> Tree Size: {trees[index * treeDim + id].tree.length}</b>
+          </div>
           <div className={"scrollContent"} style={{ height: "64vh" }}>
             {/* 参数解释: colors[0]代表顶层颜色,colors[1]代表底层颜色,其他参数先写成固定为3个*/}
             <TreeGraph
-              colors={["rgb(50,100,250)", "rgb(10,200,60)"]}
+              treeDim={treeDim}
+              key={index * treeDim + id}
+              colors={colors[index]}
               id={id}
               index={index}
               trees={trees}

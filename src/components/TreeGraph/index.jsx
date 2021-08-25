@@ -5,12 +5,13 @@ let myChart;
 class TreeGraph extends Component {
   constructor(props) {
     super(props);
-
+    console.log(this.props.id);
     this.state = {
       trees: props.trees,
       index: props.index,
       id: props.id,
       colors: props.colors,
+      treeDim: props.treeDim,
       data: [],
     };
   }
@@ -58,9 +59,9 @@ class TreeGraph extends Component {
   };
 
   drew = () => {
-    const { trees, index, id } = this.state;
+    const { trees, index, id, treeDim } = this.state;
 
-    const data = this.parseTreesToData(trees[index * 3 + id].tree, 0, []);
+    const data = this.parseTreesToData(trees[index * treeDim + id].tree, 0, []);
     myChart.setOption(
       {
         tooltip: {
@@ -83,6 +84,8 @@ class TreeGraph extends Component {
             type: "tree",
 
             data,
+            animationDuration: 550,
+            initialTreeDepth: trees[index * treeDim + id].tree.length, //展示的层数(从0开始)
 
             left: "2%",
             right: "2%",
@@ -128,21 +131,11 @@ class TreeGraph extends Component {
   }
 
   render() {
-    const { id, data, trees } = this.state;
+    const { trees, index, id } = this.state;
+    console.log(index * 3 + id);
+    console.log(trees);
     return (
       <div>
-        <div
-          style={{
-            color: "rgb(127,125,142)",
-            fontSize: "17px",
-            fontWeight: "bold",
-            lineHeight: "5vh",
-          }}
-        >
-          <b>
-            Tree ID: {id} Tree Size: {trees[0].tree.length}
-          </b>
-        </div>
         <div style={{ width: "88vw", height: "40vh" }} id={"metricsGraphs"} />
       </div>
     );
