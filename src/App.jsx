@@ -18,6 +18,7 @@ import { UserOutlined } from "@ant-design/icons";
 import Reasoning from "./pages/Reasoning";
 import axios from "axios";
 import api from "./config/api";
+import SubMenu from "antd/es/menu/SubMenu";
 const { Panel } = Collapse;
 
 const { Header, Content } = Layout;
@@ -120,11 +121,46 @@ class App extends Component {
                   联邦攻击
                 </NavLink>
               </Menu.Item>
-              <Menu.Item key="7">
-                <NavLink {...linkStyle} to="/reasoning">
-                  在线推理
-                </NavLink>
-              </Menu.Item>
+              <SubMenu
+                style={{
+                  background: "rgb(36,150,237)",
+                  color: "rgb(255,255,255)",
+                }}
+                key="10"
+                title="在线推理"
+                selectable={false}
+              >
+                <Menu.Item key="8">
+                  <NavLink
+                    style={{
+                      color: "rgb(64,64,64)",
+                    }}
+                    to="/reasoning/model"
+                  >
+                    模型部署
+                  </NavLink>
+                </Menu.Item>
+                <Menu.Item key="9">
+                  <NavLink
+                    style={{
+                      color: "rgb(64,64,64)",
+                    }}
+                    to="/reasoning/interface"
+                  >
+                    单例预测
+                  </NavLink>
+                </Menu.Item>
+                <Menu.Item key="10">
+                  <NavLink
+                    style={{
+                      color: "rgb(64,64,64)",
+                    }}
+                    to="/reasoning/batch_interface"
+                  >
+                    批量预测
+                  </NavLink>
+                </Menu.Item>
+              </SubMenu>
               <div
                 style={{
                   float: "right",

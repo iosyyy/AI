@@ -12,11 +12,16 @@
 ;
 
 }
+
+.ant-menu-submenu {
+  color: #ffffff;
+  border-bottom: white;
+}
 .user-login-extend{
   padding: 14px;
   background: #fff;
+  box-shadow: 0 8px 8px rgba(193,193,195,.24),0 0 8px rgba(193,193,195,.12);
 
-  box-shadow: 2px 2px 2px 2px rgb(193,193,195);
   border-radius: 10px ;
 
 }
