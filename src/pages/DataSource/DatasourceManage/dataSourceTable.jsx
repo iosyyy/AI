@@ -32,7 +32,7 @@ class DataSourceTable extends Component {
         dataIndex: "work_mode",
         key: "work_mode",
         render: (work_mode) => {
-          return work_mode === "1" ? "集群" : "单机";
+          return work_mode == 1 ? "集群" : "单机";
         },
       },
       {
