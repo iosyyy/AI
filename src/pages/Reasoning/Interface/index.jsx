@@ -36,11 +36,22 @@ class Interface extends Component {
           <Row justify={"center"}>
             <Col span={8}>
               <Form.Item
+                name="model_version"
+                label="模型版本"
+                rules={[{ required: true, message: "请输入模型版本" }]}
+              >
+                <Input placeholder={"请输入模型版本"} />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row justify={"center"}>
+            <Col span={8}>
+              <Form.Item
                 name="feature"
                 label="匹配样本的特征值"
                 rules={[{ required: true, message: "请输入特征值" }]}
               >
-                <Input placeholder={"请输入特征值"} />
+                <TextArea placeholder={"请输入特征值"} />
               </Form.Item>
             </Col>
           </Row>

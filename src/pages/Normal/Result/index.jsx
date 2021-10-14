@@ -204,7 +204,7 @@ export default class Result extends Component {
     };
     return (
       <div
-        style={{ height: "80vh" }}
+        style={{ height: "85vh" }}
         className="site-card-wrapper site-layout-content"
       >
         <h1 className="colorWhite">联邦攻防</h1>

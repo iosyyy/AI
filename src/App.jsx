@@ -58,9 +58,12 @@ class App extends Component {
       color: "rgb(127,125,142)",
     };
     const linkStyle = {
-      activeStyle: { userSelect: "none", color: "rgb(211,234,251)" },
-      style: { userSelect: "none", color: "rgb(255,255,255)" },
+      activeStyle: { userSelect: "none", color: "rgb(201,201,202)" },
+      style: { userSelect: "none", color: "#050505" },
     };
+    const headerHigh = "65px";
+    const headerLine = "57px";
+    const headerColor = "rgb(246,239,232)";
     const menu = (
       <div className="user-login-extend" style={{ background: "white" }}>
         <div style={fontStyle}>ID: {this.state.party_id}</div>
@@ -72,16 +75,16 @@ class App extends Component {
         <Layout className="layout">
           <Header
             style={{
-              padding: "0px 32px 0px 15px",
-              height: "8.9vh",
-              background: "rgb(36,150,237)",
+              padding: "0px 32px 0px 2vw",
+              height: headerHigh,
+              background: headerColor,
+              borderRadius: "0.1rem",
             }}
           >
             <div
               style={{
                 width: "250px",
                 height: "100%",
-                lineHeight: "5vh",
                 margin: "0px 0px 0px 0px",
                 display: "flex",
                 alignItems: "center",
@@ -92,9 +95,11 @@ class App extends Component {
             </div>
             <Menu
               style={{
-                lineHeight: "8vh",
-                height: "9vh",
-                background: "rgb(36,150,237)",
+                width: "100%",
+                lineHeight: headerLine,
+                height: headerHigh,
+
+                background: headerColor,
                 fontWeight: 600,
                 fontSize: "14px",
               }}
@@ -123,8 +128,8 @@ class App extends Component {
               </Menu.Item>
               <SubMenu
                 style={{
-                  background: "rgb(36,150,237)",
-                  color: "rgb(255,255,255)",
+                  background: headerColor,
+                  color: "#050505",
                 }}
                 key="10"
                 title="在线推理"
@@ -165,8 +170,7 @@ class App extends Component {
                 style={{
                   float: "right",
                   display: "inline-block",
-                  lineHeight: "8vh",
-                  height: "9vh",
+                  height: headerHigh,
                   marginLeft: "10px",
                   marginRight: "10px",
                 }}
@@ -193,7 +197,7 @@ class App extends Component {
             </Menu>
           </Header>
           <Content
-            style={{ padding: "2vh 3vw", background: "rgb(246,246,246)" }}
+            style={{ padding: "3.5vh 3vw", background: "rgb(246,246,246)" }}
           >
             <Switch>
               <Route path="/federalTrain" component={FederalIndex} />

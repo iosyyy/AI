@@ -139,7 +139,7 @@ class DataSourceUpload extends Component {
     const layout = {};
     const { uploadIng } = this.state;
     return (
-      <div style={{ height: "80vh", padding: 0 }}>
+      <div style={{ height: "85vh", padding: 0 }}>
         <Row
           justify={"center"}
           className={"scrollContent"}

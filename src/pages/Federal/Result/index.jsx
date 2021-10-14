@@ -1,105 +1,105 @@
-import React, { Component } from 'react';
-import { Modal, Button, Col, Image, Row, Select, Table } from 'antd';
-import FileSaver from 'file-saver';
-import fileImg from '../../../img/file.png';
-import bigImg from '../../../img/big.png';
+import React, { Component } from "react";
+import { Modal, Button, Col, Image, Row, Select, Table } from "antd";
+import FileSaver from "file-saver";
+import fileImg from "../../../img/file.png";
+import bigImg from "../../../img/big.png";
 
 class DefenseResult extends Component {
   constructor(props) {
     super(props);
     const dataSource1 = [
       {
-        key: '1',
-        name: '胡彦斌',
+        key: "1",
+        name: "胡彦斌",
         age: 32,
-        address: '西湖区湖底公园1号',
+        address: "西湖区湖底公园1号",
       },
       {
-        key: '2',
-        name: '胡彦祖',
+        key: "2",
+        name: "胡彦祖",
         age: 33,
-        address: '西湖区湖底公园1号',
+        address: "西湖区湖底公园1号",
       },
       {
-        key: '3',
-        name: '胡彦斌',
+        key: "3",
+        name: "胡彦斌",
         age: 34,
-        address: '西湖区湖底公园1号',
+        address: "西湖区湖底公园1号",
       },
       {
-        key: '4',
-        name: '胡彦祖',
+        key: "4",
+        name: "胡彦祖",
         age: 35,
-        address: '西湖区湖底公园1号',
+        address: "西湖区湖底公园1号",
       },
     ];
 
     const dataSource2 = [
       {
-        key: '1',
-        name: 'ddd',
+        key: "1",
+        name: "ddd",
         age: 32,
-        address: '西湖区湖底公园1号',
+        address: "西湖区湖底公园1号",
       },
       {
-        key: '2',
-        name: 'aaa',
+        key: "2",
+        name: "aaa",
         age: 33,
-        address: '西湖区湖底公园1号',
+        address: "西湖区湖底公园1号",
       },
       {
-        key: '3',
-        name: 'ccc',
+        key: "3",
+        name: "ccc",
         age: 34,
-        address: '西湖区湖底公园1号',
+        address: "西湖区湖底公园1号",
       },
       {
-        key: '4',
-        name: 'bbb',
+        key: "4",
+        name: "bbb",
         age: 35,
-        address: '西湖区湖底公园1号',
+        address: "西湖区湖底公园1号",
       },
       {
-        key: '2',
-        name: 'aaa',
+        key: "2",
+        name: "aaa",
         age: 33,
-        address: '西湖区湖底公园1号',
+        address: "西湖区湖底公园1号",
       },
       {
-        key: '2',
-        name: 'aaa',
+        key: "2",
+        name: "aaa",
         age: 33,
-        address: '西湖区湖底公园1号',
+        address: "西湖区湖底公园1号",
       },
       {
-        key: '2',
-        name: 'aaa',
+        key: "2",
+        name: "aaa",
         age: 33,
-        address: '西湖区湖底公园1号',
+        address: "西湖区湖底公园1号",
       },
       {
-        key: '2',
-        name: 'aaa',
+        key: "2",
+        name: "aaa",
         age: 33,
-        address: '西湖区湖底公园1号',
+        address: "西湖区湖底公园1号",
       },
       {
-        key: '2',
-        name: 'aaa',
+        key: "2",
+        name: "aaa",
         age: 33,
-        address: '西湖区湖底公园1号',
+        address: "西湖区湖底公园1号",
       },
       {
-        key: '2',
-        name: 'aaa',
+        key: "2",
+        name: "aaa",
         age: 33,
-        address: '西湖区湖底公园1号',
+        address: "西湖区湖底公园1号",
       },
       {
-        key: '2',
-        name: 'aaa',
+        key: "2",
+        name: "aaa",
         age: 33,
-        address: '西湖区湖底公园1号',
+        address: "西湖区湖底公园1号",
       },
     ];
     const columns = [
@@ -110,8 +110,8 @@ class DefenseResult extends Component {
             姓名
           </div>
         ),
-        dataIndex: 'name',
-        key: 'name',
+        dataIndex: "name",
+        key: "name",
       },
       {
         title: (
@@ -120,9 +120,9 @@ class DefenseResult extends Component {
             年龄
           </div>
         ),
-        dataIndex: 'age',
-        key: 'age',
-        defaultSortOrder: 'descend',
+        dataIndex: "age",
+        key: "age",
+        defaultSortOrder: "descend",
         sorter: (a, b) => a.age - b.age,
       },
       {
@@ -132,8 +132,8 @@ class DefenseResult extends Component {
             地址
           </div>
         ),
-        dataIndex: 'address',
-        key: 'address',
+        dataIndex: "address",
+        key: "address",
       },
     ];
     this.state = {
@@ -148,14 +148,14 @@ class DefenseResult extends Component {
     };
   }
 
-  onView = e => {
+  onView = (e) => {
     this.setState({
       isViewing: true,
     });
   };
 
-  onEnlarge = e => {
-    console.log('be large');
+  onEnlarge = (e) => {
+    console.log("be large");
   };
 
   // 点击批量导出数据生成csv文件
@@ -166,18 +166,18 @@ class DefenseResult extends Component {
       : this.state.dataSource2;
     // 定义数据拼接
     // str:table的每一列的标题，即为导出后的csv文件的每一列的标题
-    let str = 'name,age,address';
+    let str = "name,age,address";
     for (const i in data) {
-      str += '\n';
+      str += "\n";
       str += `${data[i].name},${data[i].age},${data[i].address}`;
     }
     // Excel打开后中文乱码添加如下字符串解决
-    const exportContent = '\uFEFF';
+    const exportContent = "\uFEFF";
     const blob = new Blob([exportContent + str], {
-      type: 'text/plain;charset=utf-8',
+      type: "text/plain;charset=utf-8",
     });
     // 根据数据生成生成文件
-    FileSaver.saveAs(blob, this.state.choice ? 'train.csv' : 'test.csv');
+    FileSaver.saveAs(blob, this.state.choice ? "train.csv" : "test.csv");
   };
 
   render() {
@@ -202,24 +202,24 @@ class DefenseResult extends Component {
     };
     return (
       <div
-        style={{ height: '80vh' }}
+        style={{ height: "100vh" }}
         className="site-card-wrapper site-layout-content"
       >
         <h1 className="colorWhite">联邦攻击</h1>
 
-        <Row style={{ marginBottom: '1vh' }}>
+        <Row style={{ marginBottom: "1vh" }}>
           <Col offset={8} span={12}>
             <div>
               <b>数据集选择:</b>
             </div>
           </Col>
         </Row>
-        <Row justify="center" style={{ marginBottom: '4vh' }}>
+        <Row justify="center" style={{ marginBottom: "4vh" }}>
           <Col span={8}>
             <Select
-              style={{ width: '100%' }}
-              onChange={e => {
-                if (e === 'option1') {
+              style={{ width: "100%" }}
+              onChange={(e) => {
+                if (e === "option1") {
                   this.setState({
                     type: true,
                   });
@@ -229,26 +229,26 @@ class DefenseResult extends Component {
                   });
                 }
               }}
-              value={this.state.type ? 'option1' : 'option2'}
+              value={this.state.type ? "option1" : "option2"}
             >
               <Select.Option value="option1">横向联邦数据集</Select.Option>
               <Select.Option value="option2">纵向联邦数据集</Select.Option>
             </Select>
           </Col>
         </Row>
-        <Row justify="center" style={{ marginBottom: '5vh' }}>
+        <Row justify="center" style={{ marginBottom: "5vh" }}>
           <Col span={14}>
-            <div style={{ border: '1px solid', height: '38vh' }}>
+            <div style={{ border: "1px solid", height: "38vh" }}>
               <Row gutter={[48, 1]}>
                 <Col span={6}>
                   <Col offset={1} span={24}>
-                    <div style={{ marginTop: '2vh', marginBottom: '15px' }}>
+                    <div style={{ marginTop: "2vh", marginBottom: "15px" }}>
                       数据浏览器
                     </div>
                   </Col>
                   <Col offset={1} span={24}>
                     <Button
-                      onClick={e => {
+                      onClick={(e) => {
                         this.setState({
                           choice: true,
                           isViewing: false,
@@ -267,7 +267,7 @@ class DefenseResult extends Component {
                   </Col>
                   <Col offset={1} span={24}>
                     <Button
-                      onClick={e => {
+                      onClick={(e) => {
                         this.setState({
                           choice: false,
                           isViewing: false,
@@ -287,7 +287,7 @@ class DefenseResult extends Component {
                   <Col offset={1} span={24}>
                     <Button
                       onClick={this.exportList}
-                      style={{ marginTop: '13vh' }}
+                      style={{ marginTop: "13vh" }}
                       size="small"
                     >
                       下载
@@ -295,10 +295,10 @@ class DefenseResult extends Component {
                   </Col>
                 </Col>
                 <Col span={18}>
-                  <div style={{ marginTop: '2vh', marginBottom: '15px' }}>
-                    {this.state.choice ? 'train.csv' : 'test.csv'}
+                  <div style={{ marginTop: "2vh", marginBottom: "15px" }}>
+                    {this.state.choice ? "train.csv" : "test.csv"}
                     {this.state.isViewing ? (
-                      <div style={{ float: 'right', marginRight: '4vh' }}>
+                      <div style={{ float: "right", marginRight: "4vh" }}>
                         <Button
                           onClick={this.onEnlarge}
                           type="text"
@@ -311,7 +311,7 @@ class DefenseResult extends Component {
                             style={{
                               width: 20,
                               height: 20,
-                              display: '',
+                              display: "",
                             }}
                           />
                         </Button>
@@ -323,19 +323,19 @@ class DefenseResult extends Component {
                   <div
                     onClick={this.onView}
                     style={{
-                      border: '1px solid',
-                      height: '26vh',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginBottom: '10px',
-                      marginRight: '4vh',
+                      border: "1px solid",
+                      height: "26vh",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: "10px",
+                      marginRight: "4vh",
                       padding: 0,
                     }}
                   >
                     {this.state.isViewing ? (
                       <Table
-                        scroll={{ y: '18vh' }}
+                        scroll={{ y: "18vh" }}
                         bordered={false}
                         dataSource={
                           this.state.choice ? dataSource1 : dataSource2
@@ -344,9 +344,9 @@ class DefenseResult extends Component {
                         pagination={false}
                       />
                     ) : this.state.choice ? (
-                      '预览train.csv'
+                      "预览train.csv"
                     ) : (
-                      '预览test.csv'
+                      "预览test.csv"
                     )}
                   </div>
                 </Col>
@@ -359,7 +359,7 @@ class DefenseResult extends Component {
             <Button
               onClick={() => {
                 this.props.history.push({
-                  pathname: '/federal/choice',
+                  pathname: "/federal/choice",
                   state: { type: this.state.type, status: this.state.status },
                 });
               }}
@@ -372,7 +372,7 @@ class DefenseResult extends Component {
         </Row>
         <Modal
           width="180vh"
-          title={this.state.choice ? 'train.csv' : 'test.csv'}
+          title={this.state.choice ? "train.csv" : "test.csv"}
           visible={this.state.isBig}
           onOk={handleOk}
           onCancel={handleCancel}
@@ -381,7 +381,7 @@ class DefenseResult extends Component {
           }
         >
           <Table
-            scroll={{ y: '50vh' }}
+            scroll={{ y: "50vh" }}
             bordered={false}
             dataSource={this.state.choice ? dataSource1 : dataSource2}
             columns={columns}

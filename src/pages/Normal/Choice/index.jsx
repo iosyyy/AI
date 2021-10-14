@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { Button, Form, InputNumber, Select, Tooltip } from 'antd';
-import PubSubJS from 'pubsub-js';
+import React, { Component } from "react";
+import { Button, Form, InputNumber, Select, Tooltip } from "antd";
+import PubSubJS from "pubsub-js";
 
 class Choice extends Component {
   constructor(props) {
@@ -8,12 +8,12 @@ class Choice extends Component {
     this.state = { ...this.props.location.state };
   }
 
-  onFinish = values => {
+  onFinish = (values) => {
     this.props.history.push({
-      pathname: '/federalDetail/show',
-      state: { id: '20232011' },
+      pathname: "/federalDetail/show",
+      state: { id: "20232011" },
     });
-    PubSubJS.publish('trainChoice', {
+    PubSubJS.publish("trainChoice", {
       ...values,
       type: this.state.type,
       status: this.state.status,
@@ -29,10 +29,10 @@ class Choice extends Component {
       wrapperCol: { span: 6 },
     };
     return (
-      <div style={{ height: '80vh' }} className="site-layout-content">
+      <div style={{ height: "85vh" }} className="site-layout-content">
         <h1 className="colorWhite">联邦攻防</h1>
         <div
-          style={{ textAlign: 'center', marginBottom: '5vh', marginTop: '3vh' }}
+          style={{ textAlign: "center", marginBottom: "5vh", marginTop: "3vh" }}
         >
           模型参数选择
         </div>
@@ -54,7 +54,7 @@ class Choice extends Component {
           <Form.Item
             name="local_ep"
             label="客户端训练次数："
-            rules={[{ type: 'number', min: 1, max: 1000 }]}
+            rules={[{ type: "number", min: 1, max: 1000 }]}
             initialValue={10}
           >
             <InputNumber />
@@ -63,7 +63,7 @@ class Choice extends Component {
           <Form.Item
             name="iteration"
             label="全局迭代次数："
-            rules={[{ type: 'number', min: 10, max: 20 }]}
+            rules={[{ type: "number", min: 10, max: 20 }]}
             initialValue={10}
           >
             <InputNumber />
@@ -97,7 +97,7 @@ class Choice extends Component {
           <Form.Item
             name="attacker"
             label="攻击者数："
-            rules={[{ type: 'number', min: 1, max: 20 }]}
+            rules={[{ type: "number", min: 1, max: 20 }]}
             initialValue={10}
           >
             <InputNumber />

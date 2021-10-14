@@ -147,13 +147,13 @@ class FederalResultKeep extends Component {
     };
   }
 
-  onView = e => {
+  onView = (e) => {
     this.setState({
       isViewing: true,
     });
   };
 
-  onEnlarge = e => {
+  onEnlarge = (e) => {
     console.log("be large");
   };
 
@@ -201,10 +201,10 @@ class FederalResultKeep extends Component {
     };
     return (
       <div
-        style={{ height: "80vh" }}
-        className='site-card-wrapper site-layout-content'
+        style={{ height: "85vh" }}
+        className="site-card-wrapper site-layout-content"
       >
-        <h1 className='colorWhite'>联邦训练</h1>
+        <h1 className="colorWhite">联邦训练</h1>
 
         <Row style={{ marginBottom: "1vh" }}>
           <Col offset={8} span={12}>
@@ -213,11 +213,11 @@ class FederalResultKeep extends Component {
             </div>
           </Col>
         </Row>
-        <Row style={{ marginBottom: "4vh" }} justify='center'>
+        <Row style={{ marginBottom: "4vh" }} justify="center">
           <Col span={8}>
             <Select
               style={{ width: "100%" }}
-              onChange={e => {
+              onChange={(e) => {
                 if (e === "option1") {
                   this.setState({
                     type: true,
@@ -230,12 +230,12 @@ class FederalResultKeep extends Component {
               }}
               value={this.state.type ? "option1" : "option2"}
             >
-              <Select.Option value='option1'>横向联邦数据集</Select.Option>
-              <Select.Option value='option2'>纵向联邦数据集</Select.Option>
+              <Select.Option value="option1">横向联邦数据集</Select.Option>
+              <Select.Option value="option2">纵向联邦数据集</Select.Option>
             </Select>
           </Col>
         </Row>
-        <Row style={{ marginBottom: "5vh" }} justify='center'>
+        <Row style={{ marginBottom: "5vh" }} justify="center">
           <Col span={14}>
             <div style={{ border: "1px solid", height: "38vh" }}>
               <Row gutter={[48, 1]}>
@@ -247,13 +247,13 @@ class FederalResultKeep extends Component {
                   </Col>
                   <Col offset={1} span={24}>
                     <Button
-                      onClick={e => {
+                      onClick={(e) => {
                         this.setState({
                           choice: true,
                           isViewing: false,
                         });
                       }}
-                      type='text'
+                      type="text"
                     >
                       <Image
                         height={15}
@@ -266,13 +266,13 @@ class FederalResultKeep extends Component {
                   </Col>
                   <Col offset={1} span={24}>
                     <Button
-                      onClick={e => {
+                      onClick={(e) => {
                         this.setState({
                           choice: false,
                           isViewing: false,
                         });
                       }}
-                      type='text'
+                      type="text"
                     >
                       <Image
                         height={15}
@@ -287,7 +287,7 @@ class FederalResultKeep extends Component {
                     <Button
                       onClick={this.exportList}
                       style={{ marginTop: "13vh" }}
-                      size='small'
+                      size="small"
                     >
                       下载
                     </Button>
@@ -300,8 +300,8 @@ class FederalResultKeep extends Component {
                       <div style={{ float: "right", marginRight: "4vh" }}>
                         <Button
                           onClick={this.onEnlarge}
-                          type='text'
-                          size='small'
+                          type="text"
+                          size="small"
                         >
                           <Image
                             preview={false}
@@ -353,7 +353,7 @@ class FederalResultKeep extends Component {
             </div>
           </Col>
         </Row>
-        <Row justify='center'>
+        <Row justify="center">
           <Col>
             <Button
               onClick={() => {
@@ -362,15 +362,15 @@ class FederalResultKeep extends Component {
                   state: { type: this.state.type, status: this.state.status },
                 });
               }}
-              type='primary'
-              htmlType='submit'
+              type="primary"
+              htmlType="submit"
             >
               下一步
             </Button>
           </Col>
         </Row>
         <Modal
-          width='180vh'
+          width="180vh"
           title={this.state.choice ? "train.csv" : "test.csv"}
           visible={this.state.isBig}
           onOk={handleOk}

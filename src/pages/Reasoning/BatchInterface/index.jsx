@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import { Button, Col, Form, Input, Modal, Row, Table, Upload } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import {
+  DownloadOutlined,
+  DownOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
 const COLUMNS = [
   {
     title: "序号",
@@ -67,7 +71,7 @@ class BatchInterface extends Component {
           destroyOnClose
         >
           <Form
-            labelCol={{ span: 8 }}
+            labelCol={{ span: 10 }}
             wrapperCol={{ span: 16 }}
             onFinish={(e) => {
               console.log(e);
@@ -117,11 +121,14 @@ class BatchInterface extends Component {
                   }}
                   rules={[{ required: true, message: "请上传预测样本后重试" }]}
                 >
-                  <Upload maxCount={1}>
+                  <Upload style={{ width: "2vw" }} maxCount={1}>
                     <Button icon={<UploadOutlined />}>
                       上传预测样本 (Max: 1)
                     </Button>
                   </Upload>
+                </Form.Item>
+                <Form.Item label={"下载预测样本模板"}>
+                  <Button icon={<DownloadOutlined />}>下载模板</Button>
                 </Form.Item>
               </Col>
             </Row>
