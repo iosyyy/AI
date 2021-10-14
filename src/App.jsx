@@ -62,12 +62,13 @@ class App extends Component {
       color: "rgb(127,125,142)",
     };
     const linkStyle = {
-      activeStyle: { userSelect: "none", color: "rgb(127,125,142)" },
-      style: { userSelect: "none", color: "rgb(35,41,52)" },
+      activeStyle: { userSelect: "none", color: "rgb(218,218,215)" },
+      style: { userSelect: "none", color: "rgb(246,246,246)" },
     };
     const headerHigh = "65px";
     const headerLine = "57px";
-    const headerColor = "rgba(255,255,255,0.9)";
+    const menuLine = "65.5px";
+    const headerColor = "rgba(36,41,47)";
     const menu = (
       <div className="user-login-extend" style={{ background: "white" }}>
         <div style={fontStyle}>ID: {this.state.party_id}</div>
@@ -83,8 +84,8 @@ class App extends Component {
               boxShadow: "0 3px 8px rgb(230,231,232)",
               padding: "0px 32px 0px 2vw",
               height: headerHigh,
+
               background: headerColor,
-              borderRadius: "0.2rem",
             }}
           >
             <div
@@ -103,7 +104,7 @@ class App extends Component {
               style={{
                 width: "100%",
                 lineHeight: headerLine,
-                height: headerHigh,
+                height: menuLine,
 
                 background: headerColor,
                 fontWeight: 600,
@@ -135,7 +136,7 @@ class App extends Component {
               <SubMenu
                 style={{
                   background: headerColor,
-                  color: "#050505",
+                  color: "rgb(236,238,240)",
                 }}
                 key="10"
                 title="在线推理"
