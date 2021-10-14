@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 import { Col, Form, Input, Row, Radio } from "antd";
+import { fontStyle } from "../../../util/util";
 
 class DatasourceFormHandle extends Component {
   constructor(props) {
     super(props);
     const { formData, type } = props;
-    let isDisabled = type === 0 ? false : true;
+    let isDisabled = type !== 0;
     this.state = {
       formData,
       type,
-      canControll: isDisabled
+      canControll: isDisabled,
     };
   }
 
@@ -21,12 +22,12 @@ class DatasourceFormHandle extends Component {
 
   render() {
     const tailLayout = {
-      wrapperCol: { offset: 7 }
+      wrapperCol: { offset: 7 },
     };
     // 表单样式
     const layout = {
       labelCol: { span: 12 },
-      wrapperCol: { span: 20 }
+      wrapperCol: { span: 20 },
     };
     const { formData, canControll } = this.state;
     const { setFormData } = this.props;
@@ -34,7 +35,7 @@ class DatasourceFormHandle extends Component {
       <>
         <Form
           initialValues={formData}
-          onValuesChange={e => {
+          onValuesChange={(e) => {
             for (let key in e) {
               const { formData } = this.state;
               if (e.hasOwnProperty(key)) {
@@ -42,7 +43,7 @@ class DatasourceFormHandle extends Component {
               }
               setFormData(formData);
               this.setState({
-                formData
+                formData,
               });
             }
           }}
@@ -53,14 +54,17 @@ class DatasourceFormHandle extends Component {
         >
           <Row>
             <Col span={8}>
-              <Form.Item name='originalDatasource' label='所属数据源'>
+              <Form.Item
+                name="originalDatasource"
+                label={<div style={fontStyle}>所属数据源</div>}
+              >
                 <Input readOnly />
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item
-                name='tableName'
-                label='数据表名'
+                name="tableName"
+                label={<div style={fontStyle}>数据表名</div>}
                 rules={[{ required: true, message: "请输入数据表名" }]}
               >
                 <Input readOnly={canControll} placeholder={"请输入数据表名"} />
@@ -70,15 +74,15 @@ class DatasourceFormHandle extends Component {
           <Row>
             <Col span={8}>
               <Form.Item
-                name='namespace'
-                label='命名空间'
+                name="namespace"
+                label={<div style={fontStyle}>命名空间</div>}
                 rules={[{ required: true, message: "请输入命名空间" }]}
               >
                 <Input readOnly={canControll} placeholder={"请输入命名空间"} />
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item name='description' label='备注'>
+              <Form.Item name="description" label="备注">
                 <Input readOnly={canControll} placeholder={"请输入备注"} />
               </Form.Item>
             </Col>
@@ -86,7 +90,7 @@ class DatasourceFormHandle extends Component {
           <div>
             <Row>
               <Col span={8}>
-                <Form.Item name='work_mode' label='任务类型'>
+                <Form.Item name="work_mode" label="任务类型">
                   <Radio.Group disabled={canControll}>
                     <Radio value={0}>单机</Radio>
                     <Radio value={1}>多机</Radio>

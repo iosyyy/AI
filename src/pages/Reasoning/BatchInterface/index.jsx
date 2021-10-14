@@ -39,6 +39,7 @@ class BatchInterface extends Component {
 
   render() {
     const { show, loading, datasource } = this.state;
+    const fontStyle = { fontWeight: 900, color: "rgb(127,125,142)" };
 
     return (
       <div>
@@ -82,7 +83,7 @@ class BatchInterface extends Component {
               <Col span={12}>
                 <Form.Item
                   name="name"
-                  label="任务名称"
+                  label={<div style={fontStyle}>任务名称</div>}
                   rules={[{ required: true, message: "请输入任务名称" }]}
                 >
                   <Input placeholder={"请输入任务名称"} />
@@ -93,7 +94,7 @@ class BatchInterface extends Component {
               <Col span={12}>
                 <Form.Item
                   name="service_id"
-                  label="service_id"
+                  label={<div style={fontStyle}>service_id</div>}
                   rules={[{ required: true, message: "请输入service_id" }]}
                 >
                   <Input placeholder={"请输入service_id"} />
@@ -104,7 +105,7 @@ class BatchInterface extends Component {
               <Col span={12}>
                 <Form.Item
                   name="feature"
-                  label="匹配样本的特征"
+                  label={<div style={fontStyle}>匹配样本的特征</div>}
                   rules={[{ required: true, message: "请输入特征" }]}
                 >
                   <Input placeholder={"请输入特征"} />
@@ -115,7 +116,7 @@ class BatchInterface extends Component {
               <Col span={12}>
                 <Form.Item
                   name="specimen"
-                  label="预测样本"
+                  label={<div style={fontStyle}>预测样本</div>}
                   beforeUpload={() => {
                     return false;
                   }}
@@ -127,7 +128,9 @@ class BatchInterface extends Component {
                     </Button>
                   </Upload>
                 </Form.Item>
-                <Form.Item label={"下载预测样本模板"}>
+                <Form.Item
+                  label={<div style={fontStyle}>下载预测样本模板</div>}
+                >
                   <Button icon={<DownloadOutlined />}>下载模板</Button>
                 </Form.Item>
               </Col>

@@ -9,6 +9,7 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import StepsTemplate from "../../../components/StepsTemplate";
+import { fontStyle } from "../../../util/util";
 
 const { Step } = Steps;
 
@@ -149,7 +150,7 @@ class FederalResult extends Component {
                             <Form.Item
                               style={{ marginTop: "1vh" }}
                               name={[name, "role"]}
-                              label={"角色类型"}
+                              label={<div style={fontStyle}>角色类型</div>}
                               fieldKey={[fieldKey, "role"]}
                             >
                               <div>
@@ -162,7 +163,7 @@ class FederalResult extends Component {
                               style={{ marginTop: "1vh" }}
                               name={[name, "party_id"]}
                               fieldKey={[fieldKey, "party_id"]}
-                              label={"成员ID"}
+                              label={<div style={fontStyle}>成员ID</div>}
                               onChange={(e) => {
                                 const { party_id } = this.state;
                                 party_id[key] = e.target.value;
@@ -192,7 +193,7 @@ class FederalResult extends Component {
                               style={{ marginTop: "1vh" }}
                               name={[name, "table_name"]}
                               fieldKey={[fieldKey, "table_name"]}
-                              label={"数据表名称"}
+                              label={<div style={fontStyle}>数据表名称</div>}
                               onChange={(e) => {
                                 const { table_name } = this.state;
                                 table_name[key] = e.target.value;
@@ -213,7 +214,9 @@ class FederalResult extends Component {
                               style={{ marginTop: "1vh" }}
                               name={[name, "namespace"]}
                               fieldKey={[fieldKey, "namespace"]}
-                              label={"请输入命名空间"}
+                              label={
+                                <div style={fontStyle}>请输入命名空间</div>
+                              }
                               onChange={(e) => {
                                 const { namespace } = this.state;
                                 namespace[key] = e.target.value;

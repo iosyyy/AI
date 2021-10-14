@@ -6,8 +6,8 @@ import {
   CloudUploadOutlined,
   DownloadOutlined,
   FileOutlined,
-  LoadingOutlined,
 } from "@ant-design/icons";
+import { fontStyle } from "../../../util/util";
 class FederalTrain extends Component {
   state = {
     type: true,
@@ -35,31 +35,30 @@ class FederalTrain extends Component {
         <div className="site-card-wrapper">
           <Row style={{ marginBottom: "2vh" }} gutter={[0, 30]}>
             <Col offset={8} span={12}>
-              <div>联邦类型:</div>
+              <div style={fontStyle}>联邦类型:</div>
             </Col>
           </Row>
           <Row style={{ marginBottom: "5vh" }} gutter={[0, 24]}>
             <Col offset={8} span={8}>
-            <Select
+              <Select
                 style={{ width: "100%" }}
                 onChange={(e) => {
                   if (e === "homo_lr") {
                     this.setState({
                       type: true,
-                      selectValue:e
+                      selectValue: e,
                     });
                   } else {
                     this.setState({
                       type: false,
-                      selectValue:e
+                      selectValue: e,
                     });
                   }
                 }}
                 value={this.state.type ? "homo_lr" : "hetero_lr"}
               >
-                    <Select.Option value="homo_lr">横向联邦</Select.Option>
-                    <Select.Option value="hetero_lr">纵向联邦</Select.Option>
-                 
+                <Select.Option value="homo_lr">横向联邦</Select.Option>
+                <Select.Option value="hetero_lr">纵向联邦</Select.Option>
               </Select>
             </Col>
           </Row>
@@ -68,7 +67,7 @@ class FederalTrain extends Component {
               onClick={() => {
                 this.setState({
                   type: true,
-                  selectValue:"homo_lr"
+                  selectValue: "homo_lr",
                 });
               }}
               span={6}
@@ -102,7 +101,7 @@ class FederalTrain extends Component {
               onClick={() =>
                 this.setState({
                   type: false,
-                  selectValue:"hetero_lr"
+                  selectValue: "hetero_lr",
                 })
               }
               span={6}
@@ -139,13 +138,13 @@ class FederalTrain extends Component {
             <Col offset={11} span={12}>
               <Button
                 onClick={() => {
-                  localStorage.setItem("value",this.state.selectValue);
-                  localStorage.setItem("status",this.state.type);
+                  localStorage.setItem("value", this.state.selectValue);
+                  localStorage.setItem("status", this.state.type);
                   this.props.history.push({
                     pathname: "/federalTrain/type",
                     state: {
                       status: this.state.type,
-                      value:this.state.selectValue
+                      value: this.state.selectValue,
                     },
                   });
                 }}

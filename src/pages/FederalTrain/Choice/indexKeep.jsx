@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Button, Form, InputNumber, Select, Tooltip, Table } from "antd";
 import PubSubJS from "pubsub-js";
+import { fontStyle } from "../../../util/util";
 
 class FederalTrainChoiceKeep extends Component {
   constructor(props) {
@@ -40,7 +41,11 @@ class FederalTrainChoiceKeep extends Component {
             color="#95DDDA"
             arrowPointAtCenter
           >
-            <Form.Item name="optimizer" label="优化器类型：" initialValue="sgd">
+            <Form.Item
+              name="optimizer"
+              label={<div style={fontStyle}>优化器类型：</div>}
+              initialValue="sgd"
+            >
               <Select>
                 <Select.Option value="sgd">sgd</Select.Option>
                 <Select.Option value="adam">adam</Select.Option>
@@ -50,7 +55,7 @@ class FederalTrainChoiceKeep extends Component {
 
           <Form.Item
             name="local_ep"
-            label="客户端学习："
+            label={<div style={fontStyle}>客户端学习：</div>}
             rules={[{ type: "number", min: 1, max: 1000 }]}
             initialValue={10}
           >
@@ -59,14 +64,18 @@ class FederalTrainChoiceKeep extends Component {
 
           <Form.Item
             name="epochs"
-            label="训练次数："
+            label={<div style={fontStyle}>训练次数：</div>}
             rules={[{ type: "number", min: 1, max: 10 }]}
             initialValue={5}
           >
             <InputNumber />
           </Form.Item>
 
-          <Form.Item name="lr" label="学习率：" initialValue={0.01}>
+          <Form.Item
+            name="lr"
+            label={<div style={fontStyle}>学习率：</div>}
+            initialValue={0.01}
+          >
             <InputNumber min={0} max={1} step={0.01} />
           </Form.Item>
 

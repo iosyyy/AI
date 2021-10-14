@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Button, Col, Form, Input, Modal, Row, Select, Table } from "antd";
+import { fontStyle } from "../../../util/util";
 
 const COLUMNS = [
   {
@@ -78,7 +79,7 @@ class Model extends Component {
               <Col span={12}>
                 <Form.Item
                   name="service_id"
-                  label="service_id"
+                  label={<div style={fontStyle}>service_id</div>}
                   rules={[{ required: true, message: "请输入service_id" }]}
                 >
                   <Input placeholder={"请输入service_id"} />
@@ -89,7 +90,7 @@ class Model extends Component {
               <Col span={12}>
                 <Form.Item
                   name="modelName"
-                  label="相关模型"
+                  label={<div style={fontStyle}>相关模型</div>}
                   rules={[{ required: true, message: "请输入相关模型" }]}
                 >
                   <Input placeholder={"请输入相关模型"} />

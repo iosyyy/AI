@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom";
 import axios from "axios";
 import api from "../../../config/api";
 import { number } from "echarts";
+import { fontStyle } from "../../../util/util";
 
 class NormalForm extends Component {
   constructor(props) {
@@ -25,7 +26,6 @@ class NormalForm extends Component {
       wrapperCol: { span: 8 },
     };
     return (
-      
       <div style={{ overflow: "auto" }}>
         <Spin spinning={this.state.loading} size="large">
           <Form
@@ -98,7 +98,7 @@ class NormalForm extends Component {
           >
             <Form.Item
               name="trainName"
-              label="任务名称"
+              label={<div style={fontStyle}>任务名称</div>}
               rules={[
                 { required: true, whitespace: true, message: "请输入任务名称" },
               ]}
@@ -108,7 +108,7 @@ class NormalForm extends Component {
 
             <Form.Item
               name="trainType"
-              label="任务类型"
+              label={<div style={fontStyle}>任务类型</div>}
               rules={[{ required: true, message: "请选择任务类型" }]}
             >
               <Radio.Group>
@@ -120,7 +120,7 @@ class NormalForm extends Component {
             {/* 采用算法是上个页面传过来的,目前写死为 homo_logistic_regression */}
             <Form.Item
               name="algorithm"
-              label="采用算法"
+              label={<div style={fontStyle}>采用算法</div>}
               initialValue={this.props.selectValue}
               rules={[
                 { required: true, whitespace: true, message: "请输入采用算法" },
@@ -131,7 +131,7 @@ class NormalForm extends Component {
 
             <Form.Item
               name="algorithmParms"
-              label="算法参数"
+              label={<div style={fontStyle}>算法参数</div>}
               rules={[
                 {
                   validator: (_, value) => {
@@ -165,7 +165,7 @@ class NormalForm extends Component {
 
             <Form.Item
               name="isScale"
-              label="isScale"
+              label={<div style={fontStyle}>isScale</div>}
               rules={[{ required: true, message: "请选择isScale" }]}
             >
               <Radio.Group>
@@ -176,7 +176,7 @@ class NormalForm extends Component {
 
             <Form.Item
               name="percent"
-              label="测试数据集百分比"
+              label={<div style={fontStyle}>测试数据集百分比</div>}
               rules={[
                 {
                   required: true,
@@ -193,7 +193,10 @@ class NormalForm extends Component {
               />
             </Form.Item>
 
-            <Form.Item name="postScript" label="备注信息">
+            <Form.Item
+              name="postScript"
+              label={<div style={fontStyle}>备注信息</div>}
+            >
               <Input.TextArea
                 style={{ resize: "none" }}
                 placeholder="备注信息可选"

@@ -25,6 +25,7 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import StepsTemplate from "../../../components/StepsTemplate";
+import { fontStyle } from "../../../util/util";
 
 const { Step } = Steps;
 
@@ -175,7 +176,7 @@ class DataSourceUpload extends Component {
                               style={{ marginTop: "1vh" }}
                               name={[name, "dataset"]}
                               fieldKey={[fieldKey, "dataset"]}
-                              label="数据集选择"
+                              label={<div style={fontStyle}>数据集选择</div>}
                             >
                               <Upload
                                 maxCount={1}
@@ -199,7 +200,7 @@ class DataSourceUpload extends Component {
                               style={{ marginTop: "1vh" }}
                               name={[name, "table_name"]}
                               fieldKey={[fieldKey, "table_name"]}
-                              label={"数据表名"}
+                              label={<div style={fontStyle}>数据表名</div>}
                             >
                               <Input
                                 value={this.state.tables}
@@ -220,7 +221,7 @@ class DataSourceUpload extends Component {
                               style={{ marginTop: "1vh" }}
                               name={[name, "namespace"]}
                               fieldKey={[fieldKey, "namespace"]}
-                              label={"命名空间"}
+                              label={<div style={fontStyle}>命名空间</div>}
                             >
                               <Input
                                 onChange={(e) => {
@@ -240,7 +241,7 @@ class DataSourceUpload extends Component {
                               style={{ marginTop: "1vh" }}
                               name={[name, "description"]}
                               fieldKey={[fieldKey, "description"]}
-                              label={"数据集描述"}
+                              label={<div style={fontStyle}>数据集描述</div>}
                             >
                               <Input
                                 onChange={(e) => {
@@ -260,7 +261,7 @@ class DataSourceUpload extends Component {
                               style={{ marginTop: "1vh" }}
                               name={[name, "work_mode"]}
                               fieldKey={[fieldKey, "work_mode"]}
-                              label={"任务类型"}
+                              label={<div style={fontStyle}>任务类型</div>}
                             >
                               <Radio.Group
                                 onChange={(e) => {

@@ -12,6 +12,8 @@ class Interface extends Component {
 
   render() {
     const { loading } = this.state;
+    const fontStyle = { fontWeight: 900, color: "rgb(127,125,142)" };
+
     return (
       <div>
         <Form
@@ -26,7 +28,7 @@ class Interface extends Component {
             <Col span={8}>
               <Form.Item
                 name="service_id"
-                label="service_id"
+                label={<div style={fontStyle}>service_id</div>}
                 rules={[{ required: true, message: "请输入service_id" }]}
               >
                 <Input placeholder={"请输入service_id"} />
@@ -37,7 +39,7 @@ class Interface extends Component {
             <Col span={8}>
               <Form.Item
                 name="model_version"
-                label="模型版本"
+                label={<div style={fontStyle}>模型版本</div>}
                 rules={[{ required: true, message: "请输入模型版本" }]}
               >
                 <Input placeholder={"请输入模型版本"} />
@@ -48,7 +50,7 @@ class Interface extends Component {
             <Col span={8}>
               <Form.Item
                 name="feature"
-                label="匹配样本的特征值"
+                label={<div style={fontStyle}>匹配样本的特征值</div>}
                 rules={[{ required: true, message: "请输入特征值" }]}
               >
                 <TextArea placeholder={"请输入特征值"} />
@@ -59,7 +61,7 @@ class Interface extends Component {
             <Col span={8}>
               <Form.Item
                 name="specimen"
-                label="样本内容"
+                label={<div style={fontStyle}>样本内容</div>}
                 rules={[{ required: true, message: "请输入样本内容" }]}
               >
                 <TextArea placeholder={"请输入样本内容"} />
