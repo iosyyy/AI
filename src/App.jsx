@@ -58,8 +58,8 @@ class App extends Component {
       color: "rgb(127,125,142)",
     };
     const linkStyle = {
-      activeStyle: { userSelect: "none", color: "rgb(201,201,202)" },
-      style: { userSelect: "none", color: "#050505" },
+      activeStyle: { userSelect: "none", color: "rgb(127,125,142)" },
+      style: { userSelect: "none", color: "rgb(40,44,52)" },
     };
     const headerHigh = "65px";
     const headerLine = "57px";
