@@ -401,7 +401,7 @@ class TrainingRecord extends Component {
     const fontStyle = { fontWeight: 900, color: "rgb(127,125,142)" };
 
     return (
-      <div className="site-layout-content">
+      <div style={{ height: "85vh" }} className="site-layout-content">
         <div style={{ float: "right" }}>
           <Form
             size="small"
@@ -486,7 +486,7 @@ class TrainingRecord extends Component {
         <Table
           onChange={this.onTableChange}
           loading={this.state.loading}
-          scroll={{ y: "61vh" }}
+          scroll={{ y: "64vh" }}
           bordered={false}
           dataSource={this.state.dataSource}
           columns={this.state.columns}

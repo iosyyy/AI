@@ -13,6 +13,11 @@
 
 }
 
+
+.my-ant > .ant-menu-item-selected{
+color:rgb(119,44,232);
+  border-bottom:rgb(119,44,232);
+}
 .ant-menu-submenu {
   color: #ffffff;
   border-bottom: white;
