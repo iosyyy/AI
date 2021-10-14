@@ -57,13 +57,17 @@ class App extends Component {
       fontWeight: 900,
       color: "rgb(127,125,142)",
     };
+    const fontStyleMenu = {
+      fontWeight: 900,
+      color: "rgb(127,125,142)",
+    };
     const linkStyle = {
       activeStyle: { userSelect: "none", color: "rgb(127,125,142)" },
-      style: { userSelect: "none", color: "rgb(40,44,52)" },
+      style: { userSelect: "none", color: "rgb(35,41,52)" },
     };
     const headerHigh = "65px";
     const headerLine = "57px";
-    const headerColor = "rgb(246,239,232)";
+    const headerColor = "rgba(255,255,255,0.9)";
     const menu = (
       <div className="user-login-extend" style={{ background: "white" }}>
         <div style={fontStyle}>ID: {this.state.party_id}</div>
@@ -75,10 +79,12 @@ class App extends Component {
         <Layout className="layout">
           <Header
             style={{
+              zIndex: 100,
+              boxShadow: "0 3px 8px rgb(230,231,232)",
               padding: "0px 32px 0px 2vw",
               height: headerHigh,
               background: headerColor,
-              borderRadius: "0.1rem",
+              borderRadius: "0.2rem",
             }}
           >
             <div
