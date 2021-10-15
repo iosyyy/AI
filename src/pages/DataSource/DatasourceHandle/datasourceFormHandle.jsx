@@ -82,7 +82,10 @@ class DatasourceFormHandle extends Component {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item name="description" label="备注">
+              <Form.Item
+                name="description"
+                label={<div style={fontStyle}>备注</div>}
+              >
                 <Input readOnly={canControll} placeholder={"请输入备注"} />
               </Form.Item>
             </Col>
@@ -90,7 +93,10 @@ class DatasourceFormHandle extends Component {
           <div>
             <Row>
               <Col span={8}>
-                <Form.Item name="work_mode" label="任务类型">
+                <Form.Item
+                  name="work_mode"
+                  label={<div style={fontStyle}>任务类型</div>}
+                >
                   <Radio.Group disabled={canControll}>
                     <Radio value={0}>单机</Radio>
                     <Radio value={1}>多机</Radio>

@@ -128,10 +128,7 @@ export default class PrecisionRecall extends Component {
           <ReloadOutlined />
           refresh
         </Button>
-        <div
-          id="precisionRecall"
-          style={{ width: "88vw", height: "70vh" }}
-        ></div>
+        <div id="precisionRecall" style={{ width: "88vw", height: "70vh" }} />
       </div>
     );
   }

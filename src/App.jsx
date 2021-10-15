@@ -59,10 +59,11 @@ class App extends Component {
     };
     const fontStyleMenu = {
       fontWeight: 900,
+
       color: "rgb(127,125,142)",
     };
     const linkStyle = {
-      activeStyle: { userSelect: "none", color: "rgb(222,219,226)" },
+      activeStyle: { userSelect: "none", color: "rgb(39,135,246)" },
       style: { userSelect: "none", color: "rgb(246,246,246)" },
     };
     const headerHigh = "65px";

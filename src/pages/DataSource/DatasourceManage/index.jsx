@@ -21,10 +21,10 @@ class DataSourceAdministration extends Component {
     const { visible } = this.state;
     return (
       <div
-        style={{ overflow: "auto", height: "83vh", width: "83vw" }}
-        className='site-layout-content'
+        style={{ overflow: "auto", height: "83vh", width: "auto" }}
+        className="site-layout-content"
       >
-        <h2 className='colorWhite'>数据源管理</h2>
+        <h2 className="colorWhite">数据源管理</h2>
         <Button
           style={{ margin: "1vh 0" }}
           onClick={() => {
@@ -38,7 +38,7 @@ class DataSourceAdministration extends Component {
         <DataSourceTable />
         <Modal
           visible={visible}
-          title='上传数据集'
+          title="上传数据集"
           centered
           bodyStyle={{
             WebkitBoxShadow: "0 20px 15px #9B7468",

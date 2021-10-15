@@ -37,6 +37,6 @@ const openListenByFederal = (data, fun) => {
     }
   });
 };
-const fontStyle = { fontWeight: 900, color: "rgb(127,125,142)" };
+const fontStyle = { fontSize: "14px", fontWeight: 900, color: "#606266" };
 
 export { openListenByNormal, openListenByFederal, fontStyle };

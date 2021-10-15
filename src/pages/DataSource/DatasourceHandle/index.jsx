@@ -59,7 +59,7 @@ class DatasourceHandle extends Component {
     return (
       <Spin size="large" spinning={this.state.isLoading}>
         <div
-          style={{ height: "83vh", width: "83vw", overflow: "scroll" }}
+          style={{ height: "83vh", width: "auto", overflow: "scroll" }}
           className="site-layout-content"
         >
           <h2 style={{ marginBottom: "3vh" }} className="colorWhite">
