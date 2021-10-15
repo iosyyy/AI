@@ -63,8 +63,16 @@ class App extends Component {
       color: "rgb(127,125,142)",
     };
     const linkStyle = {
-      activeStyle: { userSelect: "none", color: "rgb(39,135,246)" },
-      style: { userSelect: "none", color: "rgb(246,246,246)" },
+      activeStyle: {
+        userSelect: "none",
+        fontWeight: 900,
+        color: "rgb(246,246,246)",
+      },
+      style: {
+        userSelect: "none",
+        fontWeight: 500,
+        color: "rgb(246,246,246)",
+      },
     };
     const headerHigh = "65px";
     const headerLine = "57px";
@@ -103,7 +111,8 @@ class App extends Component {
             </div>
             <Menu
               style={{
-                width: "100%",
+                minWidth: "700px",
+                width: "auto",
                 lineHeight: headerLine,
                 height: menuLine,
 
@@ -137,7 +146,8 @@ class App extends Component {
               <SubMenu
                 style={{
                   background: headerColor,
-                  color: "rgb(236,238,240)",
+                  fontWeight: 500,
+                  color: "rgb(246,246,246)",
                 }}
                 key="10"
                 title="在线推理"
