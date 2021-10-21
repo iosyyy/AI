@@ -1,6 +1,18 @@
 import React, { Component } from "react";
-import { Button, Col, Form, Input, Modal, Row, Select, Table } from "antd";
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  message,
+  Modal,
+  Row,
+  Select,
+  Table,
+} from "antd";
 import { fontStyle } from "../../../util/util";
+import axios from "axios";
+import api from "../../../config/api";
 
 const COLUMNS = [
   {
@@ -71,7 +83,28 @@ class Model extends Component {
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
             onFinish={(e) => {
-              console.log(e);
+              this.setState({
+                loading: true,
+              });
+              axios
+                .post(api.modelUpdate, e)
+                .then((r) => {
+                  console.log(r);
+                  const { code, msg, data } = r.data;
+                  if (code === 0) {
+                    message.info("localtion:" + data.localtion);
+                  } else {
+                    message.error(msg);
+                  }
+                })
+                .catch((r) => {
+                  console.log(r);
+                })
+                .finally(() => {
+                  this.setState({
+                    loading: false,
+                  });
+                });
             }}
             layout={"horizontal"}
           >
@@ -89,7 +122,7 @@ class Model extends Component {
             <Row gutter={[0, 30]} justify={"center"}>
               <Col span={12}>
                 <Form.Item
-                  name="modelName"
+                  name="job_id"
                   label={<div style={fontStyle}>相关模型</div>}
                   rules={[{ required: true, message: "请输入相关模型" }]}
                 >

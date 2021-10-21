@@ -1,10 +1,22 @@
 import React, { Component } from "react";
-import { Button, Col, Form, Input, Modal, Row, Table, Upload } from "antd";
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  message,
+  Modal,
+  Row,
+  Table,
+  Upload,
+} from "antd";
 import {
   DownloadOutlined,
   DownOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
+import axios from "axios";
+import api from "../../../config/api";
 const COLUMNS = [
   {
     title: "序号",
@@ -75,12 +87,30 @@ class BatchInterface extends Component {
             labelCol={{ span: 10 }}
             wrapperCol={{ span: 16 }}
             onFinish={(e) => {
-              console.log(e);
+              const { service_id, file } = e;
+              const formData = new FormData();
+              formData.append("service_id", service_id);
+              formData.append("file", file.file);
+              axios
+                .post(api.batchSingle, formData)
+                .then((r) => {
+                  console.log(r);
+                  const { code, msg } = r.data;
+                  if (code === 0) {
+                    message.success("批量处理完成");
+                  } else {
+                    message.error(msg);
+                  }
+                })
+                .catch((e) => {
+                  console.log(e);
+                  message.error("批量处理失败");
+                });
             }}
             layout={"horizontal"}
           >
             <Row justify={"center"}>
-              <Col span={12}>
+              <Col span={14}>
                 <Form.Item
                   name="name"
                   label={<div style={fontStyle}>任务名称</div>}
@@ -91,7 +121,7 @@ class BatchInterface extends Component {
               </Col>
             </Row>
             <Row justify={"center"}>
-              <Col span={12}>
+              <Col span={14}>
                 <Form.Item
                   name="service_id"
                   label={<div style={fontStyle}>service_id</div>}
@@ -101,8 +131,8 @@ class BatchInterface extends Component {
                 </Form.Item>
               </Col>
             </Row>
-            <Row justify={"center"}>
-              <Col span={12}>
+            {/*<Row justify={"center"}>
+              <Col span={14}>
                 <Form.Item
                   name="feature"
                   label={<div style={fontStyle}>匹配样本的特征</div>}
@@ -111,18 +141,24 @@ class BatchInterface extends Component {
                   <Input placeholder={"请输入特征"} />
                 </Form.Item>
               </Col>
-            </Row>
+            </Row>*/}
             <Row gutter={[0, 30]} justify={"center"}>
-              <Col span={12}>
+              <Col span={14}>
                 <Form.Item
-                  name="specimen"
+                  name="file"
                   label={<div style={fontStyle}>预测样本</div>}
                   beforeUpload={() => {
                     return false;
                   }}
                   rules={[{ required: true, message: "请上传预测样本后重试" }]}
                 >
-                  <Upload style={{ width: "2vw" }} maxCount={1}>
+                  <Upload
+                    beforeUpload={() => {
+                      return false;
+                    }}
+                    style={{ width: "10px" }}
+                    maxCount={1}
+                  >
                     <Button icon={<UploadOutlined />}>
                       上传预测样本 (Max: 1)
                     </Button>
