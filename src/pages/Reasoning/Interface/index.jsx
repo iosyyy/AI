@@ -25,17 +25,21 @@ class Interface extends Component {
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 16 }}
           onFinish={(e) => {
-            e.feature_data = JSON.parse(e.feature_data);
-            e.feature_id = JSON.parse(e.feature_id);
-            console.log(e);
-            axios.post(api.single, e).then((r) => {
-              const { code, msg, data } = r.data;
-              if (code === 0) {
-                message.info("score:" + data.score);
-              } else {
-                message.error(msg);
-              }
-            });
+            axios
+              .post(api.single, {
+                feature_data: JSON.parse(e.feature_data),
+                feature_id: JSON.parse(e.feature_id),
+                service_id: e.service_id,
+                model_version: e.model_version,
+              })
+              .then((r) => {
+                const { code, msg, data } = r.data;
+                if (code === 0) {
+                  message.info("score:" + data.score);
+                } else {
+                  message.error(msg);
+                }
+              });
           }}
           layout={"horizontal"}
         >
@@ -153,6 +157,11 @@ class Interface extends Component {
                   <TextArea
                     autoSize={true}
                     value={feature_data}
+                    onKeyDown={(e) => {
+                      if (e.key === "Tab") {
+                      }
+                      console.log(e);
+                    }}
                     onChange={(e) => {
                       const { value } = e.target;
                       let jsonVal = "{" + value + "}";
