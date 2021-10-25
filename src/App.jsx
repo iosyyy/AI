@@ -99,7 +99,7 @@ class App extends Component {
             style={{
               zIndex: 100,
               boxShadow: "0 3px 8px rgb(230,231,232)",
-              padding: "0px 0px 0px 2vw",
+              padding: "0px 0px 0px 20px",
               height: headerHigh,
 
               background: headerColor,
