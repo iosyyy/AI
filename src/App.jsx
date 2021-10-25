@@ -41,11 +41,11 @@ class App extends Component {
           message.error("服务验证失败,请重试");
         } else {
           const { party_name, party_id } = r.data.data.data || r.data.data;
-          const indexOf = party_name.indexOf("host");
+          const indexOf = party_name.indexOf("guest");
           if (indexOf === -1) {
-            localStorage.setItem("role", "guest");
-          } else {
             localStorage.setItem("role", "host");
+          } else {
+            localStorage.setItem("role", "guest");
           }
           console.log(localStorage.getItem("role"));
           this.setState({
