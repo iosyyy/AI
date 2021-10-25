@@ -228,7 +228,7 @@ class App extends Component {
                   marginRight: "10px",
                 }}
               >
-                <Dropdown placement="bottomLeft" arrow overlay={menu}>
+                <Dropdown placement="bottomCenter" overlay={menu}>
                   <Avatar size={38} icon={<UserOutlined />} />
                 </Dropdown>
               </div>
