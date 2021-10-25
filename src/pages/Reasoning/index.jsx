@@ -6,6 +6,7 @@ import Choice from "../Normal/Choice";
 import BatchInterface from "./BatchInterface";
 import Interface from "./Interface";
 import Model from "./Model";
+import UploadData from "./UploadData";
 
 class Reasoning extends Component {
   render() {
@@ -15,6 +16,7 @@ class Reasoning extends Component {
           <Route exact path="/reasoning/model" component={Model} />
           <Route path="/reasoning/interface" component={Interface} />
           <Route path="/reasoning/batch_interface" component={BatchInterface} />
+          <Route path="/reasoning/upload_data" component={UploadData} />
           <Redirect to="/reasoning/model" />
         </Switch>
       </div>

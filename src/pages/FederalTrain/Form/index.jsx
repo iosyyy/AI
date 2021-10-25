@@ -148,6 +148,7 @@ class FederalTrain extends Component {
                     },
                   });
                 }}
+                disabled={localStorage.getItem("role") !== "guest"}
                 type="primary"
                 htmlType="submit"
               >

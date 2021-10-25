@@ -7,6 +7,7 @@ import {
   message,
   Modal,
   Row,
+  Space,
   Table,
   Upload,
 } from "antd";
@@ -17,6 +18,7 @@ import {
 } from "@ant-design/icons";
 import axios from "axios";
 import api from "../../../config/api";
+import PubSubJS from "pubsub-js";
 const COLUMNS = [
   {
     title: "序号",
@@ -37,15 +39,56 @@ const COLUMNS = [
     title: "操作",
     dataIndex: "action",
     key: "action",
+    render: () => {
+      return (
+        <Space>
+          <Button type={"primary"}>下载</Button>
+          <Button danger type={"primary"}>
+            删除
+          </Button>
+        </Space>
+      );
+    },
   },
 ];
 class BatchInterface extends Component {
   constructor(props) {
     super(props);
+    PubSubJS.publish("isRunning", { page: "10" });
+
     this.state = {
       show: false,
       loading: false,
-      datasource: [],
+      datasource: [
+        {
+          key: 1,
+          index: 1,
+          name: "modelUploadTest1",
+          model: 151500,
+          status: "成功",
+        },
+        {
+          key: 2,
+          index: 2,
+          name: "modelUploadTest10086",
+          model: 151566,
+          status: "成功",
+        },
+        {
+          key: 3,
+          index: 3,
+          name: "modelUploadTest2",
+          model: 151500,
+          status: "失败",
+        },
+        {
+          key: 4,
+          index: 4,
+          name: "modelUploadTest3",
+          model: 151544,
+          status: "成功",
+        },
+      ],
     };
   }
 
@@ -65,11 +108,11 @@ class BatchInterface extends Component {
           新增部署任务
         </Button>
         <Table
-          style={{ marginTop: "3vh" }}
+          size={"middle"}
+          style={{ marginTop: "1vh" }}
           dataSource={datasource}
           columns={COLUMNS}
           bordered
-          pagination={false}
         />
         <Modal
           title="项目查看"

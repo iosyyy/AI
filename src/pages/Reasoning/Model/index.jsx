@@ -6,13 +6,21 @@ import {
   Input,
   message,
   Modal,
+  Progress,
   Row,
-  Select,
+  Steps,
   Table,
 } from "antd";
 import { fontStyle } from "../../../util/util";
 import axios from "axios";
 import api from "../../../config/api";
+import PubSubJS from "pubsub-js";
+import {
+  BoxPlotOutlined,
+  BranchesOutlined,
+  CloudUploadOutlined,
+} from "@ant-design/icons";
+import StepsTemplate from "../../../components/StepsTemplate";
 
 const COLUMNS = [
   {
@@ -36,18 +44,172 @@ const COLUMNS = [
     key: "status",
   },
 ];
+let interval;
+const { Step } = Steps;
+
 class Model extends Component {
   constructor(props) {
     super(props);
+    PubSubJS.publish("isRunning", { page: "8" });
+
     this.state = {
       show: false,
       loading: false,
-      datasource: [],
+      showDetail: false,
+      datasource: [
+        {
+          key: 1,
+          index: 1,
+          service_id: 10086,
+          model: 151500,
+          status: "成功",
+        },
+        {
+          key: 2,
+          index: 2,
+          service_id: 165165165,
+          model: 151500,
+          status: "成功",
+        },
+        {
+          key: 3,
+          index: 3,
+          service_id: 10086,
+          model: 151566,
+          status: "失败",
+        },
+        {
+          key: 4,
+          index: 4,
+          service_id: 10086,
+          model: 151566,
+          status: "成功",
+        },
+      ],
+      statusNow: "error",
+      nows: 0,
+      percent: 0,
     };
   }
 
+  modelUpload = () => {
+    const step1 = 33.3;
+    const step2 = 66.6;
+    const step3 = 100;
+    let error = 5000;
+    interval = setInterval(() => {
+      const { percent, nows } = this.state;
+      let per = percent;
+      per += Math.random() * 3;
+      if (per >= error) {
+        if (per > step1) {
+          this.setState({
+            nows: 0,
+            percent: step1,
+          });
+        }
+        clearInterval(interval);
+        this.setState({
+          statusNow: "error",
+        });
+        message.error("模型部署失败请重试");
+        return;
+      }
+      if (per > step1 && nows === -1) {
+        per = step1;
+        clearInterval(interval);
+
+        interval = setTimeout(() => {
+          this.setState({
+            nows: 0,
+          });
+          message.success("模型部署完成");
+          interval = setInterval(() => {
+            const { percent, nows } = this.state;
+            let per = percent;
+
+            per += Math.random() * 5;
+            if (per >= error) {
+              if (per > step2) {
+                this.setState({
+                  nows: 1,
+                  percent: step2,
+                });
+              }
+              this.setState({
+                statusNow: "error",
+              });
+              clearInterval(interval);
+              message.error("模型发布失败请重试");
+              return;
+            }
+            if (per > step2 && nows === 0) {
+              per = step2;
+              clearInterval(interval);
+
+              interval = setTimeout(() => {
+                message.success("模型发布完成");
+                this.setState({
+                  nows: 1,
+                });
+                let interval = setInterval(() => {
+                  const { percent, nows } = this.state;
+                  let per = percent;
+                  console.log(per);
+                  per += Math.random() * 5;
+                  if (per >= error) {
+                    if (per > step3) {
+                      this.setState({
+                        nows: 2,
+                        percent: step3,
+                      });
+                    }
+                    this.setState({
+                      statusNow: "error",
+                    });
+                    clearInterval(interval);
+                    message.error("模型绑定失败请重试");
+                    return;
+                  }
+                  if (per > step3 && nows === 1) {
+                    per = step3;
+                    clearInterval(interval);
+
+                    message.success("模型绑定完成");
+                    this.setState({
+                      nows: 2,
+                      statusNow: "process",
+                    });
+                  }
+                  this.setState({
+                    percent: Math.round(per * 10) / 10,
+                  });
+                }, step3);
+              }, 3000);
+            }
+            this.setState({
+              percent: Math.round(per * 10) / 10,
+            });
+          }, step3);
+        }, 1500);
+      }
+
+      this.setState({
+        percent: Math.round(per * 10) / 10,
+      });
+    }, step3);
+  };
+
   render() {
-    const { show, loading, datasource } = this.state;
+    const {
+      show,
+      loading,
+      datasource,
+      showDetail,
+      statusNow,
+      nows,
+      percent,
+    } = this.state;
 
     return (
       <div>
@@ -61,12 +223,58 @@ class Model extends Component {
           新增部署任务
         </Button>
         <Table
-          style={{ marginTop: "3vh" }}
+          style={{ marginTop: "1vh" }}
           dataSource={datasource}
           columns={COLUMNS}
           bordered
-          pagination={false}
+          size={"middle"}
         />
+
+        <Modal
+          title="查看详情"
+          visible={showDetail}
+          onCancel={() => {
+            this.setState({
+              showDetail: false,
+            });
+            clearInterval(interval);
+          }}
+          footer={[
+            <Button
+              key="back"
+              onClick={() => {
+                this.setState({
+                  showDetail: false,
+                });
+                clearInterval(interval);
+              }}
+            >
+              返回
+            </Button>,
+          ]}
+          width={"45vw"}
+          destroyOnClose
+        >
+          <div style={{ height: "15vh" }}>
+            <Steps
+              style={{ marginBottom: "3vh" }}
+              current={nows}
+              status={statusNow}
+            >
+              <Step icon={<BranchesOutlined />} title="部署" />
+              <Step icon={<CloudUploadOutlined />} title="发布" />
+              <Step icon={<BoxPlotOutlined />} title="绑定" />
+            </Steps>
+            <Progress
+              strokeColor={{
+                from: "#108ee9",
+                to: "#87d068",
+              }}
+              percent={percent}
+              status={statusNow}
+            />
+          </div>
+        </Modal>
         <Modal
           title="项目查看"
           visible={show}
@@ -93,6 +301,13 @@ class Model extends Component {
                   const { code, msg, data } = r.data;
                   if (code === 0) {
                     message.info("localtion:" + data.localtion);
+                    this.setState({
+                      showDetail: true,
+                      percent: 0,
+                      nows: -1,
+                      statusNow: "active",
+                    });
+                    this.modelUpload();
                   } else {
                     message.error(msg);
                   }

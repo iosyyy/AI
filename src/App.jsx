@@ -41,6 +41,13 @@ class App extends Component {
           message.error("服务验证失败,请重试");
         } else {
           const { party_name, party_id } = r.data.data.data || r.data.data;
+          const indexOf = party_name.indexOf("host");
+          if (indexOf === -1) {
+            localStorage.setItem("role", "guest");
+          } else {
+            localStorage.setItem("role", "host");
+          }
+          console.log(localStorage.getItem("role"));
           this.setState({
             party_name,
             party_id,
@@ -49,6 +56,7 @@ class App extends Component {
       })
       .catch((r) => {
         message.error("链接服务器失败请重试");
+        localStorage.setItem("role", null);
       });
   }
 
@@ -77,11 +85,11 @@ class App extends Component {
     const headerHigh = "65px";
     const headerLine = "57px";
     const menuLine = "65.5px";
-    const headerColor = "rgba(36,41,47)";
+    const headerColor = "rgba(36,150,237)";
     const menu = (
       <div className="user-login-extend" style={{ background: "white" }}>
         <div style={fontStyle}>ID: {this.state.party_id}</div>
-        <div style={fontStyle}>Role: {this.state.party_name}</div>
+        <div style={fontStyle}>用户名: {this.state.party_name}</div>
       </div>
     );
     return (
@@ -91,7 +99,7 @@ class App extends Component {
             style={{
               zIndex: 100,
               boxShadow: "0 3px 8px rgb(230,231,232)",
-              padding: "0px 32px 0px 2vw",
+              padding: "0px 0px 0px 2vw",
               height: headerHigh,
 
               background: headerColor,
@@ -149,51 +157,66 @@ class App extends Component {
                   fontWeight: 500,
                   color: "rgb(246,246,246)",
                 }}
-                key="10"
+                key="11"
                 title="在线推理"
                 selectable={false}
               >
-                <Menu.Item key="8">
-                  <NavLink
-                    style={{
-                      color: "rgb(64,64,64)",
-                    }}
-                    to="/reasoning/model"
-                  >
-                    模型部署
-                  </NavLink>
-                </Menu.Item>
-                <Menu.Item key="9">
-                  <NavLink
-                    style={{
-                      color: "rgb(64,64,64)",
-                    }}
-                    to="/reasoning/interface"
-                  >
-                    单例预测
-                  </NavLink>
-                </Menu.Item>
-                <Menu.Item key="10">
-                  <NavLink
-                    style={{
-                      color: "rgb(64,64,64)",
-                    }}
-                    to="/reasoning/batch_interface"
-                  >
-                    批量预测
-                  </NavLink>
-                </Menu.Item>
+                {localStorage.getItem("role") === "guest" ? (
+                  <>
+                    <Menu.Item key="8">
+                      <NavLink
+                        style={{
+                          color: "rgb(64,64,64)",
+                        }}
+                        to="/reasoning/model"
+                      >
+                        模型部署
+                      </NavLink>
+                    </Menu.Item>
+                    <Menu.Item key="9">
+                      <NavLink
+                        style={{
+                          color: "rgb(64,64,64)",
+                        }}
+                        to="/reasoning/interface"
+                      >
+                        单例预测
+                      </NavLink>
+                    </Menu.Item>
+                    <Menu.Item key="10">
+                      <NavLink
+                        style={{
+                          color: "rgb(64,64,64)",
+                        }}
+                        to="/reasoning/batch_interface"
+                      >
+                        批量预测
+                      </NavLink>
+                    </Menu.Item>
+                  </>
+                ) : (
+                  <Menu.Item key="11">
+                    <NavLink
+                      style={{
+                        color: "rgb(64,64,64)",
+                      }}
+                      to="/reasoning/upload_data"
+                    >
+                      数据上传
+                    </NavLink>
+                  </Menu.Item>
+                )}
               </SubMenu>
               <div
                 style={{
                   float: "right",
                   display: "inline-block",
                   height: headerHigh,
-                  marginLeft: "10px",
+                  marginLeft: "20px",
                   marginRight: "10px",
                 }}
               >
-                <Dropdown placement="bottomCenter" arrow overlay={menu}>
+                <Dropdown placement="bottomLeft" arrow overlay={menu}>
                   <Avatar size={38} icon={<UserOutlined />} />
                 </Dropdown>
               </div>

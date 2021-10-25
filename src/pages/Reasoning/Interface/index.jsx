@@ -3,10 +3,12 @@ import { Button, Col, Form, Input, message, Row } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import axios from "axios";
 import api from "../../../config/api";
+import PubSubJS from "pubsub-js";
 
 class Interface extends Component {
   constructor(props) {
     super(props);
+    PubSubJS.publish("isRunning", { page: "9" });
     this.state = {
       loading: false,
       paramType: 0,
