@@ -89,7 +89,7 @@ class App extends Component {
     const menu = (
       <div className="user-login-extend" style={{ background: "white" }}>
         <div style={fontStyle}>ID: {this.state.party_id}</div>
-        <div style={fontStyle}>用户名: {this.state.party_name}</div>
+        {/*<div style={fontStyle}>用户名: {this.state.party_name}</div>*/}
       </div>
     );
     return (
@@ -209,10 +209,22 @@ class App extends Component {
               </SubMenu>
               <div
                 style={{
+                  fontWeight: 900,
+                  color: "rgb(246,246,246)",
                   float: "right",
                   display: "inline-block",
                   height: headerHigh,
-                  marginLeft: "20px",
+                  marginRight: "10px",
+                }}
+              >
+                {this.state.party_name}
+              </div>
+              <div
+                style={{
+                  float: "right",
+                  display: "inline-block",
+                  height: headerHigh,
+                  marginLeft: "10px",
                   marginRight: "10px",
                 }}
               >
@@ -220,6 +232,7 @@ class App extends Component {
                   <Avatar size={38} icon={<UserOutlined />} />
                 </Dropdown>
               </div>
+
               <Menu.Item style={{ float: "right" }} key="4">
                 <NavLink {...linkStyle} to="/trainingRecord">
                   训练记录

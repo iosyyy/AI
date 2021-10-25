@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Card, Col, Row, Select } from "antd";
+import { Alert, Button, Card, Col, Row, Select } from "antd";
 import "antd/dist/antd.css";
 import StepsTemplate from "../../../components/StepsTemplate";
 import {
@@ -62,7 +62,7 @@ class FederalTrain extends Component {
               </Select>
             </Col>
           </Row>
-          <Row style={{ marginBottom: "15vh" }} gutter={[48, 20]}>
+          <Row style={{ marginBottom: "14vh" }} gutter={[48, 20]}>
             <Col
               onClick={() => {
                 this.setState({
@@ -132,6 +132,16 @@ class FederalTrain extends Component {
                   适用于参与者数据ID特征重叠较多的情形
                 </div>
               </Card>
+            </Col>
+          </Row>
+          <Row justify={"center"} gutter={[48, 20]}>
+            <Col span={10}>
+              <Alert
+                closable
+                showIcon={true}
+                message="host端无法进行训练"
+                type="error"
+              />
             </Col>
           </Row>
           <Row gutter={48}>
