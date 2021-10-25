@@ -207,7 +207,6 @@ class App extends Component {
                     <NavLink
                       style={{
                         fontWeight: 900,
-
                         color: "rgb(127,125,142)",
                       }}
                       to="/reasoning/upload_data"
