@@ -96,6 +96,7 @@ class App extends Component {
       <div>
         <Layout className="layout">
           <Header
+            className={"ant-menus"}
             style={{
               zIndex: 100,
               boxShadow: "0 3px 8px rgb(230,231,232)",
@@ -152,6 +153,7 @@ class App extends Component {
                 </NavLink>
               </Menu.Item>
               <SubMenu
+                className={"ant-menus"}
                 style={{
                   background: headerColor,
                   fontWeight: 500,
@@ -166,7 +168,9 @@ class App extends Component {
                     <Menu.Item key="8">
                       <NavLink
                         style={{
-                          color: "rgb(64,64,64)",
+                          fontWeight: 900,
+
+                          color: "rgb(127,125,142)",
                         }}
                         to="/reasoning/model"
                       >
@@ -176,7 +180,9 @@ class App extends Component {
                     <Menu.Item key="9">
                       <NavLink
                         style={{
-                          color: "rgb(64,64,64)",
+                          fontWeight: 900,
+
+                          color: "rgb(127,125,142)",
                         }}
                         to="/reasoning/interface"
                       >
@@ -186,7 +192,9 @@ class App extends Component {
                     <Menu.Item key="10">
                       <NavLink
                         style={{
-                          color: "rgb(64,64,64)",
+                          fontWeight: 900,
+
+                          color: "rgb(127,125,142)",
                         }}
                         to="/reasoning/batch_interface"
                       >
@@ -198,7 +206,9 @@ class App extends Component {
                   <Menu.Item key="11">
                     <NavLink
                       style={{
-                        color: "rgb(64,64,64)",
+                        fontWeight: 900,
+
+                        color: "rgb(127,125,142)",
                       }}
                       to="/reasoning/upload_data"
                     >

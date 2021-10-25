@@ -13,71 +13,69 @@
 
 }
 
-.ant-menu-item-selected a {
-    font-weight: 900 !important;
-    color: rgb(246, 246, 246) !important;
-}
-
-.ant-menu-item a {
-    font-weight: 500 !important;
-    color: rgb(246, 246, 246) !important;
-}
-
-.ant-menu-submenu-title:hover {
+.ant-menus .ant-menu-item-selected a {
     font-weight: 900 !important;
     color: rgb(246, 246, 246) !important;
 
 }
 
 
-.ant-menu-submenu-active {
+
+.ant-menus .ant-menu-submenu-title:hover {
+    font-weight: 900 !important;
+    color: rgb(246, 246, 246) !important;
+
+}
+
+
+.ant-menus .ant-menu-submenu-active {
 
     background-color: rgb(36, 150, 237) !important;
 }
 
 
-.ant-menu-submenu-selected {
+.ant-menus .ant-menu-submenu-selected {
     font-weight: 900 !important;
     color: rgb(246, 246, 246) !important;
     background-color: rgb(36, 150, 237) !important;
 }
 
-.ant-menu {
+.ant-menus .ant-menu {
     background-color: rgb(36, 150, 237) !important;
 
 }
 
-.ant-menu-item:active {
+.ant-menus .ant-menu-item:active {
     font-weight: 900 !important;
     color: rgb(246, 246, 246) !important;
     background-color: rgb(36, 150, 237) !important;
 
 }
 
-.ant-menu-submenu-popup {
+.ant-menus .ant-menu-submenu-popup {
     background-color: rgb(36, 150, 237) !important;
 }
 
-.ant-menu-item a:hover {
+.ant-menus .ant-menu-item a:hover {
     font-weight: 900 !important;
     color: rgb(246, 246, 246) !important;
 
 }
 
-.ant-menu-item-selected {
+.ant-menus .ant-menu-item-selected {
     background-color: rgb(36, 150, 237) !important;
 
     font-weight: 900 !important;
     color: rgb(246, 246, 246) !important;
 }
 
-.ant-menu-item-active {
+.ant-menus .ant-menu-item-active {
     font-weight: 900 !important;
     color: rgb(246, 246, 246) !important;
 }
 
 
-.ant-menu-submenu {
+.ant-menus .ant-menu-submenu {
     color: #ffffff;
     border-bottom: white;
 }
