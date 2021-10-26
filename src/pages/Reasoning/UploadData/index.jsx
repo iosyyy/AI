@@ -65,7 +65,7 @@ const COLUMNS = [
 class UploadData extends Component {
   constructor(props) {
     super(props);
-    PubSubJS.publish("isRunning", { page: "11" });
+    PubSubJS.publish("isRunning", { page: "12" });
 
     this.state = {
       show: false,

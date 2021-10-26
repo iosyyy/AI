@@ -22,28 +22,6 @@ import {
 } from "@ant-design/icons";
 import StepsTemplate from "../../../components/StepsTemplate";
 
-const COLUMNS = [
-  {
-    title: "序号",
-    dataIndex: "index",
-    key: "index",
-  },
-  {
-    title: "service_id",
-    dataIndex: "service_id",
-    key: "service_id",
-  },
-  {
-    title: "关联模型",
-    dataIndex: "model",
-    key: "model",
-  },
-  {
-    title: "状态",
-    dataIndex: "status",
-    key: "status",
-  },
-];
 let interval;
 const { Step } = Steps;
 
@@ -58,32 +36,48 @@ class Model extends Component {
       showDetail: false,
       datasource: [
         {
-          key: 1,
+          key: 12,
           index: 1,
           service_id: 10086,
           model: 151500,
           status: "成功",
+          text: "test001",
+          nows: 2,
+          statusNow: "process",
+          percent: 100,
         },
         {
-          key: 2,
+          key: 23,
           index: 2,
           service_id: 165165165,
           model: 151500,
           status: "成功",
+          text: "test001",
+          nows: 2,
+          statusNow: "process",
+          percent: 100,
         },
         {
-          key: 3,
+          key: 33,
           index: 3,
           service_id: 10086,
           model: 151566,
           status: "失败",
+          text: "test001",
+          nows: 0,
+          statusNow: "error",
+          percent: 20.2,
         },
         {
-          key: 4,
+          key: 43,
           index: 4,
           service_id: 10086,
           model: 151566,
           status: "成功",
+          text: "test001",
+          nows: 2,
+          statusNow: "process",
+          percent: 100,
         },
       ],
       statusNow: "error",
@@ -201,6 +195,55 @@ class Model extends Component {
   };
 
   render() {
+    const COLUMNS = [
+      {
+        title: "序号",
+        dataIndex: "index",
+        key: "index",
+      },
+      {
+        title: "service_id",
+        dataIndex: "service_id",
+        key: "service_id",
+      },
+      {
+        title: "关联模型",
+        dataIndex: "model",
+        key: "model",
+      },
+      {
+        title: "备注",
+        dataIndex: "text",
+        key: "text",
+      },
+      {
+        title: "状态",
+        dataIndex: "status",
+        key: "status",
+      },
+      {
+        title: "操作",
+        dataIndex: "action",
+        render: (x, y) => {
+          return (
+            <Button
+              onClick={() => {
+                this.setState({
+                  showDetail: true,
+                  index: 0,
+                  statusNow: y.statusNow,
+                  percent: y.percent,
+                  nows: y.nows,
+                });
+              }}
+              type={"primary"}
+            >
+              查看详情
+            </Button>
+          );
+        },
+      },
+    ];
     const {
       show,
       loading,
@@ -334,7 +377,7 @@ class Model extends Component {
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={[0, 30]} justify={"center"}>
+            <Row gutter={[0, 0]} justify={"center"}>
               <Col span={12}>
                 <Form.Item
                   name="job_id"
@@ -342,6 +385,17 @@ class Model extends Component {
                   rules={[{ required: true, message: "请输入相关模型" }]}
                 >
                   <Input placeholder={"请输入相关模型"} />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={[0, 30]} justify={"center"}>
+              <Col span={12}>
+                <Form.Item
+                  name="text"
+                  label={<div style={fontStyle}>备注</div>}
+                  rules={[{ required: true, message: "请输入备注" }]}
+                >
+                  <Input placeholder={"请输入备注"} />
                 </Form.Item>
               </Col>
             </Row>

@@ -16,6 +16,8 @@ import {
   DownOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
+import FileSaver from "file-saver";
+
 import axios from "axios";
 import api from "../../../config/api";
 import PubSubJS from "pubsub-js";
@@ -59,6 +61,7 @@ class BatchInterface extends Component {
     this.state = {
       show: false,
       loading: false,
+      file_path: null,
       datasource: [
         {
           key: 1,
@@ -93,7 +96,7 @@ class BatchInterface extends Component {
   }
 
   render() {
-    const { show, loading, datasource } = this.state;
+    const { show, loading, datasource, file_path } = this.state;
     const fontStyle = { fontWeight: 900, color: "rgb(127,125,142)" };
 
     return (
@@ -120,6 +123,7 @@ class BatchInterface extends Component {
           onCancel={() => {
             this.setState({
               show: false,
+              file_path: null,
             });
           }}
           width={"45vw"}
@@ -134,13 +138,20 @@ class BatchInterface extends Component {
               const formData = new FormData();
               formData.append("service_id", service_id);
               formData.append("file", file.file);
+              this.setState({
+                loading: true,
+              });
               axios
                 .post(api.batchSingle, formData)
                 .then((r) => {
                   console.log(r);
+                  const data = r.data.data.data;
                   const { code, msg } = r.data;
                   if (code === 0) {
                     message.success("批量处理完成");
+                    this.setState({
+                      file_path: data.file_path,
+                    });
                   } else {
                     message.error(msg);
                   }
@@ -148,6 +159,11 @@ class BatchInterface extends Component {
                 .catch((e) => {
                   console.log(e);
                   message.error("批量处理失败");
+                })
+                .finally(() => {
+                  this.setState({
+                    loading: false,
+                  });
                 });
             }}
             layout={"horizontal"}
@@ -210,7 +226,21 @@ class BatchInterface extends Component {
                 <Form.Item
                   label={<div style={fontStyle}>下载预测样本模板</div>}
                 >
-                  <Button icon={<DownloadOutlined />}>下载模板</Button>
+                  <Button
+                    onClick={() => {
+                      const href =
+                        window.location.protocol +
+                        "//" +
+                        window.location.hostname +
+                        ":9380" +
+                        file_path;
+                      FileSaver.saveAs(href);
+                    }}
+                    disabled={file_path == null}
+                    icon={<DownloadOutlined />}
+                  >
+                    下载模板
+                  </Button>
                 </Form.Item>
               </Col>
             </Row>

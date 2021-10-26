@@ -1,7 +1,7 @@
 import pack from "../../package.json";
 //本地代理（代理需要在setupProxy.js中配置）
 const host = window.location.origin;
-let baseHost = window.location.origin;
+let baseHost;
 let ws;
 if (pack.env === "build") {
   ws = `ws://${window.location.hostname}:${window.location.port}`;

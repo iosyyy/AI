@@ -158,7 +158,6 @@ class App extends Component {
                   fontWeight: 500,
                   color: "rgb(246,246,246)",
                 }}
-                key="11"
                 title="在线推理"
                 selectable={false}
               >
@@ -202,7 +201,7 @@ class App extends Component {
                     </Menu.Item>
                   </>
                 ) : (
-                  <Menu.Item key="11">
+                  <Menu.Item key="12">
                     <NavLink
                       style={{
                         fontWeight: 900,
