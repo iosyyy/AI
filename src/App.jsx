@@ -82,9 +82,9 @@ class App extends Component {
         color: "rgb(246,246,246)",
       },
     };
-    const headerHigh = "65px";
+    const headerHigh = "60px";
     const headerLine = "57px";
-    const menuLine = "65.5px";
+    const menuLine = "60.5px";
     const headerColor = "rgba(36,150,237)";
     const menu = (
       <div className="user-login-extend" style={{ background: "white" }}>
@@ -116,7 +116,7 @@ class App extends Component {
               }}
               className="logo"
             >
-              <Image width={400} preview={false} src={logo} />
+              <Image width={"auto"} preview={false} src={logo} />
             </div>
             <Menu
               style={{
@@ -124,7 +124,6 @@ class App extends Component {
                 width: "auto",
                 lineHeight: headerLine,
                 height: menuLine,
-
                 background: headerColor,
                 fontWeight: 600,
                 fontSize: "14px",

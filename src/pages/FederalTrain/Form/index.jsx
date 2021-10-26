@@ -16,7 +16,10 @@ class FederalTrain extends Component {
 
   render() {
     return (
-      <div style={{ height: "83vh" }} className="site-layout-content">
+      <div
+        style={{ height: "83vh", overflow: "auto" }}
+        className="site-layout-content"
+      >
         <StepsTemplate
           steps={[
             { status: "process", title: "联邦类型", icon: <FileOutlined /> },
@@ -134,17 +137,26 @@ class FederalTrain extends Component {
               </Card>
             </Col>
           </Row>
-          <Row justify={"center"} gutter={[48, 20]}>
-            <Col span={10}>
-              <Alert
-                closable
-                showIcon={true}
-                message="host端无法进行训练"
-                type="error"
-              />
-            </Col>
-          </Row>
-          <Row gutter={48}>
+          {localStorage.getItem("role") !== "guest" ? (
+            <Row style={{ marginBottom: "1vh" }} justify={"center"}>
+              <Col span={10}>
+                <Alert
+                  closable
+                  showIcon={true}
+                  message="host端无法进行训练"
+                  type="error"
+                />
+              </Col>
+            </Row>
+          ) : (
+            <Row
+              style={{ marginBottom: "1vh" }}
+              justify={"center"}
+              gutter={[48, 20]}
+            />
+          )}
+
+          <Row>
             <Col offset={11} span={12}>
               <Button
                 onClick={() => {
