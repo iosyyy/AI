@@ -83,9 +83,9 @@ class App extends Component {
       },
     };
     const headerHigh = "60px";
-    const headerLine = "57px";
+    const headerLine = "57.5px";
     const menuLine = "60.5px";
-    const headerColor = "rgba(36,150,237)";
+    const headerColor = "rgba(22,81,170)";
     const menu = (
       <div className="user-login-extend" style={{ background: "white" }}>
         <div style={fontStyle}>ID: {this.state.party_id}</div>
@@ -257,9 +257,7 @@ class App extends Component {
               </Menu.Item>
             </Menu>
           </Header>
-          <Content
-            style={{ padding: "3.5vh 3vw", background: "rgb(246,246,246)" }}
-          >
+          <Content style={{ padding: "3.5vh 3vw", background: "#FAF9F8" }}>
             <Switch>
               <Route path="/federalTrain" component={FederalIndex} />
               <Route path="/normal" component={Normal} />
