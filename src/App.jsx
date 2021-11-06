@@ -4,7 +4,7 @@ import { NavLink, Redirect, Route, Switch } from "react-router-dom";
 import PubSubJS from "pubsub-js";
 import Normal from "./pages/Normal";
 import Federal from "./pages/Federal";
-import logo from "./img/logo.png";
+import logo from "./img/logolast.png";
 import "./App.css";
 import "antd/dist/antd.css";
 import FederalIndex from "./pages/FederalTrain";
@@ -117,6 +117,22 @@ class App extends Component {
               className="logo"
             >
               <Image width={"auto"} preview={false} src={logo} />
+              {/*<div*/}
+              {/*  style={{*/}
+              {/*    backgroundImage:*/}
+              {/*      "linear-gradient(92.7deg,#56d364 -1.37%,#79c0ff 78.71%)",*/}
+              {/*    backgroundClip: "text",*/}
+              {/*    WebkitBackgroundClip: "text",*/}
+              {/*    color: "transparent",*/}
+              {/*    userSelect: "none",*/}
+              {/*    fontWeight: 5000,*/}
+
+              {/*    fontFamily: "Times New Roman, Times, serif",*/}
+              {/*    fontSize: 14,*/}
+              {/*  }}*/}
+              {/*>*/}
+              {/*  金融多方数据共享平台*/}
+              {/*</div>*/}
             </div>
             <Menu
               style={{

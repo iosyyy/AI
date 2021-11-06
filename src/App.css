@@ -1,7 +1,7 @@
 .site-layout-content {
     min-height: 280px;
     padding: 24px;
-    border-radius: 7px;
+    border-radius: 0.5rem;
     -moz-border-radius: 7px;
     -webkit-box-shadow: 0 20px 15px #9B7468;
     -moz-box-shadow: 0 20px 15px #9B7468;
