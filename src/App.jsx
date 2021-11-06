@@ -82,9 +82,9 @@ class App extends Component {
         color: "rgb(246,246,246)",
       },
     };
-    const headerHigh = "60px";
-    const headerLine = "57.5px";
-    const menuLine = "60.5px";
+    const headerHigh = "56px";
+    const headerLine = "53.5px";
+    const menuLine = "56.5px";
     const headerColor = "rgba(22,81,170)";
     const menu = (
       <div className="user-login-extend" style={{ background: "white" }}>
