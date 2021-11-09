@@ -15,7 +15,7 @@ function clamp(n, min, max) {
   return Math.max(Math.min(n, max), min);
 }
 
-const springConfig = { stiffness: 300, damping: 50 };
+const springConfig = { stiffness: 500, damping: 50 };
 const itemsCount = 1;
 
 class ButtonMenu extends React.Component {
