@@ -1,5 +1,15 @@
 import React, { Component } from "react";
-import { Button, Collapse, Dropdown, Image, Layout, Menu, message } from "antd";
+import {
+  Button,
+  Col,
+  Collapse,
+  Dropdown,
+  Image,
+  Layout,
+  Menu,
+  message,
+  Row,
+} from "antd";
 import { NavLink, Redirect, Route, Switch } from "react-router-dom";
 import PubSubJS from "pubsub-js";
 import Normal from "./pages/Normal";
@@ -14,11 +24,23 @@ import TrainingDetails from "./pages/Training/Detail";
 import FederalDetailAll from "./pages/FederalDetail";
 import DataSource from "./pages/DataSource";
 import Avatar from "antd/es/avatar/avatar";
-import { UserOutlined } from "@ant-design/icons";
+import {
+  BoxPlotOutlined,
+  DesktopOutlined,
+  DotChartOutlined,
+  EditOutlined,
+  FieldTimeOutlined,
+  FileDoneOutlined,
+  HeatMapOutlined,
+  HistoryOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import Reasoning from "./pages/Reasoning";
 import axios from "axios";
 import api from "./config/api";
 import SubMenu from "antd/es/menu/SubMenu";
+import Sider from "antd/es/layout/Sider";
+import Demo from "./util/demo";
 const { Panel } = Collapse;
 
 const { Header, Content } = Layout;
@@ -26,7 +48,12 @@ const { Header, Content } = Layout;
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { page: "1", party_name: "", party_id: 0 };
+    this.state = {
+      page: "1",
+      party_name: "",
+      party_id: 0,
+      inlineCollapsed: true,
+    };
     // FIXME 目前使用pubsubjs监听页面跳转然后来改变Menu的选择后续可以通过当前连接更改,目前先这么写方便测试
     PubSubJS.subscribe("isRunning", (msg, data) => {
       this.setState({ page: data.page });
@@ -60,6 +87,14 @@ class App extends Component {
       });
   }
 
+  setVisFalse = () => {
+    const inlineCollapsed = !this.state.inlineCollapsed;
+    console.log(inlineCollapsed);
+    this.setState({
+      inlineCollapsed,
+    });
+  };
+
   render() {
     const fontStyle = {
       fontWeight: 900,
@@ -82,7 +117,7 @@ class App extends Component {
         color: "rgb(246,246,246)",
       },
     };
-    const headerHigh = "56px";
+    const headerHigh = "20px";
     const headerLine = "53.5px";
     const menuLine = "56.5px";
     const headerColor = "rgba(22,81,170)";
@@ -92,23 +127,22 @@ class App extends Component {
         {/*<div style={fontStyle}>用户名: {this.state.party_name}</div>*/}
       </div>
     );
+    console.log(this.state.inlineCollapsed);
     return (
       <div>
         <Layout className="layout">
           <Header
-            className={"ant-menus"}
             style={{
-              zIndex: 100,
-              boxShadow: "0 3px 8px rgb(230,231,232)",
-              padding: "0px 0px 0px 20px",
-              height: headerHigh,
-
-              background: headerColor,
+              background: "rgb(22,81,170)",
+              padding: 0,
+              margin: 0,
+              height: "50px",
+              lineHeight: "50px",
             }}
           >
             <div
               style={{
-                width: "250px",
+                width: "300px",
                 height: "100%",
                 margin: "0px 0px 0px 0px",
                 display: "flex",
@@ -116,137 +150,15 @@ class App extends Component {
               }}
               className="logo"
             >
+              <Demo
+                inlineCollapsed={this.state.inlineCollapsed}
+                setVisFalse={this.setVisFalse}
+              />
               <Image width={"auto"} preview={false} src={logo} />
-              {/*<div*/}
-              {/*  style={{*/}
-              {/*    backgroundImage:*/}
-              {/*      "linear-gradient(92.7deg,#56d364 -1.37%,#79c0ff 78.71%)",*/}
-              {/*    backgroundClip: "text",*/}
-              {/*    WebkitBackgroundClip: "text",*/}
-              {/*    color: "transparent",*/}
-              {/*    userSelect: "none",*/}
-              {/*    fontWeight: 5000,*/}
-
-              {/*    fontFamily: "Times New Roman, Times, serif",*/}
-              {/*    fontSize: 14,*/}
-              {/*  }}*/}
-              {/*>*/}
-              {/*  金融多方数据共享平台*/}
-              {/*</div>*/}
             </div>
-            <Menu
-              style={{
-                minWidth: "700px",
-                width: "auto",
-                lineHeight: headerLine,
-                height: menuLine,
-                background: headerColor,
-                fontWeight: 600,
-                fontSize: "14px",
-              }}
-              mode="horizontal"
-              selectedKeys={[this.state.page]}
-              onSelect={(info) => {
-                this.setState({
-                  page: info.key,
-                });
-              }}
-            >
-              <Menu.Item key="1">
-                <NavLink {...linkStyle} to="/federalTrain">
-                  联邦训练
-                </NavLink>
-              </Menu.Item>
-              <Menu.Item key="2">
-                <NavLink {...linkStyle} to="/normal">
-                  联邦攻防
-                </NavLink>
-              </Menu.Item>
-              <Menu.Item key="3">
-                <NavLink {...linkStyle} to="/federal">
-                  联邦攻击
-                </NavLink>
-              </Menu.Item>
-              <SubMenu
-                className={"ant-menus"}
+            <Row align={"middle"} justify={"end"}>
+              <Col
                 style={{
-                  background: headerColor,
-                  fontWeight: 500,
-                  color: "rgb(246,246,246)",
-                }}
-                title="在线推理"
-                selectable={false}
-              >
-                {localStorage.getItem("role") === "guest" ? (
-                  <>
-                    <Menu.Item key="8">
-                      <NavLink
-                        style={{
-                          fontWeight: 900,
-
-                          color: "rgb(127,125,142)",
-                        }}
-                        to="/reasoning/model"
-                      >
-                        模型部署
-                      </NavLink>
-                    </Menu.Item>
-                    <Menu.Item key="9">
-                      <NavLink
-                        style={{
-                          fontWeight: 900,
-
-                          color: "rgb(127,125,142)",
-                        }}
-                        to="/reasoning/interface"
-                      >
-                        单例预测
-                      </NavLink>
-                    </Menu.Item>
-                    <Menu.Item key="10">
-                      <NavLink
-                        style={{
-                          fontWeight: 900,
-
-                          color: "rgb(127,125,142)",
-                        }}
-                        to="/reasoning/batch_interface"
-                      >
-                        批量预测
-                      </NavLink>
-                    </Menu.Item>
-                  </>
-                ) : (
-                  <Menu.Item key="12">
-                    <NavLink
-                      style={{
-                        fontWeight: 900,
-                        color: "rgb(127,125,142)",
-                      }}
-                      to="/reasoning/upload_data"
-                    >
-                      数据上传
-                    </NavLink>
-                  </Menu.Item>
-                )}
-              </SubMenu>
-              <div
-                style={{
-                  fontWeight: 900,
-                  color: "rgb(246,246,246)",
-                  float: "right",
-                  display: "inline-block",
-                  height: headerHigh,
-                  marginRight: "10px",
-                }}
-              >
-                {this.state.party_name}
-              </div>
-              <div
-                style={{
-                  float: "right",
-                  display: "inline-block",
-                  height: headerHigh,
                   marginLeft: "10px",
                   marginRight: "10px",
                 }}
@@ -254,39 +166,115 @@ class App extends Component {
                 <Dropdown placement="bottomCenter" overlay={menu}>
                   <Avatar size={38} icon={<UserOutlined />} />
                 </Dropdown>
-              </div>
-
-              <Menu.Item style={{ float: "right" }} key="4">
-                <NavLink {...linkStyle} to="/trainingRecord">
-                  训练记录
-                </NavLink>
-              </Menu.Item>
-              <Menu.Item style={{ float: "right" }} key="5">
-                <NavLink {...linkStyle} to="/training">
-                  正在训练
-                </NavLink>
-              </Menu.Item>
-              <Menu.Item style={{ float: "right" }} key="6">
-                <NavLink {...linkStyle} to="/datasource">
-                  数据集
-                </NavLink>
-              </Menu.Item>
-            </Menu>
+              </Col>
+              <Col
+                style={{
+                  fontWeight: 900,
+                  color: "rgb(246,246,246)",
+                  marginRight: "10px",
+                }}
+              >
+                {this.state.party_name}
+              </Col>
+            </Row>
           </Header>
-          <Content style={{ padding: "3.5vh 3vw", background: "#FAF9F8" }}>
-            <Switch>
-              <Route path="/federalTrain" component={FederalIndex} />
-              <Route path="/normal" component={Normal} />
-              <Route path="/federal" component={Federal} />
-              <Route path="/training" component={Training} />
-              <Route path="/trainingRecord" component={TrainingRecord} />
-              <Route path="/federalDetail" component={FederalDetailAll} />
-              <Route path="/trainingDetails" component={TrainingDetails} />
-              <Route path="/datasource" component={DataSource} />
-              <Route path="/reasoning" component={Reasoning} />
-              <Redirect to="/federalTrain" />
-            </Switch>
-          </Content>
+          <Layout>
+            <Sider
+              collapsed={this.state.inlineCollapsed}
+              style={{ background: "#fff" }}
+            >
+              <Menu
+                mode="inline"
+                selectedKeys={[this.state.page]}
+                onSelect={(info) => {
+                  this.setState({
+                    page: info.key,
+                  });
+                }}
+              >
+                <Menu.Item key="1" icon={<DotChartOutlined />}>
+                  <NavLink to="/federalTrain">联邦训练</NavLink>
+                </Menu.Item>
+                <Menu.Item key="2" icon={<HeatMapOutlined />}>
+                  <NavLink to="/normal">联邦攻防</NavLink>
+                </Menu.Item>
+                <Menu.Item key="3" icon={<BoxPlotOutlined />}>
+                  <NavLink to="/federal">联邦攻击</NavLink>
+                </Menu.Item>
+                <SubMenu
+                  title="在线推理"
+                  selectable={false}
+                  key="15"
+                  icon={<EditOutlined />}
+                >
+                  {localStorage.getItem("role") === "guest" ? (
+                    <>
+                      <Menu.Item key="8">
+                        <NavLink to="/reasoning/model">模型部署</NavLink>
+                      </Menu.Item>
+                      <Menu.Item key="9">
+                        <NavLink to="/reasoning/interface">单例预测</NavLink>
+                      </Menu.Item>
+                      <Menu.Item key="10">
+                        <NavLink to="/reasoning/batch_interface">
+                          批量预测
+                        </NavLink>
+                      </Menu.Item>
+                    </>
+                  ) : (
+                    <Menu.Item key="12">
+                      <NavLink
+                        style={{
+                          fontWeight: 900,
+                          color: "rgb(127,125,142)",
+                        }}
+                        to="/reasoning/upload_data"
+                      >
+                        数据上传
+                      </NavLink>
+                    </Menu.Item>
+                  )}
+                </SubMenu>
+                {/**/}
+
+                <Menu.Item
+                  style={{ float: "right" }}
+                  key="4"
+                  icon={<HistoryOutlined />}
+                >
+                  <NavLink to="/trainingRecord">训练记录</NavLink>
+                </Menu.Item>
+                <Menu.Item
+                  style={{ float: "right" }}
+                  key="5"
+                  icon={<FieldTimeOutlined />}
+                >
+                  <NavLink to="/training">正在训练</NavLink>
+                </Menu.Item>
+                <Menu.Item
+                  style={{ float: "right" }}
+                  key="6"
+                  icon={<FileDoneOutlined />}
+                >
+                  <NavLink to="/datasource">数据集</NavLink>
+                </Menu.Item>
+              </Menu>
+            </Sider>
+            <Content style={{ padding: "3.5vh 3vw", background: "#FAF9F8" }}>
+              <Switch>
+                <Route path="/federalTrain" component={FederalIndex} />
+                <Route path="/normal" component={Normal} />
+                <Route path="/federal" component={Federal} />
+                <Route path="/training" component={Training} />
+                <Route path="/trainingRecord" component={TrainingRecord} />
+                <Route path="/federalDetail" component={FederalDetailAll} />
+                <Route path="/trainingDetails" component={TrainingDetails} />
+                <Route path="/datasource" component={DataSource} />
+                <Route path="/reasoning" component={Reasoning} />
+                <Redirect to="/federalTrain" />
+              </Switch>
+            </Content>
+          </Layout>
         </Layout>
       </div>
     );

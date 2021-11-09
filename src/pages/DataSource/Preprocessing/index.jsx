@@ -10,8 +10,8 @@ class MyDatasource extends Component {
   render() {
     return (
       <div
-        style={{ height: "83vh", width: "auto" }}
-        className="site-layout-content"
+      // style={{ height: "83vh", width: "auto" }}
+      // className="site-layout-content"
       >
         <h2 className="colorWhite">预处理数据管理</h2>
         <MyDatasourceTable />

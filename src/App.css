@@ -12,7 +12,9 @@
 
 
 }
-
+.ant-menu-lefts .ant-tabs-left{
+    padding-left: 12px;
+}
 .ant-menus .ant-menu-item-selected a {
     font-weight: 900 !important;
     color: rgb(246, 246, 246) !important;

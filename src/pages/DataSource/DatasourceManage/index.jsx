@@ -20,10 +20,7 @@ class DataSourceAdministration extends Component {
   render() {
     const { visible } = this.state;
     return (
-      <div
-        style={{ overflow: "auto", height: "83vh", width: "auto" }}
-        className="site-layout-content"
-      >
+      <div>
         <h2 className="colorWhite">数据源管理</h2>
         <Button
           style={{ margin: "1vh 0" }}
