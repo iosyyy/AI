@@ -82,11 +82,11 @@ class ButtonMenu extends React.Component {
                     onTouchStart={this.handleTouchStart.bind(null, i, y)}
                     className="demo8-item"
                     style={{
-                      width: "100%",
-                      height: "100px",
+                      width: "79px",
+                      height: "100%",
 
                       color: "#fff",
-                      boxShadow: `rgba(0, 0, 0, 0.2) 0px ${shadow}px ${
+                      boxShadow: `rgba(0, 0, 0, 0) 0px ${shadow}px ${
                         2 * shadow
                       }px 0px`,
                       padding: 0,
@@ -104,11 +104,11 @@ class ButtonMenu extends React.Component {
                     onTouchStart={this.handleTouchStart.bind(null, i, y)}
                     className="demo8-item"
                     style={{
-                      width: "100%",
-                      height: "100px",
+                      width: "79px",
+                      height: "100%",
 
                       color: "#fff",
-                      boxShadow: `rgba(0, 0, 0, 0.2) 0px ${shadow}px ${
+                      boxShadow: `rgba(0, 0, 0, 0) 0px ${shadow}px ${
                         2 * shadow
                       }px 0px`,
                       padding: 0,

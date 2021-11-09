@@ -140,7 +140,7 @@ class App extends Component {
           >
             <div
               style={{
-                width: "300px",
+                width: "329px",
                 height: "100%",
                 margin: "0px 0px 0px 0px",
                 display: "flex",
