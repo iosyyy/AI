@@ -18,7 +18,7 @@ function clamp(n, min, max) {
 const springConfig = { stiffness: 300, damping: 50 };
 const itemsCount = 1;
 
-export default class Demo extends React.Component {
+class ButtonMenu extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,6 +33,7 @@ export default class Demo extends React.Component {
   componentDidMount() {
     window.addEventListener("touchend", this.handleMouseUp);
     window.addEventListener("mouseup", this.handleMouseUp);
+    window.addEventListener("touchstart", this.handleMouseUp);
   }
 
   handleTouchStart = (key, pressLocation, e) => {
@@ -45,31 +46,6 @@ export default class Demo extends React.Component {
       isPressed: true,
       originalPosOfLastPressed: pos,
     });
-  };
-
-  handleMouseMove = ({ pageY }) => {
-    const {
-      isPressed,
-      topDeltaY,
-      order,
-      originalPosOfLastPressed,
-    } = this.state;
-
-    if (isPressed) {
-      const mouseY = pageY - topDeltaY;
-      const currentRow = clamp(Math.round(mouseY / 100), 0, itemsCount - 1);
-      let newOrder = order;
-
-      if (currentRow !== order.indexOf(originalPosOfLastPressed)) {
-        newOrder = reinsert(
-          order,
-          order.indexOf(originalPosOfLastPressed),
-          currentRow
-        );
-      }
-
-      this.setState({ mouseY: mouseY, order: newOrder });
-    }
   };
 
   handleMouseUp = () => {
@@ -150,3 +126,4 @@ export default class Demo extends React.Component {
     );
   }
 }
+export default ButtonMenu;

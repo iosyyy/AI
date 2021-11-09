@@ -40,7 +40,7 @@ import axios from "axios";
 import api from "./config/api";
 import SubMenu from "antd/es/menu/SubMenu";
 import Sider from "antd/es/layout/Sider";
-import Demo from "./util/demo";
+import ButtonMenu from "./util/buttonMenu";
 const { Panel } = Collapse;
 
 const { Header, Content } = Layout;
@@ -149,7 +149,7 @@ class App extends Component {
               }}
               className="logo"
             >
-              <Demo
+              <ButtonMenu
                 inlineCollapsed={this.state.inlineCollapsed}
                 setVisFalse={this.setVisFalse}
               />
