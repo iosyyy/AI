@@ -54,7 +54,7 @@ class App extends Component {
       party_id: 0,
       inlineCollapsed: true,
     };
-    // FIXME 目前使用pubsubjs监听页面跳转然后来改变Menu的选择后续可以通过当前连接更改,目前先这么写方便测试
+    // FIXME 目前使用pubsub.js监听页面跳转然后来改变Menu的选择后续可以通过当前连接更改,目前先这么写方便测试
     PubSubJS.subscribe("isRunning", (msg, data) => {
       this.setState({ page: data.page });
     });
@@ -88,10 +88,8 @@ class App extends Component {
   }
 
   setVisFalse = () => {
-    const inlineCollapsed = !this.state.inlineCollapsed;
-    console.log(inlineCollapsed);
     this.setState({
-      inlineCollapsed,
+      inlineCollapsed: !this.state.inlineCollapsed,
     });
   };
 
@@ -147,6 +145,7 @@ class App extends Component {
                 margin: "0px 0px 0px 0px",
                 display: "flex",
                 alignItems: "center",
+                userSelect: "none",
               }}
               className="logo"
             >
@@ -164,13 +163,18 @@ class App extends Component {
                 }}
               >
                 <Dropdown placement="bottomCenter" overlay={menu}>
-                  <Avatar size={38} icon={<UserOutlined />} />
+                  <Avatar
+                    size={38}
+                    icon={
+                      <UserOutlined style={{ color: "rgb(250,249,248)" }} />
+                    }
+                  />
                 </Dropdown>
               </Col>
               <Col
                 style={{
                   fontWeight: 900,
-                  color: "rgb(246,246,246)",
+                  color: "rgb(250,249,248)",
                   marginRight: "10px",
                 }}
               >
@@ -236,13 +240,12 @@ class App extends Component {
                   )}
                 </SubMenu>
                 {/**/}
-
                 <Menu.Item
                   style={{ float: "right" }}
-                  key="4"
-                  icon={<HistoryOutlined />}
+                  key="6"
+                  icon={<FileDoneOutlined />}
                 >
-                  <NavLink to="/trainingRecord">训练记录</NavLink>
+                  <NavLink to="/datasource">数据集</NavLink>
                 </Menu.Item>
                 <Menu.Item
                   style={{ float: "right" }}
@@ -253,10 +256,10 @@ class App extends Component {
                 </Menu.Item>
                 <Menu.Item
                   style={{ float: "right" }}
-                  key="6"
-                  icon={<FileDoneOutlined />}
+                  key="4"
+                  icon={<HistoryOutlined />}
                 >
-                  <NavLink to="/datasource">数据集</NavLink>
+                  <NavLink to="/trainingRecord">训练记录</NavLink>
                 </Menu.Item>
               </Menu>
             </Sider>

@@ -46,7 +46,7 @@ class DataSource extends Component {
               pathname: "/datasource/" + e,
             });
           }}
-          tabPosition={"left"}
+          tabPosition={"top"}
         >
           <TabPane
             tab={
