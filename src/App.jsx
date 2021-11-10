@@ -26,6 +26,8 @@ import DataSource from "./pages/DataSource";
 import Avatar from "antd/es/avatar/avatar";
 import {
   BoxPlotOutlined,
+  CloudUploadOutlined,
+  createFromIconfontCN,
   DesktopOutlined,
   DotChartOutlined,
   EditOutlined,
@@ -44,7 +46,9 @@ import ButtonMenu from "./util/buttonMenu";
 const { Panel } = Collapse;
 
 const { Header, Content } = Layout;
-
+const IconFont = createFromIconfontCN({
+  scriptUrl: "//at.alicdn.com/t/font_1749581_ux0xz0o2cls.js",
+});
 class App extends Component {
   constructor(props) {
     super(props);
@@ -213,13 +217,17 @@ class App extends Component {
                 >
                   {localStorage.getItem("role") === "guest" ? (
                     <>
-                      <Menu.Item key="8">
+                      <Menu.Item icon={<CloudUploadOutlined />} key="8">
                         <NavLink to="/reasoning/model">模型部署</NavLink>
                       </Menu.Item>
-                      <Menu.Item key="9">
+                      <Menu.Item icon={<IconFont type={"icon-ye"} />} key="9">
                         <NavLink to="/reasoning/interface">单例预测</NavLink>
                       </Menu.Item>
-                      <Menu.Item key="10">
+
+                      <Menu.Item
+                        icon={<IconFont type={"icon-icon"} />}
+                        key="10"
+                      >
                         <NavLink to="/reasoning/batch_interface">
                           批量预测
                         </NavLink>

@@ -488,6 +488,7 @@ class TrainingRecord extends Component {
           loading={this.state.loading}
           scroll={{ y: "64vh" }}
           bordered={false}
+          size={"middle"}
           dataSource={this.state.dataSource}
           columns={this.state.columns}
           pagination={{
