@@ -47,7 +47,7 @@ const { Panel } = Collapse;
 
 const { Header, Content } = Layout;
 const IconFont = createFromIconfontCN({
-  scriptUrl: "//at.alicdn.com/t/font_1749581_ux0xz0o2cls.js",
+  scriptUrl: "//at.alicdn.com/t/font_1749581_btq6rowck4.js",
 });
 class App extends Component {
   constructor(props) {
@@ -217,10 +217,18 @@ class App extends Component {
                 >
                   {localStorage.getItem("role") === "guest" ? (
                     <>
-                      <Menu.Item icon={<CloudUploadOutlined />} key="8">
+                      <Menu.Item
+                        icon={<IconFont type={"icon-xingkong"} />}
+                        key="8"
+                      >
                         <NavLink to="/reasoning/model">模型部署</NavLink>
                       </Menu.Item>
-                      <Menu.Item icon={<IconFont type={"icon-ye"} />} key="9">
+                      <Menu.Item
+                        icon={
+                          <IconFont type={"icon-dc-icon-zhongzidujiaoshou"} />
+                        }
+                        key="9"
+                      >
                         <NavLink to="/reasoning/interface">单例预测</NavLink>
                       </Menu.Item>
 
@@ -234,7 +242,10 @@ class App extends Component {
                       </Menu.Item>
                     </>
                   ) : (
-                    <Menu.Item key="12">
+                    <Menu.Item
+                      icon={<IconFont type={"icon-Upload"} />}
+                      key="12"
+                    >
                       <NavLink
                         style={{
                           fontWeight: 900,
@@ -271,7 +282,7 @@ class App extends Component {
                 </Menu.Item>
               </Menu>
             </Sider>
-            <Content style={{ padding: "3.5vh 3vw", background: "#FAF9F8" }}>
+            <Content style={{ padding: "3vh 1.5vw", background: "#FAF9F8" }}>
               <Switch>
                 <Route path="/federalTrain" component={FederalIndex} />
                 <Route path="/normal" component={Normal} />
