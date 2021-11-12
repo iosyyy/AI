@@ -18,7 +18,7 @@ function clamp(n, min, max) {
 const springConfig = { stiffness: 500, damping: 50 };
 const itemsCount = 1;
 
-class ButtonMenu extends React.Component {
+class MenuButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -72,28 +72,28 @@ class ButtonMenu extends React.Component {
                 };
           return (
             <Motion style={style} key={i}>
-              {({ scale, shadow, y }) =>
-                this.props.inlineCollapsed ? (
+              {({ scale, shadow, y }) => {
+                const style = {
+                  width: "79px",
+                  height: "100%",
+
+                  color: "#fff",
+                  boxShadow: `rgba(0, 0, 0, 0) 0px ${shadow}px ${
+                    2 * shadow
+                  }px 0px`,
+                  padding: 0,
+                  transform: `translate3d(0, ${y}px, 0) scale(${scale})`,
+                  WebkitTransform: `translate3d(0, ${y}px, 0) scale(${scale})`,
+                  zIndex: i === originalPosOfLastPressed ? 99 : i,
+                };
+                return this.props.inlineCollapsed ? (
                   <MenuUnfoldOutlined
                     onClick={() => {
                       this.props.setVisFalse();
                     }}
                     onMouseDown={this.handleMouseDown.bind(null, i, y)}
                     onTouchStart={this.handleTouchStart.bind(null, i, y)}
-                    className="demo8-item"
-                    style={{
-                      width: "79px",
-                      height: "100%",
-
-                      color: "#fff",
-                      boxShadow: `rgba(0, 0, 0, 0) 0px ${shadow}px ${
-                        2 * shadow
-                      }px 0px`,
-                      padding: 0,
-                      transform: `translate3d(0, ${y}px, 0) scale(${scale})`,
-                      WebkitTransform: `translate3d(0, ${y}px, 0) scale(${scale})`,
-                      zIndex: i === originalPosOfLastPressed ? 99 : i,
-                    }}
+                    style={style}
                   />
                 ) : (
                   <MenuFoldOutlined
@@ -102,23 +102,10 @@ class ButtonMenu extends React.Component {
                     }}
                     onMouseDown={this.handleMouseDown.bind(null, i, y)}
                     onTouchStart={this.handleTouchStart.bind(null, i, y)}
-                    className="demo8-item"
-                    style={{
-                      width: "79px",
-                      height: "100%",
-
-                      color: "#fff",
-                      boxShadow: `rgba(0, 0, 0, 0) 0px ${shadow}px ${
-                        2 * shadow
-                      }px 0px`,
-                      padding: 0,
-                      transform: `translate3d(0, ${y}px, 0) scale(${scale})`,
-                      WebkitTransform: `translate3d(0, ${y}px, 0) scale(${scale})`,
-                      zIndex: i === originalPosOfLastPressed ? 99 : i,
-                    }}
+                    style={style}
                   />
-                )
-              }
+                );
+              }}
             </Motion>
           );
         })}
@@ -126,4 +113,4 @@ class ButtonMenu extends React.Component {
     );
   }
 }
-export default ButtonMenu;
+export default MenuButton;

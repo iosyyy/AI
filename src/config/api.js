@@ -29,6 +29,8 @@ const e = {
   downloadTemplate: host + "/v1/client/download/template",
   stopJob: host + "/job/v1/pipeline/job/stop",
   getJobOutput: host + "/v1/tracking/component/output/model",
+  findList: host + "/v1/predict_data/predict/find_list",
+  delPredict: host + "/v1/predict_data/predict/del",
   metrics: host + "/v1/tracking/component/metrics",
   metrics_data: host + "/v1/tracking/component/metric_data",
   data_output: host + "/v1/tracking/component/output/data",

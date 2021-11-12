@@ -6,12 +6,16 @@ import {
   Input,
   message,
   Modal,
+  Popconfirm,
   Row,
   Space,
   Table,
+  Tag,
   Upload,
 } from "antd";
 import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
   DownloadOutlined,
   DownOutlined,
   UploadOutlined,
@@ -20,48 +24,7 @@ import axios from "axios";
 import api from "../../../config/api";
 import PubSubJS from "pubsub-js";
 import TextArea from "antd/es/input/TextArea";
-const COLUMNS = [
-  {
-    title: "序号",
-    dataIndex: "index",
-    key: "index",
-  },
-  {
-    title: "service_id",
-    dataIndex: "service_id",
-    key: "service_id",
-  },
-  {
-    title: "数据信息",
-    dataIndex: "note",
-    key: "note",
-  },
-  {
-    title: "上传时间",
-    dataIndex: "upload_time",
-    key: "upload_time",
-  },
-  {
-    title: "状态",
-    dataIndex: "status",
-    key: "status",
-  },
-  {
-    title: "操作",
-    dataIndex: "action",
-    key: "action",
-    render: () => {
-      return (
-        <Space>
-          <Button type={"primary"}>下载</Button>
-          <Button danger type={"primary"}>
-            删除
-          </Button>
-        </Space>
-      );
-    },
-  },
-];
+
 class UploadData extends Component {
   constructor(props) {
     super(props);
@@ -70,55 +33,127 @@ class UploadData extends Component {
     this.state = {
       show: false,
       loading: false,
-      datasource: [
-        {
-          index: 0,
-          service_id: "203541102419413968753497",
-          note: "upload success",
-          upload_time: new Date("2021-10-01"),
-          status: "完成",
-          key: 0,
-        },
-        {
-          index: 1,
-          service_id: "2331102419413968753182",
-          note: "upload success",
-          upload_time: new Date("2021-10-15"),
-          status: "完成",
-          key: 1,
-        },
-        {
-          index: 2,
-          service_id: "2251101424941396875431",
-          note: "upload success",
-          upload_time: new Date("2021-10-08"),
-          status: "完成",
-          key: 2,
-        },
-        {
-          index: 3,
-          service_id: "20211532234139687534",
-          note: "upload failed",
-          upload_time: new Date("2021-10-11"),
-          status: "失败",
-          key: 3,
-        },
-        {
-          index: 4,
-          service_id: "202121413968753497",
-          note: "upload success",
-          upload_time: new Date("2021-10-09"),
-          status: "完成",
-          key: 4,
-        },
-      ],
+      datasource: [],
     };
+  }
+
+  getData = () => {
+    const formData = new FormData();
+    formData.append("page", "1");
+    formData.append("page_length", "10");
+    this.setState({
+      loading: true,
+    });
+    axios
+      .post(api.findList, formData)
+      .then((r) => {
+        const { data } = r.data;
+        if (r.data.retcode !== 0) {
+          message.error(r.data.retmsg);
+          return;
+        }
+        const datasource = data.map((v, i) => {
+          return {
+            ...v,
+            upload_time: new Date(v.f_create_time * 1000).toLocaleString(),
+            key: i,
+          };
+        });
+        this.setState({
+          datasource,
+        });
+      })
+      .catch((r) => {
+        message.error("服务器异常");
+      })
+      .finally(() => {
+        this.setState({
+          loading: false,
+        });
+      });
+  };
+
+  componentDidMount() {
+    this.getData();
   }
 
   render() {
     const { show, loading, datasource } = this.state;
     const fontStyle = { fontWeight: 900, color: "rgb(127,125,142)" };
-
+    const COLUMNS = [
+      {
+        title: "序号",
+        dataIndex: "f_id",
+        key: "f_id",
+      },
+      {
+        title: "service_id",
+        dataIndex: "f_service_id",
+        key: "f_service_id",
+      },
+      {
+        title: "数据信息",
+        dataIndex: "f_msg",
+        key: "f_msg",
+      },
+      {
+        title: "上传时间",
+        dataIndex: "upload_time",
+        key: "upload_time",
+      },
+      {
+        title: "状态",
+        dataIndex: "f_status",
+        key: "f_status",
+        render: (_v, x) => {
+          return _v === "0" ? (
+            <Tag icon={<CheckCircleOutlined />} color="success">
+              成功
+            </Tag>
+          ) : (
+            <Tag icon={<CloseCircleOutlined />} color="error">
+              失败
+            </Tag>
+          );
+        },
+      },
+      {
+        title: "操作",
+        dataIndex: "action",
+        key: "action",
+        render: (_v, all) => {
+          return (
+            <Space>
+              <Button type={"primary"}>下载</Button>
+              <Popconfirm
+                title="确定删除本条信息?"
+                onConfirm={() => {
+                  const formData = new FormData();
+                  formData.append("id", all.f_id);
+                  axios
+                    .post(api.delPredict, formData)
+                    .then((r) => {
+                      if (r.data.retcode !== 0) {
+                        message.error("删除失败" + r.data.retmsg);
+                        return;
+                      }
+                    })
+                    .finally(() => {
+                      this.getData();
+                    });
+                }}
+                okText="确定"
+                cancelText="取消"
+              >
+                <Button danger type={"primary"}>
+                  删除
+                </Button>
+              </Popconfirm>
+            </Space>
+          );
+        },
+      },
+    ];
     return (
       <div>
         <Button
@@ -131,6 +166,7 @@ class UploadData extends Component {
           上传
         </Button>
         <Table
+          loading={loading}
           size={"middle"}
           style={{ marginTop: "1vh" }}
           dataSource={datasource}
@@ -170,7 +206,7 @@ class UploadData extends Component {
                 show: false,
               });
             }}
-            layout={"horizontal"}
+            layout={"vertical"}
           >
             <Row justify={"center"}>
               <Col span={24}>
@@ -180,6 +216,30 @@ class UploadData extends Component {
                   rules={[{ required: true, message: "请输入service_id" }]}
                 >
                   <Input placeholder={"请输入service_id"} />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row justify={"center"}>
+              <Col span={24}>
+                <Form.Item
+                  name="file"
+                  label={<div style={fontStyle}>预测样本</div>}
+                  beforeUpload={() => {
+                    return false;
+                  }}
+                  rules={[{ required: true, message: "请上传预测样本后重试" }]}
+                >
+                  <Upload
+                    beforeUpload={() => {
+                      return false;
+                    }}
+                    style={{ width: "10px" }}
+                    maxCount={1}
+                  >
+                    <Button icon={<UploadOutlined />}>
+                      上传预测样本 (Max: 1)
+                    </Button>
+                  </Upload>
                 </Form.Item>
               </Col>
             </Row>
@@ -197,6 +257,7 @@ class UploadData extends Component {
                 </Form.Item>
               </Col>
             </Row>
+
             <Row justify={"end"}>
               <Space>
                 <Col>

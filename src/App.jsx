@@ -15,6 +15,7 @@ import PubSubJS from "pubsub-js";
 import Normal from "./pages/Normal";
 import Federal from "./pages/Federal";
 import logo from "./img/logolast.png";
+import star from "./img/starWhite.png";
 import "./App.css";
 import "antd/dist/antd.css";
 import FederalIndex from "./pages/FederalTrain";
@@ -42,12 +43,12 @@ import axios from "axios";
 import api from "./config/api";
 import SubMenu from "antd/es/menu/SubMenu";
 import Sider from "antd/es/layout/Sider";
-import ButtonMenu from "./util/buttonMenu";
+import MenuButton from "./util/menuButton";
 const { Panel } = Collapse;
 
 const { Header, Content } = Layout;
 const IconFont = createFromIconfontCN({
-  scriptUrl: "//at.alicdn.com/t/font_1749581_btq6rowck4.js",
+  scriptUrl: "//at.alicdn.com/t/font_1749581_s16tzbduh78.js",
 });
 class App extends Component {
   constructor(props) {
@@ -142,23 +143,26 @@ class App extends Component {
               lineHeight: "50px",
             }}
           >
-            <div
-              style={{
-                width: "329px",
-                height: "100%",
-                margin: "0px 0px 0px 0px",
-                display: "flex",
-                alignItems: "center",
-                userSelect: "none",
-              }}
-              className="logo"
-            >
-              <ButtonMenu
-                inlineCollapsed={this.state.inlineCollapsed}
-                setVisFalse={this.setVisFalse}
-              />
-              <Image width={"auto"} preview={false} src={logo} />
-            </div>
+            <a href={"/#/federalTrain/form"}>
+              <div
+                style={{
+                  width: "329px",
+                  height: "100%",
+                  margin: "0px 0px 0px 0px",
+                  display: "flex",
+                  alignItems: "center",
+                  userSelect: "none",
+                }}
+                className="logo"
+              >
+                <MenuButton
+                  inlineCollapsed={this.state.inlineCollapsed}
+                  setVisFalse={this.setVisFalse}
+                />
+                <Image width={"80px"} preview={false} src={star} />
+                <Image width={"auto"} preview={false} src={logo} />
+              </div>
+            </a>
             <Row align={"middle"} justify={"end"}>
               <Col
                 style={{
@@ -168,9 +172,11 @@ class App extends Component {
               >
                 <Dropdown placement="bottomCenter" overlay={menu}>
                   <Avatar
+                    style={{ background: "rgb(250,249,248)" }}
                     size={38}
                     icon={
-                      <UserOutlined style={{ color: "rgb(250,249,248)" }} />
+                      <IconFont type={"icon-xuesheng"} />
+                      // <UserOutlined style={{ color: "rgb(250,249,248)" }} />
                     }
                   />
                 </Dropdown>

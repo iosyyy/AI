@@ -33,7 +33,7 @@ class TrainingRecord extends Component {
         width: "16vw",
         render: (id, obj) => (
           <div>
-            <div
+            <a
               style={{
                 color: "rgb(65,89,209)",
               }}
@@ -53,7 +53,7 @@ class TrainingRecord extends Component {
               }}
             >
               {id}
-            </div>
+            </a>
           </div>
         ),
       },
