@@ -37,15 +37,8 @@ class DataSourceAdministration extends Component {
           visible={visible}
           title="上传数据集"
           centered
-          bodyStyle={{
-            WebkitBoxShadow: "0 20px 15px #9B7468",
-            MozBoxShadow: "0 20px 15px #9B7468",
-            boxShadow: "0 6px 10px rgb(158,199,210)",
-            borderRadius: "5px",
-          }}
-          wrapClassName={"site-layout-content"}
           footer={null}
-          width={"90vw"}
+          width={"80vw"}
           onOk={() => {
             this.setState({
               visible: true,

@@ -103,27 +103,7 @@ class App extends Component {
       fontWeight: 900,
       color: "rgb(127,125,142)",
     };
-    const fontStyleMenu = {
-      fontWeight: 900,
 
-      color: "rgb(127,125,142)",
-    };
-    const linkStyle = {
-      activeStyle: {
-        userSelect: "none",
-        fontWeight: 900,
-        color: "rgb(246,246,246)",
-      },
-      style: {
-        userSelect: "none",
-        fontWeight: 500,
-        color: "rgb(246,246,246)",
-      },
-    };
-    const headerHigh = "20px";
-    const headerLine = "53.5px";
-    const menuLine = "56.5px";
-    const headerColor = "rgba(22,81,170)";
     const menu = (
       <div className="user-login-extend" style={{ background: "white" }}>
         <div style={fontStyle}>ID: {this.state.party_id}</div>
