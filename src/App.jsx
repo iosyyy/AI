@@ -125,7 +125,7 @@ class App extends Component {
           >
             <div
               style={{
-                width: "329px",
+                width: "349px",
                 height: "100%",
                 margin: "0px 0px 0px 0px",
                 display: "flex",
@@ -138,7 +138,7 @@ class App extends Component {
                 inlineCollapsed={this.state.inlineCollapsed}
                 setVisFalse={this.setVisFalse}
               />
-              <Image width={"80px"} preview={false} src={star} />
+              <Image width={"90px"} preview={false} src={star} />
               <Image width={"auto"} preview={false} src={logo} />
             </div>
             <Row align={"middle"} justify={"end"}>
