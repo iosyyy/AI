@@ -123,26 +123,24 @@ class App extends Component {
               lineHeight: "50px",
             }}
           >
-            <a href={"/#/federalTrain/form"}>
-              <div
-                style={{
-                  width: "329px",
-                  height: "100%",
-                  margin: "0px 0px 0px 0px",
-                  display: "flex",
-                  alignItems: "center",
-                  userSelect: "none",
-                }}
-                className="logo"
-              >
-                <MenuButton
-                  inlineCollapsed={this.state.inlineCollapsed}
-                  setVisFalse={this.setVisFalse}
-                />
-                <Image width={"80px"} preview={false} src={star} />
-                <Image width={"auto"} preview={false} src={logo} />
-              </div>
-            </a>
+            <div
+              style={{
+                width: "329px",
+                height: "100%",
+                margin: "0px 0px 0px 0px",
+                display: "flex",
+                alignItems: "center",
+                userSelect: "none",
+              }}
+              className="logo"
+            >
+              <MenuButton
+                inlineCollapsed={this.state.inlineCollapsed}
+                setVisFalse={this.setVisFalse}
+              />
+              <Image width={"80px"} preview={false} src={star} />
+              <Image width={"auto"} preview={false} src={logo} />
+            </div>
             <Row align={"middle"} justify={"end"}>
               <Col
                 style={{
