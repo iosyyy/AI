@@ -16,14 +16,13 @@ import {
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
-  DownloadOutlined,
-  DownOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
 import axios from "axios";
 import api from "../../../config/api";
 import PubSubJS from "pubsub-js";
 import TextArea from "antd/es/input/TextArea";
+import FileSaver from "file-saver";
 
 class UploadData extends Component {
   constructor(props) {
@@ -38,14 +37,11 @@ class UploadData extends Component {
   }
 
   getData = () => {
-    const formData = new FormData();
-    formData.append("page", "1");
-    formData.append("page_length", "10");
     this.setState({
       loading: true,
     });
     axios
-      .post(api.findList, formData)
+      .post(api.findList, { page: 1, page_length: 10 })
       .then((r) => {
         const { data } = r.data;
         if (r.data.retcode !== 0) {
@@ -124,18 +120,43 @@ class UploadData extends Component {
         render: (_v, all) => {
           return (
             <Space>
-              <Button type={"primary"}>下载</Button>
+              <Button
+                onClick={() => {
+                  axios
+                    .post(api.downloadTemplate, { file_name: all.f_data_path })
+                    .then((r) => {
+                      const { code } = r.data;
+                      if (code !== 0) {
+                        message.error("当前文件下载错误请重试");
+                        return;
+                      }
+                      const { data } = r.data;
+
+                      const exportContent = "\uFEFF";
+                      const blob = new Blob([exportContent + data], {
+                        type: "text/plain;charset=utf-8",
+                      });
+                      const regFile = /[/][\S\s]*[/]/i;
+                      const curFile = all.f_data_path.replace(regFile, "");
+                      FileSaver.saveAs(blob, curFile);
+                    })
+                    .catch((r) => {
+                      console.log(r);
+                      message.error("文件下载失败请重试并检查网络连接");
+                    });
+                }}
+                type={"primary"}
+              >
+                下载
+              </Button>
               <Popconfirm
                 title="确定删除本条信息?"
                 onConfirm={() => {
-                  const formData = new FormData();
-                  formData.append("id", all.f_id);
                   axios
-                    .post(api.delPredict, formData)
+                    .post(api.delPredict, { id: all.f_id })
                     .then((r) => {
                       if (r.data.retcode !== 0) {
                         message.error("删除失败" + r.data.retmsg);
-                        return;
                       }
                     })
                     .finally(() => {
@@ -190,21 +211,30 @@ class UploadData extends Component {
             wrapperCol={{ span: 24 }}
             onFinish={(e) => {
               console.log(e);
-              const { datasource } = this.state;
-              const data = [...datasource];
-              data.push({
-                index: data.length + 1,
-                service_id: e.service_id,
-                note: e.note,
-                upload_time: new Date(),
-                status: "完成",
-                key: data.length + 1,
-              });
-              message.success("上传成功");
+              const { service_id, context, file } = e;
+              const formData = new FormData();
+              formData.append("file", file.file);
+              formData.append("context", context);
+              formData.append("service_id", service_id);
               this.setState({
-                datasource: data,
-                show: false,
+                loading: true,
               });
+              axios
+                .post(api.uploadFile, formData)
+                .then((r) => {
+                  if (r.data.retcode !== 0) {
+                    message.error("删除失败" + r.data.retmsg);
+                    return;
+                  }
+                  message.success("上传成功");
+                })
+                .finally(() => {
+                  this.getData();
+                  this.setState({
+                    loading: false,
+                    show: false,
+                  });
+                });
             }}
             layout={"vertical"}
           >
@@ -246,7 +276,7 @@ class UploadData extends Component {
             <Row justify={"center"}>
               <Col span={24}>
                 <Form.Item
-                  name="note"
+                  name="context"
                   label={<div style={fontStyle}>数据信息</div>}
                   rules={[{ required: true, message: "请输入数据信息" }]}
                 >

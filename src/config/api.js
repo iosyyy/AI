@@ -27,6 +27,7 @@ const e = {
   single: host + "/v1/predict/single",
   batchSingle: host + "/v1/predict/batch",
   downloadTemplate: host + "/v1/client/download/template",
+  uploadFile: host + "/v1/predict_data/upload_file",
   stopJob: host + "/job/v1/pipeline/job/stop",
   getJobOutput: host + "/v1/tracking/component/output/model",
   findList: host + "/v1/predict_data/predict/find_list",
