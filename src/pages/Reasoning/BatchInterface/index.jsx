@@ -2,16 +2,22 @@ import React, { Component } from "react";
 import {
   Button,
   Col,
+  Dropdown,
   Form,
   Input,
+  Menu,
   message,
   Modal,
+  Popconfirm,
   Row,
   Space,
   Table,
+  Tag,
   Upload,
 } from "antd";
 import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
   DownloadOutlined,
   DownOutlined,
   UploadOutlined,
@@ -21,38 +27,81 @@ import FileSaver from "file-saver";
 import axios from "axios";
 import api from "../../../config/api";
 import PubSubJS from "pubsub-js";
-const COLUMNS = [
-  {
-    title: "序号",
-    dataIndex: "index",
-    key: "index",
-  },
-  {
-    title: "任务名称",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "关联模型",
-    dataIndex: "model",
-    key: "model",
-  },
-  {
-    title: "操作",
-    dataIndex: "action",
-    key: "action",
-    render: () => {
-      return (
-        <Space>
-          <Button type={"primary"}>下载</Button>
-          <Button danger type={"primary"}>
-            删除
-          </Button>
-        </Space>
-      );
-    },
-  },
-];
+const Menus = (props) => {
+  const { all } = props;
+  return (
+    <div
+      style={{
+        background: "#fff",
+        padding: "10px",
+        borderRadius: "0.5rem",
+      }}
+    >
+      <Row>
+        <Button
+          type={"link"}
+          onClick={() => {
+            axios
+              .post(api.downloadTemplate, { file_name: all.f_data_path })
+              .then((r) => {
+                const { code } = r.data;
+                if (code !== 0) {
+                  message.error("当前文件下载错误请重试");
+                  return;
+                }
+                const { data } = r.data;
+
+                const exportContent = "\uFEFF";
+                const blob = new Blob([exportContent + data], {
+                  type: "text/plain;charset=utf-8",
+                });
+                const regFile = /[/][\S\s]*[/]/i;
+                const curFile = all.f_data_path.replace(regFile, "");
+                FileSaver.saveAs(blob, curFile);
+              })
+              .catch((r) => {
+                console.log(r);
+                message.error("文件下载失败请重试并检查网络连接");
+              });
+          }}
+        >
+          下载预测源文件
+        </Button>
+      </Row>
+      <Row>
+        <Button
+          type={"link"}
+          onClick={() => {
+            axios
+              .post(api.downloadTemplate, { file_name: all.f_score_path })
+              .then((r) => {
+                const { code } = r.data;
+                if (code !== 0) {
+                  message.error("当前文件下载错误请重试");
+                  return;
+                }
+                const { data } = r.data;
+
+                const exportContent = "\uFEFF";
+                const blob = new Blob([exportContent + data], {
+                  type: "text/plain;charset=utf-8",
+                });
+                const regFile = /[/][\S\s]*[/]/i;
+                const curFile = all.f_data_path.replace(regFile, "");
+                FileSaver.saveAs(blob, curFile);
+              })
+              .catch((r) => {
+                console.log(r);
+                message.error("文件下载失败请重试并检查网络连接");
+              });
+          }}
+        >
+          下载预测结果文件
+        </Button>
+      </Row>
+    </div>
+  );
+};
 class BatchInterface extends Component {
   constructor(props) {
     super(props);
@@ -62,43 +111,131 @@ class BatchInterface extends Component {
       show: false,
       loading: false,
       file_path: null,
-      datasource: [
-        {
-          key: 1,
-          index: 1,
-          name: "modelUploadTest1",
-          model: 151500,
-          status: "成功",
-        },
-        {
-          key: 2,
-          index: 2,
-          name: "modelUploadTest10086",
-          model: 151566,
-          status: "成功",
-        },
-        {
-          key: 3,
-          index: 3,
-          name: "modelUploadTest2",
-          model: 151500,
-          status: "失败",
-        },
-        {
-          key: 4,
-          index: 4,
-          name: "modelUploadTest3",
-          model: 151544,
-          status: "成功",
-        },
-      ],
+      datasource: [],
+      pageSize: 0,
+      currentPage: 1,
     };
+  }
+
+  getData = (page) => {
+    this.setState({ loading: true });
+    axios
+      .post(api.findPredict, { page, page_length: 10 })
+      .then((r) => {
+        const { data, code, msg } = r.data;
+        if (code !== 0) {
+          message.error(msg);
+          return;
+        }
+        this.setState({ pageSize: data.count });
+        const datasource = data.data.map((v, i) => {
+          return {
+            ...v,
+            upload_time: new Date(v.f_update_time * 1000).toLocaleString(),
+            key: i,
+          };
+        });
+        this.setState({
+          datasource,
+        });
+      })
+      .catch((r) => {
+        message.error("服务器异常");
+      })
+      .finally(() => {
+        this.setState({
+          loading: false,
+        });
+      });
+  };
+  componentDidMount() {
+    this.getData(1);
   }
 
   render() {
     const { show, loading, datasource, file_path } = this.state;
     const fontStyle = { fontWeight: 900, color: "rgb(127,125,142)" };
+    const COLUMNS = [
+      {
+        title: "序号",
+        dataIndex: "f_id",
+        key: "f_id",
+      },
+      {
+        title: "service_id",
+        dataIndex: "f_service_id",
+        key: "f_service_id",
+      },
+      {
+        title: "数据名称",
+        dataIndex: "f_name",
+        key: "f_name",
+      },
+      {
+        title: "数据信息",
+        dataIndex: "f_msg",
+        key: "f_msg",
+      },
+      {
+        title: "上传时间",
+        dataIndex: "upload_time",
+        key: "upload_time",
+      },
+      {
+        title: "状态",
+        dataIndex: "f_status",
+        key: "f_status",
+        render: (_v, x) => {
+          return _v === "0" ? (
+            <Tag icon={<CheckCircleOutlined />} color="success">
+              成功
+            </Tag>
+          ) : (
+            <Tag icon={<CloseCircleOutlined />} color="error">
+              失败
+            </Tag>
+          );
+        },
+      },
+      {
+        title: "操作",
+        dataIndex: "action",
+        key: "action",
+        render: (_v, all) => {
+          return (
+            <Space>
+              <Dropdown overlay={<Menus all={all} />} placement="bottomCenter">
+                <Button type={"primary"}>下载</Button>
+              </Dropdown>
 
+              <Popconfirm
+                title="确定删除本条信息?"
+                onConfirm={() => {
+                  axios
+                    .post(api.delPredictBatch, { id: all.f_id })
+                    .then((r) => {
+                      const { code, msg } = r.data;
+
+                      if (code !== 0) {
+                        message.error("删除失败" + msg);
+                      }
+                    })
+                    .finally(() => {
+                      this.getData();
+                    });
+                }}
+                okText="确定"
+                cancelText="取消"
+              >
+                <Button danger type={"primary"}>
+                  删除
+                </Button>
+              </Popconfirm>
+            </Space>
+          );
+        },
+      },
+    ];
     return (
       <div>
         <Button
@@ -111,11 +248,25 @@ class BatchInterface extends Component {
           新增部署任务
         </Button>
         <Table
+          loading={loading}
           size={"middle"}
           style={{ marginTop: "1vh" }}
           dataSource={datasource}
           columns={COLUMNS}
           bordered
+          pagination={{
+            showSizeChanger: false,
+            pageSize: 10,
+            size: "small",
+            total: this.state.pageSize,
+            current: this.state.currentPage,
+            onChange: (page, _pageSize) => {
+              this.getData(page);
+              this.setState({
+                currentPage: page,
+              });
+            },
+          }}
         />
         <Modal
           title="项目查看"
@@ -134,10 +285,13 @@ class BatchInterface extends Component {
             labelCol={{ span: 10 }}
             wrapperCol={{ span: 16 }}
             onFinish={(e) => {
-              const { service_id, file } = e;
+              const { service_id, file, name, context } = e;
               const formData = new FormData();
               formData.append("service_id", service_id);
               formData.append("file", file.file);
+              formData.append("name", name);
+              formData.append("context", context);
+              console.log(formData);
               this.setState({
                 loading: true,
               });
@@ -145,13 +299,12 @@ class BatchInterface extends Component {
                 .post(api.batchSingle, formData)
                 .then((r) => {
                   console.log(r);
-                  const data = r.data.data.data;
                   const { code, msg } = r.data;
                   if (code === 0) {
                     message.success("批量处理完成");
-                    this.setState({
-                      file_path: data.file_path,
-                    });
+                    // this.setState({
+                    //   file_path: data.file_path,
+                    // });
                   } else {
                     message.error(msg);
                   }
@@ -176,6 +329,17 @@ class BatchInterface extends Component {
                   rules={[{ required: true, message: "请输入任务名称" }]}
                 >
                   <Input placeholder={"请输入任务名称"} />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row justify={"center"}>
+              <Col span={14}>
+                <Form.Item
+                  name="context"
+                  label={<div style={fontStyle}>任务简介</div>}
+                  rules={[{ required: true, message: "请输入任务简介" }]}
+                >
+                  <Input placeholder={"请输入任务简介"} />
                 </Form.Item>
               </Col>
             </Row>

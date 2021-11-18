@@ -6,10 +6,13 @@ import {
   Input,
   message,
   Modal,
+  Popconfirm,
   Progress,
   Row,
+  Space,
   Steps,
   Table,
+  Tag,
 } from "antd";
 import { fontStyle } from "../../../util/util";
 import axios from "axios";
@@ -18,6 +21,8 @@ import PubSubJS from "pubsub-js";
 import {
   BoxPlotOutlined,
   BranchesOutlined,
+  CheckCircleOutlined,
+  CloseCircleOutlined,
   CloudUploadOutlined,
 } from "@ant-design/icons";
 import StepsTemplate from "../../../components/StepsTemplate";
@@ -34,63 +39,64 @@ class Model extends Component {
       show: false,
       loading: false,
       showDetail: false,
-      datasource: [
-        {
-          key: 12,
-          index: 1,
-          service_id: 10086,
-          model: 151500,
-          status: "成功",
-          text: "test001",
-          nows: 2,
-          statusNow: "process",
-          percent: 100,
-        },
-        {
-          key: 23,
-          index: 2,
-          service_id: 165165165,
-          model: 151500,
-          status: "成功",
-          text: "test001",
-          nows: 2,
-          statusNow: "process",
-          percent: 100,
-        },
-        {
-          key: 33,
-          index: 3,
-          service_id: 10086,
-          model: 151566,
-          status: "失败",
-          text: "test001",
-          nows: 0,
-          statusNow: "error",
-          percent: 20.2,
-        },
-        {
-          key: 43,
-          index: 4,
-          service_id: 10086,
-          model: 151566,
-          status: "成功",
-          text: "test001",
-          nows: 2,
-          statusNow: "process",
-          percent: 100,
-        },
-      ],
+      error: 0,
+      datasource: [],
       statusNow: "error",
       nows: 0,
       percent: 0,
+      pageSize: 0,
+      currentPage: 1,
     };
+  }
+
+  getData = (page) => {
+    this.setState({ loading: true });
+    axios
+      .post(api.findDeploy, { page: page, page_length: 10 })
+      .then((r) => {
+        const { data, code, msg } = r.data;
+        if (code !== 0) {
+          message.error(msg);
+          return;
+        }
+
+        const datasource = data.data.map((v, i) => {
+          return {
+            upload_time: new Date(v.f_create_time * 1000).toLocaleString(),
+            key: i,
+            index: v.f_id,
+            model: v.f_model_id,
+            text: v.f_context,
+            service_id: v.f_service_id,
+            statusNow: "success",
+            msg: v.f_msg,
+            percent: 100,
+            nows: 2,
+            status: v.f_status,
+          };
+        });
+        this.setState({
+          datasource,
+        });
+      })
+      .catch((r) => {
+        message.error("服务器异常");
+      })
+      .finally(() => {
+        this.setState({
+          loading: false,
+        });
+      });
+  };
+  componentDidMount() {
+    this.getData(1);
   }
 
   modelUpload = () => {
     const step1 = 33.3;
     const step2 = 66.6;
     const step3 = 100;
-    let error = 5000;
+    const { error } = this.state;
     interval = setInterval(() => {
       const { percent, nows } = this.state;
       let per = percent;
@@ -149,7 +155,6 @@ class Model extends Component {
                 let interval = setInterval(() => {
                   const { percent, nows } = this.state;
                   let per = percent;
-                  console.log(per);
                   per += Math.random() * 5;
                   if (per >= error) {
                     if (per > step3) {
@@ -220,26 +225,67 @@ class Model extends Component {
         title: "状态",
         dataIndex: "status",
         key: "status",
+        render: (_v, x) => {
+          return _v === "0" ? (
+            <Tag icon={<CheckCircleOutlined />} color="success">
+              成功
+            </Tag>
+          ) : (
+            <Tag icon={<CloseCircleOutlined />} color="error">
+              失败
+            </Tag>
+          );
+        },
+      },
+      {
+        title: "上传时间",
+        dataIndex: "upload_time",
+        key: "upload_time",
       },
       {
         title: "操作",
         dataIndex: "action",
         render: (x, y) => {
           return (
-            <Button
-              onClick={() => {
-                this.setState({
-                  showDetail: true,
-                  index: 0,
-                  statusNow: y.statusNow,
-                  percent: y.percent,
-                  nows: y.nows,
-                });
-              }}
-              type={"primary"}
-            >
-              查看详情
-            </Button>
+            <Space>
+              <Button
+                onClick={() => {
+                  this.setState({
+                    showDetail: true,
+                    index: 0,
+                    statusNow: y.statusNow,
+                    percent: y.percent,
+                    nows: y.nows,
+                  });
+                }}
+                type={"primary"}
+              >
+                查看详情
+              </Button>
+              <Popconfirm
+                title="确定删除本条信息?"
+                onConfirm={() => {
+                  axios
+                    .post(api.delDeploy, { id: y.index })
+                    .then((r) => {
+                      const { code, msg } = r.data;
+
+                      if (code !== 0) {
+                        message.error("删除失败" + msg);
+                      }
+                    })
+                    .finally(() => {
+                      this.getData();
+                    });
+                }}
+                okText="确定"
+                cancelText="取消"
+              >
+                <Button danger type={"primary"}>
+                  删除
+                </Button>
+              </Popconfirm>
+            </Space>
           );
         },
       },
@@ -266,11 +312,25 @@ class Model extends Component {
           新增部署任务
         </Button>
         <Table
+          loading={loading}
           style={{ marginTop: "1vh" }}
           dataSource={datasource}
           columns={COLUMNS}
           bordered
           size={"middle"}
+          pagination={{
+            showSizeChanger: false,
+            pageSize: 10,
+            size: "small",
+            total: this.state.pageSize,
+            current: this.state.currentPage,
+            onChange: (page, _pageSize) => {
+              this.getData(page);
+              this.setState({
+                currentPage: page,
+              });
+            },
+          }}
         />
 
         <Modal
@@ -340,23 +400,21 @@ class Model extends Component {
               axios
                 .post(api.modelUpdate, e)
                 .then((r) => {
-                  console.log(r);
                   const { code, msg, data } = r.data;
-                  if (code === 0) {
-                    message.info("localtion:" + data.localtion);
+                  if (code !== 1) {
                     this.setState({
                       showDetail: true,
                       percent: 0,
                       nows: -1,
+                      error: (data.location / 3.0) * 100,
                       statusNow: "active",
                     });
-                    this.modelUpload();
-                  } else {
-                    message.error(msg);
                   }
-                })
-                .catch((r) => {
-                  console.log(r);
+                  if (code === 1) {
+                    message.error(msg);
+                    return;
+                  }
+                  this.modelUpload();
                 })
                 .finally(() => {
                   this.setState({

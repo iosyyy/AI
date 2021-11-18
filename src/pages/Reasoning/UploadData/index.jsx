@@ -33,22 +33,25 @@ class UploadData extends Component {
       show: false,
       loading: false,
       datasource: [],
+      pageSize: 0,
+      currentPage: 1,
     };
   }
 
-  getData = () => {
+  getData = (page) => {
     this.setState({
       loading: true,
     });
     axios
-      .post(api.findList, { page: 1, page_length: 10 })
+      .post(api.findList, { page: page, page_length: 10 })
       .then((r) => {
-        const { data } = r.data;
-        if (r.data.retcode !== 0) {
-          message.error(r.data.retmsg);
+        const { data, code, msg } = r.data;
+        if (code !== 0) {
+          message.error(msg);
           return;
         }
-        const datasource = data.map((v, i) => {
+
+        const datasource = data.data.map((v, i) => {
           return {
             ...v,
             upload_time: new Date(v.f_create_time * 1000).toLocaleString(),
@@ -70,7 +73,7 @@ class UploadData extends Component {
   };
 
   componentDidMount() {
-    this.getData();
+    this.getData(1);
   }
 
   render() {
@@ -155,8 +158,10 @@ class UploadData extends Component {
                   axios
                     .post(api.delPredict, { id: all.f_id })
                     .then((r) => {
-                      if (r.data.retcode !== 0) {
-                        message.error("删除失败" + r.data.retmsg);
+                      const { code, msg } = r.data;
+
+                      if (code !== 0) {
+                        message.error("删除失败" + msg);
                       }
                     })
                     .finally(() => {
@@ -193,6 +198,19 @@ class UploadData extends Component {
           dataSource={datasource}
           columns={COLUMNS}
           bordered
+          pagination={{
+            showSizeChanger: false,
+            pageSize: 10,
+            size: "small",
+            total: this.state.pageSize,
+            current: this.state.currentPage,
+            onChange: (page, _pageSize) => {
+              this.getData(page);
+              this.setState({
+                currentPage: page,
+              });
+            },
+          }}
         />
         <Modal
           title="数据上传"
@@ -222,8 +240,10 @@ class UploadData extends Component {
               axios
                 .post(api.uploadFile, formData)
                 .then((r) => {
-                  if (r.data.retcode !== 0) {
-                    message.error("删除失败" + r.data.retmsg);
+                  const { code, msg } = r.data;
+
+                  if (code !== 0) {
+                    message.error("删除失败" + msg);
                     return;
                   }
                   message.success("上传成功");
