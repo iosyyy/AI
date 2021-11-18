@@ -221,7 +221,7 @@ class BatchInterface extends Component {
                       }
                     })
                     .finally(() => {
-                      this.getData();
+                      this.getData(this.state.currentPage);
                     });
                 }}
                 okText="确定"
@@ -316,7 +316,9 @@ class BatchInterface extends Component {
                 .finally(() => {
                   this.setState({
                     loading: false,
+                    show: false,
                   });
+                  this.getData(this.state.currentPage);
                 });
             }}
             layout={"horizontal"}

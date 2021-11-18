@@ -165,7 +165,7 @@ class UploadData extends Component {
                       }
                     })
                     .finally(() => {
-                      this.getData();
+                      this.getData(this.state.currentPage);
                     });
                 }}
                 okText="确定"
@@ -249,7 +249,7 @@ class UploadData extends Component {
                   message.success("上传成功");
                 })
                 .finally(() => {
-                  this.getData();
+                  this.getData(this.state.currentPage);
                   this.setState({
                     loading: false,
                     show: false,
