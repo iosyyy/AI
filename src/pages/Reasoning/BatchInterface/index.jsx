@@ -131,7 +131,7 @@ class BatchInterface extends Component {
         const datasource = data.data.map((v, i) => {
           return {
             ...v,
-            upload_time: new Date(v.f_update_time * 1000).toLocaleString(),
+            upload_time: new Date(v.f_update_time).toLocaleString(),
             key: i,
           };
         });

@@ -63,10 +63,10 @@ class Log extends Component {
         <TextArea
           className={"scrollContent"}
           style={{
-            height: "64vh",
+            height: "100%",
             color: "rgb(181,183,189)",
           }}
-          autoSize={{ minRows: 30, maxRows: 30 }}
+          autoSize={false}
           onChange={() => {}}
           bordered={false}
           value={this.state.logDetail}

@@ -1,15 +1,5 @@
 import React, { Component } from "react";
-import {
-  Button,
-  Col,
-  Collapse,
-  Dropdown,
-  Image,
-  Layout,
-  Menu,
-  message,
-  Row,
-} from "antd";
+import { Col, Dropdown, Image, Layout, Menu, message, Row } from "antd";
 import { NavLink, Redirect, Route, Switch } from "react-router-dom";
 import PubSubJS from "pubsub-js";
 import Normal from "./pages/Normal";
@@ -27,16 +17,15 @@ import DataSource from "./pages/DataSource";
 import Avatar from "antd/es/avatar/avatar";
 import {
   BoxPlotOutlined,
-  CloudUploadOutlined,
   createFromIconfontCN,
-  DesktopOutlined,
   DotChartOutlined,
   EditOutlined,
   FieldTimeOutlined,
   FileDoneOutlined,
   HeatMapOutlined,
   HistoryOutlined,
-  UserOutlined,
+  SettingOutlined,
+  UserSwitchOutlined,
 } from "@ant-design/icons";
 import Reasoning from "./pages/Reasoning";
 import axios from "axios";
@@ -44,12 +33,12 @@ import api from "./config/api";
 import SubMenu from "antd/es/menu/SubMenu";
 import Sider from "antd/es/layout/Sider";
 import MenuButton from "./util/menuButton";
-const { Panel } = Collapse;
 
 const { Header, Content } = Layout;
 const IconFont = createFromIconfontCN({
   scriptUrl: "//at.alicdn.com/t/font_1749581_s16tzbduh78.js",
 });
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -159,6 +148,7 @@ class App extends Component {
                   fontWeight: 900,
                   color: "rgb(250,249,248)",
                   marginRight: "10px",
+                  userSelect: "none",
                 }}
               >
                 {this.state.party_name}
@@ -237,26 +227,26 @@ class App extends Component {
                     </Menu.Item>
                   )}
                 </SubMenu>
-                {/**/}
-                <Menu.Item
-                  style={{ float: "right" }}
-                  key="6"
+
+                <SubMenu
+                  title="数据集"
+                  selectable={false}
+                  key="16"
                   icon={<FileDoneOutlined />}
                 >
-                  <NavLink to="/datasource">数据集</NavLink>
-                </Menu.Item>
-                <Menu.Item
-                  style={{ float: "right" }}
-                  key="5"
-                  icon={<FieldTimeOutlined />}
-                >
+                  <Menu.Item key="17" icon={<SettingOutlined />}>
+                    <NavLink to="/datasource/datasourceManage">
+                      数据源管理
+                    </NavLink>
+                  </Menu.Item>
+                  <Menu.Item key="18" icon={<UserSwitchOutlined />}>
+                    <NavLink to="/datasource/myDatasource">我的数据源</NavLink>
+                  </Menu.Item>
+                </SubMenu>
+                <Menu.Item key="5" icon={<FieldTimeOutlined />}>
                   <NavLink to="/training">正在训练</NavLink>
                 </Menu.Item>
-                <Menu.Item
-                  style={{ float: "right" }}
-                  key="4"
-                  icon={<HistoryOutlined />}
-                >
+                <Menu.Item key="4" icon={<HistoryOutlined />}>
                   <NavLink to="/trainingRecord">训练记录</NavLink>
                 </Menu.Item>
               </Menu>

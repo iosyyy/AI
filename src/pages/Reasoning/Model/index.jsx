@@ -406,7 +406,7 @@ class Model extends Component {
                       showDetail: true,
                       percent: 0,
                       nows: -1,
-                      error: (data.location / 3.0) * 100,
+                      error: (data?.location ?? 0 / 3.0) * 100,
                       statusNow: "active",
                     });
                   }
@@ -451,7 +451,7 @@ class Model extends Component {
             <Row gutter={[0, 30]} justify={"center"}>
               <Col span={12}>
                 <Form.Item
-                  name="text"
+                  name="context"
                   label={<div style={fontStyle}>备注</div>}
                   rules={[{ required: true, message: "请输入备注" }]}
                 >

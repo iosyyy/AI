@@ -486,7 +486,7 @@ class TrainingRecord extends Component {
         <Table
           onChange={this.onTableChange}
           loading={this.state.loading}
-          scroll={{ y: "64vh" }}
+          scroll={{ y: "61.5vh" }}
           bordered={false}
           size={"middle"}
           dataSource={this.state.dataSource}
