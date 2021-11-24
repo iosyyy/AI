@@ -19,7 +19,7 @@ const data = [
   },
   {
     value: "homo_nn",
-    title: "横向循环神经网络",
+    title: "横向深度神经网络",
   },
   {
     value: "hetero_lr",
@@ -91,24 +91,31 @@ class FederalTrain extends Component {
               >
                 {this.state.type == "true" ? (
                   <>
+                    <Select.Option value="homo_line">
+                      横向线性回归
+                    </Select.Option>
+
                     <Select.Option value="homo_lr">横向逻辑回归</Select.Option>
                     <Select.Option value="homo_secure_boost">
                       横向安全提升树
                     </Select.Option>
-                    <Select.Option value="homo_nn">
-                      横向循环神经网络
+                    <Select.Option value="homo_dnn">
+                      横向深度神经网络
                     </Select.Option>
                   </>
                 ) : (
                   <>
+                    <Select.Option value="hetoro_line">
+                      纵向线性回归
+                    </Select.Option>
                     <Select.Option value="hetero_lr">
                       纵向逻辑回归
                     </Select.Option>
                     <Select.Option value="hetero_secure_boost">
                       纵向安全提升树
                     </Select.Option>
-                    <Select.Option value="hetero_nn">
-                      纵向循环神经网络
+                    <Select.Option value="hetero_dnn">
+                      纵向深度神经网络
                     </Select.Option>
                   </>
                 )}
