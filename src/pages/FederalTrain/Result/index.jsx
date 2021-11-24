@@ -278,12 +278,11 @@ class FederalResult extends Component {
                   );
                 }}
               </Form.List>
-              <Form.Item {...tailLayout} style={{ marginTop: "8vh" }}>
+              <Row justify={"center"}>
                 <Space style={{ marginTop: "30px" }} size={300}>
                   <Button
                     htmlType="button"
                     onClick={this.toLastPage}
-                    style={{ background: "rgb(201,201,201)" }}
                     size="large"
                   >
                     上一步
@@ -297,7 +296,7 @@ class FederalResult extends Component {
                     下一步
                   </Button>
                 </Space>
-              </Form.Item>
+              </Row>
             </Form>
           </Col>
         </Row>

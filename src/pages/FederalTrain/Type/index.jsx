@@ -8,6 +8,7 @@ import {
   FileOutlined,
   LoadingOutlined,
 } from "@ant-design/icons";
+import { fontStyle } from "../../../util/util";
 const data = [
   {
     value: "homo_lr",
@@ -50,7 +51,7 @@ class FederalTrain extends Component {
   };
   render() {
     return (
-      <div style={{ height: "83vh" }} className="site-layout-content">
+      <div className="site-layout-content">
         <StepsTemplate
           steps={[
             { status: "process", title: "联邦类型", icon: <FileOutlined /> },
@@ -67,8 +68,8 @@ class FederalTrain extends Component {
           ]}
         />
         <div className="site-card-wrapper">
-          <Row style={{ marginBottom: "2vh" }} gutter={[0, 30]}>
-            <Col offset={8} span={12}>
+          <Row style={{ marginTop: "1vh" }} gutter={[0, 15]}>
+            <Col style={fontStyle} offset={8} span={12}>
               <div>算法类型:</div>
             </Col>
           </Row>
@@ -122,68 +123,30 @@ class FederalTrain extends Component {
               </Select>
             </Col>
           </Row>
-          <Row style={{ marginBottom: "4vh" }} gutter={[80, 10]}>
-            <Col span={8} offset={8}>
-              {/* <Card
-                style={{
-                  backgroundColor:"RGB(96,185,234)" ,
-                  height: "37vh",
+
+          <Row justify={"center"}>
+            <Space size={300}>
+              <Button htmlType="button" onClick={this.toLastPage} size="large">
+                上一步
+              </Button>
+
+              <Button
+                onClick={() => {
+                  this.props.history.push({
+                    pathname: "/federalTrain/result",
+                    state: {
+                      status: this.state.type,
+                      selectValue: this.state.selectValue,
+                    },
+                  });
                 }}
-                headStyle={{
-                  border: 0,
-                  textAlign: "center",
-                  color:"white"
-                }}
-                title={this.state.title}
-                bordered={false}
-                hoverable
+                type="primary"
+                htmlType="submit"
+                size="large"
               >
-                <div
-                  style={{
-                    height: "150px",
-                    color: this.state.type ? "white" : "black",
-                  }}
-                >
-                </div>
-              </Card>*/}
-            </Col>
-          </Row>
-          <Row gutter={48}>
-            <Col offset={5} span={6}>
-              <Space style={{ marginTop: "15px" }} size={300}>
-                <Button
-                  htmlType="button"
-                  onClick={this.toLastPage}
-                  style={{ background: "rgb(201,201,201)" }}
-                  size="large"
-                >
-                  上一步
-                </Button>
-              </Space>
-            </Col>
-            <Col offset={1} span={6}>
-              <Space
-                style={{ marginTop: "15px", marginLeft: "240px" }}
-                size={300}
-              >
-                <Button
-                  onClick={() => {
-                    this.props.history.push({
-                      pathname: "/federalTrain/result",
-                      state: {
-                        status: this.state.type,
-                        selectValue: this.state.selectValue,
-                      },
-                    });
-                  }}
-                  type="primary"
-                  htmlType="submit"
-                  size="large"
-                >
-                  下一步
-                </Button>
-              </Space>
-            </Col>
+                下一步
+              </Button>
+            </Space>
           </Row>
         </div>
       </div>

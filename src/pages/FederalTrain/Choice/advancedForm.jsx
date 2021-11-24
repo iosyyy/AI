@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Input, Button, Upload, message, Space, Spin } from "antd";
+import { Form, Input, Button, Upload, message, Space, Spin, Row } from "antd";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import api from "../../../config/api";
@@ -227,24 +227,28 @@ class AdvancedForm extends Component {
             </a>
           </Form.Item>
 
-          <Form.Item {...tailLayout} style={{ marginTop: "10vh" }}>
-            <Space size={200}>
-              <Button
-                style={{ background: "rgb(201,201,201)" }}
-                onClick={() => {
-                  this.props.history.push({
-                    pathname: "/federalTrain/result",
-                  });
-                }}
-                size="large"
-              >
-                上一步
-              </Button>
-              <Button type="primary" htmlType="submit" size="large">
-                提交
-              </Button>
-            </Space>
-          </Form.Item>
+          <Row justify={"center"}>
+            <Form.Item>
+              <Space size={200}>
+                <Button
+                  onClick={() => {
+                    this.props.history.push({
+                      pathname: "/federalTrain/result",
+                      state: {
+                        data: this.props.location.state.data,
+                        selectValue: this.props.location.state.selectValue,
+                      },
+                    });
+                  }}
+                >
+                  上一步
+                </Button>
+                <Button type="primary" htmlType="submit">
+                  提交
+                </Button>
+              </Space>
+            </Form.Item>
+          </Row>
         </Form>
       </Spin>
     );
