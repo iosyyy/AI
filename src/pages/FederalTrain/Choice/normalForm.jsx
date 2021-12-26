@@ -1,10 +1,46 @@
 import React, { Component } from "react";
-import { Form, Input, Button, message, Space, Radio, Spin, Row } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  message,
+  Space,
+  Radio,
+  Spin,
+  Row,
+  Col,
+  Switch,
+  Modal,
+  Table,
+} from "antd";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import api from "../../../config/api";
 import { number } from "echarts";
 import { fontStyle } from "../../../util/util";
+
+const columns = [
+  {
+    title: <div>参数名</div>,
+    dataIndex: "name",
+    key: "name",
+  },
+  {
+    title: <div>参数含义</div>,
+    dataIndex: "mean",
+    key: "mean",
+  },
+  {
+    title: <div>默认值</div>,
+    dataIndex: "defaultValue",
+    key: "defaultValue",
+  },
+  {
+    title: <div>可选值</div>,
+    dataIndex: "checkValue",
+    key: "checkValue",
+  },
+];
 
 class NormalForm extends Component {
   constructor(props) {
@@ -12,9 +48,12 @@ class NormalForm extends Component {
     this.state = {
       loading: false,
       paramType: 0,
+      modal: false,
+      dataSource: [],
     };
   }
   render() {
+    const { modal, dataSource } = this.state;
     console.log(this.props);
     // 表单样式
     const tailLayout = {
@@ -130,6 +169,7 @@ class NormalForm extends Component {
             </Form.Item>
 
             <Form.Item
+              style={{ margin: 0, padding: 0 }}
               name="algorithmParms"
               label={<div style={fontStyle}>算法参数</div>}
               rules={[
@@ -162,16 +202,28 @@ class NormalForm extends Component {
                 placeholder='"penalty":"L2",&#10;"optimizer":"rmsprop",&#10;"alpha":"0.01",&#10;......'
               />
             </Form.Item>
-
+            <Form.Item style={{ margin: 0, padding: 0 }} {...tailLayout}>
+              <a
+                onClick={() => {
+                  this.setState({
+                    modal: true,
+                  });
+                }}
+                style={{ textDecorationStyle: "none" }}
+              >
+                查看参数说明
+              </a>
+            </Form.Item>
             <Form.Item
               name="isScale"
               label={<div style={fontStyle}>isScale</div>}
               rules={[{ required: true, message: "请选择isScale" }]}
             >
-              <Radio.Group>
-                <Radio value={true}>是</Radio>
-                <Radio value={false}>否</Radio>
-              </Radio.Group>
+              <Switch
+                checkedChildren="是"
+                unCheckedChildren="否"
+                defaultChecked
+              />
             </Form.Item>
 
             <Form.Item
@@ -236,6 +288,24 @@ class NormalForm extends Component {
               </Form.Item>
             </Row>
           </Form>
+          <Modal
+            visible={modal}
+            onCancel={() => {
+              this.setState({
+                modal: false,
+              });
+            }}
+            width={"45vw"}
+            footer={null}
+          >
+            <Table
+              size={"middle"}
+              bordered={false}
+              dataSource={dataSource}
+              columns={columns}
+              pagination={false}
+            />
+          </Modal>
         </Spin>
       </div>
     );

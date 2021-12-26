@@ -17,13 +17,16 @@ import DataSource from "./pages/DataSource";
 import Avatar from "antd/es/avatar/avatar";
 import {
   BoxPlotOutlined,
+  BranchesOutlined,
   createFromIconfontCN,
   DotChartOutlined,
   EditOutlined,
   FieldTimeOutlined,
   FileDoneOutlined,
   HeatMapOutlined,
+  BookOutlined,
   HistoryOutlined,
+  PieChartOutlined,
   SettingOutlined,
   UserSwitchOutlined,
 } from "@ant-design/icons";
@@ -33,6 +36,7 @@ import api from "./config/api";
 import SubMenu from "antd/es/menu/SubMenu";
 import Sider from "antd/es/layout/Sider";
 import MenuButton from "./util/menuButton";
+import JointStatement from "./pages/JointStatement";
 
 const { Header, Content } = Layout;
 const IconFont = createFromIconfontCN({
@@ -179,6 +183,35 @@ class App extends Component {
                   <NavLink to="/federal">联邦攻击</NavLink>
                 </Menu.Item>
                 <SubMenu
+                  title="联合报表"
+                  selectable={false}
+                  key="21"
+                  icon={<PieChartOutlined />}
+                >
+                  <Menu.Item icon={<BranchesOutlined />} key="22">
+                    <NavLink
+                      style={{
+                        fontWeight: 900,
+                        color: "rgb(127,125,142)",
+                      }}
+                      to="/jointStatement/create"
+                    >
+                      创建任务
+                    </NavLink>
+                  </Menu.Item>
+                  <Menu.Item icon={<BookOutlined />} key="23">
+                    <NavLink
+                      style={{
+                        fontWeight: 900,
+                        color: "rgb(127,125,142)",
+                      }}
+                      to="/jointStatement/result"
+                    >
+                      任务记录
+                    </NavLink>
+                  </Menu.Item>
+                </SubMenu>
+                <SubMenu
                   title="在线推理"
                   selectable={false}
                   key="15"
@@ -262,6 +295,7 @@ class App extends Component {
                 <Route path="/trainingDetails" component={TrainingDetails} />
                 <Route path="/datasource" component={DataSource} />
                 <Route path="/reasoning" component={Reasoning} />
+                <Route path="/jointStatement" component={JointStatement} />
                 <Redirect to="/federalTrain" />
               </Switch>
             </Content>

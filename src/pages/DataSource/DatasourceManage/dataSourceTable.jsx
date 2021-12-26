@@ -13,7 +13,7 @@ class DataSourceTable extends Component {
 
     const columnsT = [
       {
-        title: <div>job_id</div>,
+        title: <div>序号</div>,
         dataIndex: "key",
         key: "key",
       },
@@ -22,11 +22,7 @@ class DataSourceTable extends Component {
         dataIndex: "tableName",
         key: "tableName",
       },
-      {
-        title: <div>命名空间</div>,
-        dataIndex: "namespace",
-        key: "namespace",
-      },
+
       {
         title: <div>任务类型</div>,
         dataIndex: "work_mode",
@@ -47,6 +43,8 @@ class DataSourceTable extends Component {
         render: (action, obj, value) => {
           return (
             <div>
+              <a>详情</a>
+              <span>/</span>
               <a
                 onClick={() => {
                   this.props.history.push({
@@ -181,7 +179,7 @@ class DataSourceTable extends Component {
           ...v,
           note: v.description,
           tableName: v.name,
-          key: v.job_id,
+          key: k,
         };
       });
 

@@ -74,37 +74,25 @@ class DatasourceFormHandle extends Component {
           <Row>
             <Col span={8}>
               <Form.Item
-                name="namespace"
-                label={<div style={fontStyle}>命名空间</div>}
-                rules={[{ required: true, message: "请输入命名空间" }]}
-              >
-                <Input readOnly={canControll} placeholder={"请输入命名空间"} />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item
                 name="description"
                 label={<div style={fontStyle}>备注</div>}
               >
                 <Input readOnly={canControll} placeholder={"请输入备注"} />
               </Form.Item>
             </Col>
+            <Col span={8}>
+              <Form.Item
+                name="work_mode"
+                label={<div style={fontStyle}>任务类型</div>}
+              >
+                <Radio.Group disabled={canControll}>
+                  <Radio value={0}>单机</Radio>
+                  <Radio value={1}>多机</Radio>
+                </Radio.Group>
+              </Form.Item>
+            </Col>
           </Row>
-          <div>
-            <Row>
-              <Col span={8}>
-                <Form.Item
-                  name="work_mode"
-                  label={<div style={fontStyle}>任务类型</div>}
-                >
-                  <Radio.Group disabled={canControll}>
-                    <Radio value={0}>单机</Radio>
-                    <Radio value={1}>多机</Radio>
-                  </Radio.Group>
-                </Form.Item>
-              </Col>
-            </Row>
-          </div>
+
           {/*<div>
             <Row>
               <Col span={8}>

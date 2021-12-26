@@ -13,7 +13,7 @@ import { fontStyle } from "../../../util/util";
 
 const { Step } = Steps;
 
-class FederalResult extends Component {
+class JointStatementCreate extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,46 +27,32 @@ class FederalResult extends Component {
       role: ["guest", "host"],
     };
   }
-  ableToUp = () => {
-    const { party_id, role, table_name } = this.state;
 
-    for (const party of party_id) {
-      if ((isNaN(party) && party) || party % 1 !== 0) {
-        return false;
-      }
-    }
-    for (const party of table_name) {
-      if (!party) {
-        return false;
-      }
-    }
-    return true;
-  };
-
-  toNextPage = () => {
-    const { party_id, role, table_name } = this.state;
-    if (!this.ableToUp()) {
-      return;
-    }
-    const data = {};
-    data.guest = {
-      party_id: parseInt(party_id[0]),
-      table_name: table_name[0],
-    };
-    data.host = party_id.slice(1).map((v, i) => {
-      return {
-        party_id: parseInt(party_id[i + 1]),
-        table_name: table_name[i + 1],
-      };
-    });
-    this.props.history.push({
-      pathname: "/federalTrain/choice",
-      state: {
-        data,
-        selectValue: this.props.location.state.selectValue,
-      },
-    });
-  };
+  //
+  // toNextPage = () => {
+  //   const { party_id, role, table_name } = this.state;
+  //   if (!this.ableToUp()) {
+  //     return;
+  //   }
+  //   const data = {};
+  //   data.guest = {
+  //     party_id: parseInt(party_id[0]),
+  //     table_name: table_name[0],
+  //   };
+  //   data.host = party_id.slice(1).map((v, i) => {
+  //     return {
+  //       party_id: parseInt(party_id[i + 1]),
+  //       table_name: table_name[i + 1],
+  //     };
+  //   });
+  //   this.props.history.push({
+  //     pathname: "/federalTrain/choice",
+  //     state: {
+  //       data,
+  //       selectValue: this.props.location.state.selectValue,
+  //     },
+  //   });
+  // };
 
   toLastPage = () => {
     this.props.history.push({
@@ -76,27 +62,12 @@ class FederalResult extends Component {
 
   render() {
     const tailLayout = {
-      wrapperCol: { offset: 8 },
+      wrapperCol: { span: 5 },
     };
     const layout = {};
     const { uploadIng } = this.state;
     return (
       <div style={{ height: "83vh" }} className="site-layout-content">
-        <StepsTemplate
-          steps={[
-            { status: "finish", title: "联邦类型", icon: <FileOutlined /> },
-            {
-              status: "process",
-              title: "任务参与方选择",
-              icon: uploadIng ? <LoadingOutlined /> : <CloudUploadOutlined />,
-            },
-            {
-              status: "wait",
-              title: "参数配置",
-              icon: <DownloadOutlined />,
-            },
-          ]}
-        />
         <Row justify={"center"} className={"scrollContent"}>
           <Col>
             <Form
@@ -107,6 +78,22 @@ class FederalResult extends Component {
               }}
               {...layout}
             >
+              <Form.Item
+                style={{ marginTop: "1vh" }}
+                name={"name"}
+                {...tailLayout}
+                label={<div style={fontStyle}>任务名称</div>}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                {...tailLayout}
+                style={{ marginTop: "1vh" }}
+                name={"describe"}
+                label={<div style={fontStyle}>任务描述</div>}
+              >
+                <Input />
+              </Form.Item>
               <Form.List rules={[{ required: true }]} name="partys">
                 {(fields, { add, remove }) => {
                   if (fields.length === 0) {
@@ -237,23 +224,13 @@ class FederalResult extends Component {
                 }}
               </Form.List>
               <Row justify={"center"}>
-                <Space style={{ marginTop: "30px" }} size={300}>
-                  <Button
-                    htmlType="button"
-                    onClick={this.toLastPage}
-                    size="large"
-                  >
-                    上一步
-                  </Button>
-                  <Button
-                    onClick={this.toNextPage}
-                    type="primary"
-                    htmlType="submit"
-                    size="large"
-                  >
-                    下一步
-                  </Button>
-                </Space>
+                <Col>
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                      执行任务
+                    </Button>
+                  </Form.Item>
+                </Col>
               </Row>
             </Form>
           </Col>
@@ -263,4 +240,4 @@ class FederalResult extends Component {
   }
 }
 
-export default FederalResult;
+export default JointStatementCreate;

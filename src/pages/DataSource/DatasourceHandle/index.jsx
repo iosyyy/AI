@@ -18,14 +18,12 @@ class DatasourceHandle extends Component {
         ? {
             originalDatasource: data.tableName,
             tableName: "",
-            namespace: "",
             description: "",
             work_mode: 0,
           }
         : {
             originalDatasource: data.history_table_name,
             tableName: data.tableName,
-            namespace: data.namespace,
             description: data.note,
             work_mode: data.work_mode,
           };
@@ -90,7 +88,7 @@ class DatasourceHandle extends Component {
                 type="primary"
                 onClick={() => {
                   let { datasource, filepath, formData } = this.state;
-                  if (formData.namespace === "" || formData.tableName === "") {
+                  if (formData.tableName === "") {
                     message.error("数据表名或命名空间没有填写");
                     return;
                   }
@@ -109,7 +107,6 @@ class DatasourceHandle extends Component {
                       file_path: filepath,
                       history_table_name: formData.originalDatasource,
                       table_name: formData.tableName,
-                      namespace: formData.namespace,
                       description: formData.description,
                       work_mode: formData.work_mode,
                       label_info: datasource,
