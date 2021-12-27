@@ -2,13 +2,10 @@ import React from "react";
 import { DragSource } from "react-dnd";
 
 const style = {
-  border: "1px dashed gray",
-  backgroundColor: "white",
   padding: "0.5rem 1rem",
-  marginRight: "1.5rem",
-  marginBottom: "1.5rem",
+  borderRadius: "0.2rem",
   cursor: "move",
-  float: "left",
+  marginBottom: 5,
 };
 
 const boxSource = {
@@ -20,6 +17,10 @@ const boxSource = {
     // 返回的对象可以在 monitor.getItem() 中获取到
     return {
       name: props.name,
+      index: props.index,
+      now: props.now,
+      remove: props.remove,
+      change: props.change,
     };
   },
 
@@ -29,15 +30,9 @@ const boxSource = {
    * @param {*} monitor DragSourceMonitor 对象
    */
   endDrag(props, monitor) {
-    // 当前拖拽的 item 组件
     const item = monitor.getItem();
-    // 拖拽元素放下时，drop 结果
     const dropResult = monitor.getDropResult();
-
-    // 如果 drop 结果存在，就弹出 alert 提示
-    if (dropResult) {
-      alert(`You dropped ${item.name} into ${dropResult.name}!`);
-    }
+    if (dropResult) item.remove(item.index, item.now, item, dropResult.name);
   },
 };
 
@@ -57,15 +52,34 @@ const boxSource = {
 )
 class Box extends React.Component {
   render() {
-    const { isDragging, connectDragSource } = this.props;
-    const { name } = this.props;
+    const { isDragging, connectDragSource, onClick } = this.props;
+    const { name, change } = this.props;
     const opacity = isDragging ? 0.4 : 1;
-
+    const styleChange = change
+      ? {
+          background: "rgb(53,158,255)",
+          color: "#fff",
+        }
+      : {
+          background: "rgb(245,245,245)",
+          color: "black",
+        };
     // 使用 connectDragSource 包裹住 DOM 节点，使其可以接受各种拖动 API
     // connectDragSource 包裹住的 DOM 节点才可以被拖动
     return (
       connectDragSource &&
-      connectDragSource(<div style={{ ...style, opacity }}>{name}</div>)
+      connectDragSource(
+        <div
+          onClick={onClick}
+          style={{
+            ...styleChange,
+            ...style,
+            opacity,
+          }}
+        >
+          {name}
+        </div>
+      )
     );
   }
 }

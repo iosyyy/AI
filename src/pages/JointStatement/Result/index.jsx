@@ -14,14 +14,14 @@ import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import axios from "axios";
 import NoteImg from "../../../img/Note.png";
 import NoteHover from "../../../img/NoteHover.png";
-import PubSubJS from "pubsub-js";
 import qs from "qs";
 import api from "../../../config/api";
+
 const { Option } = Select;
+
 class JointStatementResult extends Component {
   constructor(props) {
     super(props);
-    PubSubJS.publish("isRunning", { page: "4" });
 
     const columns = [
       {

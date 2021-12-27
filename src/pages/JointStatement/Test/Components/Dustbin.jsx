@@ -1,27 +1,26 @@
 import React from "react";
 
-import { DragSource, DropTarget } from "react-dnd";
+import { DropTarget } from "react-dnd";
+import Box from "./Box";
 
 const style = {
-  height: "12rem",
-  width: "12rem",
-  marginRight: "1.5rem",
-  marginBottom: "1.5rem",
-  color: "white",
+  height: "75vh",
+  width: "100%",
+
   padding: "1rem",
-  textAlign: "center",
-  fontSize: "1rem",
   lineHeight: "normal",
-  float: "left",
+  background: "rgb(245,245,245)",
+  borderRadius: "0.7rem",
+  boxShadow: "0 8px 8px rgba(250,249,248, .24), 0 0 8px rgba(250,249,248, .12)",
 };
 
 const boxTarget = {
   // 当有对应的 drag source 放在当前组件区域时，会返回一个对象，可以在 monitor.getDropResult() 中获取到
   drop: (props, monitor) => {
-    console.log(monitor.getItem());
-    return { name: "Dustbin" };
+    return { name: props.name };
   },
 };
+
 @DropTarget(
   // type 标识，这里是字符串 'box'
   "box",
@@ -40,7 +39,13 @@ const boxTarget = {
 )
 class Dustbin extends React.Component {
   render() {
-    const { canDrop, isOver, connectDropTarget } = this.props;
+    const {
+      canDrop,
+      changeColor,
+      isOver,
+      connectDropTarget,
+      list,
+    } = this.props;
     const isActive = canDrop && isOver;
 
     let backgroundColor = "#222";
@@ -58,8 +63,24 @@ class Dustbin extends React.Component {
     return (
       connectDropTarget &&
       connectDropTarget(
-        <div style={{ ...style, backgroundColor }}>
-          {isActive ? "Release to drop" : "Drag a box here"}
+        <div>
+          <div style={{ ...style }}>
+            {list.map((v, i) => {
+              return (
+                <Box
+                  onClick={() => {
+                    changeColor(i, v.now);
+                  }}
+                  change={v.change}
+                  remove={this.props.remove}
+                  name={v.name}
+                  now={v.now}
+                  key={i}
+                  index={i}
+                />
+              );
+            })}
+          </div>
         </div>
       )
     );
