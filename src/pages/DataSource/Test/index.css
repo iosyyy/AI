@@ -1,0 +1,6 @@
+.card-container .ant-tabs > .ant-tabs-nav{
+    width: 40vw !important;
+    position: absolute !important;
+    margin-bottom: 16px;
+    border: 0;
+}

@@ -1,164 +1,99 @@
-import { Component } from "react";
-import Box from "./Components/Box";
-import Dustbin from "./Components/Dustbin";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { Button, Col, Row, Space } from "antd";
-import {
-  NodeCollapseOutlined,
-  NodeExpandOutlined,
-  DeleteFilled,
-  BulbTwoTone,
-} from "@ant-design/icons";
+import React, { Component } from "react";
+import { Button, Switch, Tabs } from "antd";
+import Transfer from "./Components/Transfer";
+import "./index.css";
+const { TabPane } = Tabs;
 
-class DataSourceDetail extends Component {
+class DataSourceTest extends Component {
   constructor(props) {
     super(props);
+    const list1 = [
+      { name: "id", now: "list1", change: false },
+      { name: "x0", now: "list1", change: false },
+      { name: "x1", now: "list1", change: false },
+      { name: "x2", now: "list1", change: false },
+      { name: "x3", now: "list1", change: false },
+    ];
+    const list2 = [
+      { name: "id", now: "list1", change: false },
+      { name: "x0", now: "list1", change: false },
+      { name: "x1", now: "list1", change: false },
+      { name: "x4", now: "list1", change: false },
+      { name: "x5", now: "list1", change: false },
+    ];
+    const list3 = [
+      { name: "id", now: "list1", change: false },
+      { name: "x6", now: "list1", change: false },
+      { name: "x7", now: "list1", change: false },
+      { name: "x8", now: "list1", change: false },
+      { name: "x9", now: "list1", change: false },
+    ];
     this.state = {
-      list1: [
-        { name: "item1", now: "list1", change: false },
-        { name: "item2", now: "list1", change: false },
-        { name: "item3", now: "list1", change: false },
-      ],
-      list2: [],
+      list1,
+      list2,
+      list3,
+      checked: true,
     };
   }
 
-  changeColor = (index, now) => {
-    const listCopy = [...this.state[now]];
-    listCopy[index].change = !listCopy[index].change;
-    if (now === "list1") {
-      this.setState({
-        list1: listCopy,
-      });
-    } else {
-      this.setState({
-        list2: listCopy,
-      });
-    }
-  };
-
-  remove = (index, now, item, name) => {
-    if (now === name) {
-      return;
-    }
-    let listCopy = [...this.state[now]];
-    listCopy.splice(index, 1);
-    item.change = false;
-    if (now === "list1") {
-      const listX = [...this.state.list2];
-      item.now = "list2";
-
-      listX.push(item);
-
-      this.setState({
-        list1: listCopy,
-        list2: listX,
-      });
-    } else {
-      const listX = [...this.state.list1];
-      item.now = "list1";
-
-      listX.push(item);
-      this.setState({
-        list2: listCopy,
-        list1: listX,
-      });
-    }
-  };
-
   render() {
-    const { list1, list2 } = this.state;
+    const { list1, list2, list3, checked } = this.state;
+    const panes = checked
+      ? [
+          {
+            component: <Transfer list={list1} />,
+            title: "散点图",
+          },
+          {
+            component: <Transfer list={list2} />,
+            title: "热力图",
+          },
+          {
+            component: <Transfer list={list3} />,
+            title: "直方图",
+          },
+        ]
+      : [
+          {
+            component: <Transfer list={list1} />,
+            title: "k-means",
+          },
+          {
+            component: <Transfer list={list2} />,
+            title: "决策树",
+          },
+        ];
     return (
-      <DndProvider backend={HTML5Backend}>
-        <Row style={{ marginBottom: "4px" }}>
-          <Col span={11} />
-          <Col span={2} />
-          <Col span={11}>
-            <Space>
-              <Button type={"primary"}>开始分析</Button>
-              <Button type={"text"} icon={<DeleteFilled />} />
-              <Button type={"text"} icon={<BulbTwoTone />} />
-            </Space>
-          </Col>
-        </Row>
-
-        <Row justify={"space-around"}>
-          <Col span={11}>
-            <Dustbin
-              changeColor={this.changeColor}
-              name={"list1"}
-              remove={this.remove}
-              list={list1}
-            />
-          </Col>
-          <Col span={2}>
-            <Row style={{ height: "75vh" }} align={"middle"} justify={"center"}>
-              <Col>
-                <Space direction={"vertical"}>
-                  <Button
-                    type={"text"}
-                    onClick={() => {
-                      const list1Copy = [...list1];
-                      const list2Copy = [...list2];
-                      for (let i = 0; i < list1Copy.length; i++) {
-                        if (list1Copy[i].change) {
-                          list1Copy[i].change = false;
-                          list1Copy[i].now = "list2";
-
-                          list2Copy.push(list1Copy[i]);
-
-                          list1Copy.splice(i, 1);
-                          i--;
-                        }
-                      }
-                      console.log(list1Copy);
-                      console.log(list2Copy);
-                      this.setState({
-                        list1: list1Copy,
-                        list2: list2Copy,
-                      });
-                    }}
-                    icon={<NodeExpandOutlined />}
-                  />
-                  <Button
-                    type={"text"}
-                    onClick={() => {
-                      const list1Copy = [...list1];
-                      const list2Copy = [...list2];
-                      for (let i = 0; i < list2Copy.length; i++) {
-                        if (list2Copy[i].change) {
-                          list2Copy[i].change = false;
-                          list2Copy[i].now = "list1";
-
-                          list1Copy.push(list2Copy[i]);
-                          list2Copy.splice(i, 1);
-                          i--;
-                        }
-                      }
-                      this.setState({
-                        list1: list1Copy,
-                        list2: list2Copy,
-                      });
-                    }}
-                    icon={<NodeCollapseOutlined />}
-                  />
-                </Space>
-              </Col>
-            </Row>
-          </Col>
-          <Col span={11}>
-            <Dustbin
-              changeColor={this.changeColor}
-              name={"list2"}
-              remove={this.remove}
-              list={list2}
-            />
-          </Col>
-        </Row>
-      </DndProvider>
+      <div className="card-container">
+        <Tabs
+          size={"small"}
+          tabBarExtraContent={{
+            right: (
+              <Switch
+                onChange={(checked) => {
+                  this.setState({
+                    checked,
+                  });
+                }}
+                defaultChecked
+                checkedChildren="探索性数据分析"
+                unCheckedChildren="数据建模"
+              />
+            ),
+          }}
+          defaultActiveKey="0"
+        >
+          {panes.map((v, i) => {
+            return (
+              <TabPane tab={v.title} key={i}>
+                {v.component}
+              </TabPane>
+            );
+          })}
+        </Tabs>
+      </div>
     );
   }
 }
 
-export default DataSourceDetail;
+export default DataSourceTest;

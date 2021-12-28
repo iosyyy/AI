@@ -63,7 +63,7 @@ class Dustbin extends React.Component {
     return (
       connectDropTarget &&
       connectDropTarget(
-        <div>
+        <div style={{ marginTop: "16px" }}>
           <div style={{ ...style }}>
             {list.map((v, i) => {
               return (
