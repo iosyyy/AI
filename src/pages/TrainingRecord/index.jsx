@@ -473,11 +473,7 @@ class TrainingRecord extends Component {
               <Input />
             </Form.Item>
             <Form.Item>
-              <Button
-                style={{ borderRadius: "5vw", width: "4vw" }}
-                type="primary"
-                htmlType="submit"
-              >
+              <Button shape={"round"} type="primary" htmlType="submit">
                 搜索
               </Button>
             </Form.Item>

@@ -13,6 +13,13 @@
 
 
 }
+.ant-btn{
+    border-radius: 5px !important;
+}
+.ant-btn-round{
+    border-radius: 24px !important;
+
+}
 .ant-menu-lefts .ant-tabs-left{
     padding-left: 12px;
 }

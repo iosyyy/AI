@@ -43,7 +43,13 @@ class DataSourceTable extends Component {
         render: (action, obj, value) => {
           return (
             <div>
-              <a>详情</a>
+              <a
+                onClick={() => {
+                  this.props.history.push("/datasource/detail");
+                }}
+              >
+                详情
+              </a>
               <span>/</span>
               <a
                 onClick={() => {

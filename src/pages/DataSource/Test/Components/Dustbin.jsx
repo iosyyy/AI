@@ -10,7 +10,7 @@ const style = {
   padding: "1rem",
   lineHeight: "normal",
   background: "rgb(245,245,245)",
-  borderRadius: "0.7rem",
+  borderRadius: "4px",
   boxShadow: "0 8px 8px rgba(250,249,248, .24), 0 0 8px rgba(250,249,248, .12)",
 };
 
