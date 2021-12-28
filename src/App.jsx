@@ -1,20 +1,6 @@
 import React, { Component } from "react";
 import { Col, Dropdown, Image, Layout, Menu, message, Row } from "antd";
 import { NavLink, Redirect, Route, Switch } from "react-router-dom";
-import PubSubJS from "pubsub-js";
-import Normal from "./pages/Normal";
-import Federal from "./pages/Federal";
-import logo from "./img/logolast.png";
-import star from "./img/starWhite.png";
-import "./App.css";
-import "antd/dist/antd.css";
-import FederalIndex from "./pages/FederalTrain";
-import TrainingRecord from "./pages/TrainingRecord";
-import Training from "./pages/Training";
-import TrainingDetails from "./pages/Training/Detail";
-import FederalDetailAll from "./pages/FederalDetail";
-import DataSource from "./pages/DataSource";
-import Avatar from "antd/es/avatar/avatar";
 import {
   BoxPlotOutlined,
   BranchesOutlined,
@@ -30,6 +16,21 @@ import {
   SettingOutlined,
   UserSwitchOutlined,
 } from "@ant-design/icons";
+import PubSubJS from "pubsub-js";
+import Normal from "./pages/Normal";
+import Federal from "./pages/Federal";
+import logo from "./img/logolast.png";
+import star from "./img/starWhite.png";
+import "./App.css";
+import "antd/dist/antd.css";
+import FederalIndex from "./pages/FederalTrain";
+import TrainingRecord from "./pages/TrainingRecord";
+import Training from "./pages/Training";
+import TrainingDetails from "./pages/Training/Detail";
+import FederalDetailAll from "./pages/FederalDetail";
+import DataSource from "./pages/DataSource";
+import Avatar from "antd/es/avatar/avatar";
+import Tmp from './pages/Tmp'
 import Reasoning from "./pages/Reasoning";
 import axios from "axios";
 import api from "./config/api";
@@ -296,6 +297,8 @@ class App extends Component {
                 <Route path="/datasource" component={DataSource} />
                 <Route path="/reasoning" component={Reasoning} />
                 <Route path="/jointStatement" component={JointStatement} />
+                <Route path="/tmp" component={Tmp}  />
+
                 <Redirect to="/federalTrain" />
               </Switch>
             </Content>
