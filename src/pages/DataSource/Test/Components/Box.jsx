@@ -1,8 +1,9 @@
-import React from "react";
+import React, { Component } from "react";
 import { DragSource } from "react-dnd";
+import { v4 as uuidv4 } from "uuid";
 
 const style = {
-  padding: "0.5rem 1rem",
+  padding: "5px 10px",
   borderRadius: "0.2rem",
   cursor: "move",
   marginBottom: 5,
@@ -50,7 +51,7 @@ const boxSource = {
     isDragging: monitor.isDragging(),
   })
 )
-class Box extends React.Component {
+class Box extends Component {
   render() {
     const { isDragging, connectDragSource, onClick } = this.props;
     const { name, change } = this.props;

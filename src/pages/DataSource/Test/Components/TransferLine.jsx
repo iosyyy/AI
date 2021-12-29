@@ -11,8 +11,10 @@ import {
   CloseCircleFilled,
 } from "@ant-design/icons";
 import Dustbin from "./Dustbin";
+import DustbinLine from "./DustbinLine";
 import { v4 as uuidv4 } from "uuid";
-class Transfer extends Component {
+
+class TransferLine extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -75,7 +77,7 @@ class Transfer extends Component {
             <Space>
               <Button
                 onClick={() => {
-                  this.props.analysis(list1, list2);
+                  this.props.analysis();
                 }}
                 type={"primary"}
               >
@@ -94,7 +96,7 @@ class Transfer extends Component {
                 type={"text"}
                 icon={<CloseCircleFilled />}
               />
-            </Tooltip>{" "}
+            </Tooltip>
           </Col>
         </Row>
 
@@ -167,11 +169,7 @@ class Transfer extends Component {
             </Row>
           </Col>
           <Col span={11}>
-            <Dustbin
-              message={
-                this.props.messageRight ??
-                "请将数据拖拽到此处, 然后点击开始分析按钮分析数据"
-              }
+            <DustbinLine
               key={uuidv4()}
               changeColor={this.changeColor}
               name={"list2"}
@@ -185,4 +183,4 @@ class Transfer extends Component {
   }
 }
 
-export default Transfer;
+export default TransferLine;

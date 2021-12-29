@@ -4,18 +4,19 @@ import { DropTarget } from "react-dnd";
 import Box from "./Box";
 import { Col, Row } from "antd";
 import { v4 as uuidv4 } from "uuid";
+const bkColor = "rgb(245,245,245)";
+const fontColor = "rgb(38,38,38)";
 
 const style = {
-  height: "75vh",
+  height: "70vh",
   width: "100%",
 
   padding: "1rem",
   lineHeight: "normal",
-  background: "rgb(245,245,245)",
+  background: bkColor,
   borderRadius: "4px",
   boxShadow: "0 8px 8px rgba(250,249,248, .24), 0 0 8px rgba(250,249,248, .12)",
 };
-
 const boxTarget = {
   // 当有对应的 drag source 放在当前组件区域时，会返回一个对象，可以在 monitor.getDropResult() 中获取到
   drop: (props, monitor) => {
@@ -39,7 +40,7 @@ const boxTarget = {
     canDrop: monitor.canDrop(),
   })
 )
-class Dustbin extends Component {
+class DustbinLine extends Component {
   render() {
     const {
       canDrop,
@@ -48,7 +49,9 @@ class Dustbin extends Component {
       connectDropTarget,
       list,
     } = this.props;
-    const notEmpty = list.length !== 0;
+
+    const notEmptyY = list.length !== 0;
+    const notEmptyX = list.length >= 2;
 
     // 使用 connectDropTarget 包裹住 DOM 节点，使其可以接收对应的 drag source 组件
     // connectDropTarget 包裹住的 DOM 节点才能接收 drag source 组件
@@ -56,9 +59,41 @@ class Dustbin extends Component {
       connectDropTarget &&
       connectDropTarget(
         <div style={{ marginTop: "16px" }}>
+          <div>
+            {notEmptyY ? (
+              <Box
+                onClick={() => {
+                  changeColor(0, list[0].now);
+                }}
+                change={list[0].change}
+                remove={this.props.remove}
+                name={list[0].name}
+                now={list[0].now}
+                key={0}
+                index={0}
+              />
+            ) : (
+              <Row
+                style={{
+                  background: bkColor,
+
+                  color: fontColor,
+                  height: "4vh",
+                  marginBottom: "1vh",
+                }}
+                justify={"center"}
+                align={"middle"}
+              >
+                <Col>Y</Col>
+              </Row>
+            )}
+          </div>
           <div style={{ ...style }}>
-            {notEmpty ? (
+            {notEmptyX ? (
               list.map((v, i) => {
+                if (i === 0) {
+                  return;
+                }
                 return (
                   <Box
                     onClick={() => {
@@ -75,11 +110,11 @@ class Dustbin extends Component {
               })
             ) : (
               <Row
-                style={{ color: "rgb(38,38,38)", height: "100%" }}
+                style={{ color: fontColor, height: "100%" }}
                 justify={"center"}
                 align={"middle"}
               >
-                <Col>{this.props.message ?? "数据为空请重试"}</Col>
+                <Col>X</Col>
               </Row>
             )}
           </div>
@@ -89,4 +124,4 @@ class Dustbin extends Component {
   }
 }
 
-export default Dustbin;
+export default DustbinLine;

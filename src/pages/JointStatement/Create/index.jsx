@@ -10,6 +10,7 @@ import {
 } from "@ant-design/icons";
 import StepsTemplate from "../../../components/StepsTemplate";
 import { fontStyle } from "../../../util/util";
+import PubSubJS from "pubsub-js";
 
 const { Step } = Steps;
 
@@ -54,11 +55,9 @@ class JointStatementCreate extends Component {
   //   });
   // };
 
-  toLastPage = () => {
-    this.props.history.push({
-      pathname: "/federalTrain/type",
-    });
-  };
+  componentDidMount() {
+    PubSubJS.publish("datasourcePage", { page: "22" });
+  }
 
   render() {
     const tailLayout = {

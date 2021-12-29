@@ -6,6 +6,8 @@ import DatasourceHandle from "./DatasourceHandle";
 import Preprocessing from "./Preprocessing";
 import PubSubJS from "pubsub-js";
 import DataSourceDetail from "./Test";
+import DataSourceTestResults from "./Test/Results";
+import DataSourceTablesw from "./Test/Tables";
 
 const { TabPane } = Tabs;
 
@@ -37,6 +39,14 @@ class DataSource extends Component {
             component={DatasourceHandle}
           />
           <Route path="/datasource/detail" component={DataSourceDetail} />
+          <Route
+            path="/datasource/testResult"
+            component={DataSourceTestResults}
+          />
+          <Route
+            path="/datasource/resultTables"
+            component={DataSourceTablesw}
+          />
 
           <Redirect to="/datasource/datasourceManage" />
         </Switch>

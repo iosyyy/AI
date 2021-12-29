@@ -16,6 +16,7 @@ import NoteImg from "../../../img/Note.png";
 import NoteHover from "../../../img/NoteHover.png";
 import qs from "qs";
 import api from "../../../config/api";
+import PubSubJS from "pubsub-js";
 
 const { Option } = Select;
 
@@ -250,6 +251,8 @@ class JointStatementResult extends Component {
   }
 
   componentDidMount() {
+    PubSubJS.publish("datasourcePage", { page: "23" });
+
     axios
       .post(api.pageList, {
         fDescription: "",

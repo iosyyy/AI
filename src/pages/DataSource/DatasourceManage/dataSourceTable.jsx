@@ -45,7 +45,8 @@ class DataSourceTable extends Component {
             <div>
               <a
                 onClick={() => {
-                  this.props.history.push("/datasource/detail");
+                  this.props.history.push("/datasource/resultTables");
+                  localStorage.setItem("resultTitle", obj.tableName);
                 }}
               >
                 详情
