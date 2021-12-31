@@ -1,68 +1,15 @@
 import React, { Component } from "react";
-import { Button, Col, Radio, Row, Table, Tooltip } from "antd";
+import { Button, Col, message, Radio, Row, Spin, Table, Tooltip } from "antd";
 import { CloseCircleFilled } from "@ant-design/icons";
+import axios from "axios";
+import api from "../../../../config/api";
 
 class DataSourceTablesw extends Component {
   constructor(props) {
     super(props);
-    const columns = [
-      {
-        title: <div>id</div>,
-        dataIndex: "id",
-        key: "id",
-      },
-      {
-        title: <div>x0</div>,
-        dataIndex: "x0",
-        key: "x0",
-      },
-      {
-        title: <div>x1</div>,
-        dataIndex: "x1",
-        key: "x1",
-      },
-      {
-        title: <div>x2</div>,
-        dataIndex: "x2",
-        key: "x2",
-      },
-      {
-        title: <div>x3</div>,
-        dataIndex: "x3",
-        key: "x3",
-      },
-      {
-        title: <div>x4</div>,
-        dataIndex: "x4",
-        key: "x4",
-      },
-      {
-        title: <div>x5</div>,
-        dataIndex: "x5",
-        key: "x5",
-      },
-      {
-        title: <div>Y</div>,
-        dataIndex: "Y",
-        key: "Y",
-      },
-    ];
-    const dataSources = [];
-    for (let i = 0; i < 100; i++) {
-      dataSources[i] = {
-        id: i,
-        x0: Math.random().toFixed(5),
-        x1: Math.random().toFixed(5),
-        x2: Math.random().toFixed(5),
-        x3: Math.random().toFixed(5),
-        x4: Math.random().toFixed(5),
-        x5: Math.random().toFixed(5),
-        Y: Math.random(),
-      };
-    }
     this.state = {
-      columns,
-      dataSources,
+      columns: [],
+      dataSources: [],
       loading: false,
       total: 200,
       curOption: 0,
@@ -71,17 +18,55 @@ class DataSourceTablesw extends Component {
     };
   }
 
+  componentDidMount() {
+    this.setState({
+      loading: true,
+    });
+    axios
+      .post(api.getPreprocess, {
+        file_path: localStorage.getItem("file_name"),
+      })
+      .then((r) => {
+        console.log(r);
+        if (r.data.code === 0) {
+          const { data } = r.data.data;
+          const firstDatum = data.data[0];
+          const columns = firstDatum.map((v, i) => {
+            return {
+              title: <div>{v}</div>,
+              dataIndex: v,
+              key: v,
+            };
+          });
+          const dataSources = [];
+          for (let i = 1; i < data.data.length; i++) {
+            const dataw = {};
+            for (let j = 0; j < data.data[i].length; j++) {
+              dataw[firstDatum[j]] = data.data[i][j];
+            }
+            dataSources.push(dataw);
+          }
+          this.setState({
+            total: data.all_num,
+            columns: columns,
+            dataSources,
+          });
+        }
+      })
+      .catch((r) => {
+        message.error("数据获取错误请重试");
+      })
+      .finally((r) => {
+        this.setState({
+          loading: false,
+        });
+      });
+  }
+
   render() {
-    const {
-      loading,
-      dataSources,
-      columns,
-      total,
-      curOption,
-      value,
-    } = this.state;
+    const { loading, dataSources, columns, total, value } = this.state;
     return (
-      <div>
+      <Spin spinning={loading}>
         <Row justify={"space-between"}>
           <Col>
             <h1 className="colorWhite">
@@ -147,7 +132,7 @@ class DataSourceTablesw extends Component {
             </Col>
           </Row>
         )}
-      </div>
+      </Spin>
     );
   }
 }

@@ -60,6 +60,7 @@ class MyDatasourceTable extends Component {
               <span>/</span>
               <a
                 onClick={() => {
+                  console.log(obj.file);
                   axios
                     .post(api.downloadTemplate, { file_name: obj.file })
                     .then((r) => {

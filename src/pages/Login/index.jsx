@@ -23,14 +23,16 @@ class Login extends Component {
           console.log(localStorage.getItem("role"));
 
           localStorage.setItem("party_name", party_name);
-          localStorage.setItem("userLogin", "success");
           localStorage.setItem("party_id", party_id);
-          this.props.history.push("/federalTrain");
         }
       })
       .catch((r) => {
         message.error("链接服务器失败请重试");
         localStorage.setItem("role", null);
+      })
+      .finally(() => {
+        localStorage.setItem("userLogin", "success");
+        this.props.history.push("/federalTrain");
       });
   };
 

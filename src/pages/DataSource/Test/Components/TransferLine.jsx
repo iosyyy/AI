@@ -77,7 +77,7 @@ class TransferLine extends Component {
             <Space>
               <Button
                 onClick={() => {
-                  this.props.analysis();
+                  this.props.analysis(list1, list2);
                 }}
                 type={"primary"}
               >

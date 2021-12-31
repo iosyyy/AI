@@ -9,7 +9,7 @@ import { exportPDF } from "../../../../util/exportPdf";
 class DataSourceTestResults extends Component {
   render() {
     const type = localStorage.getItem("dataSourceResultType");
-
+    console.log(localStorage.getItem("feature"));
     let comResult = <>当前分析为空请重试</>;
     switch (type) {
       case DataSourceType.ZhiFang:

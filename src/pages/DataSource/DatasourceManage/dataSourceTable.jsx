@@ -47,6 +47,7 @@ class DataSourceTable extends Component {
                 onClick={() => {
                   this.props.history.push("/datasource/resultTables");
                   localStorage.setItem("resultTitle", obj.tableName);
+                  localStorage.setItem("file_name", obj.file);
                 }}
               >
                 详情

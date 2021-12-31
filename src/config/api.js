@@ -46,6 +46,7 @@ const e = {
   delDatasource: host + "/v1/preprocess/data/del",
   preprocess: host + "/v1/preprocess/data/preprocess",
   getClientInfo: host + "/v1/client/info",
+  getPreprocess: host + "/v1/preprocess/data_find",
 };
 
 export default e;

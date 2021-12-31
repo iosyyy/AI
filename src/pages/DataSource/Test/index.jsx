@@ -51,6 +51,7 @@ class DataSourceTest extends Component {
       list3,
       list4,
       list5,
+      n: 0,
       activeKey: null,
       checked: localStorage.getItem("tablesSelectValue") === "探索性数据分析",
     };
@@ -66,6 +67,7 @@ class DataSourceTest extends Component {
       list2,
       list3,
       list4,
+      n,
       list5,
       checked,
       activeKey,
@@ -77,11 +79,12 @@ class DataSourceTest extends Component {
               <TransferLine
                 back={this.back}
                 list={list1}
-                analysis={() => {
+                analysis={(list1, list2) => {
                   localStorage.setItem(
                     "dataSourceResultType",
                     DataSourceType.SanDian
                   );
+                  localStorage.setItem("feature", JSON.stringify(list2));
                   this.props.history.push("/datasource/testResult");
                 }}
               />
@@ -93,11 +96,13 @@ class DataSourceTest extends Component {
               <Transfer
                 back={this.back}
                 list={list2}
-                analysis={() => {
+                analysis={(list1, list2) => {
                   localStorage.setItem(
                     "dataSourceResultType",
                     DataSourceType.ReLi
                   );
+                  localStorage.setItem("feature", JSON.stringify(list2));
+
                   this.props.history.push("/datasource/testResult");
                 }}
               />
@@ -109,11 +114,13 @@ class DataSourceTest extends Component {
               <Transfer
                 back={this.back}
                 list={list3}
-                analysis={() => {
+                analysis={(list1, list2) => {
                   localStorage.setItem(
                     "dataSourceResultType",
                     DataSourceType.ZhiFang
                   );
+                  localStorage.setItem("feature", JSON.stringify(list2));
+
                   this.props.history.push("/datasource/testResult");
                 }}
               />
@@ -133,6 +140,9 @@ class DataSourceTest extends Component {
                     message.error("k-means只能选择两个参数请重试");
                     return;
                   }
+                  localStorage.setItem("feature", JSON.stringify(list2));
+                  localStorage.setItem("n", n);
+
                   localStorage.setItem(
                     "dataSourceResultType",
                     DataSourceType.kMeans
@@ -145,15 +155,17 @@ class DataSourceTest extends Component {
           },
           {
             component: (
-              <Transfer
+              <TransferLine
                 messageLeft={"请将数据从右侧拖拽到此处以删除数据"}
                 back={this.back}
                 list={list5}
-                analysis={() => {
+                analysis={(list1, list2) => {
                   localStorage.setItem(
                     "dataSourceResultType",
                     DataSourceType.decisionTree
                   );
+                  localStorage.setItem("feature", JSON.stringify(list2));
+                  localStorage.setItem("n", n);
                   this.props.history.push("/datasource/testResult");
                 }}
               />
@@ -175,7 +187,15 @@ class DataSourceTest extends Component {
                     {!activeKey || activeKey === "k-means"
                       ? "类别数: "
                       : "决策树深度: "}
-                    <InputNumber />
+                    <InputNumber
+                      min={0}
+                      value={n}
+                      onChange={(value) => {
+                        this.setState({
+                          n: value,
+                        });
+                      }}
+                    />
                   </>
                 )}
                 <Switch
