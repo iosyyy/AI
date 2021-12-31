@@ -47,6 +47,9 @@ const e = {
   preprocess: host + "/v1/preprocess/data/preprocess",
   getClientInfo: host + "/v1/client/info",
   getPreprocess: host + "/v1/preprocess/data_find",
+  getZhiFang: host + "/v1/preprocess/data/hist",
+  getReLi: host + "/v1/preprocess/data/heatmap",
+  getSanDian: host + "/v1/preprocess/data/dotmap"
 };
 
 export default e;
