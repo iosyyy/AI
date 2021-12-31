@@ -10,41 +10,16 @@ const { TabPane } = Tabs;
 class DataSourceTest extends Component {
   constructor(props) {
     super(props);
-    const list1 = [
-      { name: "id", now: "list1", change: false },
-      { name: "x0", now: "list1", change: false },
-      { name: "x1", now: "list1", change: false },
-      { name: "x2", now: "list1", change: false },
-      { name: "x3", now: "list1", change: false },
-    ];
-    const list2 = [
-      { name: "id", now: "list1", change: false },
-      { name: "x0", now: "list1", change: false },
-      { name: "x1", now: "list1", change: false },
-      { name: "x4", now: "list1", change: false },
-      { name: "x5", now: "list1", change: false },
-    ];
-    const list3 = [
-      { name: "id", now: "list1", change: false },
-      { name: "x6", now: "list1", change: false },
-      { name: "x7", now: "list1", change: false },
-      { name: "x8", now: "list1", change: false },
-      { name: "x9", now: "list1", change: false },
-    ];
-    const list4 = [
-      { name: "id", now: "list1", change: false },
-      { name: "x6", now: "list1", change: false },
-      { name: "x7", now: "list1", change: false },
-      { name: "x8", now: "list1", change: false },
-      { name: "x9", now: "list1", change: false },
-    ];
-    const list5 = [
-      { name: "id", now: "list1", change: false },
-      { name: "w", now: "list1", change: false },
-      { name: "x81", now: "list1", change: false },
-      { name: "x82", now: "list1", change: false },
-      { name: "x83", now: "list1", change: false },
-    ];
+    const listData = JSON.parse(localStorage.getItem("processTableData"));
+    console.log(listData);
+    const list1 = listData.map((v, i) => {
+      return { name: v, now: "list1", change: false };
+    });
+    const list2 = [...list1];
+    const list3 = [...list1];
+    const list4 = [...list1];
+    const list5 = [...list1];
+
     this.state = {
       list1,
       list2,

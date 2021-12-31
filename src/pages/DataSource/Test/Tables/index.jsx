@@ -15,6 +15,7 @@ class DataSourceTablesw extends Component {
       curOption: 0,
       names: [],
       value: "探索性数据分析",
+      firstDatum: [],
     };
   }
 
@@ -50,6 +51,7 @@ class DataSourceTablesw extends Component {
             total: data.all_num,
             columns: columns,
             dataSources,
+            firstDatum,
           });
         }
       })
@@ -64,7 +66,14 @@ class DataSourceTablesw extends Component {
   }
 
   render() {
-    const { loading, dataSources, columns, total, value } = this.state;
+    const {
+      loading,
+      dataSources,
+      columns,
+      total,
+      value,
+      firstDatum,
+    } = this.state;
     return (
       <Spin spinning={loading}>
         <Row justify={"space-between"}>
@@ -88,6 +97,10 @@ class DataSourceTablesw extends Component {
               onClick={() => {
                 this.props.history.push("/datasource/detail");
                 localStorage.setItem("tablesSelectValue", value);
+                localStorage.setItem(
+                  "processTableData",
+                  JSON.stringify(firstDatum)
+                );
               }}
               type={"primary"}
             >
