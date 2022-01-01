@@ -30,7 +30,7 @@ import TrainingDetails from "./pages/Training/Detail";
 import FederalDetailAll from "./pages/FederalDetail";
 import DataSource from "./pages/DataSource";
 import Avatar from "antd/es/avatar/avatar";
-import Tmp from "./pages/Tmp";
+import Tmp from "./pages/DataSource/ResultGrapths";
 import Reasoning from "./pages/Reasoning";
 import axios from "axios";
 import api from "./config/api";

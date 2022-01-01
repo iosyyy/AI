@@ -3,7 +3,7 @@ import "echarts/lib/chart/bar";
 // 引入提示框和标题组件
 import "echarts/lib/component/tooltip";
 import "echarts/lib/component/title";
-import api from '../../config/api'
+import api from '../../../config/api'
 import axios from 'axios'
 
 const echarts = require("echarts");

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import ZhiFang from "../../../Tmp/ZhiFang";
-import Sandian from "../../../Tmp/Sandian";
+import ZhiFang from "../../ResultGrapths/ZhiFang";
+import Sandian from "../../ResultGrapths/Sandian";
 import { DataSourceType } from "../../../../util/dataSourceReultEnum";
-import ReLi from "../../../Tmp/ReLi";
+import ReLi from "../../ResultGrapths/ReLi";
 import { Button, Space } from "antd";
 import { exportPDF } from "../../../../util/exportPdf";
 import TreeSet from "./TreeSet";
@@ -23,7 +23,7 @@ class DataSourceTestResults extends Component {
       case DataSourceType.SanDian:
         comResult = (
           <div id="exportPdf">
-            <Sandian />
+            <Sandian type="zhifang"/>
           </div>
         );
         break;
@@ -37,7 +37,7 @@ class DataSourceTestResults extends Component {
       case DataSourceType.kMeans:
         comResult = (
           <div id="exportPdf">
-            <Sandian />
+            <Sandian type="k-means"/>
           </div>
         );
         break;
