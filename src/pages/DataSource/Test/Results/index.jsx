@@ -5,6 +5,7 @@ import { DataSourceType } from "../../../../util/dataSourceReultEnum";
 import ReLi from "../../../Tmp/ReLi";
 import { Button, Space } from "antd";
 import { exportPDF } from "../../../../util/exportPdf";
+import TreeSet from "./TreeSet";
 
 class DataSourceTestResults extends Component {
   render() {
@@ -43,9 +44,7 @@ class DataSourceTestResults extends Component {
       case DataSourceType.decisionTree:
         comResult = (
           <div id="exportPdf">
-            <ZhiFang />
-            <ReLi />
-            <Sandian />
+            <TreeSet />
           </div>
         );
         break;

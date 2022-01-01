@@ -26,7 +26,7 @@ class DataSourceTest extends Component {
       list3,
       list4,
       list5,
-      n: 0,
+      n: 1,
       activeKey: null,
       checked: localStorage.getItem("tablesSelectValue") === "探索性数据分析",
     };
@@ -55,6 +55,10 @@ class DataSourceTest extends Component {
                 back={this.back}
                 list={list1}
                 analysis={(list1, list2) => {
+                  if (list2.length < 2) {
+                    message.error("散点图应最少具有两个参数");
+                    return;
+                  }
                   localStorage.setItem(
                     "dataSourceResultType",
                     DataSourceType.SanDian
@@ -72,6 +76,10 @@ class DataSourceTest extends Component {
                 back={this.back}
                 list={list2}
                 analysis={(list1, list2) => {
+                  if (list2.length < 2) {
+                    message.error("热力图应最少具有两个参数");
+                    return;
+                  }
                   localStorage.setItem(
                     "dataSourceResultType",
                     DataSourceType.ReLi
@@ -90,6 +98,10 @@ class DataSourceTest extends Component {
                 back={this.back}
                 list={list3}
                 analysis={(list1, list2) => {
+                  if (list2.length < 1) {
+                    message.error("直方图应最少具有一个参数");
+                    return;
+                  }
                   localStorage.setItem(
                     "dataSourceResultType",
                     DataSourceType.ZhiFang
@@ -135,6 +147,10 @@ class DataSourceTest extends Component {
                 back={this.back}
                 list={list5}
                 analysis={(list1, list2) => {
+                  if (list2.length < 2) {
+                    message.error("决策树应最少具有两个参数");
+                    return;
+                  }
                   localStorage.setItem(
                     "dataSourceResultType",
                     DataSourceType.decisionTree
@@ -163,7 +179,7 @@ class DataSourceTest extends Component {
                       ? "类别数: "
                       : "决策树深度: "}
                     <InputNumber
-                      min={0}
+                      min={1}
                       value={n}
                       onChange={(value) => {
                         this.setState({

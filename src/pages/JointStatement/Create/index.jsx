@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Col, Form, Input, Row, Space, Steps } from "antd";
+import { Button, Col, Form, Input, message, Row, Space, Steps } from "antd";
 import "antd/dist/antd.css";
 import {
   CloudUploadOutlined,
@@ -11,6 +11,8 @@ import {
 import StepsTemplate from "../../../components/StepsTemplate";
 import { fontStyle } from "../../../util/util";
 import PubSubJS from "pubsub-js";
+import axios from "axios";
+import api from "../../../config/api";
 
 const { Step } = Steps;
 
@@ -26,37 +28,53 @@ class JointStatementCreate extends Component {
       table_name: ["", ""],
       party_id: ["", ""],
       role: ["guest", "host"],
+      job_name: "",
+      job_description: "",
     };
   }
 
-  //
-  // toNextPage = () => {
-  //   const { party_id, role, table_name } = this.state;
-  //   if (!this.ableToUp()) {
-  //     return;
-  //   }
-  //   const data = {};
-  //   data.guest = {
-  //     party_id: parseInt(party_id[0]),
-  //     table_name: table_name[0],
-  //   };
-  //   data.host = party_id.slice(1).map((v, i) => {
-  //     return {
-  //       party_id: parseInt(party_id[i + 1]),
-  //       table_name: table_name[i + 1],
-  //     };
-  //   });
-  //   this.props.history.push({
-  //     pathname: "/federalTrain/choice",
-  //     state: {
-  //       data,
-  //       selectValue: this.props.location.state.selectValue,
-  //     },
-  //   });
-  // };
+  ableToUp = () => {
+    const { party_id, table_name, job_name, job_description } = this.state;
+
+    for (const party of party_id) {
+      if (isNaN(party)) {
+        return false;
+      }
+    }
+
+    for (const party of table_name) {
+      if (!party) {
+        return false;
+      }
+    }
+    if (!job_name || !job_description) {
+      message.error("任务名称与任务简绍都不能为空");
+      return false;
+    }
+    return true;
+  };
+
+  getData = () => {
+    const { party_id, table_name, job_name, job_description } = this.state;
+    const data = {};
+    data.guest = {
+      party_id: parseInt(party_id[0]),
+      table_name: table_name[0],
+    };
+    data.host = party_id.slice(1).map((v, i) => {
+      return {
+        party_id: parseInt(party_id[i + 1]),
+        table_name: table_name[i + 1],
+      };
+    });
+    data.job_name = job_name;
+    data.job_description = job_description;
+    data.work_mode = 0;
+    return data;
+  };
 
   componentDidMount() {
-    PubSubJS.publish("datasourcePage", { page: "22" });
+    PubSubJS.publish("isRunning", { page: "22" });
   }
 
   render() {
@@ -64,34 +82,47 @@ class JointStatementCreate extends Component {
       wrapperCol: { span: 5 },
     };
     const layout = {};
-    const { uploadIng } = this.state;
+    const { uploadIng, job_name, job_description } = this.state;
     return (
       <div style={{ height: "83vh" }} className="site-layout-content">
         <Row justify={"center"} className={"scrollContent"}>
           <Col>
             <Form
               size={"middle"}
-              onFinish={() => {}}
-              onFinishFailed={() => {
-                this.setState({});
+              onFinish={(e) => {
+                console.log(this.getData(e));
               }}
               {...layout}
             >
               <Form.Item
                 style={{ marginTop: "1vh" }}
-                name={"name"}
+                name={"job_name"}
                 {...tailLayout}
                 label={<div style={fontStyle}>任务名称</div>}
               >
-                <Input />
+                <Input
+                  value={job_name}
+                  onChange={(e) => {
+                    this.setState({
+                      job_name: e.target.value,
+                    });
+                  }}
+                />
               </Form.Item>
               <Form.Item
                 {...tailLayout}
                 style={{ marginTop: "1vh" }}
-                name={"describe"}
+                name={"job_description"}
                 label={<div style={fontStyle}>任务描述</div>}
               >
-                <Input />
+                <Input
+                  value={job_description}
+                  onChange={(e) => {
+                    this.setState({
+                      job_description: e.target.value,
+                    });
+                  }}
+                />
               </Form.Item>
               <Form.List rules={[{ required: true }]} name="partys">
                 {(fields, { add, remove }) => {
@@ -224,8 +255,37 @@ class JointStatementCreate extends Component {
               </Form.List>
               <Row justify={"center"}>
                 <Col>
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
+                  <Form.Item name={"submit"}>
+                    <Button
+                      loading={uploadIng}
+                      onClick={() => {
+                        if (this.ableToUp()) {
+                          this.setState({
+                            uploadIng: true,
+                          });
+                          axios
+                            .post(api.submitJob, { ...this.getData() })
+                            .then((r) => {
+                              console.log(r);
+                              if (r.data.code === 0) {
+                                message.success("执行任务成功");
+                              } else {
+                                message.error("执行失败请重试");
+                              }
+                            })
+                            .catch((r) => {
+                              message.error("服务器异常");
+                            })
+                            .finally(() => {
+                              this.setState({
+                                uploadIng: false,
+                              });
+                            });
+                        }
+                      }}
+                      type="primary"
+                      htmlType="submit"
+                    >
                       执行任务
                     </Button>
                   </Form.Item>

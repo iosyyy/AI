@@ -13,6 +13,8 @@ if (pack.env === "build") {
 
 const e = {
   pageList: host + "/job/query/page/new", // 详情界面url
+  jobList: host + "/v1/intersection/list/job/intersection",
+  dTree: host + "/v1/preprocess/data/d_tree",
   showList: ws + "/websocket/progress/{jobId}/{role}/{partyId}",
   showDetailMetrics: host + "/v1/tracking/component/metrics",
   showDetailOutputModel: host + "/v1/tracking/component/output/model",
@@ -28,6 +30,7 @@ const e = {
   batchSingle: host + "/v1/predict/batch",
   downloadTemplate: host + "/v1/client/download/template",
   uploadFile: host + "/v1/predict_data/upload_file",
+  submitJob: host + "/v1/intersection/submit/job/intersection",
   stopJob: host + "/job/v1/pipeline/job/stop",
   getJobOutput: host + "/v1/tracking/component/output/model",
   findList: host + "/v1/predict_data/predict/find_list",
@@ -49,7 +52,7 @@ const e = {
   getPreprocess: host + "/v1/preprocess/data_find",
   getZhiFang: host + "/v1/preprocess/data/hist",
   getReLi: host + "/v1/preprocess/data/heatmap",
-  getSanDian: host + "/v1/preprocess/data/dotmap"
+  getSanDian: host + "/v1/preprocess/data/dotmap",
 };
 
 export default e;
