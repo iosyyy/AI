@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { message, Table } from "antd";
+import { Button, message, Table } from "antd";
 import axios from "axios";
 import NoteImg from "../../../img/Note.png";
 import qs from "qs";
@@ -102,6 +102,18 @@ class JointStatementResult extends Component {
         dataIndex: "f_status",
         key: "f_status",
       },
+      {
+        title: <div>action</div>,
+        dataIndex: "action",
+        key: "action",
+        render: (text, obj) => {
+          return obj.f_status === "failed" ? (
+            <Button type={"link"}>retry</Button>
+          ) : (
+            <></>
+          );
+        },
+      },
     ];
 
     this.state = {
@@ -129,9 +141,9 @@ class JointStatementResult extends Component {
           message.error(r.data.msg);
           return;
         }
-        const { dataSource, count } = r.data.data.data;
+        const { data, count } = r.data.data;
         this.setState({
-          dataSource: dataSource,
+          dataSource: data,
           page_length: count,
         });
       })
@@ -160,10 +172,10 @@ class JointStatementResult extends Component {
 
   render() {
     return (
-      <div style={{ height: "85vh" }} className="site-layout-content">
+      <div className="site-layout-content">
         <Table
           loading={this.state.loading}
-          scroll={{ y: "61.5vh" }}
+          scroll={{ y: "65.5vh" }}
           bordered={false}
           size={"middle"}
           dataSource={this.state.dataSource}
