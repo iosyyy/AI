@@ -13,8 +13,8 @@ class JointStatementResult extends Component {
     const columns = [
       {
         title: <div>ID</div>,
-        dataIndex: "id",
-        key: "id",
+        dataIndex: "f_job_id",
+        key: "f_job_id",
         width: "16vw",
         render: (id, obj) => (
           <div>
@@ -26,12 +26,12 @@ class JointStatementResult extends Component {
                 this.props.history.push({
                   pathname: "/federalDetail/show",
                   search: qs.stringify({
-                    id: obj.id,
-                    role: obj.role,
-                    partyId: obj.partyId,
-                    status: obj.status,
-                    startTime: obj.startTime,
-                    endTime: obj.endTime,
+                    id: obj.f_job_id,
+                    role: obj.f_initiator_role,
+                    partyId: obj.f_party_id,
+                    status: obj.f_status,
+                    startTime: obj.f_create_time,
+                    endTime: obj.f_end_time,
                     duration: obj.duration,
                   }),
                 });
@@ -44,26 +44,36 @@ class JointStatementResult extends Component {
       },
       {
         title: <div>PartyID</div>,
-        dataIndex: "partyId",
-        key: "partyId",
+        dataIndex: "f_party_id",
+        key: "f_party_id",
+      },
+      {
+        title: <div>任务名称</div>,
+        dataIndex: "f_name",
+        key: "f_name",
+      },
+      {
+        title: <div>任务描述</div>,
+        dataIndex: "f_description",
+        key: "f_description",
       },
       {
         title: <div>规则</div>,
-        dataIndex: "role",
-        key: "role",
+        dataIndex: "f_initiator_role",
+        key: "f_initiator_role",
       },
       {
         title: <div>开始时间</div>,
-        dataIndex: "startTime",
-        key: "start_time",
+        dataIndex: "f_create_time",
+        key: "f_create_time",
         render: (text) => {
           return <>{new Date(text).toLocaleString()}</>;
         },
       },
       {
         title: <div>结束时间</div>,
-        dataIndex: "endTime",
-        key: "end_time",
+        dataIndex: "f_end_time",
+        key: "f_end_time",
         render: (text) => {
           return <>{new Date(text).toLocaleString()}</>;
         },
@@ -72,8 +82,9 @@ class JointStatementResult extends Component {
         title: <div>运行时间</div>,
         dataIndex: "duration",
         key: "elapsed",
+
         render: (text, value) => {
-          const time = value.endTime - value.startTime;
+          const time = value.f_end_time - value.f_create_time;
           const seconds = Math.round((time / 1000) % 60);
           const minutes = Math.round((time / 1000 / 60) % 60);
           const hour = Math.round((time / 1000 / 60 / 60) % 60);
@@ -88,25 +99,15 @@ class JointStatementResult extends Component {
       },
       {
         title: <div>结果</div>,
-        dataIndex: "status",
-        key: "status",
-      },
-      {
-        title: <div>记录</div>,
-        dataIndex: "notes",
-        key: "notes",
-        width: "9vw",
+        dataIndex: "f_status",
+        key: "f_status",
       },
     ];
-    const NoteNow = [];
-    for (let i = 0; i < 25; i++) {
-      NoteNow.push({ Notes: NoteImg, Show: true });
-    }
+
     this.state = {
       columns,
       dataSource: [],
 
-      NoteNow,
       loading: false,
       page_length: 0,
       currentPage: 1,
@@ -116,7 +117,7 @@ class JointStatementResult extends Component {
   componentDidMount() {
     PubSubJS.publish("isRunning", { page: "23" });
 
-    this.getDataSource(0);
+    this.getDataSource(1);
   }
 
   getDataSource = (page) => {
@@ -128,12 +129,10 @@ class JointStatementResult extends Component {
           message.error(r.data.msg);
           return;
         }
-        const { list } = r.data.data;
-        const page_length = r.data.data.totalRecord;
-        const dataSource = this.getDataSourceByDataList(list);
+        const { dataSource, count } = r.data.data.data;
         this.setState({
-          dataSource,
-          page_length,
+          dataSource: dataSource,
+          page_length: count,
         });
       })
       .catch((e) => {
@@ -150,26 +149,6 @@ class JointStatementResult extends Component {
   componentWillUnmount() {
     //处理逻辑
     this.setState = (_state, _callback) => {};
-  }
-
-  getDataSourceByDataList(list) {
-    const dataSource = [];
-    list.forEach((values, key) => {
-      const value = values.job;
-      dataSource.push({
-        key,
-        id: value.fJobId,
-        startTime: value.fStartTime,
-        endTime: value.fEndTime,
-        duration: value.fElapsed,
-        role: value.fRole,
-        partyId: value.fPartyId,
-        notes: value.fDescription,
-        status: value.fStatus,
-        action: value.fStatus === "success" ? "" : "retry",
-      });
-    });
-    return dataSource;
   }
 
   getData = (page) => {
@@ -191,7 +170,7 @@ class JointStatementResult extends Component {
           columns={this.state.columns}
           pagination={{
             showSizeChanger: false,
-            page_length: 20,
+            pageSize: 20,
             position: ["bottomCenter"],
             size: "small",
             total: this.state.page_length,
