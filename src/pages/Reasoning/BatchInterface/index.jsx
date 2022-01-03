@@ -269,7 +269,7 @@ class BatchInterface extends Component {
           }}
         />
         <Modal
-          title="项目查看"
+          title="部署任务"
           visible={show}
           onCancel={() => {
             this.setState({

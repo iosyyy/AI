@@ -1,10 +1,30 @@
 import React, { Component } from "react";
-import { Button, message, Table } from "antd";
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  message,
+  Modal,
+  Progress,
+  Row,
+  Steps,
+  Table,
+} from "antd";
 import axios from "axios";
 import NoteImg from "../../../img/Note.png";
 import qs from "qs";
 import api from "../../../config/api";
 import PubSubJS from "pubsub-js";
+import { fontStyle } from "../../../util/util";
+import {
+  BoxPlotOutlined,
+  BranchesOutlined,
+  CloudUploadOutlined,
+} from "@ant-design/icons";
+
+let interval;
+const { Step } = Steps;
 
 class JointStatementResult extends Component {
   constructor(props) {
@@ -114,15 +134,43 @@ class JointStatementResult extends Component {
           );
         },
       },
+      {
+        title: <div>模型部署</div>,
+        dataIndex: "modal",
+        key: "modal",
+        render: (text, obj) => {
+          return (
+            <Button
+              onClick={() => {
+                this.setState({
+                  id: obj.f_job_id,
+                  show: true,
+                });
+              }}
+              type={"primary"}
+            >
+              部署
+            </Button>
+          );
+        },
+      },
     ];
 
     this.state = {
       columns,
       dataSource: [],
-
+      show: false,
       loading: false,
       page_length: 0,
       currentPage: 1,
+      id: "",
+      showDetail: false,
+      error: 0,
+      datasource: [],
+      statusNow: "error",
+      nows: 0,
+      percent: 0,
+      pageSize: 0,
     };
   }
 
@@ -170,7 +218,124 @@ class JointStatementResult extends Component {
     };
   };
 
+  modelUpload = () => {
+    const step1 = 33.3;
+    const step2 = 66.6;
+    const step3 = 100;
+    const { error } = this.state;
+    interval = setInterval(() => {
+      const { percent, nows } = this.state;
+      let per = percent;
+      per += Math.random() * 3;
+      if (per >= error) {
+        if (per > step1) {
+          this.setState({
+            nows: 0,
+            percent: step1,
+          });
+        }
+        clearInterval(interval);
+        this.setState({
+          statusNow: "error",
+        });
+        message.error("模型部署失败请重试");
+        return;
+      }
+      if (per > step1 && nows === -1) {
+        per = step1;
+        clearInterval(interval);
+
+        interval = setTimeout(() => {
+          this.setState({
+            nows: 0,
+          });
+          message.success("模型部署完成");
+          interval = setInterval(() => {
+            const { percent, nows } = this.state;
+            let per = percent;
+
+            per += Math.random() * 5;
+            if (per >= error) {
+              if (per > step2) {
+                this.setState({
+                  nows: 1,
+                  percent: step2,
+                });
+              }
+              this.setState({
+                statusNow: "error",
+              });
+              clearInterval(interval);
+              message.error("模型发布失败请重试");
+              return;
+            }
+            if (per > step2 && nows === 0) {
+              per = step2;
+              clearInterval(interval);
+
+              interval = setTimeout(() => {
+                message.success("模型发布完成");
+                this.setState({
+                  nows: 1,
+                });
+                let interval = setInterval(() => {
+                  const { percent, nows } = this.state;
+                  let per = percent;
+                  per += Math.random() * 5;
+                  if (per >= error) {
+                    if (per > step3) {
+                      this.setState({
+                        nows: 2,
+                        percent: step3,
+                      });
+                    }
+                    this.setState({
+                      statusNow: "error",
+                    });
+                    clearInterval(interval);
+                    message.error("模型绑定失败请重试");
+                    return;
+                  }
+                  if (per > step3 && nows === 1) {
+                    per = step3;
+                    clearInterval(interval);
+
+                    message.success("模型绑定完成");
+                    this.setState({
+                      nows: 2,
+                      statusNow: "process",
+                    });
+                  }
+                  this.setState({
+                    percent: Math.round(per * 10) / 10,
+                  });
+                }, step3);
+              }, 3000);
+            }
+            this.setState({
+              percent: Math.round(per * 10) / 10,
+            });
+          }, step3);
+        }, 1500);
+      }
+
+      this.setState({
+        percent: Math.round(per * 10) / 10,
+      });
+    }, step3);
+  };
+
   render() {
+    const {
+      show,
+      id,
+      loading,
+      showDetail,
+      statusNow,
+      nows,
+      percent,
+    } = this.state;
+
     return (
       <div className="site-layout-content">
         <Table
@@ -192,6 +357,146 @@ class JointStatementResult extends Component {
             },
           }}
         />
+
+        <Modal
+          title="模型详情"
+          visible={showDetail}
+          onCancel={() => {
+            this.setState({
+              showDetail: false,
+            });
+            clearInterval(interval);
+          }}
+          footer={[
+            <Button
+              key="back"
+              onClick={() => {
+                this.setState({
+                  showDetail: false,
+                });
+                clearInterval(interval);
+              }}
+            >
+              返回
+            </Button>,
+          ]}
+          width={"45vw"}
+          destroyOnClose
+        >
+          <div style={{ height: "15vh" }}>
+            <Steps
+              style={{ marginBottom: "3vh" }}
+              current={nows}
+              status={statusNow}
+            >
+              <Step icon={<BranchesOutlined />} title="部署" />
+              <Step icon={<CloudUploadOutlined />} title="发布" />
+              <Step icon={<BoxPlotOutlined />} title="绑定" />
+            </Steps>
+            <Progress
+              strokeColor={{
+                from: "#108ee9",
+                to: "#87d068",
+              }}
+              percent={percent}
+              status={statusNow}
+            />
+          </div>
+        </Modal>
+
+        <Modal
+          title="模型部署"
+          visible={show}
+          onCancel={() => {
+            this.setState({
+              show: false,
+            });
+          }}
+          width={"45vw"}
+          footer={null}
+          destroyOnClose
+        >
+          <Form
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
+            initialValues={{ job_id: id }}
+            onFinish={(e) => {
+              this.setState({
+                loading: true,
+              });
+              axios
+                .post(api.modelUpdate, e)
+                .then((r) => {
+                  const { code, msg, data } = r.data;
+                  if (code !== 1) {
+                    this.setState({
+                      showDetail: true,
+                      percent: 0,
+                      nows: -1,
+                      error: (data?.location ?? 0 / 3.0) * 100,
+                      statusNow: "active",
+                    });
+                  }
+                  if (code === 1) {
+                    message.error(msg);
+                    return;
+                  }
+                  this.modelUpload();
+                })
+                .finally(() => {
+                  this.setState({
+                    loading: false,
+                    show: false,
+                  });
+                  this.getDataSource(this.state.currentPage);
+                });
+            }}
+            layout={"horizontal"}
+          >
+            {/*<Row justify={"center"}>*/}
+            {/*  <Col span={12}>*/}
+            {/*    <Form.Item*/}
+            {/*      name="service_id"*/}
+            {/*      label={<div style={fontStyle}>service_id</div>}*/}
+            {/*      rules={[{ required: true, message: "请输入service_id" }]}*/}
+            {/*    >*/}
+            {/*      <Input placeholder={"请输入service_id"} />*/}
+            {/*    </Form.Item>*/}
+            {/*  </Col>*/}
+            {/*</Row>*/}
+            <Row gutter={[0, 0]} justify={"center"}>
+              <Col span={12}>
+                <Form.Item
+                  name="job_id"
+                  label={<div style={fontStyle}>相关模型</div>}
+                  rules={[{ required: true, message: "请输入相关模型" }]}
+                >
+                  <Input placeholder={"请输入相关模型"} />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={[0, 30]} justify={"center"}>
+              <Col span={12}>
+                <Form.Item
+                  name="context"
+                  label={<div style={fontStyle}>备注</div>}
+                  rules={[{ required: true, message: "请输入备注" }]}
+                >
+                  <Input placeholder={"请输入备注"} />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row justify={"center"}>
+              <Col>
+                <Form.Item>
+                  <Button loading={loading} type="primary" htmlType="submit">
+                    提交
+                  </Button>
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
+        </Modal>
       </div>
     );
   }

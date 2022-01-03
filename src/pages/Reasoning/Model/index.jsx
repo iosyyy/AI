@@ -55,7 +55,7 @@ class Model extends Component {
       .post(api.findDeploy, { page: page, page_length: 10 })
       .then((r) => {
         const { data, code, msg } = r.data;
-        console.log(data)
+        console.log(data);
         if (code !== 0) {
           message.error(msg);
           return;
@@ -77,7 +77,7 @@ class Model extends Component {
           };
         });
         this.setState({
-          pageSize:data.count,
+          pageSize: data.count,
           datasource,
         });
       })
@@ -381,7 +381,7 @@ class Model extends Component {
           </div>
         </Modal>
         <Modal
-          title="项目查看"
+          title="模型部署"
           visible={show}
           onCancel={() => {
             this.setState({
