@@ -12,7 +12,6 @@ import {
   Table,
 } from "antd";
 import axios from "axios";
-import NoteImg from "../../../img/Note.png";
 import qs from "qs";
 import api from "../../../config/api";
 import PubSubJS from "pubsub-js";
@@ -123,15 +122,11 @@ class JointStatementResult extends Component {
         key: "f_status",
       },
       {
-        title: <div>action</div>,
+        title: <div>操作</div>,
         dataIndex: "action",
         key: "action",
         render: (text, obj) => {
-          return obj.f_status === "failed" ? (
-            <Button type={"link"}>retry</Button>
-          ) : (
-            <></>
-          );
+          return obj.f_status === "failed" ? <Button>重试</Button> : <></>;
         },
       },
       {
