@@ -92,9 +92,9 @@ class FederalTrain extends Component {
               >
                 {this.state.type == "true" ? (
                   <>
-                    <Select.Option value="homo_line">
-                      横向线性回归
-                    </Select.Option>
+                    {/*<Select.Option value="homo_line">*/}
+                    {/*  横向线性回归*/}
+                    {/*</Select.Option>*/}
 
                     <Select.Option value="homo_lr">横向逻辑回归</Select.Option>
                     <Select.Option value="homo_secure_boost">
@@ -106,7 +106,7 @@ class FederalTrain extends Component {
                   </>
                 ) : (
                   <>
-                    <Select.Option value="hetoro_line">
+                    <Select.Option value="hetero_line">
                       纵向线性回归
                     </Select.Option>
                     <Select.Option value="hetero_lr">

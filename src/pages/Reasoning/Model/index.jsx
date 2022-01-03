@@ -55,6 +55,7 @@ class Model extends Component {
       .post(api.findDeploy, { page: page, page_length: 10 })
       .then((r) => {
         const { data, code, msg } = r.data;
+        console.log(data)
         if (code !== 0) {
           message.error(msg);
           return;
@@ -76,6 +77,7 @@ class Model extends Component {
           };
         });
         this.setState({
+          pageSize:data.count,
           datasource,
         });
       })
@@ -426,17 +428,17 @@ class Model extends Component {
             }}
             layout={"horizontal"}
           >
-            <Row justify={"center"}>
-              <Col span={12}>
-                <Form.Item
-                  name="service_id"
-                  label={<div style={fontStyle}>service_id</div>}
-                  rules={[{ required: true, message: "请输入service_id" }]}
-                >
-                  <Input placeholder={"请输入service_id"} />
-                </Form.Item>
-              </Col>
-            </Row>
+            {/*<Row justify={"center"}>*/}
+            {/*  <Col span={12}>*/}
+            {/*    <Form.Item*/}
+            {/*      name="service_id"*/}
+            {/*      label={<div style={fontStyle}>service_id</div>}*/}
+            {/*      rules={[{ required: true, message: "请输入service_id" }]}*/}
+            {/*    >*/}
+            {/*      <Input placeholder={"请输入service_id"} />*/}
+            {/*    </Form.Item>*/}
+            {/*  </Col>*/}
+            {/*</Row>*/}
             <Row gutter={[0, 0]} justify={"center"}>
               <Col span={12}>
                 <Form.Item
