@@ -25,6 +25,7 @@ export default () => {
             {
                 name: data.series[0].name,
                 type: "line",
+                smooth: true,
                 yAxisIndex: 1,
                 data: data.series[0].data,
             },
@@ -40,6 +41,13 @@ export default () => {
                 axisPointer: {
                     type: "cross",
                 },
+                formatter: function (params) {
+                    console.log(params)
+                    return "x : " + params[0].axisValue + '<br/>' +
+                        params[1].seriesName + " : " + params[1].value + '<br/>' +
+                        params[0].seriesName + " : " + params[0].value
+
+                },
             },
             grid: {
                 right: "20%",
@@ -51,7 +59,6 @@ export default () => {
                     saveAsImage: {show: true},
                 },
             },
-
             xAxis: [
                 {
                     type: "category",
@@ -60,10 +67,11 @@ export default () => {
                     },
                     title: "hello",
                     align: "center",
-                    name: "test1",
                     // prettier-ignore
                     data: data.sub,
+
                 },
+
             ],
             yAxis: [
                 {
@@ -126,7 +134,7 @@ export default () => {
         })
     }, []);
 
-    useEffect(()=>{
+    useEffect(() => {
         let list = [];
         for (let i = 0; i < tmpData.count; i++) {
             list[i] = (
@@ -138,7 +146,7 @@ export default () => {
             );
         }
         setList(list);
-    },[tmpData])
+    }, [tmpData])
 
     useEffect(() => {
         if (list.length === 0) return;
