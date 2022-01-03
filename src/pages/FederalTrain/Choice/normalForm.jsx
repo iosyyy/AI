@@ -104,7 +104,7 @@ class NormalForm extends Component {
                   config_type: 0,
                   train_algorithm_name: e.algorithm,
                   algorithm_parameters: algorithmParms,
-                  isScale: e.isScale,
+                  isScale: e.isScale ?? true,
                   test_size: percent,
                 },
               }).then(
@@ -217,7 +217,6 @@ class NormalForm extends Component {
             <Form.Item
               name="isScale"
               label={<div style={fontStyle}>isScale</div>}
-              rules={[{ required: true, message: "请选择isScale" }]}
             >
               <Switch
                 checkedChildren="是"
