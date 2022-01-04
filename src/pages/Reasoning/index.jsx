@@ -7,6 +7,7 @@ import BatchInterface from "./BatchInterface";
 import Interface from "./Interface";
 import Model from "./Model";
 import UploadData from "./UploadData";
+import ModelTable from "./ModelTable";
 
 class Reasoning extends Component {
   render() {
@@ -17,6 +18,7 @@ class Reasoning extends Component {
           <Route path="/reasoning/interface" component={Interface} />
           <Route path="/reasoning/batch_interface" component={BatchInterface} />
           <Route path="/reasoning/upload_data" component={UploadData} />
+          <Route path="/reasoning/modelTable" component={ModelTable} />
           <Redirect to="/reasoning/model" />
         </Switch>
       </div>

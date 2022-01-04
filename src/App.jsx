@@ -223,20 +223,28 @@ class App extends Component {
                         </Menu.Item>
                       </>
                     ) : (
-                      <Menu.Item
-                        icon={<IconFont type={"icon-Upload"} />}
-                        key="12"
-                      >
-                        <NavLink
-                          style={{
-                            fontWeight: 900,
-                            color: "rgb(127,125,142)",
-                          }}
-                          to="/reasoning/upload_data"
+                      <>
+                        <Menu.Item
+                          icon={<IconFont type={"icon-xingkong"} />}
+                          key="30"
                         >
-                          数据上传
-                        </NavLink>
-                      </Menu.Item>
+                          <NavLink to="/reasoning/modelTable">部署记录</NavLink>
+                        </Menu.Item>
+                        <Menu.Item
+                          icon={<IconFont type={"icon-Upload"} />}
+                          key="12"
+                        >
+                          <NavLink
+                            style={{
+                              fontWeight: 900,
+                              color: "rgb(127,125,142)",
+                            }}
+                            to="/reasoning/upload_data"
+                          >
+                            数据上传
+                          </NavLink>
+                        </Menu.Item>
+                      </>
                     )}
                   </SubMenu>
 
