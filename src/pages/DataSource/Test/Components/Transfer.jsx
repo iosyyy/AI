@@ -104,7 +104,6 @@ class Transfer extends Component {
               message={
                 this.props.messageLeft ?? "请将数据从右侧拖拽到此处以删除数据"
               }
-              key={uuidv4()}
               changeColor={this.changeColor}
               name={"list1"}
               remove={this.remove}
@@ -172,7 +171,6 @@ class Transfer extends Component {
                 this.props.messageRight ??
                 "请将数据拖拽到此处, 然后点击开始分析按钮分析数据"
               }
-              key={uuidv4()}
               changeColor={this.changeColor}
               name={"list2"}
               remove={this.remove}

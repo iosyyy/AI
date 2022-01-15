@@ -12,7 +12,6 @@ const style = {
   padding: "1rem",
   lineHeight: "normal",
   background: "rgb(245,245,245)",
-  borderRadius: "4px",
   boxShadow: "0 8px 8px rgba(250,249,248, .24), 0 0 8px rgba(250,249,248, .12)",
 };
 
@@ -55,7 +54,15 @@ class Dustbin extends Component {
     return (
       connectDropTarget &&
       connectDropTarget(
-        <div style={{ marginTop: "16px" }}>
+        <div
+          style={{
+            borderRadius: "4px",
+
+            marginTop: "16px",
+            overflow: "auto",
+            background: "rgb(245,245,245)",
+          }}
+        >
           <div style={{ ...style }}>
             {notEmpty ? (
               list.map((v, i) => {

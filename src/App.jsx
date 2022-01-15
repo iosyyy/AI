@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Col, Dropdown, Image, Layout, Menu, message, Row } from "antd";
+import { Badge, Col, Dropdown, Image, Layout, Menu, message, Row } from "antd";
 import { NavLink, Redirect, Route, Switch } from "react-router-dom";
 import {
   BoxPlotOutlined,
@@ -15,6 +15,7 @@ import {
   PieChartOutlined,
   SettingOutlined,
   UserSwitchOutlined,
+  AlertOutlined,
 } from "@ant-design/icons";
 import PubSubJS from "pubsub-js";
 import Normal from "./pages/Normal";
@@ -39,6 +40,7 @@ import Sider from "antd/es/layout/Sider";
 import MenuButton from "./util/menuButton";
 import JointStatement from "./pages/JointStatement";
 import Login from "./pages/Login";
+import { white } from "mockjs/src/mock/random/color_dict";
 
 const { Header, Content } = Layout;
 const IconFont = createFromIconfontCN({
@@ -115,12 +117,34 @@ class App extends Component {
                   marginRight: "10px",
                 }}
               >
+                <Badge
+                  style={{
+                    marginRight: "15px",
+                    backgroundColor: "#52c41a",
+                  }}
+                  count={1}
+                  size="small"
+                >
+                  <AlertOutlined
+                    style={{
+                      marginRight: "15px",
+                      color: "white",
+                      fontSize: 20,
+                    }}
+                  />
+                </Badge>
                 <Dropdown placement="bottomCenter" overlay={menu}>
                   <Avatar
-                    style={{ background: "rgb(250,249,248)" }}
+                    style={{
+                      background: "rgb(250,249,248)",
+                      color: "rgb(69,111,208)",
+                      userSelect: "none",
+                    }}
                     size={38}
-                    icon={<IconFont type={"icon-xuesheng"} />}
-                  />
+                    // icon={<IconFont type={"icon-xuesheng"} />}
+                  >
+                    {localStorage.getItem("username")}
+                  </Avatar>
                 </Dropdown>
               </Col>
               <Col

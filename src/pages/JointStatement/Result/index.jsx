@@ -8,6 +8,7 @@ import {
   Modal,
   Progress,
   Row,
+  Space,
   Steps,
   Table,
 } from "antd";
@@ -126,26 +127,21 @@ class JointStatementResult extends Component {
         dataIndex: "action",
         key: "action",
         render: (text, obj) => {
-          return obj.f_status === "failed" ? <Button>重试</Button> : <></>;
-        },
-      },
-      {
-        title: <div>模型部署</div>,
-        dataIndex: "modal",
-        key: "modal",
-        render: (text, obj) => {
           return (
-            <Button
-              onClick={() => {
-                this.setState({
-                  id: obj.f_job_id,
-                  show: true,
-                });
-              }}
-              type={"primary"}
-            >
-              部署
-            </Button>
+            <Space>
+              {obj.f_status === "failed" ? <Button>重试</Button> : <></>}
+              <Button
+                onClick={() => {
+                  this.setState({
+                    id: obj.f_job_id,
+                    show: true,
+                  });
+                }}
+                type={"primary"}
+              >
+                部署
+              </Button>
+            </Space>
           );
         },
       },

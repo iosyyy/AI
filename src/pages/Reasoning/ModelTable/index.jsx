@@ -33,7 +33,7 @@ const { Step } = Steps;
 class ModelTable extends Component {
   constructor(props) {
     super(props);
-    PubSubJS.publish("isRunning", { page: "8" });
+    PubSubJS.publish("isRunning", { page: "30" });
 
     this.state = {
       show: false,

@@ -17,6 +17,7 @@ import {
   CheckCircleOutlined,
   CloseCircleOutlined,
   UploadOutlined,
+  ExclamationCircleOutlined,
 } from "@ant-design/icons";
 import axios from "axios";
 import api from "../../../config/api";
@@ -35,6 +36,11 @@ class UploadData extends Component {
       datasource: [],
       pageSize: 0,
       currentPage: 1,
+      update: false,
+      updateData: {
+        context: "",
+        service_id: "",
+      },
     };
   }
 
@@ -60,6 +66,7 @@ class UploadData extends Component {
         });
         this.setState({
           datasource,
+          pageSize: data.count,
         });
       })
       .catch((r) => {
@@ -77,7 +84,7 @@ class UploadData extends Component {
   }
 
   render() {
-    const { show, loading, datasource } = this.state;
+    const { show, loading, datasource, update, updateData } = this.state;
     const fontStyle = { fontWeight: 900, color: "rgb(127,125,142)" };
     const COLUMNS = [
       {
@@ -108,6 +115,10 @@ class UploadData extends Component {
           return _v === "0" ? (
             <Tag icon={<CheckCircleOutlined />} color="success">
               成功
+            </Tag>
+          ) : _v === "1" ? (
+            <Tag icon={<ExclamationCircleOutlined />} color="warning">
+              待更新
             </Tag>
           ) : (
             <Tag icon={<CloseCircleOutlined />} color="error">
@@ -152,6 +163,24 @@ class UploadData extends Component {
               >
                 下载
               </Button>
+              {all.status !== "2" ? (
+                <Button
+                  onClick={() => {
+                    this.setState({
+                      update: true,
+                      updateData: {
+                        context: all.f_context,
+                        service_id: all.f_id,
+                      },
+                    });
+                  }}
+                  style={{ background: "rgb(109,218,99)", color: "#fff" }}
+                >
+                  更新
+                </Button>
+              ) : (
+                <></>
+              )}
               <Popconfirm
                 title="确定删除本条信息?"
                 onConfirm={() => {
@@ -243,7 +272,7 @@ class UploadData extends Component {
                   const { code, msg } = r.data;
 
                   if (code !== 0) {
-                    message.error("删除失败" + msg);
+                    message.error("上传失败" + msg);
                     return;
                   }
                   message.success("上传成功");
@@ -327,6 +356,129 @@ class UploadData extends Component {
                   <Form.Item>
                     <Button loading={loading} type="primary" htmlType="submit">
                       执行
+                    </Button>
+                  </Form.Item>
+                </Col>
+              </Space>
+            </Row>
+          </Form>
+        </Modal>
+        <Modal
+          title="数据更新"
+          visible={update}
+          onCancel={() => {
+            this.setState({
+              update: false,
+            });
+          }}
+          width={"33vw"}
+          footer={null}
+          destroyOnClose
+        >
+          <Form
+            initialValues={{ ...updateData }}
+            labelCol={{ span: 5 }}
+            wrapperCol={{ span: 24 }}
+            onFinish={(e) => {
+              console.log(e);
+              const { service_id, context, file } = e;
+              const formData = new FormData();
+              formData.append("file", file.file);
+              formData.append("context", context);
+              formData.append("id", service_id);
+              this.setState({
+                loading: true,
+              });
+              axios
+                .post(api.updateFile, formData)
+                .then((r) => {
+                  const { code, msg } = r.data;
+
+                  if (code !== 0) {
+                    message.error("更新失败" + msg);
+                    return;
+                  }
+                  message.success("上传成功");
+                })
+                .finally(() => {
+                  this.getData(this.state.currentPage);
+                  this.setState({
+                    loading: false,
+                    show: false,
+                  });
+                });
+            }}
+            layout={"vertical"}
+          >
+            <Row justify={"center"}>
+              <Col span={24}>
+                <Form.Item
+                  name="service_id"
+                  label={<div style={fontStyle}>service_id</div>}
+                  rules={[{ required: true, message: "请输入service_id" }]}
+                >
+                  <Input disabled placeholder={"请输入service_id"} />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row justify={"center"}>
+              <Col span={24}>
+                <Form.Item
+                  name="file"
+                  label={<div style={fontStyle}>预测样本</div>}
+                  beforeUpload={() => {
+                    return false;
+                  }}
+                  rules={[{ required: true, message: "请上传预测样本后重试" }]}
+                >
+                  <Upload
+                    beforeUpload={() => {
+                      return false;
+                    }}
+                    style={{ width: "10px" }}
+                    maxCount={1}
+                  >
+                    <Button icon={<UploadOutlined />}>
+                      上传预测样本 (Max: 1)
+                    </Button>
+                  </Upload>
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row justify={"center"}>
+              <Col span={24}>
+                <Form.Item
+                  name="context"
+                  label={<div style={fontStyle}>数据信息</div>}
+                  rules={[{ required: true, message: "请输入数据信息" }]}
+                >
+                  <TextArea
+                    autoSize={{ minRows: 6, maxRows: 6 }}
+                    placeholder={"请输入数据信息"}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+
+            <Row justify={"end"}>
+              <Space>
+                <Col>
+                  <Form.Item>
+                    <Button
+                      onClick={() => {
+                        this.setState({
+                          update: false,
+                        });
+                      }}
+                    >
+                      取消
+                    </Button>
+                  </Form.Item>
+                </Col>
+                <Col>
+                  <Form.Item>
+                    <Button loading={loading} type="primary" htmlType="submit">
+                      更新
                     </Button>
                   </Form.Item>
                 </Col>

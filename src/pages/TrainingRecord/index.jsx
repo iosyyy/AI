@@ -76,7 +76,7 @@ class TrainingRecord extends Component {
         key: "partyId",
       },
       {
-        title: <div>规则</div>,
+        title: <div>角色</div>,
         dataIndex: "role",
         key: "role",
       },
@@ -128,7 +128,7 @@ class TrainingRecord extends Component {
         key: "status",
       },
       {
-        title: <div>记录</div>,
+        title: <div>任务名称</div>,
         dataIndex: "notes",
         key: "notes",
         width: "9vw",

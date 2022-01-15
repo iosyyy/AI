@@ -24,6 +24,7 @@ import {
   CheckCircleOutlined,
   CloseCircleOutlined,
   CloudUploadOutlined,
+  ExclamationCircleOutlined,
 } from "@ant-design/icons";
 import StepsTemplate from "../../../components/StepsTemplate";
 
@@ -229,12 +230,16 @@ class Model extends Component {
         key: "status",
         render: (_v, x) => {
           return _v === "0" ? (
+            <Tag icon={<ExclamationCircleOutlined />} color="warning">
+              未上传
+            </Tag>
+          ) : _v === "1" ? (
             <Tag icon={<CheckCircleOutlined />} color="success">
-              成功
+              已上传
             </Tag>
           ) : (
             <Tag icon={<CloseCircleOutlined />} color="error">
-              失败
+              部署失败
             </Tag>
           );
         },
@@ -263,6 +268,33 @@ class Model extends Component {
                 type={"primary"}
               >
                 查看详情
+              </Button>
+              <Button
+                onClick={() => {
+                  axios
+                    .post(api.updateStatus, {
+                      service_id: y.service_id,
+                      status: 0,
+                    })
+                    .then((r) => {
+                      const { code, msg } = r.data;
+
+                      if (code !== 0) {
+                        message.error("重新上传失败" + msg);
+                      } else {
+                        message.success("重新上传成功");
+                      }
+                    })
+                    .catch((r) => {
+                      message.error("服务器异常");
+                    })
+                    .finally(() => {
+                      this.getData(this.state.currentPage);
+                    });
+                }}
+                disabled={y.status !== "1"}
+              >
+                重新上传
               </Button>
               <Popconfirm
                 title="确定删除本条信息?"

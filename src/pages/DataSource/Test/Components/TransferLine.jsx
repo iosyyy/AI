@@ -106,7 +106,6 @@ class TransferLine extends Component {
               message={
                 this.props.messageLeft ?? "请将数据从右侧拖拽到此处以删除数据"
               }
-              key={uuidv4()}
               changeColor={this.changeColor}
               name={"list1"}
               remove={this.remove}
@@ -170,7 +169,6 @@ class TransferLine extends Component {
           </Col>
           <Col span={11}>
             <DustbinLine
-              key={uuidv4()}
               changeColor={this.changeColor}
               name={"list2"}
               remove={this.remove}

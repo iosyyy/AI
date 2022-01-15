@@ -17,8 +17,10 @@ class Login extends Component {
           const indexOf = party_name.indexOf("guest");
           if (indexOf === -1) {
             localStorage.setItem("role", "host");
+            localStorage.setItem("username", "H");
           } else {
             localStorage.setItem("role", "guest");
+            localStorage.setItem("username", "G");
           }
           console.log(localStorage.getItem("role"));
 

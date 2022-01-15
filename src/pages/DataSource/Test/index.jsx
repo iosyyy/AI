@@ -15,10 +15,18 @@ class DataSourceTest extends Component {
     const list1 = listData.map((v, i) => {
       return { name: v, now: "list1", change: false };
     });
-    const list2 = [...list1];
-    const list3 = [...list1];
-    const list4 = [...list1];
-    const list5 = [...list1];
+    const list2 = listData.map((v, i) => {
+      return { name: v, now: "list1", change: false };
+    });
+    const list3 = listData.map((v, i) => {
+      return { name: v, now: "list1", change: false };
+    });
+    const list4 = listData.map((v, i) => {
+      return { name: v, now: "list1", change: false };
+    });
+    const list5 = listData.map((v, i) => {
+      return { name: v, now: "list1", change: false };
+    });
 
     this.state = {
       list1,
