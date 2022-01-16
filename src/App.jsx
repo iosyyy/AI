@@ -103,7 +103,7 @@ class App extends Component {
         let role = localStorage.getItem("role") !== "guest"
         const content = (
             <div>
-                {this.state.datasource.map((item,index) => {
+                {this.state.count !== 0 ?this.state.datasource.map((item,index) => {
                     let time = moment(item.f_create_date)
                     return (
                         <Card key={index} hoverable style={{margin: "1vh"}} size='small'>
@@ -111,7 +111,7 @@ class App extends Component {
                             <Row justify='end'><span style={{color:'grey'}}>{time.format('L LTS')}</span></Row>
                         </Card>
                     )
-                })}
+                }):'暂无信息'}
             </div>
         );
         return (
