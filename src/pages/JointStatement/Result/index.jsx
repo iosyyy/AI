@@ -66,26 +66,32 @@ class JointStatementResult extends Component {
         title: <div>PartyID</div>,
         dataIndex: "f_party_id",
         key: "f_party_id",
+        width: "8vw",
       },
       {
         title: <div>任务名称</div>,
         dataIndex: "f_name",
         key: "f_name",
+        width: "8vw",
       },
       {
         title: <div>任务描述</div>,
         dataIndex: "f_description",
         key: "f_description",
+        width: "8vw",
       },
       {
         title: <div>规则</div>,
         dataIndex: "f_initiator_role",
         key: "f_initiator_role",
+        width: "8vw",
       },
       {
         title: <div>开始时间</div>,
         dataIndex: "f_create_time",
         key: "f_create_time",
+        width: "7vw",
+
         render: (text) => {
           return <>{new Date(text).toLocaleString()}</>;
         },
@@ -94,6 +100,8 @@ class JointStatementResult extends Component {
         title: <div>结束时间</div>,
         dataIndex: "f_end_time",
         key: "f_end_time",
+        width: "7vw",
+
         render: (text) => {
           return <>{new Date(text).toLocaleString()}</>;
         },
@@ -102,6 +110,7 @@ class JointStatementResult extends Component {
         title: <div>运行时间</div>,
         dataIndex: "duration",
         key: "elapsed",
+        width: "4vw",
 
         render: (text, value) => {
           const time = value.f_end_time - value.f_create_time;
@@ -121,6 +130,7 @@ class JointStatementResult extends Component {
         title: <div>结果</div>,
         dataIndex: "f_status",
         key: "f_status",
+        width: "8vw",
       },
       {
         title: <div>操作</div>,
