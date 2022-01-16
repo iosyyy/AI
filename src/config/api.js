@@ -3,12 +3,15 @@ import pack from "../../package.json";
 const host = window.location.origin;
 let baseHost;
 let ws;
+let fateBoardWs;
 if (pack.env === "build") {
   ws = `ws://${window.location.hostname}:${window.location.port}`;
+  fateBoardWs = `ws://${window.location.hostname}:${window.location.port}`;
   baseHost = window.location.origin;
 } else {
   ws = `ws://1.117.24.151:8080`;
   baseHost = window.location.origin + "/api";
+  fateBoardWs = `ws://${window.location.hostname}:8080`;
 }
 
 const e = {
@@ -56,6 +59,8 @@ const e = {
   getReLi: host + "/v1/preprocess/data/heatmap",
   getSanDian: host + "/v1/preprocess/data/dotmap",
   getKmeans: host + "/v1/preprocess/data/cluster_data",
+  hostStatus: ws + "/websocket/deploy/status/host",
+  guestStatus: ws + "/websocket/deploy/status/guest",
 };
 
 export default e;
