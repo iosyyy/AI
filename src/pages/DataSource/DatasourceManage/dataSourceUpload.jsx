@@ -78,7 +78,7 @@ class DataSourceUpload extends Component {
       return;
     }
     formData.append("file", e.dataset.file);
-    formData.append("table_name", tables[uploadKey]);
+    formData.append("table_name", tables[uploadKey].trim());
     formData.append("namespace", namespaces[uploadKey]);
     formData.append("data_type", "0");
     formData.append("description", description[uploadKey]);
