@@ -298,6 +298,7 @@ class App extends Component {
                 </Menu>
               </Sider>
             )}
+
             <Content style={{ padding: "3vh 1.5vw", background: "#FAF9F8" }}>
               <Switch>
                 <Route path="/federalTrain" component={FederalIndex} />
@@ -310,9 +311,6 @@ class App extends Component {
                 <Route path="/datasource" component={DataSource} />
                 <Route path="/reasoning" component={Reasoning} />
                 <Route path="/jointStatement" component={JointStatement} />
-                <Route path="/login" component={Login} />
-
-                <Redirect to="/login" />
               </Switch>
             </Content>
           </Layout>
