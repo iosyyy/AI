@@ -31,6 +31,10 @@
     padding: 0;
     border: 0;
     align-items: center;
+    background-image: url(./img/loginBackground.jpg);
+
+    background-size: cover;
+    background-position: top center;
 }
 .site-layout-content-login {
     min-height: 1vh;

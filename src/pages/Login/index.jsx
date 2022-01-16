@@ -43,16 +43,7 @@ class Login extends Component {
 
   render() {
     return (
-      <div
-        className="pageheader"
-        style={{
-          backgroundImage:
-            "url('https://tests-1305221371.cos.ap-nanjing.myqcloud.com/K~QZWYUOHQ~)(N~%40TDX1%253F.png')",
-
-          backgroundSize: "cover",
-          backgroundPosition: "top center",
-        }}
-      >
+      <div className="pageheader">
         <Row style={{ height: "100vh" }} align={"middle"} justify={"center"}>
           <Col className={"site-layout-content-login"}>
             <div
