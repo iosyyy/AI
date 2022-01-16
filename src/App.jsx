@@ -311,6 +311,7 @@ class App extends Component {
                 <Route path="/datasource" component={DataSource} />
                 <Route path="/reasoning" component={Reasoning} />
                 <Route path="/jointStatement" component={JointStatement} />
+                <Redirect to="/home" />
               </Switch>
             </Content>
           </Layout>
