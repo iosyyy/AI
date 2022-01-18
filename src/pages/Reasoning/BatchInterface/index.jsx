@@ -277,12 +277,12 @@ class BatchInterface extends Component {
               file_path: null,
             });
           }}
+          style={{ top: 40 }}
           width={"45vw"}
           footer={null}
           destroyOnClose
         >
           <Form
-            labelCol={{ span: 10 }}
             wrapperCol={{ span: 16 }}
             onFinish={(e) => {
               const { service_id, file, name, context } = e;
@@ -321,10 +321,10 @@ class BatchInterface extends Component {
                   this.getData(this.state.currentPage);
                 });
             }}
-            layout={"horizontal"}
+            layout={"vertical"}
           >
             <Row justify={"center"}>
-              <Col span={14}>
+              <Col span={24}>
                 <Form.Item
                   name="name"
                   label={<div style={fontStyle}>任务名称</div>}
@@ -335,7 +335,7 @@ class BatchInterface extends Component {
               </Col>
             </Row>
             <Row justify={"center"}>
-              <Col span={14}>
+              <Col span={24}>
                 <Form.Item
                   name="context"
                   label={<div style={fontStyle}>任务简介</div>}
@@ -346,7 +346,7 @@ class BatchInterface extends Component {
               </Col>
             </Row>
             <Row justify={"center"}>
-              <Col span={14}>
+              <Col span={24}>
                 <Form.Item
                   name="service_id"
                   label={<div style={fontStyle}>service_id</div>}
@@ -368,7 +368,7 @@ class BatchInterface extends Component {
               </Col>
             </Row>*/}
             <Row gutter={[0, 30]} justify={"center"}>
-              <Col span={14}>
+              <Col span={24}>
                 <Form.Item
                   name="file"
                   label={<div style={fontStyle}>预测样本</div>}
@@ -381,7 +381,6 @@ class BatchInterface extends Component {
                     beforeUpload={() => {
                       return false;
                     }}
-                    style={{ width: "10px" }}
                     maxCount={1}
                   >
                     <Button icon={<UploadOutlined />}>

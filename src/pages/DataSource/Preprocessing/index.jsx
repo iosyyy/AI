@@ -4,7 +4,7 @@ import PubSubJS from "pubsub-js";
 
 class MyDatasource extends Component {
   componentDidMount() {
-    PubSubJS.publish("datasourcePage", { page: "2" });
+    PubSubJS.publish("isRunning", { page: "18" });
   }
 
   render() {

@@ -14,7 +14,7 @@ class DataSourceAdministration extends Component {
   }
 
   componentDidMount() {
-    PubSubJS.publish("datasourcePage", { page: "1" });
+    PubSubJS.publish("isRunning", { page: "17" });
   }
 
   render() {

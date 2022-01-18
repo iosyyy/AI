@@ -24,6 +24,7 @@ import {
   CheckCircleOutlined,
   CloseCircleOutlined,
   CloudUploadOutlined,
+  ExclamationCircleOutlined,
 } from "@ant-design/icons";
 import StepsTemplate from "../../../components/StepsTemplate";
 
@@ -229,12 +230,16 @@ class ModelTable extends Component {
         key: "status",
         render: (_v, x) => {
           return _v === "0" ? (
+            <Tag icon={<ExclamationCircleOutlined />} color="warning">
+              未上传
+            </Tag>
+          ) : _v === "1" ? (
             <Tag icon={<CheckCircleOutlined />} color="success">
-              成功
+              已上传
             </Tag>
           ) : (
             <Tag icon={<CloseCircleOutlined />} color="error">
-              失败
+              部署失败
             </Tag>
           );
         },

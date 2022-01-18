@@ -12,19 +12,19 @@ class DataSourceTest extends Component {
     super(props);
     const listData = JSON.parse(localStorage.getItem("processTableData"));
     console.log(listData);
-    const list1 = listData.map((v, i) => {
+    const list1 = listData.map((v) => {
       return { name: v, now: "list1", change: false };
     });
-    const list2 = listData.map((v, i) => {
+    const list2 = listData.map((v) => {
       return { name: v, now: "list1", change: false };
     });
-    const list3 = listData.map((v, i) => {
+    const list3 = listData.map((v) => {
       return { name: v, now: "list1", change: false };
     });
-    const list4 = listData.map((v, i) => {
+    const list4 = listData.map((v) => {
       return { name: v, now: "list1", change: false };
     });
-    const list5 = listData.map((v, i) => {
+    const list5 = listData.map((v) => {
       return { name: v, now: "list1", change: false };
     });
 
