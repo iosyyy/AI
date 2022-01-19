@@ -43,7 +43,7 @@ class TrainingRecord extends Component {
         title: <div>ID</div>,
         dataIndex: "id",
         key: "id",
-        width: "16vw",
+        width: "12vw",
         render: (id, obj) => (
           <div>
             <a
@@ -74,16 +74,20 @@ class TrainingRecord extends Component {
         title: <div>PartyID</div>,
         dataIndex: "partyId",
         key: "partyId",
+        width: "5vw",
       },
       {
         title: <div>角色</div>,
         dataIndex: "role",
         key: "role",
+        width: "5vw",
       },
       {
         title: <div>开始时间</div>,
         dataIndex: "startTime",
         key: "start_time",
+        width: "5vw",
+
         sorter: {
           compare: (_a, _b) => {
             return true;
@@ -99,6 +103,8 @@ class TrainingRecord extends Component {
         dataIndex: "endTime",
         key: "end_time",
         sorter: true,
+        width: "5vw",
+
         render: (text) => {
           return <>{new Date(text).toLocaleString()}</>;
         },
@@ -107,6 +113,8 @@ class TrainingRecord extends Component {
         title: <div>运行时间</div>,
         dataIndex: "duration",
         key: "elapsed",
+        width: "5vw",
+
         sorter: true,
         render: (text, value) => {
           const time = value.endTime - value.startTime;
@@ -126,12 +134,13 @@ class TrainingRecord extends Component {
         title: <div>结果</div>,
         dataIndex: "status",
         key: "status",
+        width: "5vw",
       },
       {
         title: <div>任务名称</div>,
         dataIndex: "notes",
         key: "notes",
-        width: "9vw",
+        width: "5vw",
         render: (text, value, _context) => {
           const note = this.state.NoteNow[value.key];
           return (
@@ -233,32 +242,30 @@ class TrainingRecord extends Component {
           );
         },
       },
-
       {
-        title: <div>action</div>,
-        dataIndex: "action",
-        key: "action",
-        render: (text) => {
-          return text ? <Button>重试</Button> : <></>;
-        },
-      },
-      {
-        title: <div>模型部署</div>,
+        title: <div>操作</div>,
         dataIndex: "modal",
         key: "modal",
+        width: "7vw",
+
         render: (text, obj) => {
           return (
-            <Button
-              onClick={() => {
-                this.setState({
-                  id: obj.id,
-                  show: true,
-                });
-              }}
-              type={"primary"}
-            >
-              部署
-            </Button>
+            <Space>
+              <Button
+                disabled={obj.action || obj.partyId === 0}
+                onClick={() => {
+                  this.setState({
+                    id: obj.id,
+                    show: true,
+                  });
+                }}
+                type={"primary"}
+              >
+                部署
+              </Button>
+
+              {obj.action ? <Button>重试</Button> : <></>}
+            </Space>
           );
         },
       },

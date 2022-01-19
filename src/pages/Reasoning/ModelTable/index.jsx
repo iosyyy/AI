@@ -9,6 +9,7 @@ import {
   Popconfirm,
   Progress,
   Row,
+  Select,
   Space,
   Steps,
   Table,
@@ -273,7 +274,6 @@ class ModelTable extends Component {
       },
     ];
     const {
-      show,
       loading,
       datasource,
       showDetail,

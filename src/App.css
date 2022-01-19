@@ -10,6 +10,13 @@
     text-decoration: none;
     background: #fff;
 }
+.guestBack{
+    background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%) !important;
+}
+
+.hostBack{
+    background-image: linear-gradient(to top, #48c6ef 0%, #6f86d6 100%) !important;}
+
 .pageheader:before{
     background: rgba(0, 0, 0, 0.5);
 }.pageheader:before, .pageheader:after{

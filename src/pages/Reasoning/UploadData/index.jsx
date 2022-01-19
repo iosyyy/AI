@@ -8,6 +8,7 @@ import {
   Modal,
   Popconfirm,
   Row,
+  Select,
   Space,
   Table,
   Tag,
@@ -24,6 +25,7 @@ import api from "../../../config/api";
 import PubSubJS from "pubsub-js";
 import TextArea from "antd/es/input/TextArea";
 import FileSaver from "file-saver";
+import { fontStyle } from "../../../util/util";
 
 class UploadData extends Component {
   constructor(props) {
@@ -220,6 +222,31 @@ class UploadData extends Component {
         >
           上传
         </Button>
+        <div style={{ float: "right" }}>
+          <Form size="small" layout="inline" onFinish={(res) => {}}>
+            <Form.Item label={<div style={fontStyle}>Job ID</div>} name="id">
+              <Input />
+            </Form.Item>
+
+            <Form.Item label={<div style={fontStyle}>状态</div>} name="status">
+              <Select
+                mode="multiple"
+                placeholder="选择状态"
+                style={{ width: "8vw" }}
+              >
+                <Option value="success">已上传 </Option>
+                <Option value="running">未上传</Option>
+                <Option value="waiting">失败</Option>
+              </Select>
+            </Form.Item>
+
+            <Form.Item>
+              <Button shape={"round"} type="primary" htmlType="submit">
+                搜索
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
         <Table
           loading={loading}
           size={"middle"}

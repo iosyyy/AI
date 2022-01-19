@@ -24,6 +24,7 @@ class Interface extends Component {
     return (
       <div>
         <Form
+          style={{ marginTop: "2vh" }}
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 16 }}
           onFinish={(e) => {
@@ -32,7 +33,6 @@ class Interface extends Component {
                 feature_data: JSON.parse(e.feature_data),
                 feature_id: JSON.parse(e.feature_id),
                 service_id: e.service_id,
-                model_version: e.model_version,
               })
               .then((r) => {
                 const { code, msg, data } = r.data;
@@ -56,17 +56,7 @@ class Interface extends Component {
               </Form.Item>
             </Col>
           </Row>
-          <Row justify={"center"}>
-            <Col span={8}>
-              <Form.Item
-                name="model_version"
-                label={<div style={fontStyle}>模型版本</div>}
-                rules={[{ required: true, message: "请输入模型版本" }]}
-              >
-                <Input placeholder={"请输入模型版本"} />
-              </Form.Item>
-            </Col>
-          </Row>
+
           <Row justify={"center"}>
             <Col span={8}>
               <Form.Item

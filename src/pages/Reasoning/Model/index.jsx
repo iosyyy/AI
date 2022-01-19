@@ -9,6 +9,7 @@ import {
   Popconfirm,
   Progress,
   Row,
+  Select,
   Space,
   Steps,
   Table,
@@ -30,7 +31,7 @@ import StepsTemplate from "../../../components/StepsTemplate";
 
 let interval;
 const { Step } = Steps;
-
+const { Option } = Select;
 class Model extends Component {
   constructor(props) {
     super(props);
@@ -47,6 +48,7 @@ class Model extends Component {
       percent: 0,
       pageSize: 0,
       currentPage: 1,
+      text: "",
     };
   }
 
@@ -220,11 +222,6 @@ class Model extends Component {
         key: "model",
       },
       {
-        title: "备注",
-        dataIndex: "text",
-        key: "text",
-      },
-      {
         title: "状态",
         dataIndex: "status",
         key: "status",
@@ -263,6 +260,7 @@ class Model extends Component {
                     statusNow: y.statusNow,
                     percent: y.percent,
                     nows: y.nows,
+                    text: y.text,
                   });
                 }}
                 type={"primary"}
@@ -332,11 +330,12 @@ class Model extends Component {
       statusNow,
       nows,
       percent,
+      text,
     } = this.state;
 
     return (
       <div>
-        <Button
+        {/*<Button
           onClick={() => {
             this.setState({
               show: true,
@@ -344,7 +343,39 @@ class Model extends Component {
           }}
         >
           新增部署任务
-        </Button>
+        </Button>*/}
+
+        <div style={{ float: "right" }}>
+          <Form size="small" layout="inline" onFinish={(res) => {}}>
+            <Form.Item label={<div style={fontStyle}>Job ID</div>} name="id">
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label={<div style={fontStyle}>Party ID</div>}
+              name="partyId"
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item label={<div style={fontStyle}>状态</div>} name="status">
+              <Select
+                mode="multiple"
+                placeholder="选择状态"
+                style={{ width: "8vw" }}
+              >
+                <Option value="success">已上传 </Option>
+                <Option value="running">未上传</Option>
+                <Option value="waiting">失败</Option>
+              </Select>
+            </Form.Item>
+
+            <Form.Item>
+              <Button shape={"round"} type="primary" htmlType="submit">
+                搜索
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
         <Table
           loading={loading}
           style={{ marginTop: "1vh" }}
@@ -355,7 +386,6 @@ class Model extends Component {
           pagination={{
             showSizeChanger: false,
             pageSize: 10,
-            size: "small",
             total: this.state.pageSize,
             current: this.state.currentPage,
             onChange: (page, _pageSize) => {
@@ -411,6 +441,7 @@ class Model extends Component {
               status={statusNow}
             />
           </div>
+          <div style={fontStyle}>备注: {text}</div>
         </Modal>
         <Modal
           title="模型部署"

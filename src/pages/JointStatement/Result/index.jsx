@@ -43,11 +43,12 @@ class JointStatementResult extends Component {
                 color: "rgb(65,89,209)",
               }}
               onClick={(_e) => {
+                console.log(obj);
                 this.props.history.push({
                   pathname: "/federalDetail/show",
                   search: qs.stringify({
                     id: obj.f_job_id,
-                    role: obj.f_initiator_role,
+                    role: obj.f_role,
                     partyId: obj.f_party_id,
                     status: obj.f_status,
                     startTime: obj.f_create_time,
