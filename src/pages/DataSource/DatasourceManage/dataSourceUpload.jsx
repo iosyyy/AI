@@ -51,7 +51,7 @@ class DataSourceUpload extends Component {
       description,
       uploadKey,
       isLoading,
-      namespaces,
+      // namespaces,
       tables,
       disables,
       work_mode,
@@ -65,7 +65,7 @@ class DataSourceUpload extends Component {
     if (
       !e ||
       !tables[uploadKey] ||
-      !namespaces[uploadKey] ||
+      // !namespaces[uploadKey] ||
       !description[uploadKey] ||
       (!work_mode[uploadKey] && work_mode[uploadKey] !== 0)
     ) {
@@ -79,9 +79,9 @@ class DataSourceUpload extends Component {
     }
     formData.append("file", e.dataset.file);
     formData.append("table_name", tables[uploadKey].trim());
-    formData.append("namespace", namespaces[uploadKey]);
+    // formData.append("namespace", namespaces[uploadKey]);
     formData.append("data_type", "0");
-    formData.append("description", description[uploadKey]);
+    formData.append("description", description[uploadKey].trim());
     formData.append("work_mode", work_mode[uploadKey]);
 
     let isNull = false;
@@ -217,26 +217,26 @@ class DataSourceUpload extends Component {
                                 placeholder={"请输入表名"}
                               />
                             </Form.Item>
-                            <Form.Item
-                              style={{ marginTop: "1vh" }}
-                              name={[name, "namespace"]}
-                              fieldKey={[fieldKey, "namespace"]}
-                              label={<div style={fontStyle}>命名空间</div>}
-                            >
-                              <Input
-                                onChange={(e) => {
-                                  const { namespaces } = this.state;
-                                  namespaces[key] = e.target.value;
-                                  this.setState({
-                                    namespaces,
-                                  });
-                                }}
-                                onPressEnter={(e) => {
-                                  e.preventDefault();
-                                }}
-                                placeholder={"请输入命名空间"}
-                              />
-                            </Form.Item>
+                            {/*<Form.Item*/}
+                            {/*  style={{ marginTop: "1vh" }}*/}
+                            {/*  name={[name, "namespace"]}*/}
+                            {/*  fieldKey={[fieldKey, "namespace"]}*/}
+                            {/*  label={<div style={fontStyle}>命名空间</div>}*/}
+                            {/*>*/}
+                            {/*  <Input*/}
+                            {/*    onChange={(e) => {*/}
+                            {/*      const { namespaces } = this.state;*/}
+                            {/*      namespaces[key] = e.target.value;*/}
+                            {/*      this.setState({*/}
+                            {/*        namespaces,*/}
+                            {/*      });*/}
+                            {/*    }}*/}
+                            {/*    onPressEnter={(e) => {*/}
+                            {/*      e.preventDefault();*/}
+                            {/*    }}*/}
+                            {/*    placeholder={"请输入命名空间"}*/}
+                            {/*  />*/}
+                            {/*</Form.Item>*/}
                             <Form.Item
                               style={{ marginTop: "1vh" }}
                               name={[name, "description"]}

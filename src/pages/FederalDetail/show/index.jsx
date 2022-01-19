@@ -13,7 +13,6 @@ class FederalDetail extends Component {
     super(props);
     const search = props.location.search;
     const cur = qs.parse(search.replace(/^\?/, ""));
-
     const startTime = new Date(cur.startTime).toLocaleTimeString();
     const endTime = new Date(cur.endTime).toLocaleTimeString();
     const duration = cur.duration / 1000;

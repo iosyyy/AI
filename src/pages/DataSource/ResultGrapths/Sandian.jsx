@@ -5,8 +5,8 @@ import "echarts/lib/component/tooltip";
 import "echarts/lib/component/title";
 import axios from "axios";
 import api from "../../../config/api";
-
 const echarts = require("echarts");
+const randomColor = require('random-color');
 
 let myChart = [];
 export default (props) => {
@@ -108,21 +108,22 @@ export default (props) => {
         );
     };
 
-    function color() {
-        //16进制随机数生成 颜色值
-        var r = Math.floor(Math.random() * 253) + 1;
-        var g = Math.floor(Math.random() * 253) + 1;
-        var b = Math.floor(Math.random() * 253) + 1;
-        return "#" + r.toString(16) + g.toString(16) + b.toString(16);
-    }
+    // function color() {
+    //     //16进制随机数生成 颜色值
+    //     var r = Math.floor(Math.random() * 253) + 1;
+    //     var g = Math.floor(Math.random() * 253) + 1;
+    //     var b = Math.floor(Math.random() * 253) + 1;
+    //     return "#" + r.toString(16) + g.toString(16) + b.toString(16);
+    // }
 
     const drew2 = (data) => {
         console.log(data);
         if (data === null) return;
         let series = [];
         const colors = [];
+
         for (let i = 0; i < data.series.length; i++) {
-            colors.push(color());
+            colors.push(randomColor().hexString());
         }
         data.legend.data[0].forEach((item, index) => {
             series.push({

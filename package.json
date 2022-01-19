@@ -3,13 +3,12 @@
   "version": "1.2.0",
   "private": true,
   "homepage": "/",
-  "env": "build",
+  "env": "dev",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
     "@testing-library/user-event": "^12.6.2",
     "axios": "^0.21.1",
-    "uuid": "^8.3.2",
     "d3": "^6.5.0",
     "dayjs": "^1.10.4",
     "gojs": "^2.1.40",
@@ -21,6 +20,7 @@
     "process": "^0.11.10",
     "pubsub-js": "^1.9.2",
     "qs": "^6.10.1",
+    "random-color": "^1.0.1",
     "react": "^17.0.1",
     "react-dnd": "^14.0.4",
     "react-dnd-html5-backend": "^14.0.2",
@@ -32,6 +32,7 @@
     "react-scripts": "4.0.1",
     "socket.io": "^3.1.0",
     "socket.io-client": "^3.1.0",
+    "uuid": "^8.3.2",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
