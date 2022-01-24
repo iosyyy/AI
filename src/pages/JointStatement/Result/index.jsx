@@ -83,8 +83,8 @@ class JointStatementResult extends Component {
       },
       {
         title: <div>规则</div>,
-        dataIndex: "f_initiator_role",
-        key: "f_initiator_role",
+        dataIndex: "f_role",
+        key: "f_role",
         width: "8vw",
       },
       {
@@ -142,6 +142,7 @@ class JointStatementResult extends Component {
             <Space>
               {obj.f_status === "failed" ? <Button>重试</Button> : <></>}
               <Button
+                disabled={obj.f_status === "failed" || obj.f_party_id === 0}
                 onClick={() => {
                   this.setState({
                     id: obj.f_job_id,

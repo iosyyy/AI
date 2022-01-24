@@ -24,9 +24,9 @@ class Interface extends Component {
     return (
       <div>
         <Form
-          style={{ marginTop: "2vh" }}
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 16 }}
+          style={{ marginTop: "3vh" }}
+          labelCol={{ span: 10 }}
+          wrapperCol={{ span: 24 }}
           onFinish={(e) => {
             axios
               .post(api.single, {
@@ -43,7 +43,7 @@ class Interface extends Component {
                 }
               });
           }}
-          layout={"horizontal"}
+          layout={"vertical"}
         >
           <Row justify={"center"}>
             <Col span={8}>

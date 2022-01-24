@@ -179,7 +179,7 @@ class UploadData extends Component {
                       update: true,
                       updateData: {
                         context: all.f_context,
-                        service_id: all.f_id,
+                        service_id: all.f_service_id,
                       },
                     });
                   }}
@@ -287,7 +287,6 @@ class UploadData extends Component {
           pagination={{
             showSizeChanger: false,
             pageSize: 10,
-            size: "small",
             total: this.state.pageSize,
             current: this.state.currentPage,
             onChange: (page, _pageSize) => {
@@ -439,7 +438,7 @@ class UploadData extends Component {
               const formData = new FormData();
               formData.append("file", file.file);
               formData.append("context", context);
-              formData.append("id", service_id);
+              formData.append("service_id", service_id);
               this.setState({
                 loading: true,
               });
@@ -452,7 +451,7 @@ class UploadData extends Component {
                     message.error("更新失败" + msg);
                     return;
                   }
-                  message.success("上传成功");
+                  message.success("更新成功");
                 })
                 .finally(() => {
                   this.getData(this.state.currentPage);

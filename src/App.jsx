@@ -54,7 +54,7 @@ import SubMenu from "antd/es/menu/SubMenu";
 import Sider from "antd/es/layout/Sider";
 import MenuButton from "./util/menuButton";
 import JointStatement from "./pages/JointStatement";
-import Login from "./pages/Login";
+import { message } from "antd";
 import { white } from "mockjs/src/mock/random/color_dict";
 import api from "./config/api";
 import TextArea from "antd/es/input/TextArea";
@@ -435,17 +435,16 @@ class App extends Component {
               const formData = new FormData();
               formData.append("file", file.file);
               formData.append("context", context);
-              formData.append("id", service_id);
+              formData.append("service_id", service_id);
               this.setState({
                 loading: true,
               });
               axios
-                .post(api.updateFile, formData)
+                .post(api.uploadFile, formData)
                 .then((r) => {
                   const { code, msg } = r.data;
-
                   if (code !== 0) {
-                    message.error("更新失败" + msg);
+                    message.error("上传失败:" + msg);
                     return;
                   }
                   message.success("上传成功");
@@ -524,7 +523,7 @@ class App extends Component {
                 <Col>
                   <Form.Item>
                     <Button loading={loading} type="primary" htmlType="submit">
-                      更新
+                      上传
                     </Button>
                   </Form.Item>
                 </Col>

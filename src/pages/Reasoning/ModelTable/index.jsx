@@ -31,7 +31,7 @@ import StepsTemplate from "../../../components/StepsTemplate";
 
 let interval;
 const { Step } = Steps;
-
+const { Option } = Select;
 class ModelTable extends Component {
   constructor(props) {
     super(props);
@@ -53,6 +53,7 @@ class ModelTable extends Component {
         service_id: "",
         model_id: "",
       },
+      text: "",
     };
   }
   getData = (page) => {
@@ -229,11 +230,7 @@ class ModelTable extends Component {
         dataIndex: "model",
         key: "model",
       },
-      {
-        title: "备注",
-        dataIndex: "text",
-        key: "text",
-      },
+
       {
         title: "状态",
         dataIndex: "status",
@@ -272,6 +269,7 @@ class ModelTable extends Component {
                   statusNow: y.statusNow,
                   percent: y.percent,
                   nows: y.nows,
+                  text: y.text,
                 });
               }}
               type={"primary"}
@@ -289,6 +287,7 @@ class ModelTable extends Component {
       statusNow,
       nows,
       percent,
+      text,
     } = this.state;
 
     return (
@@ -351,7 +350,6 @@ class ModelTable extends Component {
           pagination={{
             showSizeChanger: false,
             pageSize: 10,
-            size: "small",
             total: this.state.pageSize,
             current: this.state.currentPage,
             onChange: (page, _pageSize) => {
@@ -407,6 +405,7 @@ class ModelTable extends Component {
               status={statusNow}
             />
           </div>
+          <div style={fontStyle}>备注: {text}</div>
         </Modal>
       </div>
     );

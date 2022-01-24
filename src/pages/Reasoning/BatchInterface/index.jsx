@@ -287,7 +287,6 @@ class BatchInterface extends Component {
           pagination={{
             showSizeChanger: false,
             pageSize: 10,
-            size: "small",
             total: this.state.pageSize,
             current: this.state.currentPage,
             onChange: (page, _pageSize) => {
