@@ -5,6 +5,7 @@ import { Button, Card, message, Popconfirm, Progress } from "antd";
 import axios from "axios";
 import api from "../../config/api";
 import { QuestionCircleOutlined } from "@ant-design/icons";
+import { fontStyle } from "../../util/util";
 
 class Training extends Component {
   constructor(props) {
@@ -126,7 +127,9 @@ class Training extends Component {
           {trainList.length !== 0 ? (
             trainList
           ) : (
-            <h1 style={{ marginTop: "30vh" }}>暂无正在训练模型</h1>
+            <h1 style={{ marginTop: "30vh", color: fontStyle.color }}>
+              暂无正在训练模型
+            </h1>
           )}
         </div>
       </div>

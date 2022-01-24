@@ -10,6 +10,7 @@ import {
   Modal,
   Popconfirm,
   Row,
+  Select,
   Space,
   Table,
   Tag,
@@ -27,6 +28,7 @@ import FileSaver from "file-saver";
 import axios from "axios";
 import api from "../../../config/api";
 import PubSubJS from "pubsub-js";
+const { Option } = Select;
 const Menus = (props) => {
   const { all } = props;
   return (
@@ -114,6 +116,7 @@ class BatchInterface extends Component {
       datasource: [],
       pageSize: 0,
       currentPage: 1,
+      serviceIdList: [],
     };
   }
 
@@ -148,12 +151,39 @@ class BatchInterface extends Component {
         });
       });
   };
+
+  getServiceIdList = () => {
+    axios
+      .get(api.findDeployListStatus1)
+      .then((r) => {
+        const { data, code, msg } = r.data;
+        if (code !== 0) {
+          message.error(msg);
+          return;
+        }
+        const serviceIdList = data.data.map((v, i) => {
+          return v.f_service_id;
+        });
+        this.setState({
+          serviceIdList,
+        });
+      })
+      .catch((r) => {
+        message.error("服务器异常");
+      })
+      .finally(() => {
+        this.setState({
+          loading: false,
+        });
+      });
+  };
   componentDidMount() {
     this.getData(1);
+    this.getServiceIdList();
   }
 
   render() {
-    const { show, loading, datasource, file_path } = this.state;
+    const { show, loading, datasource, file_path, serviceIdList } = this.state;
     const fontStyle = { fontWeight: 900, color: "rgb(127,125,142)" };
     const COLUMNS = [
       {
@@ -352,7 +382,15 @@ class BatchInterface extends Component {
                   label={<div style={fontStyle}>service_id</div>}
                   rules={[{ required: true, message: "请输入service_id" }]}
                 >
-                  <Input placeholder={"请输入service_id"} />
+                  <Select>
+                    {serviceIdList.map((v, i) => {
+                      return (
+                        <Option key={`serviceId${i}`} value={v}>
+                          {v}
+                        </Option>
+                      );
+                    })}
+                  </Select>
                 </Form.Item>
               </Col>
             </Row>
@@ -372,9 +410,6 @@ class BatchInterface extends Component {
                 <Form.Item
                   name="file"
                   label={<div style={fontStyle}>预测样本</div>}
-                  beforeUpload={() => {
-                    return false;
-                  }}
                   rules={[{ required: true, message: "请上传预测样本后重试" }]}
                 >
                   <Upload

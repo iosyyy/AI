@@ -49,13 +49,23 @@ class Model extends Component {
       pageSize: 0,
       currentPage: 1,
       text: "",
+      searchData: {
+        status: "",
+        service_id: "",
+        model_id: "",
+      },
     };
   }
 
   getData = (page) => {
+    const { searchData } = this.state;
     this.setState({ loading: true });
     axios
-      .post(api.findDeploy, { page: page, page_length: 10 })
+      .post(api.findDeployConditionList, {
+        page: page,
+        page_length: 10,
+        ...searchData,
+      })
       .then((r) => {
         const { data, code, msg } = r.data;
         console.log(data);
@@ -346,26 +356,43 @@ class Model extends Component {
         </Button>*/}
 
         <div style={{ float: "right" }}>
-          <Form size="small" layout="inline" onFinish={(res) => {}}>
-            <Form.Item label={<div style={fontStyle}>Job ID</div>} name="id">
+          <Form
+            size="small"
+            layout="inline"
+            onFinish={(res) => {
+              this.setState({
+                searchData: {
+                  status: res.status ? res.status : "",
+                  service_id: res.service_id ? res.service_id : "",
+                  model_id: res.model_id ? res.model_id : "",
+                },
+                currentPage: 1,
+              });
+              this.getData(1);
+            }}
+          >
+            <Form.Item
+              label={<div style={fontStyle}>service_id</div>}
+              name="service_id"
+            >
               <Input />
             </Form.Item>
             <Form.Item
-              label={<div style={fontStyle}>Party ID</div>}
-              name="partyId"
+              label={<div style={fontStyle}>模型ID</div>}
+              name="model_id"
             >
               <Input />
             </Form.Item>
 
             <Form.Item label={<div style={fontStyle}>状态</div>} name="status">
               <Select
-                mode="multiple"
+                allowClear
                 placeholder="选择状态"
                 style={{ width: "8vw" }}
               >
-                <Option value="success">已上传 </Option>
-                <Option value="running">未上传</Option>
-                <Option value="waiting">失败</Option>
+                <Option value="0">未上传 </Option>
+                <Option value="1">已上传</Option>
+                <Option value="2">部署失败</Option>
               </Select>
             </Form.Item>
 

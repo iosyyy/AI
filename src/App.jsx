@@ -58,6 +58,7 @@ import Login from "./pages/Login";
 import { white } from "mockjs/src/mock/random/color_dict";
 import api from "./config/api";
 import TextArea from "antd/es/input/TextArea";
+import axios from "axios";
 
 const { Header, Content } = Layout;
 const IconFont = createFromIconfontCN({
@@ -80,6 +81,7 @@ class App extends Component {
         service_id: "",
       },
       loading: false,
+      clicked: false,
     };
     // FIXME 目前使用PubSubJS.js监听页面跳转然后来改变Menu的选择后续可以通过当前连接更改,目前先这么写方便测试
     PubSubJS.subscribe("isRunning", (msg, data) => {
@@ -110,10 +112,9 @@ class App extends Component {
       selectId: {
         service_id: id,
       },
+      clicked: false,
     });
-    this.setShow({
-      show: true,
-    });
+    this.setShow(true);
   };
 
   setShow = (show) => {
@@ -127,17 +128,26 @@ class App extends Component {
     });
   };
 
+  exit = () => {
+    this.props.history.push({
+      pathname: "/home",
+    });
+  };
+
   render() {
     const fontStyle = {
       fontWeight: 900,
       color: "rgb(127,125,142)",
     };
-    const { show, selectId, loading } = this.state;
+    const { show, selectId, loading, clicked } = this.state;
 
     const userLogin = !localStorage.getItem("userLogin");
     const menu = (
       <div className="user-login-extend" style={{ background: "white" }}>
-        <div style={fontStyle}>ID: {localStorage.getItem("party_id")}</div>
+        <div style={{ ...fontStyle, marginBottom: "0.5vh" }}>
+          ID: {localStorage.getItem("party_id")}
+        </div>
+        <Button onClick={this.exit}>退出登录</Button>
       </div>
     );
 
@@ -146,13 +156,15 @@ class App extends Component {
       <div style={{ ...fontStyle, maxHeight: "40vh", overflow: "scroll" }}>
         {this.state.count !== 0
           ? this.state.datasource.map((item, index) => {
-              let time = moment.unix(item.f_create_date);
+              let time = new Date(item.f_create_date * 1000);
               return (
                 <Card
                   key={index}
                   hoverable
                   onClick={() => {
-                    this.upload(item.f_service_id);
+                    if (role) {
+                      this.upload(item.f_service_id);
+                    }
                   }}
                   style={{ margin: "1vh" }}
                   size="small"
@@ -164,7 +176,7 @@ class App extends Component {
                   </Row>
                   <Row justify="end">
                     <span style={{ color: "grey" }}>
-                      {time.format("L LTS")}
+                      {time.toLocaleString()}
                     </span>
                   </Row>
                 </Card>
@@ -211,7 +223,16 @@ class App extends Component {
                   marginRight: "10px",
                 }}
               >
-                <Popover placement="bottomRight" content={content}>
+                <Popover
+                  onVisibleChange={(visible) => {
+                    this.setState({
+                      clicked: visible,
+                    });
+                  }}
+                  visible={clicked}
+                  placement="bottomRight"
+                  content={content}
+                >
                   <Badge
                     style={{
                       marginRight: "15px",
@@ -309,7 +330,7 @@ class App extends Component {
                           icon={<IconFont type={"icon-xingkong"} />}
                           key="8"
                         >
-                          <NavLink to="/reasoning/model">模型部署</NavLink>
+                          <NavLink to="/reasoning/model">模型部署记录</NavLink>
                         </Menu.Item>
                         <Menu.Item
                           icon={
@@ -454,9 +475,6 @@ class App extends Component {
                 <Form.Item
                   name="file"
                   label={<div style={fontStyle}>预测样本</div>}
-                  beforeUpload={() => {
-                    return false;
-                  }}
                   rules={[{ required: true, message: "请上传预测样本后重试" }]}
                 >
                   <Upload

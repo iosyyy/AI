@@ -48,13 +48,22 @@ class ModelTable extends Component {
       percent: 0,
       pageSize: 0,
       currentPage: 1,
+      searchData: {
+        status: "",
+        service_id: "",
+        model_id: "",
+      },
     };
   }
-
   getData = (page) => {
+    const { searchData } = this.state;
     this.setState({ loading: true });
     axios
-      .post(api.findDeploy, { page: page, page_length: 10 })
+      .post(api.findDeployConditionList, {
+        page: page,
+        page_length: 10,
+        ...searchData,
+      })
       .then((r) => {
         const { data, code, msg } = r.data;
         console.log(data);
@@ -284,6 +293,54 @@ class ModelTable extends Component {
 
     return (
       <div>
+        <div style={{ float: "right" }}>
+          <Form
+            size="small"
+            layout="inline"
+            onFinish={(res) => {
+              this.setState({
+                searchData: {
+                  status: res.status ? res.status : "",
+                  service_id: res.service_id ? res.service_id : "",
+                  model_id: res.model_id ? res.model_id : "",
+                },
+                currentPage: 1,
+              });
+              this.getData(1);
+            }}
+          >
+            <Form.Item
+              label={<div style={fontStyle}>service_id</div>}
+              name="service_id"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label={<div style={fontStyle}>模型ID</div>}
+              name="model_id"
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item label={<div style={fontStyle}>状态</div>} name="status">
+              <Select
+                allowClear
+                placeholder="选择状态"
+                style={{ width: "8vw" }}
+              >
+                <Option value="0">未上传 </Option>
+                <Option value="1">已上传</Option>
+                <Option value="2">部署失败</Option>
+              </Select>
+            </Form.Item>
+
+            <Form.Item>
+              <Button shape={"round"} type="primary" htmlType="submit">
+                搜索
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
         <Table
           loading={loading}
           style={{ marginTop: "1vh" }}

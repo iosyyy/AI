@@ -25,8 +25,7 @@ import api from "../../../config/api";
 import PubSubJS from "pubsub-js";
 import TextArea from "antd/es/input/TextArea";
 import FileSaver from "file-saver";
-import { fontStyle } from "../../../util/util";
-
+const { Option } = Select;
 class UploadData extends Component {
   constructor(props) {
     super(props);
@@ -43,6 +42,10 @@ class UploadData extends Component {
         context: "",
         service_id: "",
       },
+      searchData: {
+        status: "",
+        service_id: "",
+      },
     };
   }
 
@@ -51,7 +54,11 @@ class UploadData extends Component {
       loading: true,
     });
     axios
-      .post(api.findList, { page: page, page_length: 10 })
+      .post(api.findConditionList, {
+        page: page,
+        page_length: 10,
+        ...this.state.searchData,
+      })
       .then((r) => {
         const { data, code, msg } = r.data;
         if (code !== 0) {
@@ -213,40 +220,63 @@ class UploadData extends Component {
     ];
     return (
       <div>
-        <Button
-          onClick={() => {
-            this.setState({
-              show: true,
-            });
-          }}
-        >
-          上传
-        </Button>
-        <div style={{ float: "right" }}>
-          <Form size="small" layout="inline" onFinish={(res) => {}}>
-            <Form.Item label={<div style={fontStyle}>Job ID</div>} name="id">
-              <Input />
-            </Form.Item>
-
-            <Form.Item label={<div style={fontStyle}>状态</div>} name="status">
-              <Select
-                mode="multiple"
-                placeholder="选择状态"
-                style={{ width: "8vw" }}
+        <Row justify={"space-between"}>
+          <Col>
+            <Button
+              onClick={() => {
+                this.setState({
+                  show: true,
+                });
+              }}
+            >
+              上传
+            </Button>
+          </Col>
+          <Col>
+            <Form
+              size="small"
+              layout="inline"
+              onFinish={(res) => {
+                this.setState({
+                  searchData: {
+                    status: res.status ? res.status : "",
+                    service_id: res.service_id ? res.service_id : "",
+                  },
+                  currentPage: 1,
+                });
+                this.getData(1);
+              }}
+            >
+              <Form.Item
+                label={<div style={fontStyle}>service_id</div>}
+                name="service_id"
               >
-                <Option value="success">已上传 </Option>
-                <Option value="running">未上传</Option>
-                <Option value="waiting">失败</Option>
-              </Select>
-            </Form.Item>
+                <Input />
+              </Form.Item>
 
-            <Form.Item>
-              <Button shape={"round"} type="primary" htmlType="submit">
-                搜索
-              </Button>
-            </Form.Item>
-          </Form>
-        </div>
+              <Form.Item
+                label={<div style={fontStyle}>状态</div>}
+                name="status"
+              >
+                <Select
+                  allowClear
+                  placeholder="选择状态"
+                  style={{ width: "8vw" }}
+                >
+                  <Option value="0">成功 </Option>
+                  <Option value="1">待更新</Option>
+                  <Option value="2">失败</Option>
+                </Select>
+              </Form.Item>
+
+              <Form.Item>
+                <Button shape={"round"} type="primary" htmlType="submit">
+                  搜索
+                </Button>
+              </Form.Item>
+            </Form>
+          </Col>
+        </Row>
         <Table
           loading={loading}
           size={"middle"}
@@ -330,9 +360,6 @@ class UploadData extends Component {
                 <Form.Item
                   name="file"
                   label={<div style={fontStyle}>预测样本</div>}
-                  beforeUpload={() => {
-                    return false;
-                  }}
                   rules={[{ required: true, message: "请上传预测样本后重试" }]}
                 >
                   <Upload
@@ -453,9 +480,6 @@ class UploadData extends Component {
                 <Form.Item
                   name="file"
                   label={<div style={fontStyle}>预测样本</div>}
-                  beforeUpload={() => {
-                    return false;
-                  }}
                   rules={[{ required: true, message: "请上传预测样本后重试" }]}
                 >
                   <Upload
