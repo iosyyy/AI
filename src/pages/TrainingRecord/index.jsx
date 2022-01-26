@@ -252,7 +252,7 @@ class TrainingRecord extends Component {
           return (
             <Space>
               <Button
-                disabled={obj.action || obj.partyId === 0}
+                disabled={obj.action || obj.partyId == 0}
                 onClick={() => {
                   this.setState({
                     id: obj.id,

@@ -3,14 +3,14 @@ import "echarts/lib/chart/bar";
 // 引入提示框和标题组件
 import "echarts/lib/component/tooltip";
 import "echarts/lib/component/title";
-import api from '../../../config/api'
-import axios from 'axios'
+import api from "../../../config/api";
+import axios from "axios";
 
 const echarts = require("echarts");
 
 let myChart;
 export default () => {
-  let tmpData
+  let tmpData;
 
   const drew = () => {
     const titleLeft = tmpData.titleLeft;
@@ -84,17 +84,17 @@ export default () => {
   };
 
   useEffect(() => {
-    let feature = JSON.parse(localStorage.getItem('feature')).map(item=>item.name)
-    let file_path = localStorage.getItem('file_name')
-    axios.post(api.getReLi,{feature,file_path}).then((res) =>{
-      console.log(res)
-      if(res.data.code === 0){
-        tmpData =res.data.data.data
+    let feature = JSON.parse(localStorage.getItem("feature")).map(
+      (item) => item.name
+    );
+    let file_path = localStorage.getItem("file_name");
+    axios.post(api.getReLi, { feature, file_path }).then((res) => {
+      if (res.data.code === 0) {
+        tmpData = res.data.data.data;
         myChart = echarts.init(document.getElementById("graph-relitu"));
         drew();
       }
-    })
-
+    });
   }, []);
 
   return <div id="graph-relitu" style={{ width: "80vw", height: "80vh" }} />;

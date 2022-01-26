@@ -10,7 +10,6 @@ import TreeSet from "./TreeSet";
 class DataSourceTestResults extends Component {
   render() {
     const type = localStorage.getItem("dataSourceResultType");
-    console.log(localStorage.getItem("feature"));
     let comResult = <>当前分析为空请重试</>;
     switch (type) {
       case DataSourceType.ZhiFang:
@@ -23,7 +22,7 @@ class DataSourceTestResults extends Component {
       case DataSourceType.SanDian:
         comResult = (
           <div id="exportPdf">
-            <Sandian type="zhifang"/>
+            <Sandian type="zhifang" />
           </div>
         );
         break;
@@ -37,7 +36,7 @@ class DataSourceTestResults extends Component {
       case DataSourceType.kMeans:
         comResult = (
           <div id="exportPdf">
-            <Sandian type="k-means"/>
+            <Sandian type="k-means" />
           </div>
         );
         break;

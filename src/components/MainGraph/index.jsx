@@ -9,7 +9,6 @@ class MainGraph extends Component {
   constructor(props) {
     super(props);
     const { component_list, component_need_run } = this.props;
-    console.log(component_need_run);
     this.state = {
       diagram: {},
       component_list,
@@ -105,7 +104,6 @@ class MainGraph extends Component {
         }
       }
     }
-    console.log(linkArray);
     this.setState({
       nodeArray,
       linkArray,

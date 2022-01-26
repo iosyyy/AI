@@ -5,7 +5,6 @@ let myChart;
 class TreeGraph extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props.id);
     this.state = {
       trees: props.trees,
       index: props.index,
@@ -35,7 +34,6 @@ class TreeGraph extends Component {
         name = `ID:${id}\n ${featureNameFidMapping[fid]} <= ${bid.toFixed(5)}`;
       } else {
         if (splitMaskdict.hasOwnProperty(id)) {
-          console.log(id);
           name = `ID:${id}\n ${featureNameFidMapping[fid]} <=${splitMaskdict[
             id
           ].toFixed(5)} `;
@@ -158,8 +156,6 @@ class TreeGraph extends Component {
 
   render() {
     const { trees, index, id } = this.state;
-    console.log(index * 3 + id);
-    console.log(trees);
     return (
       <div>
         <div style={{ width: "88vw", height: "40vh" }} id={"metricsGraphs"} />

@@ -54,7 +54,6 @@ class NormalForm extends Component {
   }
   render() {
     const { modal, dataSource } = this.state;
-    console.log(this.props);
     // 表单样式
     const tailLayout = {
       wrapperCol: { offset: 9 },

@@ -11,7 +11,6 @@ class DataSourceTest extends Component {
   constructor(props) {
     super(props);
     const listData = JSON.parse(localStorage.getItem("processTableData"));
-    console.log(listData);
     const list1 = listData.map((v) => {
       return { name: v, now: "list1", change: false };
     });

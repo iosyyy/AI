@@ -60,7 +60,6 @@ class MyDatasourceTable extends Component {
               <span>/</span>
               <a
                 onClick={() => {
-                  console.log(obj.file);
                   axios
                     .post(api.downloadTemplate, { file_name: obj.file })
                     .then((r) => {
@@ -80,7 +79,6 @@ class MyDatasourceTable extends Component {
                       FileSaver.saveAs(blob, curFile);
                     })
                     .catch((r) => {
-                      console.log(r);
                       message.error("文件下载失败请重试并检查网络连接");
                     });
                 }}

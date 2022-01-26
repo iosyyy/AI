@@ -28,7 +28,6 @@ class DataSourceTablesw extends Component {
         file_path: localStorage.getItem("file_name"),
       })
       .then((r) => {
-        console.log(r);
         if (r.data.code === 0) {
           const { data } = r.data.data;
           const firstDatum = data.data[0];

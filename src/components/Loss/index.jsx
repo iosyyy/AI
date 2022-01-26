@@ -68,9 +68,7 @@ export default class Loss extends Component {
     if (metricsKeys && lossHistory) {
       metrics[metricsKeys[0]] = ["loss"];
       let postData = { ...post_data, metrics };
-      console.log(postData);
       axios.post(api.batch, postData).then((data) => {
-        console.log(data);
         let lossHistory = data.data.data[metricsKeys[0]]["loss"].data;
         this.setState({
           lossHistory,

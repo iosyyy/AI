@@ -32,7 +32,6 @@ class TreeSet extends Component {
 
   render() {
     const { url } = this.state;
-    console.log(url);
     return (
       <div>
         <Row justify={"center"}>

@@ -244,9 +244,13 @@ class ModelTable extends Component {
             <Tag icon={<CheckCircleOutlined />} color="success">
               已上传
             </Tag>
-          ) : (
+          ) : _v === "2" ? (
             <Tag icon={<CloseCircleOutlined />} color="error">
               部署失败
+            </Tag>
+          ) : (
+            <Tag icon={<CheckCircleOutlined />} color="#108ee9">
+              已预测
             </Tag>
           );
         },
@@ -330,6 +334,7 @@ class ModelTable extends Component {
                 <Option value="0">未上传 </Option>
                 <Option value="1">已上传</Option>
                 <Option value="2">部署失败</Option>
+                <Option value="3">已预测</Option>
               </Select>
             </Form.Item>
 

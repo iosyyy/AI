@@ -77,6 +77,18 @@ class DataSourceUpload extends Component {
       });
       return;
     }
+    console.log(tables[uploadKey].indexOf(" "));
+    if (
+      tables[uploadKey].indexOf(" ") !== -1 ||
+      description[uploadKey].indexOf(" ") !== -1
+    ) {
+      message.warning(
+        `请检查第${
+          uploadKey + 1
+        }条数据 注意不要在数据表名或数据集描述里面加入空格`
+      );
+      return;
+    }
     formData.append("file", e.dataset.file);
     formData.append("table_name", tables[uploadKey].trim());
     // formData.append("namespace", namespaces[uploadKey]);

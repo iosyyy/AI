@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { Button, Col, Form, Input, message, Row } from "antd";
+import { Button, Col, Form, Input, message, Row, Select } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import axios from "axios";
 import api from "../../../config/api";
 import PubSubJS from "pubsub-js";
-
+const { Option } = Select;
 class Interface extends Component {
   constructor(props) {
     super(props);
@@ -14,11 +14,41 @@ class Interface extends Component {
       paramType: 0,
       feature_data: "",
       feature_id: "",
+      serviceIdList: [],
     };
   }
 
+  getServiceIdList = () => {
+    axios
+      .get(api.findDeployListStatus1)
+      .then((r) => {
+        const { data, code, msg } = r.data;
+        if (code !== 0) {
+          message.error(msg);
+          return;
+        }
+        const serviceIdList = data.data.map((v, i) => {
+          return v.f_service_id;
+        });
+        this.setState({
+          serviceIdList,
+        });
+      })
+      .catch((r) => {
+        message.error("服务器异常");
+      })
+      .finally(() => {
+        this.setState({
+          loading: false,
+        });
+      });
+  };
+  componentDidMount() {
+    this.getServiceIdList();
+  }
+
   render() {
-    const { loading, feature_data, feature_id } = this.state;
+    const { loading, feature_data, feature_id, serviceIdList } = this.state;
     const fontStyle = { fontWeight: 900, color: "rgb(127,125,142)" };
 
     return (
@@ -30,14 +60,14 @@ class Interface extends Component {
           onFinish={(e) => {
             axios
               .post(api.single, {
-                feature_data: JSON.parse(e.feature_data),
-                feature_id: JSON.parse(e.feature_id),
+                feature_data: JSON.parse(feature_data),
+                feature_id: JSON.parse(feature_id),
                 service_id: e.service_id,
               })
               .then((r) => {
                 const { code, msg, data } = r.data;
                 if (code === 0) {
-                  message.info("score:" + data.score);
+                  message.info("score:" + data?.data?.score ?? "");
                 } else {
                   message.error(msg);
                 }
@@ -52,7 +82,15 @@ class Interface extends Component {
                 label={<div style={fontStyle}>service_id</div>}
                 rules={[{ required: true, message: "请输入service_id" }]}
               >
-                <Input placeholder={"请输入service_id"} />
+                <Select>
+                  {serviceIdList.map((v, i) => {
+                    return (
+                      <Option key={`serviceId${i}`} value={v}>
+                        {v}
+                      </Option>
+                    );
+                  })}
+                </Select>
               </Form.Item>
             </Col>
           </Row>
@@ -103,7 +141,6 @@ class Interface extends Component {
                           return;
                         }
                       }
-                      console.log(feature_id);
                       this.setState({
                         feature_id: JSON.stringify(data, null, "  "),
                       });

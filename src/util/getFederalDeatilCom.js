@@ -17,7 +17,6 @@ export default function getFederalDeatilCom(
   model
 ) {
   let names;
-  console.log(namew);
   switch (namew) {
     // 这里通过metric_namespace选择不同的tabs
     case "HeteroNN":
@@ -266,8 +265,6 @@ export default function getFederalDeatilCom(
       ];
       break;
     default:
-      console.log(namew);
-
       names = [
         {
           name: "summary",
@@ -302,8 +299,6 @@ export default function getFederalDeatilCom(
 
       break;
   }
-  console.log(111);
-  console.log(names);
 
   return names;
 }

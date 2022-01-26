@@ -43,7 +43,6 @@ class JointStatementResult extends Component {
                 color: "rgb(65,89,209)",
               }}
               onClick={(_e) => {
-                console.log(obj);
                 this.props.history.push({
                   pathname: "/federalDetail/show",
                   search: qs.stringify({
@@ -142,7 +141,7 @@ class JointStatementResult extends Component {
             <Space>
               {obj.f_status === "failed" ? <Button>重试</Button> : <></>}
               <Button
-                disabled={obj.f_status === "failed" || obj.f_party_id === 0}
+                disabled={obj.f_status === "failed" || obj.f_party_id == 0}
                 onClick={() => {
                   this.setState({
                     id: obj.f_job_id,
@@ -198,9 +197,7 @@ class JointStatementResult extends Component {
           page_length: count,
         });
       })
-      .catch((e) => {
-        console.log(e);
-      })
+      .catch((e) => {})
       .finally(() => {
         this.setState({
           loading: false,
