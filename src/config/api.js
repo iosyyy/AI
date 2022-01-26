@@ -1,10 +1,9 @@
-import pack from "../../package.json";
 //本地代理（代理需要在setupProxy.js中配置）
 const host = window.location.origin;
 let baseHost;
 let ws;
 let fateBoardWs;
-if (pack.env === "build") {
+if (process.env.ENVIRONMENT === "build") {
   ws = `ws://${window.location.hostname}:${window.location.port}`;
   fateBoardWs = `ws://${window.location.hostname}:${window.location.port}`;
   baseHost = window.location.origin;
