@@ -154,9 +154,7 @@ export default class Result extends Component {
     });
   };
 
-  onEnlarge = (_e) => {
-    console.log("be large");
-  };
+  onEnlarge = (_e) => {};
 
   // 点击批量导出数据生成csv文件
   exportList = () => {

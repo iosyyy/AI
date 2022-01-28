@@ -41,7 +41,6 @@ export default () => {
           type: "cross",
         },
         formatter: function (params) {
-          console.log(params);
           return (
             "x : " +
             params[0].axisValue +
@@ -133,7 +132,6 @@ export default () => {
     );
     let file_path = localStorage.getItem("file_name");
     axios.post(api.getZhiFang, { feature, file_path }).then((res) => {
-      console.log(res);
       if (res.data.code === 0) {
         let tmp = res.data.data.data;
         setData(tmp);
@@ -157,7 +155,6 @@ export default () => {
 
   useEffect(() => {
     if (list.length === 0) return;
-    console.log(tmpData);
     for (let i = 0; i < tmpData.count; i++) {
       myChart[i] = echarts.init(document.getElementById(`graph-zhifangtu${i}`));
       drew(tmpData.data[i], i);

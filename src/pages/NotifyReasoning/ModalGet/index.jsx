@@ -102,7 +102,6 @@ class ModalGet extends Component {
     axios
       .post(api.batchSingle, formData)
       .then((r) => {
-        console.log(r);
         const { code, msg } = r.data;
         if (code === 0) {
           message.success("批量预测完成");
@@ -116,7 +115,6 @@ class ModalGet extends Component {
         }
       })
       .catch((e) => {
-        console.log(e);
         message.error("批量处理失败");
       })
       .finally(() => {
@@ -242,7 +240,6 @@ class ModalGet extends Component {
                               return;
                             }
                           }
-                          console.log(feature_id);
                           this.setState({
                             feature_id: JSON.stringify(data, null, "  "),
                           });
@@ -291,7 +288,6 @@ class ModalGet extends Component {
                         onKeyDown={(e) => {
                           if (e.key === "Tab") {
                           }
-                          console.log(e);
                         }}
                         onChange={(e) => {
                           const { value } = e.target;
@@ -307,7 +303,6 @@ class ModalGet extends Component {
                               return;
                             }
                           }
-                          console.log(feature_data);
                           this.setState({
                             feature_data: JSON.stringify(data, null, "  "),
                           });

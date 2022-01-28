@@ -153,9 +153,7 @@ class FederalResultKeep extends Component {
     });
   };
 
-  onEnlarge = (e) => {
-    console.log("be large");
-  };
+  onEnlarge = (e) => {};
 
   // 点击批量导出数据生成csv文件
   exportList = () => {

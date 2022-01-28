@@ -132,8 +132,7 @@ class TransferLine extends Component {
                           i--;
                         }
                       }
-                      console.log(list1Copy);
-                      console.log(list2Copy);
+
                       this.setState({
                         list1: list1Copy,
                         list2: list2Copy,

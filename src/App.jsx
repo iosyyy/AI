@@ -100,6 +100,7 @@ class App extends Component {
     );
     socket.onmessage = (data) => {
       let detail = JSON.parse(data.data);
+
       this.setState({
         count: detail.total,
         datasource: detail.data,

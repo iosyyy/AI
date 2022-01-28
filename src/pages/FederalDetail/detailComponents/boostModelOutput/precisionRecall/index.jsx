@@ -10,7 +10,6 @@ export default class PrecisionRecall extends Component {
   constructor(props) {
     super(props);
     const { allMetrics, metricsKeys } = props;
-    console.log(props);
     let metricsKey = metricsKeys[0];
     let metricsForPrecisionRecall = {};
     if (metricsKey && allMetrics) {
@@ -25,7 +24,6 @@ export default class PrecisionRecall extends Component {
   drew = (type) => {
     const { metricsKeys } = this.props;
     let { datas, metricsForPrecisionRecall } = this.state;
-    console.log(type);
     let metricsKey = type ? type : metricsKeys[0];
     let metrics = {};
     // TODO:此处根据选择改变metricsKeys
@@ -34,7 +32,6 @@ export default class PrecisionRecall extends Component {
       ...this.props.postData,
       metrics,
     };
-    console.log("postdata:", postData);
     let option;
     let d;
 

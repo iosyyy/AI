@@ -151,7 +151,6 @@ class BoostModelOutput extends Component {
             </span>
             <Select
               onChange={(e) => {
-                console.log(e);
                 this.setState({
                   index: Number(e),
                 });
@@ -182,7 +181,6 @@ class BoostModelOutput extends Component {
 
             <Select
               onChange={(e) => {
-                console.log(e);
                 this.setState({
                   id: Number(e),
                 });
@@ -244,7 +242,6 @@ class BoostModelOutput extends Component {
             </span>
             <Select
               onChange={(e) => {
-                console.log(e);
                 this.setState({
                   index: Number(e),
                 });
@@ -275,7 +272,6 @@ class BoostModelOutput extends Component {
 
             <Select
               onChange={(e) => {
-                console.log(e);
                 this.setState({
                   id: Number(e),
                 });

@@ -62,7 +62,6 @@ const Menus = (props) => {
                 FileSaver.saveAs(blob, curFile);
               })
               .catch((r) => {
-                console.log(r);
                 message.error("文件下载失败请重试并检查网络连接");
               });
           }}
@@ -93,7 +92,6 @@ const Menus = (props) => {
                 FileSaver.saveAs(blob, curFile);
               })
               .catch((r) => {
-                console.log(r);
                 message.error("文件下载失败请重试并检查网络连接");
               });
           }}
@@ -320,14 +318,12 @@ class BatchInterface extends Component {
               formData.append("file", file.file);
               formData.append("name", name);
               formData.append("context", context);
-              console.log(formData);
               this.setState({
                 loading: true,
               });
               axios
                 .post(api.batchSingle, formData)
                 .then((r) => {
-                  console.log(r);
                   const { code, msg } = r.data;
                   if (code === 0) {
                     message.success("批量处理完成");
@@ -339,7 +335,6 @@ class BatchInterface extends Component {
                   }
                 })
                 .catch((e) => {
-                  console.log(e);
                   message.error("批量处理失败");
                 })
                 .finally(() => {

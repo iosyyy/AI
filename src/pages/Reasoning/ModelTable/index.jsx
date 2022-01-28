@@ -67,7 +67,6 @@ class ModelTable extends Component {
       })
       .then((r) => {
         const { data, code, msg } = r.data;
-        console.log(data);
         if (code !== 0) {
           message.error(msg);
           return;

@@ -28,6 +28,7 @@ import {
   ExclamationCircleOutlined,
 } from "@ant-design/icons";
 import StepsTemplate from "../../../components/StepsTemplate";
+import ModalGet from "../../NotifyReasoning/ModalGet";
 
 let interval;
 const { Step } = Steps;
@@ -49,6 +50,10 @@ class Model extends Component {
       pageSize: 0,
       currentPage: 1,
       text: "",
+      selectId: {
+        service_id: "",
+      },
+      modalShow: false,
       searchData: {
         status: "",
         service_id: "",
@@ -56,6 +61,12 @@ class Model extends Component {
       },
     };
   }
+
+  setModalShow = (modalShow) => {
+    this.setState({
+      modalShow,
+    });
+  };
 
   getData = (page) => {
     const { searchData } = this.state;
@@ -68,7 +79,6 @@ class Model extends Component {
       })
       .then((r) => {
         const { data, code, msg } = r.data;
-        console.log(data);
         if (code !== 0) {
           message.error(msg);
           return;
@@ -102,6 +112,13 @@ class Model extends Component {
           loading: false,
         });
       });
+  };
+
+  setModalLoadingAndShow = (loading, modalShow) => {
+    this.setState({
+      loading,
+      modalShow,
+    });
   };
   componentDidMount() {
     this.getData(1);
@@ -214,128 +231,144 @@ class Model extends Component {
     }, step3);
   };
 
-  render() {
-    const COLUMNS = [
-      {
-        title: "序号",
-        dataIndex: "index",
-        key: "index",
+  COLUMNS = [
+    {
+      title: "序号",
+      dataIndex: "index",
+      key: "index",
+    },
+    {
+      title: "service_id",
+      dataIndex: "service_id",
+      key: "service_id",
+    },
+    {
+      title: "关联模型",
+      dataIndex: "model",
+      key: "model",
+    },
+    {
+      title: "状态",
+      dataIndex: "status",
+      key: "status",
+      render: (_v, x) => {
+        return _v === "0" ? (
+          <Tag icon={<ExclamationCircleOutlined />} color="warning">
+            未上传
+          </Tag>
+        ) : _v === "1" ? (
+          <Tag icon={<CheckCircleOutlined />} color="success">
+            已上传
+          </Tag>
+        ) : _v === "2" ? (
+          <Tag icon={<CloseCircleOutlined />} color="error">
+            部署失败
+          </Tag>
+        ) : (
+          <Tag icon={<CheckCircleOutlined />} color="#108ee9">
+            已预测
+          </Tag>
+        );
       },
-      {
-        title: "service_id",
-        dataIndex: "service_id",
-        key: "service_id",
-      },
-      {
-        title: "关联模型",
-        dataIndex: "model",
-        key: "model",
-      },
-      {
-        title: "状态",
-        dataIndex: "status",
-        key: "status",
-        render: (_v, x) => {
-          return _v === "0" ? (
-            <Tag icon={<ExclamationCircleOutlined />} color="warning">
-              未上传
-            </Tag>
-          ) : _v === "1" ? (
-            <Tag icon={<CheckCircleOutlined />} color="success">
-              已上传
-            </Tag>
-          ) : _v === "2" ? (
-            <Tag icon={<CloseCircleOutlined />} color="error">
-              部署失败
-            </Tag>
-          ) : (
-            <Tag icon={<CheckCircleOutlined />} color="#108ee9">
-              已预测
-            </Tag>
-          );
-        },
-      },
-      {
-        title: "上传时间",
-        dataIndex: "upload_time",
-        key: "upload_time",
-      },
-      {
-        title: "操作",
-        dataIndex: "action",
-        render: (x, y) => {
-          return (
-            <Space>
-              <Button
-                onClick={() => {
-                  this.setState({
-                    showDetail: true,
-                    index: 0,
-                    statusNow: y.statusNow,
-                    percent: y.percent,
-                    nows: y.nows,
-                    text: y.text,
+    },
+    {
+      title: "上传时间",
+      dataIndex: "upload_time",
+      key: "upload_time",
+    },
+    {
+      title: "操作",
+      dataIndex: "action",
+      render: (x, y) => {
+        return (
+          <Space>
+            <Button
+              onClick={() => {
+                this.setState({
+                  showDetail: true,
+                  index: 0,
+                  statusNow: y.statusNow,
+                  percent: y.percent,
+                  nows: y.nows,
+                  text: y.text,
+                });
+              }}
+              type={"primary"}
+            >
+              查看详情
+            </Button>
+            <Button
+              onClick={() => {
+                this.setState({
+                  modalShow: true,
+                  selectId: {
+                    service_id: y.service_id,
+                  },
+                });
+              }}
+              disabled={y.status !== "1" && y.status !== "3"}
+              style={{ background: "rgb(109,218,99)", color: "#fff" }}
+              type={"primary"}
+            >
+              预测
+            </Button>
+            <Button
+              onClick={() => {
+                axios
+                  .post(api.updateStatus, {
+                    service_id: y.service_id,
+                    status: 0,
+                  })
+                  .then((r) => {
+                    const { code, msg } = r.data;
+
+                    if (code !== 0) {
+                      message.error("重新上传失败" + msg);
+                    } else {
+                      message.success("重新上传成功");
+                    }
+                  })
+                  .catch((r) => {
+                    message.error("服务器异常");
+                  })
+                  .finally(() => {
+                    this.getData(this.state.currentPage);
                   });
-                }}
-                type={"primary"}
-              >
-                查看详情
-              </Button>
-              <Button
-                onClick={() => {
-                  axios
-                    .post(api.updateStatus, {
-                      service_id: y.service_id,
-                      status: 0,
-                    })
-                    .then((r) => {
-                      const { code, msg } = r.data;
+              }}
+              disabled={y.status !== "1" && y.status !== "3"}
+            >
+              重新上传
+            </Button>
+            <Popconfirm
+              title="确定删除本条信息?"
+              onConfirm={() => {
+                axios
+                  .post(api.delDeploy, { id: y.index })
+                  .then((r) => {
+                    const { code, msg } = r.data;
 
-                      if (code !== 0) {
-                        message.error("重新上传失败" + msg);
-                      } else {
-                        message.success("重新上传成功");
-                      }
-                    })
-                    .catch((r) => {
-                      message.error("服务器异常");
-                    })
-                    .finally(() => {
-                      this.getData(this.state.currentPage);
-                    });
-                }}
-                disabled={y.status !== "1"}
-              >
-                重新上传
+                    if (code !== 0) {
+                      message.error("删除失败" + msg);
+                    }
+                  })
+                  .finally(() => {
+                    this.getData(this.state.currentPage);
+                  });
+              }}
+              okText="确定"
+              cancelText="取消"
+            >
+              <Button danger type={"primary"}>
+                删除
               </Button>
-              <Popconfirm
-                title="确定删除本条信息?"
-                onConfirm={() => {
-                  axios
-                    .post(api.delDeploy, { id: y.index })
-                    .then((r) => {
-                      const { code, msg } = r.data;
-
-                      if (code !== 0) {
-                        message.error("删除失败" + msg);
-                      }
-                    })
-                    .finally(() => {
-                      this.getData(this.state.currentPage);
-                    });
-                }}
-                okText="确定"
-                cancelText="取消"
-              >
-                <Button danger type={"primary"}>
-                  删除
-                </Button>
-              </Popconfirm>
-            </Space>
-          );
-        },
+            </Popconfirm>
+          </Space>
+        );
       },
-    ];
+    },
+  ];
+
+  render() {
     const {
       show,
       loading,
@@ -345,6 +378,8 @@ class Model extends Component {
       nows,
       percent,
       text,
+      selectId,
+      modalShow,
     } = this.state;
 
     return (
@@ -358,7 +393,14 @@ class Model extends Component {
         >
           新增部署任务
         </Button>*/}
-
+        <ModalGet
+          show={modalShow}
+          selectId={selectId}
+          loading={loading}
+          setShow={this.setModalShow}
+          setLoadingAndShow={this.setModalLoadingAndShow}
+          history={this.props.history}
+        />
         <div style={{ float: "right" }}>
           <Form
             size="small"
@@ -412,7 +454,7 @@ class Model extends Component {
           loading={loading}
           style={{ marginTop: "1vh" }}
           dataSource={datasource}
-          columns={COLUMNS}
+          columns={this.COLUMNS}
           bordered
           size={"middle"}
           pagination={{

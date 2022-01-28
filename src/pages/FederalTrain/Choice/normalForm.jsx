@@ -130,9 +130,7 @@ class NormalForm extends Component {
               );
             }}
             {...layout}
-            onFinishFailed={(e) => {
-              console.log(e);
-            }}
+            onFinishFailed={(e) => {}}
           >
             <Form.Item
               name="trainName"

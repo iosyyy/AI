@@ -164,7 +164,6 @@ class UploadData extends Component {
                       FileSaver.saveAs(blob, curFile);
                     })
                     .catch((r) => {
-                      console.log(r);
                       message.error("文件下载失败请重试并检查网络连接");
                     });
                 }}
@@ -313,7 +312,6 @@ class UploadData extends Component {
             labelCol={{ span: 5 }}
             wrapperCol={{ span: 24 }}
             onFinish={(e) => {
-              console.log(e);
               const { service_id, context, file } = e;
               const formData = new FormData();
               formData.append("file", file.file);

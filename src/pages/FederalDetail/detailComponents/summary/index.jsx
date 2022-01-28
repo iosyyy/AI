@@ -49,9 +49,7 @@ class Summary extends Component {
     const { data } = this.state;
     let dataDetail;
     if (data) {
-      console.log(data);
       dataDetail = data.map((v, i) => {
-        console.log(v[0] + i);
         return (
           <div
             key={v[0] + i}

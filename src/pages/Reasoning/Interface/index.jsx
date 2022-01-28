@@ -189,7 +189,6 @@ class Interface extends Component {
                     onKeyDown={(e) => {
                       if (e.key === "Tab") {
                       }
-                      console.log(e);
                     }}
                     onChange={(e) => {
                       const { value } = e.target;
@@ -205,7 +204,6 @@ class Interface extends Component {
                           return;
                         }
                       }
-                      console.log(feature_data);
                       this.setState({
                         feature_data: JSON.stringify(data, null, "  "),
                       });

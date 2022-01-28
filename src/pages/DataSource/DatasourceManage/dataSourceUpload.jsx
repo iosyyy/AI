@@ -77,7 +77,6 @@ class DataSourceUpload extends Component {
       });
       return;
     }
-    console.log(tables[uploadKey].indexOf(" "));
     if (
       tables[uploadKey].indexOf(" ") !== -1 ||
       description[uploadKey].indexOf(" ") !== -1

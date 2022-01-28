@@ -8,7 +8,6 @@ import star from "../../img/star.png";
 
 class Login extends Component {
   login = (values) => {
-    console.log("Received values of form: ", values);
     axios
       .get(api.getClientInfo)
       .then((r) => {

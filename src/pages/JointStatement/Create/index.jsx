@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, Col, Form, Input, message, Row, Space, Steps } from "antd";
 import "antd/dist/antd.css";
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import {
   CloudUploadOutlined,
   DownloadOutlined,
@@ -267,10 +267,9 @@ class JointStatementCreate extends Component {
                           axios
                             .post(api.submitJob, { ...this.getData() })
                             .then((r) => {
-                              console.log(r);
                               if (r.data.code === 0) {
                                 message.success("执行任务成功");
-                                this.props.history.push("/training")
+                                this.props.history.push("/training");
                               } else {
                                 message.error("执行失败请重试");
                               }

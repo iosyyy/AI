@@ -44,7 +44,6 @@ class ModalUpdate extends Component {
           labelCol={{ span: 5 }}
           wrapperCol={{ span: 24 }}
           onFinish={(e) => {
-            console.log(e);
             const { service_id, context, file } = e;
             const formData = new FormData();
             formData.append("file", file.file);
