@@ -3,10 +3,12 @@ const host = window.location.origin;
 let baseHost;
 let ws;
 let fateBoardWs;
+let localFateFlow;
 if (process.env.ENVIRONMENT === "build") {
   ws = `ws://${window.location.hostname}:${window.location.port}`;
   fateBoardWs = `ws://${window.location.hostname}:${window.location.port}`;
   baseHost = window.location.origin;
+  localFateFlow = `http://${window.location.hostname}:9380`
 } else {
   ws = `ws://1.117.24.151:8080`;
   baseHost = window.location.origin + "/api";
@@ -63,7 +65,7 @@ const e = {
   getKmeans: host + "/v1/preprocess/data/cluster_data",
   hostStatus: ws + "/websocket/deploy/status/host",
   guestStatus: ws + "/websocket/deploy/status/guest",
-  downloadIntroduction: host + "/api/v1/client/download/conf_params"
+  downloadIntroduction: localFateFlow + "/v1/client/download/conf_params"
 };
 
 export default e;
