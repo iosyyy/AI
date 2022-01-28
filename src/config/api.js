@@ -13,6 +13,7 @@ if (process.env.ENVIRONMENT === "build") {
   ws = `ws://1.117.24.151:8080`;
   baseHost = window.location.origin + "/api";
   fateBoardWs = `ws://${window.location.hostname}:8080`;
+  localFateFlow = `http://1.117.24.151:9380`
 }
 
 const e = {
