@@ -6,6 +6,7 @@ import {
   DownloadOutlined,
   FileOutlined,
   LoadingOutlined,
+  MinusCircleOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
 import StepsTemplate from "../../../components/StepsTemplate";
@@ -198,6 +199,13 @@ class FederalResult extends Component {
                             >
                               <Input placeholder={"请输入数据表名称"} />
                             </Form.Item>
+                            {key >= 2 ? (
+                              <MinusCircleOutlined
+                                onClick={() => remove(name)}
+                              />
+                            ) : (
+                              <></>
+                            )}{" "}
                           </Space>
                         );
                       })}

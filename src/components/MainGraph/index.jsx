@@ -53,7 +53,7 @@ class MainGraph extends Component {
       return {
         index: i,
         status: v.status,
-        is_need_run: component_need_run[v.component_name],
+        is_need_run: v.status,
         key: v.component_name,
         color: nodeColors[i],
         colorA: colorBack,
@@ -65,7 +65,7 @@ class MainGraph extends Component {
         img:
           v.status === "success"
             ? finish
-            : v.status === "canceled"
+            : v.status === "canceled" || v.status === "failed"
             ? failed
             : loading,
       };
@@ -216,14 +216,18 @@ class MainGraph extends Component {
             new go.Binding("fill", "isSelected", function (sel, node) {
               if (sel) {
                 change(node.Zj.nb.key);
-                if (node.Zj.nb.is_need_run) {
+                if (node.Zj.nb.is_need_run === "success") {
                   return "rgb(39,153,255)";
+                } else if (node.Zj.nb.is_need_run === "failed") {
+                  return "rgb(216,44,128)";
                 } else {
                   return "rgb(216,44,128)";
                 }
               } else {
-                if (node.Zj.nb.is_need_run) {
+                if (node.Zj.nb.is_need_run === "success") {
                   return "rgb(14,199,165)";
+                } else if (node.Zj.nb.is_need_run === "failed") {
+                  return "rgb(221,0,27)";
                 } else {
                   return "rgb(187,187,200)";
                 }

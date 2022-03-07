@@ -60,8 +60,8 @@ class Interface extends Component {
           onFinish={(e) => {
             axios
               .post(api.single, {
-                feature_data: JSON.parse(feature_data),
-                feature_id: JSON.parse(feature_id),
+                feature_data: JSON.parse(feature_id),
+                feature_id: JSON.parse(feature_data),
                 service_id: e.service_id,
               })
               .then((r) => {
