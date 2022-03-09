@@ -34,6 +34,9 @@ import {
   SettingOutlined,
   UploadOutlined,
   UserSwitchOutlined,
+  UserOutlined,
+  ToolOutlined,
+  MehOutlined
 } from "@ant-design/icons";
 import PubSubJS from "pubsub-js";
 import Normal from "./pages/Normal";
@@ -61,6 +64,7 @@ import TextArea from "antd/es/input/TextArea";
 import axios from "axios";
 import ModalUpdate from "./pages/NotifyReasoning/ModalUpdate";
 import ModalGet from "./pages/NotifyReasoning/ModalGet";
+import UserInfo from './pages/UserInfo'
 
 const { Header, Content } = Layout;
 const IconFont = createFromIconfontCN({
@@ -417,6 +421,25 @@ class App extends Component {
                       </NavLink>
                     </Menu.Item>
                   </SubMenu>
+
+                  <SubMenu
+                      title="用户信息"
+                      selectable={false}
+                      key="45"
+                      icon={<UserOutlined />}
+                  >
+                    <Menu.Item key="58" icon={<MehOutlined />}>
+                      <NavLink to="/userinfo/userinfo">
+                        用户信息
+                      </NavLink>
+                    </Menu.Item>
+                    <Menu.Item key="57" icon={<ToolOutlined />}>
+                      <NavLink to="/userinfo/changepwd">
+                        修改登陆密码
+                      </NavLink>
+                    </Menu.Item>
+                  </SubMenu>
+
                   <Menu.Item key="5" icon={<FieldTimeOutlined />}>
                     <NavLink to="/training">正在训练</NavLink>
                   </Menu.Item>
@@ -438,6 +461,7 @@ class App extends Component {
                 <Route path="/datasource" component={DataSource} />
                 <Route path="/reasoning" component={Reasoning} />
                 <Route path="/jointStatement" component={JointStatement} />
+                <Route path="/userinfo" component={UserInfo} />
 
                 <Redirect to="/home" />
               </Switch>
