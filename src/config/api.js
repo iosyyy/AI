@@ -1,4 +1,3 @@
-import pack from '../../package.json'
 //本地代理（代理需要在setupProxy.js中配置）
 const host = window.location.origin;
 let baseHost;

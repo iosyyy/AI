@@ -20,7 +20,7 @@ module.exports = function (app) {
   );
   app.use(
     createProxyMiddleware("/v1", {
-      target: "http://1.117.11.147:8080/",
+      target: "http://127.0.0.1:8080/",
     })
   );
 };
