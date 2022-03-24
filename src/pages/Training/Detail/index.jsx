@@ -225,7 +225,7 @@ export default class index extends Component {
       <div className="training-details">
         <div className="trainning-details-card1-continer">
           <Card className="trainning-details-card1">
-            <h4>Info</h4>
+            <h4>数据信息</h4>
             <div
               style={{ fontWeight: 600, width: "18vw" }}
               className="trainning-details-info"
@@ -269,7 +269,7 @@ export default class index extends Component {
             className="trainning-details-card1 c2"
             style={{ position: "relative" }}
           >
-            <h4>Task</h4>
+            <h4>任务</h4>
             <Progress
               percent={this.state.percent}
               strokeColor={{
@@ -310,7 +310,7 @@ export default class index extends Component {
           </Card>
           <Card className="trainning-details-card1">
             <div>
-              <span style={{ fontWeight: 600 }}>Graph</span>
+              <span style={{ fontWeight: 600 }}>组件图</span>
               <div
                 style={{
                   float: "right",

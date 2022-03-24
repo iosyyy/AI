@@ -267,14 +267,14 @@ class NormalForm extends Component {
                         </Form.Item>
 
                         <Form.Item {...tailLayout}>
-                            <a
+                            {/* <a
                                 style={{textDecorationStyle: "none"}}
                                 onClick={() => {
                                     this.props.changeForm();
                                 }}
                             >
                                 高级配置
-                            </a>
+                            </a> */}
                         </Form.Item>
                         <Row justify={"center"}>
                             <Form.Item>

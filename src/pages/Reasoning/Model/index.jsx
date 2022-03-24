@@ -14,6 +14,7 @@ import {
   Steps,
   Table,
   Tag,
+  Upload
 } from "antd";
 import { fontStyle } from "../../../util/util";
 import axios from "axios";
@@ -26,6 +27,8 @@ import {
   CloseCircleOutlined,
   CloudUploadOutlined,
   ExclamationCircleOutlined,
+  UploadOutlined,
+  DownloadOutlined
 } from "@ant-design/icons";
 import StepsTemplate from "../../../components/StepsTemplate";
 import ModalGet from "../../NotifyReasoning/ModalGet";
@@ -34,6 +37,33 @@ let interval;
 const { Step } = Steps;
 const { Option } = Select;
 class Model extends Component {
+getServiceIdList = () => {
+    axios
+      .get(api.findDeployListStatus1)
+      .then((r) => {
+        const { data, code, msg } = r.data;
+        if (code !== 0) {
+          message.error(msg);
+          return;
+        }
+        console.log(r);
+
+        const serviceIdList = data.data.map((v, i) => {
+          return v.f_service_id;
+        });
+        this.setState({
+          serviceIdList,
+        });
+      })
+      .catch((r) => {
+        message.error("服务器异常");
+      })
+      .finally(() => {
+        this.setState({
+          loading: false,
+        });
+      });
+  };
   constructor(props) {
     super(props);
     PubSubJS.publish("isRunning", { page: "8" });
@@ -48,6 +78,7 @@ class Model extends Component {
       nows: 0,
       percent: 0,
       pageSize: 0,
+      file_path: null,
       currentPage: 1,
       text: "",
       selectId: {
@@ -59,6 +90,7 @@ class Model extends Component {
         service_id: "",
         model_id: "",
       },
+      serviceIdList: [],
     };
   }
 
@@ -123,6 +155,7 @@ class Model extends Component {
   };
   componentDidMount() {
     this.getData(1);
+    this.getServiceIdList();
   }
 
   modelUpload = () => {
@@ -381,11 +414,13 @@ class Model extends Component {
       text,
       selectId,
       modalShow,
+      serviceIdList,
+      file_path
     } = this.state;
 
     return (
       <div>
-        {/*<Button
+        <Button
           onClick={() => {
             this.setState({
               show: true,
@@ -393,7 +428,7 @@ class Model extends Component {
           }}
         >
           新增部署任务
-        </Button>*/}
+        </Button>
         <ModalGet
           show={modalShow}
           selectId={selectId}
@@ -519,42 +554,46 @@ class Model extends Component {
           <div style={fontStyle}>备注: {text}</div>
         </Modal>
         <Modal
-          title="模型部署"
+          title="部署任务"
           visible={show}
           onCancel={() => {
             this.setState({
               show: false,
+              file_path: null,
             });
           }}
+          style={{ top: 40 }}
           width={"45vw"}
           footer={null}
           destroyOnClose
         >
           <Form
-            labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
             onFinish={(e) => {
+              const { service_id, file, name, context } = e;
+              const formData = new FormData();
+              formData.append("service_id", service_id);
+              formData.append("file", file.file);
+              formData.append("name", name);
+              formData.append("context", context);
               this.setState({
                 loading: true,
               });
               axios
-                .post(api.modelUpdate, e)
+                .post(api.batchSingle, formData)
                 .then((r) => {
-                  const { code, msg, data } = r.data;
-                  if (code !== 1) {
-                    this.setState({
-                      showDetail: true,
-                      percent: 0,
-                      nows: -1,
-                      error: (data?.location ?? 0 / 3.0) * 100,
-                      statusNow: "active",
-                    });
-                  }
-                  if (code === 1) {
+                  const { code, msg } = r.data;
+                  if (code === 0) {
+                    message.success("批量处理完成");
+                    // this.setState({
+                    //   file_path: data.file_path,
+                    // });
+                  } else {
                     message.error(msg);
-                    return;
                   }
-                  this.modelUpload();
+                })
+                .catch((e) => {
+                  message.error("批量处理失败");
                 })
                 .finally(() => {
                   this.setState({
@@ -564,38 +603,96 @@ class Model extends Component {
                   this.getData(this.state.currentPage);
                 });
             }}
-            layout={"horizontal"}
+            layout={"vertical"}
           >
-            {/*<Row justify={"center"}>*/}
-            {/*  <Col span={12}>*/}
-            {/*    <Form.Item*/}
-            {/*      name="service_id"*/}
-            {/*      label={<div style={fontStyle}>service_id</div>}*/}
-            {/*      rules={[{ required: true, message: "请输入service_id" }]}*/}
-            {/*    >*/}
-            {/*      <Input placeholder={"请输入service_id"} />*/}
-            {/*    </Form.Item>*/}
-            {/*  </Col>*/}
-            {/*</Row>*/}
-            <Row gutter={[0, 0]} justify={"center"}>
-              <Col span={12}>
+            <Row justify={"center"}>
+              <Col span={24}>
                 <Form.Item
-                  name="job_id"
-                  label={<div style={fontStyle}>相关模型</div>}
-                  rules={[{ required: true, message: "请输入相关模型" }]}
+                  name="name"
+                  label={<div style={fontStyle}>任务名称</div>}
+                  rules={[{ required: true, message: "请输入任务名称" }]}
                 >
-                  <Input placeholder={"请输入相关模型"} />
+                  <Input placeholder={"请输入任务名称"} />
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={[0, 30]} justify={"center"}>
-              <Col span={12}>
+            <Row justify={"center"}>
+              <Col span={24}>
                 <Form.Item
                   name="context"
-                  label={<div style={fontStyle}>备注</div>}
-                  rules={[{ required: true, message: "请输入备注" }]}
+                  label={<div style={fontStyle}>任务简介</div>}
+                  rules={[{ required: true, message: "请输入任务简介" }]}
                 >
-                  <Input placeholder={"请输入备注"} />
+                  <Input placeholder={"请输入任务简介"} />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row justify={"center"}>
+              <Col span={24}>
+                <Form.Item
+                  name="service_id"
+                  label={<div style={fontStyle}>service_id</div>}
+                  rules={[{ required: true, message: "请输入service_id" }]}
+                >
+                  <Select>
+                    {serviceIdList.map((v, i) => {
+                      return (
+                        <Option key={`serviceId${i}`} value={v}>
+                          {v}
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
+            {/*<Row justify={"center"}>
+              <Col span={14}>
+                <Form.Item
+                  name="feature"
+                  label={<div style={fontStyle}>匹配样本的特征</div>}
+                  rules={[{ required: true, message: "请输入特征" }]}
+                >
+                  <Input placeholder={"请输入特征"} />
+                </Form.Item>
+              </Col>
+            </Row>*/}
+            <Row gutter={[0, 30]} justify={"center"}>
+              <Col span={24}>
+                <Form.Item
+                  name="file"
+                  label={<div style={fontStyle}>预测样本</div>}
+                  rules={[{ required: true, message: "请上传预测样本后重试" }]}
+                >
+                  <Upload
+                    beforeUpload={() => {
+                      return false;
+                    }}
+                    maxCount={1}
+                  >
+                    <Button icon={<UploadOutlined />}>
+                      上传预测样本 (Max: 1)
+                    </Button>
+                  </Upload>
+                </Form.Item>
+                <Form.Item
+                  label={<div style={fontStyle}>下载预测样本模板</div>}
+                >
+                  <Button
+                    onClick={() => {
+                      const href =
+                        window.location.protocol +
+                        "//" +
+                        window.location.hostname +
+                        ":9380" +
+                        file_path;
+                      FileSaver.saveAs(href);
+                    }}
+                    disabled={file_path == null}
+                    icon={<DownloadOutlined />}
+                  >
+                    下载模板
+                  </Button>
                 </Form.Item>
               </Col>
             </Row>

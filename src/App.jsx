@@ -395,21 +395,21 @@ class App extends Component {
                         >
                           <NavLink to="/reasoning/model">模型部署记录</NavLink>
                         </Menu.Item>
-                        <Menu.Item
+                        {/* <Menu.Item
                           icon={
                             <IconFont type={"icon-dc-icon-zhongzidujiaoshou"} />
                           }
                           key="9"
                         >
                           <NavLink to="/reasoning/interface">单例预测</NavLink>
-                        </Menu.Item>
+                        </Menu.Item> */}
 
                         <Menu.Item
                           icon={<IconFont type={"icon-icon"} />}
                           key="10"
                         >
                           <NavLink to="/reasoning/batch_interface">
-                            批量预测
+                            批量预测记录
                           </NavLink>
                         </Menu.Item>
                       </>

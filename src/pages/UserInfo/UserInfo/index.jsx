@@ -8,11 +8,7 @@ class Comp extends Component {
   constructor(props) {
     super(props);
     PubSubJS.publish("isRunning", { page: "58" });
-    this.state = {
-      id: localStorage.getItem("id"),
-      account: localStorage.getItem("account"),
-      nickname: localStorage.getItem("nickname"),
-    };
+    this.formRef = React.createRef()
   }
   changeUserInfo = (values) => {
     axios
@@ -38,11 +34,13 @@ class Comp extends Component {
           message.error("服务验证失败,请重试");
           this.props.history.push("/home");
         } else {
-          const { f_account, f_nickname } = r.data.data.data || r.data.data;
-          this.setState({
+          const { f_account, f_nickname,f_party_id } = r.data.data.data || r.data.data;
+          this.formRef.current.setFieldsValue({
+            id : f_party_id,
             account: f_account,
-            nickname: f_nickname,
-          });
+            nickname: f_nickname
+          })
+
         }
       })
       .catch((r) => {
@@ -67,9 +65,10 @@ class Comp extends Component {
             labelAlign="right"
             layout="vertical"
             style={{ width: "30%" }}
+            ref={this.formRef}
           >
-            <Form.Item name="id" label="id" rules={[{ required: true }]}>
-              <Input readOnly={true} />
+            <Form.Item name="id" label="party_id" rules={[{ required: true }]}>
+              <Input readOnly={true} disabled />
             </Form.Item>
             <Form.Item
               name="account"

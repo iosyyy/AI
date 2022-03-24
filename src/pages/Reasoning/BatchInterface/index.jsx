@@ -268,7 +268,7 @@ class BatchInterface extends Component {
     ];
     return (
       <div>
-        <Button
+        {/* <Button
           onClick={() => {
             this.setState({
               show: true,
@@ -276,7 +276,7 @@ class BatchInterface extends Component {
           }}
         >
           新增部署任务
-        </Button>
+        </Button> */}
         <Table
           loading={loading}
           size={"middle"}
