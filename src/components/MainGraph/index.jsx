@@ -383,8 +383,9 @@ class MainGraph extends Component {
 
   render() {
     const { nodeArray, linkArray } = this.state;
+    const { style } = this.props;
     return (
-      <div>
+      <div style={{ ...style }}>
         <ReactDiagram
           initDiagram={this.initDiagram}
           divClassName="diagram-component"

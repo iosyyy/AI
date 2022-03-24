@@ -14,7 +14,6 @@ class FederalDetail extends Component {
     super(props);
     const search = props.location.search;
     const cur = qs.parse(search.replace(/^\?/, ""));
-    console.log(cur);
     const startTime = new Date(Number(cur.startTime)).toLocaleString();
     const endTime = new Date(Number(cur.endTime)).toLocaleString();
     const duration = cur.duration / 1000;
@@ -28,9 +27,9 @@ class FederalDetail extends Component {
       endTime,
       description: "",
       name: "",
-      dataset: "",
-      dataSetRole: "",
-      dataSetPartyID: "",
+      dataset: [],
+      dataSetRole: [],
+      dataSetPartyID: [],
       duration: `${duration}秒`,
       names: [],
       treeData: [],
@@ -154,21 +153,31 @@ class FederalDetail extends Component {
         }
       }
 
-      const { job, dataset } = d.summary_date;
-      let datasetKey = [];
-      let dataSetRole = "";
-      let dataSetPartyID = "";
-      let dataSet = "";
+      const { job } = d.summary_date;
 
-      if (dataset && dataset.dataset) {
-        datasetKey = Object.keys(dataset.dataset);
-        dataSetRole = datasetKey[0];
-        if (dataSetRole) {
-          const strings = Object.keys(dataset.dataset[datasetKey[0]]);
-          dataSetPartyID = strings[0];
-          dataSet = Object.values(
-            dataset.dataset[datasetKey[0]][dataSetPartyID]
-          )[0];
+      const datasets = [];
+      const dataSetPartyID = [];
+      const dataSetRole = [];
+      const dataset = d.summary_date.dataset.dataset;
+      for (let data in dataset) {
+        if (dataset.hasOwnProperty(data)) {
+          for (let partyId in dataset[data]) {
+            if (dataset[data].hasOwnProperty(partyId)) {
+              const values = Object.values(dataset[data][partyId]);
+              for (let value of values) {
+                const vals = value.split(".");
+                console.log(vals);
+                if (vals && vals.length > 0) {
+                  datasets.push(vals[1]);
+                } else {
+                  datasets.push(vals);
+                }
+
+                dataSetPartyID.push(partyId);
+                dataSetRole.push(data);
+              }
+            }
+          }
         }
       }
       this.setState({
@@ -185,7 +194,7 @@ class FederalDetail extends Component {
         startTime: new Date(Number(job.fStartTime)).toLocaleString(),
         endTime: new Date(Number(job.fEndTime)).toLocaleString(),
         duration: `${d.duration / 1000}秒`,
-        dataset: dataSet,
+        dataset: datasets,
         dataSetRole: dataSetRole,
         dataSetPartyID: dataSetPartyID,
         name: job.fName,
@@ -216,11 +225,17 @@ class FederalDetail extends Component {
         className="site-layout-content"
         style={{ height: "83vh", width: "100%" }}
       >
-        <div style={{ display: "inline-block", width: "20%", height: "75vh" }}>
+        <div
+          style={{
+            display: "inline-block",
+            width: "20%",
+            height: "75vh",
+            overflow: "auto",
+          }}
+        >
           <div
             style={{
               marginRight: "1vh",
-              paddingBottom: "2vh",
               borderBottom: "1px solid",
             }}
           >
@@ -235,24 +250,38 @@ class FederalDetail extends Component {
             <div style={{ marginBottom: "1vh" }}>{this.state.type}</div>
             <div style={{ ...fontStyle }}>任务描述:</div>
             <div style={{ marginBottom: "1vh" }}>{this.state.description}</div>
-            {this.state.dataset ? (
-              <div style={{ marginRight: "1vw" }}>
-                <Row justify={"space-between"}>
-                  <Col style={{ ...fontStyle }}>role:</Col>
-                  <Col>{this.state.dataset.replace("experiment.", "")}</Col>
-                </Row>
-                <Row justify={"space-between"}>
-                  <Col style={{ ...fontStyle }}>party_id:</Col>
-                  <Col>{this.state.dataSetRole}</Col>
-                </Row>
-                <Row justify={"space-between"}>
-                  <Col style={{ ...fontStyle }}>dataset:</Col>
-                  <Col>{this.state.dataSetPartyID}</Col>
-                </Row>
-              </div>
-            ) : (
-              <></>
-            )}
+          </div>
+          <div
+            style={{
+              paddingTop: "1vh",
+              paddingBottom: "1vh",
+              paddingRight: "2vw",
+              marginRight: "1vh",
+              borderBottom: "1px solid",
+            }}
+          >
+            {this.state.dataset.map((v, i) => {
+              return (
+                <div style={{ marginRight: "1vw" }}>
+                  <Row justify={"space-between"}>
+                    <Col>role:</Col>
+                    <Col style={{ ...fontStyle }}>{v}</Col>
+                  </Row>
+                  <Row justify={"space-between"}>
+                    <Col>party_id:</Col>
+                    <Col style={{ ...fontStyle }}>
+                      {this.state.dataSetRole[i]}
+                    </Col>
+                  </Row>
+                  <Row justify={"space-between"}>
+                    <Col>dataset:</Col>
+                    <Col style={{ ...fontStyle }}>
+                      {this.state.dataSetPartyID[i]}
+                    </Col>
+                  </Row>
+                </div>
+              );
+            })}
           </div>
           <div>
             <div style={{ marginTop: "2vh" }}>

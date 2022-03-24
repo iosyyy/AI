@@ -6,6 +6,7 @@ import axios from "axios";
 import api from "../../config/api";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { fontStyle } from "../../util/util";
+import qs from "qs";
 
 class Training extends Component {
   constructor(props) {
@@ -70,7 +71,11 @@ class Training extends Component {
         onDoubleClick={() => {
           this.props.history.push({
             pathname: "/trainingDetails",
-            state: { id: item.id, role: item.role, partyId: item.partyId },
+            search: qs.stringify({
+              id: item.id,
+              role: item.role,
+              partyId: item.partyId,
+            }),
           });
         }}
       >

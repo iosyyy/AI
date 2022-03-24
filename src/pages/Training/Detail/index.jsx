@@ -15,6 +15,7 @@ import "./index.css";
 import Show from "../../../components/Show";
 import bigImg from "../../../img/big.png";
 import api from "../../../config/api";
+import qs from "qs";
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -24,9 +25,13 @@ let socketList;
 export default class index extends Component {
   constructor(props) {
     super(props);
+    const search = props.location.search;
+    const cur = qs.parse(search.replace(/^\?/, ""));
     this.state = {
       isShowing: 0,
-      id: this.props.location.state.id,
+      id: cur.id,
+      partyId: cur.partyId,
+      role: cur.role,
       info: {
         dataset: "train.csv",
         epoch: 5,
@@ -50,11 +55,11 @@ export default class index extends Component {
       names: ["Input", "HeteroLR", "Evaluation"],
       timeString: "",
       roles: [],
-      role: "",
       roleDataset: {},
       startTime: 0,
       endTime: 0,
       duration: 0,
+      status: "",
     };
   }
 
@@ -85,7 +90,7 @@ export default class index extends Component {
   }
 
   componentDidMount() {
-    let { id, partyId, role } = this.props.location.state;
+    let { id, partyId, role } = this.state;
     let url = api.logDetail
       .replace("{id}", id)
       .replace("{partyId}", partyId)
@@ -169,7 +174,8 @@ export default class index extends Component {
       const timeString = `${hour < 10 ? `0${hour}` : hour}:${
         minutes < 10 ? `0${minutes}` : minutes
       }:${seconds < 10 ? `0${seconds}` : seconds}`;
-      let role, datasets;
+      let role,
+        datasets = {};
       if (
         d.summary_date.dataset &&
         Object.keys(d.summary_date.dataset).length
@@ -182,7 +188,24 @@ export default class index extends Component {
           }
         }
         role = roles;
-        datasets = dataset;
+        for (let data in dataset) {
+          if (dataset.hasOwnProperty(data)) {
+            for (let partyId in dataset[data]) {
+              if (dataset[data].hasOwnProperty(partyId)) {
+                const values = Object.values(dataset[data][partyId]);
+                for (let value of values) {
+                  const vals = value.split(".");
+                  console.log(vals);
+                  if (vals && vals.length > 0) {
+                    datasets[data] = vals[1];
+                  } else {
+                    datasets[data] = value;
+                  }
+                }
+              }
+            }
+          }
+        }
       }
       this.setState({
         names,
@@ -194,6 +217,7 @@ export default class index extends Component {
         endTime: d.summary_date.job.fEndTime,
         duration: percent,
         role: d.summary_date.job.fRole,
+        status: d.status,
         partyId: d.summary_date.job.fPartyId,
       });
     };
@@ -201,7 +225,7 @@ export default class index extends Component {
 
   render() {
     let cur = this.state;
-    const { roles } = this.state;
+    const { roles, roleDataset } = this.state;
     const handleOk = () => {
       this.setState({
         isBig: false,
@@ -221,6 +245,15 @@ export default class index extends Component {
       host = roles["host"];
       arbiter = roles["arbiter"];
     }
+    let guestDataset = "";
+    let hostDataset = "";
+    let arbiterDataset = "";
+
+    if (roleDataset && Object.keys(roleDataset).length) {
+      guestDataset = roleDataset["guest"] ? roleDataset["guest"] : "";
+      hostDataset = roleDataset["host"] ? roleDataset["host"] : "";
+      arbiterDataset = roleDataset["arbiter"] ? roleDataset["arbiter"] : "";
+    }
     return (
       <div className="training-details">
         <div className="trainning-details-card1-continer">
@@ -239,7 +272,7 @@ export default class index extends Component {
               </Row>
               <Row justify={"space-between"} style={{ marginBottom: "2vh" }}>
                 <Col>{guest}</Col>
-                <Col style={{ color: "rgb(145,89,209)" }}>{}</Col>
+                <Col style={{ color: "rgb(145,89,209)" }}>{guestDataset}</Col>
               </Row>
               <Row
                 justify={"space-between"}
@@ -250,7 +283,7 @@ export default class index extends Component {
               </Row>
               <Row justify={"space-between"} style={{ marginBottom: "2vh" }}>
                 <Col>{host}</Col>
-                <Col style={{ color: "rgb(145,89,209)" }}>{}</Col>
+                <Col style={{ color: "rgb(145,89,209)" }}>{hostDataset}</Col>
               </Row>
               <Row
                 justify={"space-between"}
@@ -261,7 +294,7 @@ export default class index extends Component {
               </Row>
               <Row justify={"space-between"} style={{ marginBottom: "2vh" }}>
                 <Col>{arbiter}</Col>
-                <Col style={{ color: "rgb(145,89,209)" }}>{}</Col>
+                <Col style={{ color: "rgb(145,89,209)" }}>{arbiterDataset}</Col>
               </Row>
             </div>
           </Card>
@@ -293,7 +326,15 @@ export default class index extends Component {
               onClick={() => {
                 this.props.history.push({
                   pathname: "/federalDetail/show",
-                  state: { cur },
+                  search: qs.stringify({
+                    id: cur.id,
+                    role: cur.role,
+                    partyId: cur.partyId,
+                    status: cur.status,
+                    startTime: cur.startTime,
+                    endTime: cur.endTime,
+                    duration: cur.duration,
+                  }),
                 });
               }}
               type="primary"
@@ -346,7 +387,7 @@ export default class index extends Component {
 
         <Card style={{ height: "49vh" }} className="trainning-details-card2">
           <Tabs defaultActiveKey="1">
-            <TabPane tab="partym Log" key="1">
+            <TabPane tab="Algorithm Log" key="1">
               <Tabs defaultActiveKey="1" type="card">
                 <TabPane
                   tab={
@@ -432,7 +473,7 @@ export default class index extends Component {
                 </TabPane>
               </Tabs>
             </TabPane>
-            <TabPane tab="job Log" key="2" animated>
+            <TabPane tab="Schedule Log" key="2" animated>
               <Tabs defaultActiveKey="1" type="card">
                 <TabPane
                   tab={
