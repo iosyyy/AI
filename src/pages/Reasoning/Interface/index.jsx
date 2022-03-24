@@ -27,6 +27,8 @@ class Interface extends Component {
           message.error(msg);
           return;
         }
+        console.log(r);
+
         const serviceIdList = data.data.map((v, i) => {
           return v.f_service_id;
         });

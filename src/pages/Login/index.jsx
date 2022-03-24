@@ -7,36 +7,65 @@ import api from "../../config/api";
 import star from "../../img/star.png";
 
 class Login extends Component {
-  login = (values) => {
+  setF = () => {
+    // 过期时间为三天
+    const duration = 1000 * 3 * 60 * 60 * 24;
+    localStorage.setItem("LOGIN_FLAG", String(new Date().getTime() + duration));
+  };
+  loginPublish = (values) => {
+    console.log(values);
     axios
-      .get(api.getClientInfo)
+      .post(api.userLogin, { ...values })
       .then((r) => {
         if (r.data.data.retcode || r.data.data.code) {
           message.error("服务验证失败,请重试");
         } else {
-          const { party_name, party_id } = r.data.data.data || r.data.data;
-          const indexOf = party_name.indexOf("guest");
-          if (indexOf === -1) {
-            localStorage.setItem("role", "host");
-            localStorage.setItem("username", "H");
-          } else {
-            localStorage.setItem("role", "guest");
-            localStorage.setItem("username", "G");
-          }
+          const { account, nickname, id } = r.data.data.data || r.data.data;
+          localStorage.setItem("account", account);
+          localStorage.setItem("nickname", nickname);
+          localStorage.setItem("id", id);
+          console.log(id);
+          axios
+            .get(api.getClientInfo)
+            .then((r) => {
+              if (r.data.data.retcode || r.data.data.code) {
+                message.error("服务验证失败,请重试");
+              } else {
+                const { party_name, party_id } =
+                  r.data.data.data || r.data.data;
+                const indexOf = party_name.indexOf("guest");
+                if (indexOf === -1) {
+                  localStorage.setItem("role", "host");
+                  localStorage.setItem("username", "H");
+                } else {
+                  localStorage.setItem("role", "guest");
+                  localStorage.setItem("username", "G");
+                }
 
-          localStorage.setItem("party_name", party_name);
-          localStorage.setItem("party_id", party_id);
-          this.props.history.push("/federalTrain");
-          localStorage.setItem("userLogin", "success");
+                localStorage.setItem("party_name", party_name);
+                localStorage.setItem("party_id", party_id);
+                localStorage.setItem("userLogin", "success");
+                this.setF();
+
+                this.props.history.push("/federalTrain");
+              }
+            })
+            .catch((r) => {
+              message.error("链接服务器失败请重试");
+              localStorage.setItem("role", null);
+              localStorage.setItem("username", null);
+              localStorage.setItem("party_name", null);
+              localStorage.setItem("party_id", null);
+              localStorage.setItem("userLogin", null);
+            });
         }
       })
       .catch((r) => {
-        message.error("链接服务器失败请重试");
-        localStorage.setItem("role", null);
-        localStorage.setItem("username", null);
-        localStorage.setItem("party_name", null);
-        localStorage.setItem("party_id", null);
-        localStorage.setItem("userLogin", null);
+        console.log(r);
+        message.error("登录失败请重试");
+        localStorage.setItem("account", null);
+        localStorage.setItem("nickname", null);
+        localStorage.setItem("id", null);
       });
   };
 
@@ -65,10 +94,10 @@ class Login extends Component {
               name="normal_login"
               className="login-form"
               initialValues={{ remember: true }}
-              onFinish={this.login}
+              onFinish={this.loginPublish}
             >
               <Form.Item
-                name="username"
+                name="account"
                 rules={[
                   { required: true, message: "Please input your Username!" },
                 ]}
@@ -79,7 +108,7 @@ class Login extends Component {
                 />
               </Form.Item>
               <Form.Item
-                name="password"
+                name="pwd"
                 rules={[
                   { required: true, message: "Please input your Password!" },
                 ]}

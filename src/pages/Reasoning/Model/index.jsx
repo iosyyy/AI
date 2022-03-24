@@ -105,6 +105,7 @@ class Model extends Component {
         });
       })
       .catch((r) => {
+        console.log(r);
         message.error("服务器异常");
       })
       .finally(() => {

@@ -36,7 +36,7 @@ import {
   UserSwitchOutlined,
   UserOutlined,
   ToolOutlined,
-  MehOutlined
+  MehOutlined,
 } from "@ant-design/icons";
 import PubSubJS from "pubsub-js";
 import Normal from "./pages/Normal";
@@ -64,13 +64,20 @@ import TextArea from "antd/es/input/TextArea";
 import axios from "axios";
 import ModalUpdate from "./pages/NotifyReasoning/ModalUpdate";
 import ModalGet from "./pages/NotifyReasoning/ModalGet";
-import UserInfo from './pages/UserInfo'
+import UserInfo from "./pages/UserInfo";
 
 const { Header, Content } = Layout;
 const IconFont = createFromIconfontCN({
   scriptUrl: "//at.alicdn.com/t/font_1749581_s16tzbduh78.js",
 });
-
+function checkF() {
+  // 检查是否登陆过期
+  return (
+    localStorage.getItem("userLogin") &&
+    localStorage.getItem("LOGIN_FLAG") &&
+    Number(localStorage.getItem("LOGIN_FLAG")) < new Date().getTime()
+  );
+}
 class App extends Component {
   constructor(props) {
     super(props);
@@ -90,6 +97,9 @@ class App extends Component {
       modalShow: false,
       clicked: false,
     };
+
+    // request拦截器
+
     // FIXME 目前使用PubSubJS.js监听页面跳转然后来改变Menu的选择后续可以通过当前连接更改,目前先这么写方便测试
     PubSubJS.subscribe("isRunning", (msg, data) => {
       this.setState({ page: data.page });
@@ -97,19 +107,38 @@ class App extends Component {
   }
 
   componentDidMount() {
-    let socket = new WebSocket(
-      localStorage.getItem("role") !== "guest"
-        ? api.hostStatus
-        : api.guestStatus
-    );
-    socket.onmessage = (data) => {
-      let detail = JSON.parse(data.data);
+    if (localStorage.getItem("userLogin")) {
+      if (checkF()) {
+        this.props.history.push("/home");
+        console.log(Number(localStorage.getItem("LOGIN_FLAG")));
+        console.log(new Date().getTime());
+        message.error("登录超时请重试");
+        localStorage.setItem("role", null);
+        localStorage.setItem("username", null);
+        localStorage.setItem("party_name", null);
+        localStorage.setItem("party_id", null);
+        localStorage.setItem("userLogin", null);
+        localStorage.setItem("account", null);
+        localStorage.setItem("nickname", null);
+        localStorage.setItem("id", null);
+        localStorage.setItem("LOGIN_FLAG", null);
+      }
+      let socket = new WebSocket(
+        localStorage.getItem("role") !== "guest"
+          ? api.hostStatus
+          : api.guestStatus
+      );
+      socket.onmessage = (data) => {
+        let detail = JSON.parse(data.data);
 
-      this.setState({
-        count: detail.total,
-        datasource: detail.data,
-      });
-    };
+        this.setState({
+          count: detail.total,
+          datasource: detail.data,
+        });
+      };
+    } else {
+      this.props.history.push("/home");
+    }
   }
 
   upload = (id) => {
@@ -309,7 +338,7 @@ class App extends Component {
                   userSelect: "none",
                 }}
               >
-                {localStorage.getItem("party_name")}
+                {localStorage.getItem("nickname")}
               </Col>
             </Row>
           </Header>
@@ -423,20 +452,16 @@ class App extends Component {
                   </SubMenu>
 
                   <SubMenu
-                      title="用户信息"
-                      selectable={false}
-                      key="45"
-                      icon={<UserOutlined />}
+                    title="用户信息"
+                    selectable={false}
+                    key="45"
+                    icon={<UserOutlined />}
                   >
                     <Menu.Item key="58" icon={<MehOutlined />}>
-                      <NavLink to="/userinfo/userinfo">
-                        用户信息
-                      </NavLink>
+                      <NavLink to="/userinfo/userinfo">用户信息</NavLink>
                     </Menu.Item>
                     <Menu.Item key="57" icon={<ToolOutlined />}>
-                      <NavLink to="/userinfo/changepwd">
-                        修改登陆密码
-                      </NavLink>
+                      <NavLink to="/userinfo/changepwd">修改登陆密码</NavLink>
                     </Menu.Item>
                   </SubMenu>
 
