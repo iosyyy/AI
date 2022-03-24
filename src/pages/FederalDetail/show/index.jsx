@@ -7,23 +7,30 @@ import axios from "axios";
 import PubSubJS from "pubsub-js";
 import qs from "qs";
 import MainGraph from "../../../components/MainGraph";
+import { fontStyle } from "../../../util/util";
 
 class FederalDetail extends Component {
   constructor(props) {
     super(props);
     const search = props.location.search;
     const cur = qs.parse(search.replace(/^\?/, ""));
-    const startTime = new Date(cur.startTime).toLocaleTimeString();
-    const endTime = new Date(cur.endTime).toLocaleTimeString();
+    console.log(cur);
+    const startTime = new Date(Number(cur.startTime)).toLocaleString();
+    const endTime = new Date(Number(cur.endTime)).toLocaleString();
     const duration = cur.duration / 1000;
     this.state = {
       id: cur.id,
       role: cur.role,
       partyId: cur.partyId,
       status: cur.status,
-      type: "FEDERAL DEFENCE",
+      type: cur.workmode,
       startTime,
       endTime,
+      description: "",
+      name: "",
+      dataset: "",
+      dataSetRole: "",
+      dataSetPartyID: "",
       duration: `${duration}秒`,
       names: [],
       treeData: [],
@@ -146,12 +153,43 @@ class FederalDetail extends Component {
           break;
         }
       }
+
+      const { job, dataset } = d.summary_date;
+      let datasetKey = [];
+      let dataSetRole = "";
+      let dataSetPartyID = "";
+      let dataSet = "";
+
+      if (dataset && dataset.dataset) {
+        datasetKey = Object.keys(dataset.dataset);
+        dataSetRole = datasetKey[0];
+        if (dataSetRole) {
+          const strings = Object.keys(dataset.dataset[datasetKey[0]]);
+          dataSetPartyID = strings[0];
+          dataSet = Object.values(
+            dataset.dataset[datasetKey[0]][dataSetPartyID]
+          )[0];
+        }
+      }
       this.setState({
         names,
         component_list,
         key: this.generateUUID(),
         dependencies,
         component_need_run,
+        id: job.fJobId,
+        role: job.fRole,
+        partyId: job.fPartyId,
+        status: job.fStatus,
+        type: job.fWorkMode === 0 ? "单机训练" : "联合训练",
+        startTime: new Date(Number(job.fStartTime)).toLocaleString(),
+        endTime: new Date(Number(job.fEndTime)).toLocaleString(),
+        duration: `${d.duration / 1000}秒`,
+        dataset: dataSet,
+        dataSetRole: dataSetRole,
+        dataSetPartyID: dataSetPartyID,
+        name: job.fName,
+        description: job.fDescription,
       });
     };
   }
@@ -186,27 +224,49 @@ class FederalDetail extends Component {
               borderBottom: "1px solid",
             }}
           >
-            <h1>Task Summary</h1>
-            <div style={{ marginTop: "4vh" }}>task ID:</div>
+            <h1 style={{ ...fontStyle }}>任务摘要</h1>
+            <div style={{ marginTop: "4vh", ...fontStyle }}>任务ID:</div>
             <div style={{ marginBottom: "1vh" }}>{this.state.id}</div>
-            <div>status:</div>
+            <div style={{ ...fontStyle }}>任务名称:</div>
+            <div style={{ marginBottom: "1vh" }}>{this.state.name}</div>
+            <div style={{ ...fontStyle }}>状态:</div>
             <div style={{ marginBottom: "1vh" }}>{this.state.status}</div>
-            <div>type:</div>
+            <div style={{ ...fontStyle }}>类型:</div>
             <div style={{ marginBottom: "1vh" }}>{this.state.type}</div>
+            <div style={{ ...fontStyle }}>任务描述:</div>
+            <div style={{ marginBottom: "1vh" }}>{this.state.description}</div>
+            {this.state.dataset ? (
+              <div style={{ marginRight: "1vw" }}>
+                <Row justify={"space-between"}>
+                  <Col style={{ ...fontStyle }}>role:</Col>
+                  <Col>{this.state.dataset.replace("experiment.", "")}</Col>
+                </Row>
+                <Row justify={"space-between"}>
+                  <Col style={{ ...fontStyle }}>party_id:</Col>
+                  <Col>{this.state.dataSetRole}</Col>
+                </Row>
+                <Row justify={"space-between"}>
+                  <Col style={{ ...fontStyle }}>dataset:</Col>
+                  <Col>{this.state.dataSetPartyID}</Col>
+                </Row>
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
           <div>
             <div style={{ marginTop: "2vh" }}>
-              start time:
+              <span style={{ ...fontStyle }}> 开始时间:</span>
               <br />
               {this.state.startTime}
             </div>
             <div style={{ marginTop: "2vh" }}>
-              end time:
+              <span style={{ ...fontStyle }}> 结束时间:</span>
               <br />
               {this.state.endTime}
             </div>
             <div style={{ marginTop: "2vh" }}>
-              duration:
+              <span style={{ ...fontStyle }}> 持续:</span>
               <br />
               {this.state.duration}
             </div>
@@ -222,9 +282,11 @@ class FederalDetail extends Component {
         >
           <Row gutter={16}>
             <Col className="gutter-row" span={15}>
-              <h1 style={{ marginLeft: "3vh" }}>Outputs From Task</h1>
-              <div style={{ marginLeft: "3vh", marginBottom: "1vh" }}>
-                Main Graph
+              <h1 style={{ marginLeft: "3vh", ...fontStyle }}>任务输出</h1>
+              <div
+                style={{ marginLeft: "3vh", marginBottom: "1vh", ...fontStyle }}
+              >
+                视图
               </div>
               <div
                 style={{
@@ -247,8 +309,10 @@ class FederalDetail extends Component {
               </div>
             </Col>
             <Col className="gutter-row" span={9}>
-              <div style={{ marginTop: "6vh", marginBottom: "1vh" }}>
-                Information
+              <div
+                style={{ marginTop: "6vh", marginBottom: "1vh", ...fontStyle }}
+              >
+                详情
               </div>
               <Spin spinning={this.state.loading} delay={500}>
                 <div
@@ -273,32 +337,36 @@ class FederalDetail extends Component {
                   />
                 </div>
               </Spin>
-              <Button
-                onClick={(_e) => {
-                  if (this.state.dataIndex !== "") {
-                    this.props.history.push({
-                      pathname: "/federalDetail/detail",
-                      search: qs.stringify({
-                        name: this.state.dataIndex,
-                        id,
-                        role,
-                        partyId,
-                        module: this.state.datas.module,
-                      }),
-                    });
-                  }
-                }}
-                style={{
-                  height: "7vh",
-                  marginTop: "5vh",
-                  width: "100%",
-                  borderRadius: "6px",
-                }}
-                type="primary"
-                loading={!this.state.isLoading}
-              >
-                view the optputs
-              </Button>
+              <Row justify={"center"}>
+                <Button
+                  onClick={(_e) => {
+                    if (this.state.dataIndex !== "") {
+                      this.props.history.push({
+                        pathname: "/federalDetail/detail",
+                        search: qs.stringify({
+                          name: this.state.dataIndex,
+                          id,
+                          role,
+                          partyId,
+                          module: this.state.datas.module,
+                        }),
+                      });
+                    }
+                  }}
+                  style={{
+                    height: "6vh",
+
+                    width: "95%",
+                    borderRadius: "6px",
+                    position: "absolute",
+                    bottom: "0",
+                  }}
+                  type="primary"
+                  loading={!this.state.isLoading}
+                >
+                  查看当前输出
+                </Button>
+              </Row>
             </Col>
           </Row>
         </div>
