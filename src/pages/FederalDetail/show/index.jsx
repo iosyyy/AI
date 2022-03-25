@@ -175,6 +175,7 @@ class FederalDetail extends Component {
 
                 dataSetPartyID.push(partyId);
                 dataSetRole.push(data);
+                console.log(dataSetRole);
               }
             }
           }
@@ -265,19 +266,19 @@ class FederalDetail extends Component {
                 <div style={{ marginRight: "1vw" }}>
                   <Row justify={"space-between"}>
                     <Col>role:</Col>
-                    <Col style={{ ...fontStyle }}>{v}</Col>
-                  </Row>
-                  <Row justify={"space-between"}>
-                    <Col>party_id:</Col>
                     <Col style={{ ...fontStyle }}>
                       {this.state.dataSetRole[i]}
                     </Col>
                   </Row>
                   <Row justify={"space-between"}>
-                    <Col>dataset:</Col>
+                    <Col>party_id:</Col>
                     <Col style={{ ...fontStyle }}>
                       {this.state.dataSetPartyID[i]}
                     </Col>
+                  </Row>
+                  <Row justify={"space-between"}>
+                    <Col>dataset:</Col>
+                    <Col style={{ ...fontStyle }}>{v}</Col>
                   </Row>
                 </div>
               );
