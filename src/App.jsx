@@ -362,25 +362,7 @@ class App extends Component {
                   <Menu.Item key="1" icon={<DotChartOutlined />}>
                     <NavLink to="/federalTrain">联邦训练</NavLink>
                   </Menu.Item>
-                  <Menu.Item key="2" icon={<HeatMapOutlined />}>
-                    <NavLink to="/normal">联邦攻防</NavLink>
-                  </Menu.Item>
-                  <Menu.Item key="3" icon={<BoxPlotOutlined />}>
-                    <NavLink to="/federal">联邦攻击</NavLink>
-                  </Menu.Item>
-                  <SubMenu
-                    title="联合报表"
-                    selectable={false}
-                    key="21"
-                    icon={<PieChartOutlined />}
-                  >
-                    <Menu.Item icon={<BranchesOutlined />} key="22">
-                      <NavLink to="/jointStatement/create">创建任务</NavLink>
-                    </Menu.Item>
-                    <Menu.Item icon={<BookOutlined />} key="23">
-                      <NavLink to="/jointStatement/result">任务记录</NavLink>
-                    </Menu.Item>
-                  </SubMenu>
+
                   <SubMenu
                     title="在线推理"
                     selectable={false}
