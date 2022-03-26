@@ -17,7 +17,7 @@
     "immer": "^9.0.6",
     "jschardet": "^2.3.0",
     "moment": "^2.29.1",
-    "node-sass": "^5.0.0",
+    "node-sass": "^7.0.0",
     "process": "^0.11.10",
     "pubsub-js": "^1.9.2",
     "qs": "^6.10.1",
