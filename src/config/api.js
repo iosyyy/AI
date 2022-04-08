@@ -32,6 +32,7 @@ const e = {
   logDetail: ws + "/log/new/{id}/{role}/{partyId}/default",
   jobUpdate: host + "/job/update",
   modelUpdate: host + "/v1/deploy/grpc/create",
+  jobRun: host + "/job/v1/rerun",
   single: host + "/v1/predict/single",
   batchSingle: host + "/v1/predict/batch",
   downloadTemplate: host + "/v1/client/download/template",

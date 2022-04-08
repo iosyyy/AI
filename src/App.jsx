@@ -362,7 +362,23 @@ class App extends Component {
                   <Menu.Item key="1" icon={<DotChartOutlined />}>
                     <NavLink to="/federalTrain">联邦训练</NavLink>
                   </Menu.Item>
-
+                  <SubMenu
+                    title="数据集"
+                    selectable={false}
+                    key="16"
+                    icon={<FileDoneOutlined />}
+                  >
+                    <Menu.Item key="17" icon={<SettingOutlined />}>
+                      <NavLink to="/datasource/datasourceManage">
+                        数据源管理
+                      </NavLink>
+                    </Menu.Item>
+                    <Menu.Item key="18" icon={<UserSwitchOutlined />}>
+                      <NavLink to="/datasource/myDatasource">
+                        我的数据源
+                      </NavLink>
+                    </Menu.Item>
+                  </SubMenu>
                   <SubMenu
                     title="在线推理"
                     selectable={false}
@@ -413,24 +429,6 @@ class App extends Component {
                         </Menu.Item>
                       </>
                     )}
-                  </SubMenu>
-
-                  <SubMenu
-                    title="数据集"
-                    selectable={false}
-                    key="16"
-                    icon={<FileDoneOutlined />}
-                  >
-                    <Menu.Item key="17" icon={<SettingOutlined />}>
-                      <NavLink to="/datasource/datasourceManage">
-                        数据源管理
-                      </NavLink>
-                    </Menu.Item>
-                    <Menu.Item key="18" icon={<UserSwitchOutlined />}>
-                      <NavLink to="/datasource/myDatasource">
-                        我的数据源
-                      </NavLink>
-                    </Menu.Item>
                   </SubMenu>
 
                   <SubMenu
