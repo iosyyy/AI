@@ -205,42 +205,11 @@ class NormalForm extends Component {
                   // this.setState({
                   //   modal: true,
                   // });
-
-                  axios
-                    .post(api.downloadIntroduction, {
-                      params_name: this.props.selectValue,
-                    })
-                    .then((data) => {
-                      if (!data.data.code || data.data.code !== 0) {
-                        return;
-                      }
-                      let path = data.data.data.data;
-                      axios
-                        .post(api.downloadTemplate, {
-                          file_name: path,
-                        })
-                        .then((r) => {
-                          console.log(r);
-                          const { code } = r.data;
-                          if (code !== 0) {
-                            message.error("当前文件下载错误请重试");
-                            return;
-                          }
-                          let { data } = r.data;
-                          const blob = new Blob([data], {
-                            type:
-                              "application/vnd.openxmlformats-officedocument.wordprocessingml.document;charset=utf-8",
-                          });
-                          FileSaver.saveAs(
-                            blob,
-                            this.props.selectValue + "说明文档.docx"
-                          );
-                        })
-                        .catch((r) => {
-                          console.log(r);
-                          message.error("文件下载失败请重试并检查网络连接");
-                        });
-                    });
+                  FileSaver.saveAs(
+                    api.downloadIntroduction +
+                      `?params_name=${this.props.selectValue}`,
+                    "参数说明.doc"
+                  );
                 }}
                 style={{ textDecorationStyle: "none" }}
               >
