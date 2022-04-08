@@ -71,7 +71,7 @@ const e = {
   getKmeans: host + "/v1/preprocess/data/cluster_data",
   hostStatus: ws + "/websocket/deploy/status/host",
   guestStatus: ws + "/websocket/deploy/status/guest",
-  downloadIntroduction: host + "/v1/client/download/conf_params",
+  downloadIntroduction: localFateFlow + "/v1/client/download/conf_params",
 };
 
 export default e;
