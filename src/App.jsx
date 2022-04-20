@@ -267,8 +267,7 @@ class App extends Component {
                 <Image height={'25px'} preview={false} src={star} />
               </Col>
               <Col>
-                <Image width={'200px'} preview={false} src={font} />
-
+                <Image width={'248px'} preview={false} src={font} />
               </Col>
               <Col>
                 <span
