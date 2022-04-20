@@ -83,11 +83,11 @@ class App extends Component {
   }
 
   componentDidMount() {
-    if (localStorage.getItem('userLogin')) {
+    var loginItem = localStorage.getItem('userLogin');
+
+    if (loginItem && loginItem !== 'null') {
       if (checkF()) {
         this.props.history.push('/home');
-        console.log(Number(localStorage.getItem('LOGIN_FLAG')));
-        console.log(new Date().getTime());
         message.error('登录超时请重试');
         localStorage.setItem('role', null);
         localStorage.setItem('username', null);
@@ -98,6 +98,7 @@ class App extends Component {
         localStorage.setItem('nickname', null);
         localStorage.setItem('id', null);
         localStorage.setItem('LOGIN_FLAG', null);
+        return;
       }
       let socket = new WebSocket(
         localStorage.getItem('role') !== 'guest'
@@ -113,6 +114,7 @@ class App extends Component {
         });
       };
     } else {
+      message.error("请重新登录后重试")
       this.props.history.push('/home');
     }
   }
@@ -169,6 +171,15 @@ class App extends Component {
   };
 
   exit = () => {
+    localStorage.setItem('role', null);
+    localStorage.setItem('username', null);
+    localStorage.setItem('party_name', null);
+    localStorage.setItem('party_id', null);
+    localStorage.setItem('userLogin', null);
+    localStorage.setItem('account', null);
+    localStorage.setItem('nickname', null);
+    localStorage.setItem('id', null);
+    localStorage.setItem('LOGIN_FLAG', null);
     this.props.history.push({
       pathname: '/home'
     });
@@ -237,7 +248,7 @@ class App extends Component {
               padding: 0,
               margin: 0,
               height: '50px',
-              lineHeight:"50px"
+              lineHeight: '50px'
             }}
           >
             <Row align={'middle'} justify={'space-between'}>
