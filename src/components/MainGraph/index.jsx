@@ -48,7 +48,7 @@ class MainGraph extends Component {
         component_need_run[v.component_name] ? "rgb(14,199,165)" : color
       }`;
     });
-    const colorBack = "rgb(240,240,240)";
+    const colorBack = "rgb(248,248,250)";
     const nodeArray = component_list.map((v, i) => {
       return {
         index: i,
@@ -70,7 +70,7 @@ class MainGraph extends Component {
             : loading,
       };
     });
-
+    console.log(nodeArray);
     const linkArray = [];
     const fromPorts = ["A", "B", "C"];
     const toPorts = ["D", "E", "F"];
@@ -150,7 +150,7 @@ class MainGraph extends Component {
               width: 6,
               height: 6,
               portId: "D",
-              stroke: "rgb(240,240,240)",
+              stroke: "rgb(248,248,250)",
 
               toSpot: go.Spot.Left,
             })
@@ -180,7 +180,7 @@ class MainGraph extends Component {
                 height: 6,
                 portId: "E",
                 fromSpot: go.Spot.Right,
-                stroke: "rgb(240,240,240)",
+                stroke: "rgb(248,248,250)",
               }
             )
           ),
@@ -197,7 +197,7 @@ class MainGraph extends Component {
               {
                 width: 6,
                 height: 6,
-                stroke: "rgb(240,240,240)",
+                stroke: "rgb(248,248,250)",
                 portId: "F",
                 fromSpot: go.Spot.Right,
               }
@@ -215,18 +215,18 @@ class MainGraph extends Component {
             new go.Binding("fill", "color"),
             new go.Binding("fill", "isSelected", function (sel, node) {
               if (sel) {
-                change(node.Zj.nb.key);
-                if (node.Zj.nb.is_need_run === "success") {
+                change(node.Dj.jb.key);
+                if (node.Dj.jb.is_need_run === "success") {
                   return "rgb(39,153,255)";
-                } else if (node.Zj.nb.is_need_run === "failed") {
+                } else if (node.Dj.jb.is_need_run === "failed") {
                   return "rgb(216,44,128)";
                 } else {
                   return "rgb(216,44,128)";
                 }
               } else {
-                if (node.Zj.nb.is_need_run === "success") {
+                if (node.Dj.jb.is_need_run === "success") {
                   return "rgb(14,199,165)";
-                } else if (node.Zj.nb.is_need_run === "failed") {
+                } else if (node.Dj.jb.is_need_run === "failed") {
                   return "rgb(221,0,27)";
                 } else {
                   return "rgb(187,187,200)";
@@ -263,7 +263,7 @@ class MainGraph extends Component {
 
               {
                 width: 6,
-                stroke: "rgb(240,240,240)",
+                stroke: "rgb(248,248,250)",
                 height: 6,
                 portId: "A",
                 toSpot: go.Spot.Left,
@@ -284,7 +284,7 @@ class MainGraph extends Component {
                 width: 6,
                 height: 6,
                 portId: "B",
-                stroke: "rgb(240,240,240)",
+                stroke: "rgb(248,248,250)",
                 fromSpot: go.Spot.Right,
               }
             )
@@ -303,7 +303,7 @@ class MainGraph extends Component {
                 width: 6,
                 height: 6,
                 portId: "C",
-                stroke: "rgb(240,240,240)",
+                stroke: "rgb(248,248,250)",
                 fromSpot: go.Spot.Right,
               }
             )
@@ -352,9 +352,9 @@ class MainGraph extends Component {
       }
     );
 
-    setTimeout(() => {
+  /*  setTimeout(() => {
       diagram.nodes.each(function (node) {
-        const status = node.elt(0).Zj.nb.status;
+        const status = node.elt(0).bg.jb.status;
         if (
           status &&
           status !== "success" &&
@@ -377,7 +377,7 @@ class MainGraph extends Component {
           animation.start();
         }
       });
-    }, 1000);
+    }, 1000);*/
     return diagram;
   };
 
