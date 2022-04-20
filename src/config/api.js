@@ -6,14 +6,14 @@ let ws;
 let fateBoardWs;
 let localFateFlow;
 if (pack.env === "build") {
-  ws = `wss://${window.location.hostname}:${window.location.port}`;
-  fateBoardWs = `wss://${window.location.hostname}:${window.location.port}`;
+  ws = `ws://${window.location.hostname}:${window.location.port}`;
+  fateBoardWs = `ws://${window.location.hostname}:${window.location.port}`;
   baseHost = window.location.origin;
   localFateFlow = `http://${window.location.hostname}:9380`;
 } else {
-  ws = `wss://1.117.24.151:8080`;
+  ws = `ws://1.117.24.151:8080`;
   baseHost = window.location.origin + "/api";
-  fateBoardWs = `wss://${window.location.hostname}:8080`;
+  fateBoardWs = `ws://${window.location.hostname}:8080`;
   localFateFlow = `http://1.117.24.151:8080`;
 }
 
