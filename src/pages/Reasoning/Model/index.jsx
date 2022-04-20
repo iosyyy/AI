@@ -46,7 +46,6 @@ getServiceIdList = () => {
           message.error(msg);
           return;
         }
-        console.log(r);
 
         const serviceIdList = data.data.map((v, i) => {
           return v.f_service_id;
@@ -137,7 +136,6 @@ getServiceIdList = () => {
         });
       })
       .catch((r) => {
-        console.log(r);
         message.error("服务器异常");
       })
       .finally(() => {

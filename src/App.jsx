@@ -114,7 +114,7 @@ class App extends Component {
         });
       };
     } else {
-      message.error("请重新登录后重试")
+      message.error('请重新登录后重试');
       this.props.history.push('/home');
     }
   }
@@ -244,7 +244,9 @@ class App extends Component {
         <Layout className='layout'>
           <Header
             style={{
-              background: 'rgb(78,141,245)',
+              // background: 'rgb(78,141,245)',
+              background: 'rgb(22,81,170)',
+
               padding: 0,
               margin: 0,
               height: '50px',
@@ -254,21 +256,18 @@ class App extends Component {
             <Row align={'middle'} justify={'space-between'}>
               <Col
                 style={{
-                  width: 'auto',
                   height: '100%',
-                  margin: '0px 0px 0px 0px',
                   userSelect: 'none'
                 }}
-                className='logo'
               >
                 <MenuButton
                   inlineCollapsed={this.state.inlineCollapsed}
                   setVisFalse={this.setVisFalse}
                 />
-                <Image width={'180px'} preview={false} src={star} />
+                <Image height={'25px'} preview={false} src={star} />
               </Col>
               <Col>
-                <Image width={'auto'} preview={false} src={font} />
+                <Image width={'200px'} preview={false} src={font} />
 
               </Col>
               <Col>

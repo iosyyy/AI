@@ -166,7 +166,6 @@ class FederalDetail extends Component {
               const values = Object.values(dataset[data][partyId]);
               for (let value of values) {
                 const vals = value.split(".");
-                console.log(vals);
                 if (vals && vals.length > 0) {
                   datasets.push(vals[1]);
                 } else {
@@ -175,7 +174,6 @@ class FederalDetail extends Component {
 
                 dataSetPartyID.push(partyId);
                 dataSetRole.push(data);
-                console.log(dataSetRole);
               }
             }
           }

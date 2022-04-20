@@ -13,7 +13,6 @@ class Login extends Component {
     localStorage.setItem("LOGIN_FLAG", String(new Date().getTime() + duration));
   };
   loginPublish = (values) => {
-    console.log(values);
     axios
       .post(api.userLogin, { ...values })
       .then((r) => {

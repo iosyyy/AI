@@ -70,7 +70,6 @@ class MainGraph extends Component {
             : loading,
       };
     });
-    console.log(nodeArray);
     const linkArray = [];
     const fromPorts = ["A", "B", "C"];
     const toPorts = ["D", "E", "F"];
