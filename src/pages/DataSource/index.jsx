@@ -1,65 +1,56 @@
 import React, { Component } from "react";
-import { Menu, Row } from "antd";
-import { NavLink, Redirect, Route, Switch } from "react-router-dom";
-import DataSourceAdministration from "./Administration";
+import { Tabs } from "antd";
+import { Redirect, Route, Switch } from "react-router-dom";
+import DataSourceAdministration from "./DatasourceManage";
 import DatasourceHandle from "./DatasourceHandle";
-import MyDatasource from "./MyDatasource";
+import Preprocessing from "./Preprocessing";
 import PubSubJS from "pubsub-js";
+import DataSourceDetail from "./Test";
+import DataSourceTestResults from "./Test/Results";
+import DataSourceTablesw from "./Test/Tables";
+
+const { TabPane } = Tabs;
 
 class DataSource extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      page: "1",
-    };
-  }
-
-  componentDidMount() {
     PubSubJS.publish("isRunning", { page: "6" });
   }
 
   render() {
     return (
-      <Row>
-        <Menu
-          style={{
-            background: "rgb(240,242,245)",
-            marginRight: "2vw",
-            height: "100%",
-            width: "8vw",
-          }}
-          selectedKeys={[this.state.page]}
-          onSelect={(info) => {
-            this.setState({
-              page: info.key,
-            });
-          }}
-        >
-          <Menu.Item key="1">
-            <NavLink to="/datasource/administration">数据源管理</NavLink>
-          </Menu.Item>
-          <Menu.Item key="2">
-            <NavLink to="/datasource/myDatasource">我的数据源</NavLink>
-          </Menu.Item>
-          <Menu.Item key="3">
-            <NavLink to="/datasource/datasourceHandle">数据源预处理</NavLink>
-          </Menu.Item>
-        </Menu>
-
+      <div
+        style={{
+          padding: "10px 24px",
+          overflow: "auto",
+          height: "83vh",
+          width: "auto",
+        }}
+        className="site-layout-content"
+      >
         <Switch>
           <Route
-            path="/datasource/administration"
+            path="/datasource/datasourceManage"
             component={DataSourceAdministration}
           />
-          <Route path="/datasource/myDatasource" component={MyDatasource} />
+          <Route path="/datasource/myDatasource" component={Preprocessing} />
           <Route
             path="/datasource/datasourceHandle"
             component={DatasourceHandle}
           />
+          <Route path="/datasource/detail" component={DataSourceDetail} />
+          <Route
+            path="/datasource/testResult"
+            component={DataSourceTestResults}
+          />
+          <Route
+            path="/datasource/resultTables"
+            component={DataSourceTablesw}
+          />
 
-          <Redirect to="/datasource/administration" />
+          <Redirect to="/datasource/datasourceManage" />
         </Switch>
-      </Row>
+      </div>
     );
   }
 }

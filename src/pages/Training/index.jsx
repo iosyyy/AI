@@ -5,10 +5,14 @@ import { Button, Card, message, Popconfirm, Progress } from "antd";
 import axios from "axios";
 import api from "../../config/api";
 import { QuestionCircleOutlined } from "@ant-design/icons";
+import { fontStyle } from "../../util/util";
+import qs from "qs";
 
 class Training extends Component {
   constructor(props) {
     super(props);
+    PubSubJS.publish("isRunning", { page: "5" });
+
     this.state = {
       trainInfo: [],
     };
@@ -23,12 +27,11 @@ class Training extends Component {
 
   componentDidMount() {
     // eslint-disable-next-line no-unused-vars
-    PubSubJS.publish("isRunning", { page: "5" });
     this.getRunning();
 
     let numInterval = setInterval(() => {
       this.getRunning();
-    }, 1500);
+    }, 1000);
 
     this.setState({
       numInterval,
@@ -40,7 +43,8 @@ class Training extends Component {
       .get(api.isTrainingDetail)
       .then((r) => {
         const { data } = r.data;
-        const trainInfo = data.map((v, _i) => {
+
+        const newTrainInfo = data.map((v) => {
           return {
             id: v.fJobId,
             percent: v.fProgress,
@@ -50,11 +54,11 @@ class Training extends Component {
         });
 
         this.setState({
-          trainInfo,
+          trainInfo: newTrainInfo,
         });
       })
       .catch((_m) => {
-        message.error("服务器异常");
+        message.error("网络状态不好");
       });
   }
 
@@ -67,7 +71,11 @@ class Training extends Component {
         onDoubleClick={() => {
           this.props.history.push({
             pathname: "/trainingDetails",
-            state: { id: item.id, role: item.role, partyId: item.partyId },
+            search: qs.stringify({
+              id: item.id,
+              role: item.role,
+              partyId: item.partyId,
+            }),
           });
         }}
       >
@@ -120,7 +128,15 @@ class Training extends Component {
     return (
       <div>
         <h1 className="colorWhite">正在训练</h1>
-        <div className="training-list">{trainList}</div>
+        <div className="training-list">
+          {trainList.length !== 0 ? (
+            trainList
+          ) : (
+            <h1 style={{ marginTop: "30vh", color: fontStyle.color }}>
+              暂无正在训练模型
+            </h1>
+          )}
+        </div>
       </div>
     );
   }

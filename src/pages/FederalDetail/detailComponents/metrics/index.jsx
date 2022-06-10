@@ -122,43 +122,38 @@ class Metrics extends Component {
       f1_scores: [],
       thresholds: [],
       TABLE_COLUMNS1,
+      isEmpty: true,
     };
   }
 
   componentDidMount() {
     const { post_data, metrics } = this.props;
-    // 求交集
-    let train = _.intersection(
-      [
-        "homo_lr_0",
-        "homo_lr_0_confusion_mat",
-        "homo_lr_0_f1_score",
-        "homo_lr_0_quantile_pr",
-      ],
-      metrics.train
-    );
     axios
       .post(api.batch, {
         ...post_data,
-        metrics: {
-          train,
-        },
+        metrics,
       })
       .then((r) => {
         let { code, msg } = r.data;
-        if (code !== 0) {
-          message.error(`${code}: ${msg}`);
-        }
-        if (Object.keys(r.data.data).length === 0) {
+        const datas = r.data.data[Object.keys(r.data.data)[0]];
+        if (
+          code !== 0 ||
+          Object.keys(r.data.data).length === 0 ||
+          !datas ||
+          Object.keys(datas).length === 0
+        ) {
+          message.error(`空数据异常`);
+          this.setState({
+            isEmpty: true,
+          });
           return;
         }
+        const metricArray = metrics[Object.keys(metrics)[0]];
+        const homo_lr_0 = datas[metricArray[0]];
+        const homo_lr_0_confusion_mat = datas[metricArray[9]];
+        const homo_lr_0_f1_score = datas[metricArray[10]];
+        const homo_lr_0_quantile_pr = datas[metricArray[11]];
         const dataset = Object.keys(r.data.data)[0];
-        const {
-          homo_lr_0_quantile_pr,
-          homo_lr_0,
-          homo_lr_0_f1_score,
-          homo_lr_0_confusion_mat,
-        } = r.data.data[dataset];
         const { p_scores, r_scores, thresholds } = homo_lr_0_quantile_pr.meta;
         // fn右下,tn右上,fp左上,tp左下
         const { fn, fp, tn, tp } = homo_lr_0_confusion_mat.meta;
@@ -209,6 +204,7 @@ class Metrics extends Component {
             width: "10vw",
           }
         );
+
         dataSource1["precision"] = p_scores[10][1];
         dataSource1["recall"] = r_scores[10][1];
         dataSource1["key"] = 1;
@@ -246,6 +242,8 @@ class Metrics extends Component {
         tableDataSource2.push(dataSource3);
 
         this.setState({
+          isEmpty: false,
+
           TABLE_COLUMNS1,
           tableDataSource1,
           tableDataSource2,
@@ -307,79 +305,94 @@ class Metrics extends Component {
       tableDataSource1,
       tableDataSource2,
       TABLE_COLUMNS1,
+      isEmpty,
     } = this.state;
 
     return (
       <div
         className={"scrollContent"}
-        style={{ height: "65vh", padding: "2vh" }}
+        style={{ height: "64vh", padding: "2vh" }}
       >
-        <h2>Evaluation scores</h2>
-        <Row>
-          <Col span={4}>
-            <Slider
-              min={0}
-              max={1}
-              step={0.05}
-              onChange={this.onChange1}
-              value={inputValue1}
+        {isEmpty ? (
+          <>
+            <Row
+              style={{ height: "62vh", marginTop: "2vh" }}
+              justify={"center"}
+            >
+              <Col>
+                <h1>There is no data</h1>
+              </Col>
+            </Row>
+          </>
+        ) : (
+          <>
+            <h2>Evaluation scores</h2>
+            <Row>
+              <Col span={4}>
+                <Slider
+                  min={0}
+                  max={1}
+                  step={0.05}
+                  onChange={this.onChange1}
+                  value={inputValue1}
+                />
+              </Col>
+              <Col>
+                <InputNumber
+                  min={0}
+                  max={1}
+                  step={0.05}
+                  style={{ margin: "0 16px" }}
+                  value={inputValue1}
+                  onChange={this.onChange1}
+                />
+              </Col>
+            </Row>
+            <Table
+              columns={TABLE_COLUMNS1}
+              bordered={false}
+              size={"small"}
+              pagination={false}
+              dataSource={tableDataSource1}
             />
-          </Col>
-          <Col>
-            <InputNumber
-              min={0}
-              max={1}
-              step={0.05}
-              style={{ margin: "0 16px" }}
-              value={inputValue1}
-              onChange={this.onChange1}
+            <Divider style={{ margin: "3vh 0", height: "5px" }} />
+            <h2>Confusion Matrix</h2>
+            <Row>
+              <Col span={4}>
+                <Slider
+                  min={0}
+                  max={1}
+                  step={0.01}
+                  onChange={this.onChange2}
+                  value={inputValue2}
+                />
+              </Col>
+              <Col>
+                <InputNumber
+                  min={0}
+                  max={1}
+                  step={0.01}
+                  style={{ margin: "0 16px" }}
+                  value={inputValue2}
+                  onChange={this.onChange2}
+                />
+              </Col>
+            </Row>
+            <Divider style={{ margin: "3vh 0", height: "5px" }} />
+            <Table
+              columns={TABLE_COLUMNS2}
+              bordered={false}
+              size={"small"}
+              pagination={false}
+              dataSource={tableDataSource2}
             />
-          </Col>
-        </Row>
-        <Table
-          columns={TABLE_COLUMNS1}
-          bordered={false}
-          size={"small"}
-          pagination={false}
-          dataSource={tableDataSource1}
-        />
-        <Divider style={{ margin: "3vh 0", height: "5px" }} />
-
-        <h2>Confusion Matrix</h2>
-        <Row>
-          <Col span={4}>
-            <Slider
-              min={0}
-              max={1}
-              step={0.01}
-              onChange={this.onChange2}
-              value={inputValue2}
+            <Divider style={{ margin: "3vh 0", height: "5px" }} />
+            <Graphs
+              metrics={this.props.metrics}
+              post_data={this.props.post_data}
             />
-          </Col>
-          <Col>
-            <InputNumber
-              min={0}
-              max={1}
-              step={0.01}
-              style={{ margin: "0 16px" }}
-              value={inputValue2}
-              onChange={this.onChange2}
-            />
-          </Col>
-        </Row>
-        <Divider style={{ margin: "3vh 0", height: "5px" }} />
-
-        <Table
-          columns={TABLE_COLUMNS2}
-          bordered={false}
-          size={"small"}
-          pagination={false}
-          dataSource={tableDataSource2}
-        />
-
-        <Divider style={{ margin: "3vh 0", height: "5px" }} />
-
-        <Graphs metrics={this.props.metrics} post_data={this.props.post_data} />
+          </>
+        )}
       </div>
     );
   }

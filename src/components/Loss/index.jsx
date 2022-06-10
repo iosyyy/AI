@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Row, Col, Button, Space } from "antd";
 import { SyncOutlined } from "@ant-design/icons";
+import axios from "axios";
+import api from "../../config/api";
 import * as echarts from "echarts";
 
 let myChart;
@@ -8,9 +10,15 @@ let myChart;
 export default class Loss extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      lossHistory: props.lossHistory,
-    };
+    if (props.lossHistory) {
+      this.state = {
+        lossHistory: props.lossHistory,
+      };
+    } else {
+      this.state = {
+        lossHistory: [],
+      };
+    }
   }
 
   drew() {
@@ -27,7 +35,7 @@ export default class Loss extends Component {
     option = {
       tooltip: {
         trigger: "axis",
-        formatter: function(params) {
+        formatter: function (params) {
           let htmlStr = "<div>";
           htmlStr += "iteration：" + params[0].axisValue + "<br/>";
           htmlStr += "loss：" + params[0].value;
@@ -55,6 +63,18 @@ export default class Loss extends Component {
   }
 
   componentDidMount() {
+    const { metricsKeys, post_data, lossHistory } = this.props;
+    let metrics = {};
+    if (metricsKeys && lossHistory) {
+      metrics[metricsKeys[0]] = ["loss"];
+      let postData = { ...post_data, metrics };
+      axios.post(api.batch, postData).then((data) => {
+        let lossHistory = data.data.data[metricsKeys[0]]["loss"].data;
+        this.setState({
+          lossHistory,
+        });
+      });
+    }
     let dom = document.getElementById("loss");
     if (myChart != null && myChart !== "" && myChart !== undefined) {
       myChart.dispose(); //销毁

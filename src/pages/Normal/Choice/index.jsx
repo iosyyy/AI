@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
-import { Button, Form, InputNumber, Select, Tooltip } from 'antd';
-import PubSubJS from 'pubsub-js';
+import React, { Component } from "react";
+import { Button, Form, InputNumber, Select, Tooltip } from "antd";
+import PubSubJS from "pubsub-js";
+import { fontStyle } from "../../../util/util";
 
 class Choice extends Component {
   constructor(props) {
@@ -8,12 +9,12 @@ class Choice extends Component {
     this.state = { ...this.props.location.state };
   }
 
-  onFinish = values => {
+  onFinish = (values) => {
     this.props.history.push({
-      pathname: '/federalDetail/show',
-      state: { id: '20232011' },
+      pathname: "/federalDetail/show",
+      state: { id: "20232011" },
     });
-    PubSubJS.publish('trainChoice', {
+    PubSubJS.publish("trainChoice", {
       ...values,
       type: this.state.type,
       status: this.state.status,
@@ -29,10 +30,10 @@ class Choice extends Component {
       wrapperCol: { span: 6 },
     };
     return (
-      <div style={{ height: '80vh' }} className="site-layout-content">
+      <div style={{ height: "85vh" }} className="site-layout-content">
         <h1 className="colorWhite">联邦攻防</h1>
         <div
-          style={{ textAlign: 'center', marginBottom: '5vh', marginTop: '3vh' }}
+          style={{ textAlign: "center", marginBottom: "5vh", marginTop: "3vh" }}
         >
           模型参数选择
         </div>
@@ -43,7 +44,11 @@ class Choice extends Component {
             color="#95DDDA"
             arrowPointAtCenter
           >
-            <Form.Item name="optimizer" label="优化器类型：" initialValue="cnn">
+            <Form.Item
+              name="optimizer"
+              label={<div style={fontStyle}>优化器类型：</div>}
+              initialValue="cnn"
+            >
               <Select>
                 <Select.Option value="cnn">cnn</Select.Option>
                 <Select.Option value="mpl">mpl</Select.Option>
@@ -53,8 +58,8 @@ class Choice extends Component {
 
           <Form.Item
             name="local_ep"
-            label="客户端训练次数："
-            rules={[{ type: 'number', min: 1, max: 1000 }]}
+            label={<div style={fontStyle}>客户端训练次数：</div>}
+            rules={[{ type: "number", min: 1, max: 1000 }]}
             initialValue={10}
           >
             <InputNumber />
@@ -62,8 +67,8 @@ class Choice extends Component {
 
           <Form.Item
             name="iteration"
-            label="全局迭代次数："
-            rules={[{ type: 'number', min: 10, max: 20 }]}
+            label={<div style={fontStyle}>全局迭代次数：</div>}
+            rules={[{ type: "number", min: 10, max: 20 }]}
             initialValue={10}
           >
             <InputNumber />
@@ -76,7 +81,7 @@ class Choice extends Component {
           >
             <Form.Item
               name="attackType"
-              label="攻击类型："
+              label={<div style={fontStyle}>攻击类型：</div>}
               initialValue="type1"
             >
               <Select>
@@ -90,14 +95,18 @@ class Choice extends Component {
               </Select>
             </Form.Item>
           </Tooltip>
-          <Form.Item name="lr" label="学习率：" initialValue={0.01}>
+          <Form.Item
+            name="lr"
+            label={<div style={fontStyle}>学习率：</div>}
+            initialValue={0.01}
+          >
             <InputNumber min={0} max={1} step={0.01} />
           </Form.Item>
 
           <Form.Item
             name="attacker"
-            label="攻击者数："
-            rules={[{ type: 'number', min: 1, max: 20 }]}
+            label={<div style={fontStyle}>攻击者数：</div>}
+            rules={[{ type: "number", min: 1, max: 20 }]}
             initialValue={10}
           >
             <InputNumber />

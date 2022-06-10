@@ -3,6 +3,7 @@ import { Button, Table } from "antd";
 import Modal from "antd/es/modal/Modal";
 import DataSourceUpload from "./dataSourceUpload";
 import DataSourceTable from "./dataSourceTable";
+import PubSubJS from "pubsub-js";
 
 class DataSourceAdministration extends Component {
   constructor(props) {
@@ -12,13 +13,14 @@ class DataSourceAdministration extends Component {
     };
   }
 
+  componentDidMount() {
+    PubSubJS.publish("isRunning", { page: "17" });
+  }
+
   render() {
     const { visible } = this.state;
     return (
-      <div
-        style={{ overflow: "auto", height: "83vh", width: "83vw" }}
-        className="site-layout-content"
-      >
+      <div>
         <h2 className="colorWhite">数据源管理</h2>
         <Button
           style={{ margin: "1vh 0" }}
@@ -35,15 +37,8 @@ class DataSourceAdministration extends Component {
           visible={visible}
           title="上传数据集"
           centered
-          bodyStyle={{
-            WebkitBoxShadow: "0 20px 15px #9B7468",
-            MozBoxShadow: "0 20px 15px #9B7468",
-            boxShadow: "0 6px 10px rgb(158,199,210)",
-            borderRadius: "5px",
-          }}
-          wrapClassName={"site-layout-content"}
           footer={null}
-          width={"90vw"}
+          width={"80vw"}
           onOk={() => {
             this.setState({
               visible: true,

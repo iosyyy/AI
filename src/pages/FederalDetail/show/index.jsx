@@ -7,39 +7,48 @@ import axios from "axios";
 import PubSubJS from "pubsub-js";
 import qs from "qs";
 import MainGraph from "../../../components/MainGraph";
+import { fontStyle } from "../../../util/util";
 
 class FederalDetail extends Component {
   constructor(props) {
     super(props);
     const search = props.location.search;
     const cur = qs.parse(search.replace(/^\?/, ""));
-
-    const startTime = new Date(cur.startTime).toLocaleTimeString();
-    const endTime = new Date(cur.endTime).toLocaleTimeString();
+    const startTime = new Date(Number(cur.startTime)).toLocaleString();
+    const endTime = new Date(Number(cur.endTime)).toLocaleString();
     const duration = cur.duration / 1000;
     this.state = {
       id: cur.id,
       role: cur.role,
       partyId: cur.partyId,
       status: cur.status,
-      type: "FEDERAL DEFENCE",
+      type: cur.workmode,
       startTime,
       endTime,
+      description: "",
+      name: "",
+      dataset: [],
+      dataSetRole: [],
+      dataSetPartyID: [],
       duration: `${duration}秒`,
       names: [],
       treeData: [],
       d: {},
-      loading: false,
+      loading: true,
       dataIndex: "",
       datas: [],
       component_list: [],
       isLoading: false,
+      key: this.generateUUID(),
+      dependencies: {},
+      component_need_run: {},
     };
   }
 
   onChange = (index) => {
     this.setState({
       loading: true,
+      isLoading: false,
       dataIndex: index,
     });
     axios
@@ -58,7 +67,6 @@ class FederalDetail extends Component {
           this.setState({ datas: d, loading: true, isLoading: false });
           return;
         }
-        console.log(d);
         this.setState({ datas: d, treeData, loading: false, isLoading: true });
       })
       .catch((_m) => {
@@ -127,9 +135,70 @@ class FederalDetail extends Component {
 
     socket.onmessage = (data) => {
       const d = JSON.parse(data.data);
-      const { component_list } = d.dependency_data;
+      const {
+        component_list,
+        dependencies,
+        component_need_run,
+      } = d.dependency_data;
       const names = component_list.map((item) => item.component_name);
-      this.setState({ names, component_list });
+      let change = false;
+      for (const item in component_list) {
+        if (
+          (component_list.hasOwnProperty(item) &&
+            this.state.component_list.length === 0) ||
+          component_list[item].status !== this.state.component_list[item]
+        ) {
+          change = true;
+          break;
+        }
+      }
+
+      const { job } = d.summary_date;
+
+      const datasets = [];
+      const dataSetPartyID = [];
+      const dataSetRole = [];
+      const dataset = d.summary_date.dataset.dataset;
+      for (let data in dataset) {
+        if (dataset.hasOwnProperty(data)) {
+          for (let partyId in dataset[data]) {
+            if (dataset[data].hasOwnProperty(partyId)) {
+              const values = Object.values(dataset[data][partyId]);
+              for (let value of values) {
+                const vals = value.split(".");
+                if (vals && vals.length > 0) {
+                  datasets.push(vals[1]);
+                } else {
+                  datasets.push(vals);
+                }
+
+                dataSetPartyID.push(partyId);
+                dataSetRole.push(data);
+              }
+            }
+          }
+        }
+      }
+      this.setState({
+        names,
+        component_list,
+        key: this.generateUUID(),
+        dependencies,
+        component_need_run,
+        id: job.fJobId,
+        role: job.fRole,
+        partyId: job.fPartyId,
+        status: job.fStatus,
+        type: job.fWorkMode === 0 ? "单机训练" : "联合训练",
+        startTime: new Date(Number(job.fStartTime)).toLocaleString(),
+        endTime: new Date(Number(job.fEndTime)).toLocaleString(),
+        duration: `${d.duration / 1000}秒`,
+        dataset: datasets,
+        dataSetRole: dataSetRole,
+        dataSetPartyID: dataSetPartyID,
+        name: job.fName,
+        description: job.fDescription,
+      });
     };
   }
 
@@ -139,42 +208,93 @@ class FederalDetail extends Component {
   }
 
   render() {
-    const { id, role, partyId, component_list, names } = this.state;
+    const {
+      id,
+      role,
+      partyId,
+      component_list,
+      names,
+      key,
+      dependencies,
+      component_need_run,
+    } = this.state;
 
     return (
       <div
         className="site-layout-content"
         style={{ height: "83vh", width: "100%" }}
       >
-        <div style={{ display: "inline-block", width: "20%", height: "75vh" }}>
+        <div
+          style={{
+            display: "inline-block",
+            width: "20%",
+            height: "75vh",
+            overflow: "auto",
+          }}
+        >
           <div
             style={{
               marginRight: "1vh",
-              paddingBottom: "2vh",
               borderBottom: "1px solid",
             }}
           >
-            <h1>Task Summary</h1>
-            <div style={{ marginTop: "4vh" }}>task ID:</div>
+            <h1 style={{ ...fontStyle }}>任务摘要</h1>
+            <div style={{ marginTop: "4vh", ...fontStyle }}>任务ID:</div>
             <div style={{ marginBottom: "1vh" }}>{this.state.id}</div>
-            <div>status:</div>
+            <div style={{ ...fontStyle }}>任务名称:</div>
+            <div style={{ marginBottom: "1vh" }}>{this.state.name}</div>
+            <div style={{ ...fontStyle }}>状态:</div>
             <div style={{ marginBottom: "1vh" }}>{this.state.status}</div>
-            <div>type:</div>
+            <div style={{ ...fontStyle }}>类型:</div>
             <div style={{ marginBottom: "1vh" }}>{this.state.type}</div>
+            <div style={{ ...fontStyle }}>任务描述:</div>
+            <div style={{ marginBottom: "1vh" }}>{this.state.description}</div>
+          </div>
+          <div
+            style={{
+              paddingTop: "1vh",
+              paddingBottom: "1vh",
+              paddingRight: "2vw",
+              marginRight: "1vh",
+              borderBottom: "1px solid",
+            }}
+          >
+            {this.state.dataset.map((v, i) => {
+              return (
+                <div style={{ marginRight: "1vw" }}>
+                  <Row justify={"space-between"}>
+                    <Col>role:</Col>
+                    <Col style={{ ...fontStyle }}>
+                      {this.state.dataSetRole[i]}
+                    </Col>
+                  </Row>
+                  <Row justify={"space-between"}>
+                    <Col>party_id:</Col>
+                    <Col style={{ ...fontStyle }}>
+                      {this.state.dataSetPartyID[i]}
+                    </Col>
+                  </Row>
+                  <Row justify={"space-between"}>
+                    <Col>dataset:</Col>
+                    <Col style={{ ...fontStyle }}>{v}</Col>
+                  </Row>
+                </div>
+              );
+            })}
           </div>
           <div>
             <div style={{ marginTop: "2vh" }}>
-              start time:
+              <span style={{ ...fontStyle }}> 开始时间:</span>
               <br />
               {this.state.startTime}
             </div>
             <div style={{ marginTop: "2vh" }}>
-              end time:
+              <span style={{ ...fontStyle }}> 结束时间:</span>
               <br />
               {this.state.endTime}
             </div>
             <div style={{ marginTop: "2vh" }}>
-              duration:
+              <span style={{ ...fontStyle }}> 持续:</span>
               <br />
               {this.state.duration}
             </div>
@@ -190,9 +310,11 @@ class FederalDetail extends Component {
         >
           <Row gutter={16}>
             <Col className="gutter-row" span={15}>
-              <h1 style={{ marginLeft: "3vh" }}>Outputs From Task</h1>
-              <div style={{ marginLeft: "3vh", marginBottom: "1vh" }}>
-                Main Graph
+              <h1 style={{ marginLeft: "3vh", ...fontStyle }}>任务输出</h1>
+              <div
+                style={{ marginLeft: "3vh", marginBottom: "1vh", ...fontStyle }}
+              >
+                视图
               </div>
               <div
                 style={{
@@ -202,7 +324,9 @@ class FederalDetail extends Component {
                 }}
               >
                 <MainGraph
-                  key={component_list}
+                  component_need_run={component_need_run}
+                  dependencies={dependencies}
+                  key={key}
                   component_list={component_list}
                   names={names}
                   symbolSize={60}
@@ -213,8 +337,10 @@ class FederalDetail extends Component {
               </div>
             </Col>
             <Col className="gutter-row" span={9}>
-              <div style={{ marginTop: "6vh", marginBottom: "1vh" }}>
-                Information
+              <div
+                style={{ marginTop: "6vh", marginBottom: "1vh", ...fontStyle }}
+              >
+                详情
               </div>
               <Spin spinning={this.state.loading} delay={500}>
                 <div
@@ -239,27 +365,36 @@ class FederalDetail extends Component {
                   />
                 </div>
               </Spin>
-              <Button
-                onClick={(_e) => {
-                  if (this.state.dataIndex !== "") {
-                    this.props.history.push({
-                      pathname: "/federalDetail/detail",
-                      search: qs.stringify({
-                        name: this.state.dataIndex,
-                        id,
-                        role,
-                        partyId,
-                        module: this.state.datas.module,
-                      }),
-                    });
-                  }
-                }}
-                style={{ height: "7vh", marginTop: "5vh", width: "100%" }}
-                type="primary"
-                loading={!this.state.isLoading}
-              >
-                view the optputs
-              </Button>
+              <Row justify={"center"}>
+                <Button
+                  onClick={(_e) => {
+                    if (this.state.dataIndex !== "") {
+                      this.props.history.push({
+                        pathname: "/federalDetail/detail",
+                        search: qs.stringify({
+                          name: this.state.dataIndex,
+                          id,
+                          role,
+                          partyId,
+                          module: this.state.datas.module,
+                        }),
+                      });
+                    }
+                  }}
+                  style={{
+                    height: "6vh",
+
+                    width: "95%",
+                    borderRadius: "6px",
+                    position: "absolute",
+                    bottom: "0",
+                  }}
+                  type="primary"
+                  loading={!this.state.isLoading}
+                >
+                  查看当前输出
+                </Button>
+              </Row>
             </Col>
           </Row>
         </div>

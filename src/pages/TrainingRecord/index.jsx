@@ -1,60 +1,72 @@
 import React, { Component } from "react";
 import {
   Button,
+  Col,
   Form,
   Image,
   Input,
   message,
+  Modal,
+  Progress,
+  Row,
   Select,
   Space,
+  Steps,
   Table,
   Tooltip,
 } from "antd";
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import {
+  BoxPlotOutlined,
+  BranchesOutlined,
+  CheckOutlined,
+  CloseOutlined,
+  CloudUploadOutlined,
+} from "@ant-design/icons";
 import axios from "axios";
 import NoteImg from "../../img/Note.png";
 import NoteHover from "../../img/NoteHover.png";
 import api from "../../config/api";
 import PubSubJS from "pubsub-js";
 import qs from "qs";
+import { fontStyle } from "../../util/util";
 
 const { Option } = Select;
-
+const { Step } = Steps;
+let interval;
 class TrainingRecord extends Component {
   constructor(props) {
     super(props);
+    PubSubJS.publish("isRunning", { page: "4" });
+
     const columns = [
       {
         title: <div>ID</div>,
         dataIndex: "id",
         key: "id",
-        width: "16vw",
-        render: (id) => (
+        width: "12vw",
+        render: (id, obj) => (
           <div>
-            <div
+            <a
               style={{
                 color: "rgb(65,89,209)",
               }}
               onClick={(_e) => {
-                const cur = this.state.dataSource.filter(
-                  (item) => item.id === id
-                )[0];
                 this.props.history.push({
                   pathname: "/federalDetail/show",
                   search: qs.stringify({
-                    id: cur.id,
-                    role: cur.role,
-                    partyId: cur.partyId,
-                    status: cur.status,
-                    startTime: cur.startTime,
-                    endTime: cur.endTime,
-                    duration: cur.duration,
+                    id: obj.id,
+                    role: obj.role,
+                    partyId: obj.partyId,
+                    status: obj.status,
+                    startTime: obj.startTime,
+                    endTime: obj.endTime,
+                    duration: obj.duration,
                   }),
                 });
               }}
             >
               {id}
-            </div>
+            </a>
           </div>
         ),
       },
@@ -62,16 +74,20 @@ class TrainingRecord extends Component {
         title: <div>PartyID</div>,
         dataIndex: "partyId",
         key: "partyId",
+        width: "5vw",
       },
       {
-        title: <div>规则</div>,
+        title: <div>角色</div>,
         dataIndex: "role",
         key: "role",
+        width: "5vw",
       },
       {
         title: <div>开始时间</div>,
         dataIndex: "startTime",
         key: "start_time",
+        width: "5vw",
+
         sorter: {
           compare: (_a, _b) => {
             return true;
@@ -87,6 +103,8 @@ class TrainingRecord extends Component {
         dataIndex: "endTime",
         key: "end_time",
         sorter: true,
+        width: "5vw",
+
         render: (text) => {
           return <>{new Date(text).toLocaleString()}</>;
         },
@@ -95,6 +113,8 @@ class TrainingRecord extends Component {
         title: <div>运行时间</div>,
         dataIndex: "duration",
         key: "elapsed",
+        width: "5vw",
+
         sorter: true,
         render: (text, value) => {
           const time = value.endTime - value.startTime;
@@ -114,12 +134,13 @@ class TrainingRecord extends Component {
         title: <div>结果</div>,
         dataIndex: "status",
         key: "status",
+        width: "5vw",
       },
       {
-        title: <div>记录</div>,
+        title: <div>任务名称</div>,
         dataIndex: "notes",
         key: "notes",
-        width: "9vw",
+        width: "5vw",
         render: (text, value, _context) => {
           const note = this.state.NoteNow[value.key];
           return (
@@ -222,11 +243,56 @@ class TrainingRecord extends Component {
         },
       },
       {
-        title: <div>action</div>,
-        dataIndex: "action",
-        key: "action",
-        render: (text) => {
-          return <Button type="link">{text}</Button>;
+        title: <div>操作</div>,
+        dataIndex: "modal",
+        key: "modal",
+        width: "7vw",
+
+        render: (text, obj) => {
+          return (
+            <Space>
+              <Button
+                disabled={
+                  obj.action ||
+                  obj.partyId == 0 ||
+                  localStorage.getItem("role") !== "guest"
+                }
+                onClick={() => {
+                  this.setState({
+                    id: obj.id,
+                    show: true,
+                  });
+                }}
+                type={"primary"}
+              >
+                部署
+              </Button>
+
+              {obj.action ? (
+                <Button
+                  onClick={() => {
+                    console.log(obj);
+                    axios
+                      .post(api.jobRun, {
+                        component_name: "pipeline",
+                        job_id: obj.id,
+                      })
+                      .then((r) => {
+                        if (r.data.code === 0) {
+                          message.success("重试成功");
+                        } else {
+                          message.error("重试失败");
+                        }
+                      });
+                  }}
+                >
+                  重试
+                </Button>
+              ) : (
+                <></>
+              )}
+            </Space>
+          );
         },
       },
     ];
@@ -242,6 +308,14 @@ class TrainingRecord extends Component {
       selectKey: "",
       NoteNow,
       loading: true,
+      show: false,
+      id: "",
+      showDetail: false,
+      error: 0,
+      datasource: [],
+      statusNow: "error",
+      nows: 0,
+      percent: 0,
       pageSize: 0,
       currentPage: 1,
       searchRes: { note: "", id: "", partyId: "", role: [], status: [] },
@@ -252,9 +326,7 @@ class TrainingRecord extends Component {
     };
   }
 
-  componentDidMount() {
-    PubSubJS.publish("isRunning", { page: "4" });
-
+  getDataSource = () => {
     axios
       .post(api.pageList, {
         fDescription: "",
@@ -288,13 +360,15 @@ class TrainingRecord extends Component {
           currentPage: 1,
         });
       });
+  };
+
+  componentDidMount() {
+    this.getDataSource();
   }
 
   componentWillUnmount() {
     //处理逻辑
-    this.setState = (state, callback) => {
-      return;
-    };
+    this.setState = (_state, _callback) => {};
   }
 
   getDataSourceByDataList(list) {
@@ -333,6 +407,118 @@ class TrainingRecord extends Component {
       NoteNow: Notew,
     });
   }
+  modelUpload = () => {
+    const step1 = 33.3;
+    const step2 = 66.6;
+    const step3 = 100;
+    const { error } = this.state;
+    interval = setInterval(() => {
+      const { percent, nows } = this.state;
+      let per = percent;
+      per += Math.random() * 3;
+      if (per >= error) {
+        if (per > step1) {
+          this.setState({
+            nows: 0,
+            percent: step1,
+          });
+        }
+        clearInterval(interval);
+        this.setState({
+          statusNow: "error",
+        });
+        message.error("模型部署失败请重试");
+        this.props.history.push("/reasoning/model");
+        return;
+      }
+      if (per > step1 && nows === -1) {
+        per = step1;
+        clearInterval(interval);
+
+        interval = setTimeout(() => {
+          this.setState({
+            nows: 0,
+          });
+          message.success("模型部署完成");
+          interval = setInterval(() => {
+            const { percent, nows } = this.state;
+            let per = percent;
+
+            per += Math.random() * 5;
+            if (per >= error) {
+              if (per > step2) {
+                this.setState({
+                  nows: 1,
+                  percent: step2,
+                });
+              }
+              this.setState({
+                statusNow: "error",
+              });
+              clearInterval(interval);
+              message.error("模型发布失败请重试");
+              this.props.history.push("/reasoning/model");
+
+              return;
+            }
+            if (per > step2 && nows === 0) {
+              per = step2;
+              clearInterval(interval);
+
+              interval = setTimeout(() => {
+                message.success("模型发布完成");
+                this.setState({
+                  nows: 1,
+                });
+                let interval = setInterval(() => {
+                  const { percent, nows } = this.state;
+                  let per = percent;
+                  per += Math.random() * 5;
+                  if (per >= error) {
+                    if (per > step3) {
+                      this.setState({
+                        nows: 2,
+                        percent: step3,
+                      });
+                    }
+                    this.setState({
+                      statusNow: "error",
+                    });
+                    clearInterval(interval);
+                    message.error("模型绑定失败请重试");
+                    this.props.history.push("/reasoning/model");
+
+                    return;
+                  }
+                  if (per > step3 && nows === 1) {
+                    per = step3;
+                    clearInterval(interval);
+                    this.props.history.push("/reasoning/model");
+
+                    message.success("模型绑定完成");
+                    this.setState({
+                      nows: 2,
+                      statusNow: "process",
+                    });
+                  }
+                  this.setState({
+                    percent: Math.round(per * 10) / 10,
+                  });
+                }, step3);
+              }, 3000);
+            }
+            this.setState({
+              percent: Math.round(per * 10) / 10,
+            });
+          }, step3);
+        }, 1500);
+      }
+
+      this.setState({
+        percent: Math.round(per * 10) / 10,
+      });
+    }, step3);
+  };
 
   getData = (page, sor, resw) => {
     let res = this.state.searchRes;
@@ -341,7 +527,6 @@ class TrainingRecord extends Component {
     }
     let { sorter } = this.state;
     let orderField, orderRule;
-    console.log(sorter);
     if (Object.keys(sorter).length) {
       orderField = `f_${sorter.columnKey}`;
       orderRule = `${sorter.order === `ascend` ? `asc` : `desc`}`;
@@ -404,8 +589,19 @@ class TrainingRecord extends Component {
   };
 
   render() {
+    const {
+      show,
+      id,
+      loading,
+      showDetail,
+      nows,
+      statusNow,
+      percent,
+    } = this.state;
+    const fontStyle = { fontWeight: 900, color: "rgb(127,125,142)" };
+
     return (
-      <div className="site-layout-content">
+      <div style={{ height: "85vh" }} className="site-layout-content">
         <div style={{ float: "right" }}>
           <Form
             size="small"
@@ -438,34 +634,16 @@ class TrainingRecord extends Component {
                 });
             }}
           >
-            <Form.Item
-              label={
-                <div style={{ fontWeight: 900, color: "rgb(127,125,142)" }}>
-                  Job ID
-                </div>
-              }
-              name="id"
-            >
+            <Form.Item label={<div style={fontStyle}>Job ID</div>} name="id">
               <Input />
             </Form.Item>
             <Form.Item
-              label={
-                <div style={{ fontWeight: 900, color: "rgb(127,125,142)" }}>
-                  Party ID
-                </div>
-              }
+              label={<div style={fontStyle}>Party ID</div>}
               name="partyId"
             >
               <Input />
             </Form.Item>
-            <Form.Item
-              label={
-                <div style={{ fontWeight: 900, color: "rgb(127,125,142)" }}>
-                  规则
-                </div>
-              }
-              name="role"
-            >
+            <Form.Item label={<div style={fontStyle}>规则</div>} name="role">
               <Select
                 mode="multiple"
                 placeholder="选择规则"
@@ -478,14 +656,7 @@ class TrainingRecord extends Component {
               </Select>
             </Form.Item>
 
-            <Form.Item
-              label={
-                <div style={{ fontWeight: 900, color: "rgb(127,125,142)" }}>
-                  结果
-                </div>
-              }
-              name="status"
-            >
+            <Form.Item label={<div style={fontStyle}>结果</div>} name="status">
               <Select
                 mode="multiple"
                 placeholder="选择结果"
@@ -498,22 +669,11 @@ class TrainingRecord extends Component {
                 <Option value="canceled">canceled</Option>
               </Select>
             </Form.Item>
-            <Form.Item
-              label={
-                <div style={{ fontWeight: 900, color: "rgb(127,125,142)" }}>
-                  记录
-                </div>
-              }
-              name="note"
-            >
+            <Form.Item label={<div style={fontStyle}>记录</div>} name="note">
               <Input />
             </Form.Item>
             <Form.Item>
-              <Button
-                style={{ borderRadius: "5vw", width: "4vw" }}
-                type="primary"
-                htmlType="submit"
-              >
+              <Button shape={"round"} type="primary" htmlType="submit">
                 搜索
               </Button>
             </Form.Item>
@@ -522,8 +682,9 @@ class TrainingRecord extends Component {
         <Table
           onChange={this.onTableChange}
           loading={this.state.loading}
-          scroll={{ y: "61vh" }}
+          scroll={{ y: "61.5vh" }}
           bordered={false}
+          size={"middle"}
           dataSource={this.state.dataSource}
           columns={this.state.columns}
           pagination={{
@@ -538,7 +699,6 @@ class TrainingRecord extends Component {
               axios
                 .post(api.pageList, this.getData(page))
                 .then((r) => {
-                  console.log(page);
                   const { list } = r.data.data;
                   const pageSize = r.data.data.totalRecord;
                   const dataSource = this.getDataSourceByDataList(list);
@@ -559,6 +719,145 @@ class TrainingRecord extends Component {
             },
           }}
         />
+
+        <Modal
+          title="模型详情"
+          visible={showDetail}
+          onCancel={() => {
+            this.setState({
+              showDetail: false,
+            });
+            clearInterval(interval);
+          }}
+          footer={[
+            <Button
+              key="back"
+              onClick={() => {
+                this.setState({
+                  showDetail: false,
+                });
+                clearInterval(interval);
+              }}
+            >
+              返回
+            </Button>,
+          ]}
+          width={"45vw"}
+          destroyOnClose
+        >
+          <div style={{ height: "15vh" }}>
+            <Steps
+              style={{ marginBottom: "3vh" }}
+              current={nows}
+              status={statusNow}
+            >
+              <Step icon={<BranchesOutlined />} title="部署" />
+              <Step icon={<CloudUploadOutlined />} title="发布" />
+              <Step icon={<BoxPlotOutlined />} title="绑定" />
+            </Steps>
+            <Progress
+              strokeColor={{
+                from: "#108ee9",
+                to: "#87d068",
+              }}
+              percent={percent}
+              status={statusNow}
+            />
+          </div>
+        </Modal>
+        <Modal
+          title="模型部署"
+          visible={show}
+          onCancel={() => {
+            this.setState({
+              show: false,
+            });
+          }}
+          width={"45vw"}
+          footer={null}
+          destroyOnClose
+        >
+          <Form
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
+            initialValues={{ job_id: id }}
+            onFinish={(e) => {
+              this.setState({
+                loading: true,
+              });
+              axios
+                .post(api.modelUpdate, e)
+                .then((r) => {
+                  const { code, msg, data } = r.data;
+                  if (code !== 1) {
+                    this.setState({
+                      showDetail: true,
+                      percent: 0,
+                      nows: -1,
+                      error: (data?.location ?? 0 / 3.0) * 100,
+                      statusNow: "active",
+                    });
+                  }
+                  if (code === 1) {
+                    message.error(msg);
+                    return;
+                  }
+                  this.modelUpload();
+                })
+                .finally(() => {
+                  this.setState({
+                    loading: false,
+                    show: false,
+                  });
+                  this.getDataSource(this.state.currentPage);
+                });
+            }}
+            layout={"horizontal"}
+          >
+            {/*<Row justify={"center"}>*/}
+            {/*  <Col span={12}>*/}
+            {/*    <Form.Item*/}
+            {/*      name="service_id"*/}
+            {/*      label={<div style={fontStyle}>service_id</div>}*/}
+            {/*      rules={[{ required: true, message: "请输入service_id" }]}*/}
+            {/*    >*/}
+            {/*      <Input placeholder={"请输入service_id"} />*/}
+            {/*    </Form.Item>*/}
+            {/*  </Col>*/}
+            {/*</Row>*/}
+            <Row gutter={[0, 0]} justify={"center"}>
+              <Col span={12}>
+                <Form.Item
+                  name="job_id"
+                  label={<div style={fontStyle}>相关模型</div>}
+                  rules={[{ required: true, message: "请输入相关模型" }]}
+                >
+                  <Input placeholder={"请输入相关模型"} />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={[0, 30]} justify={"center"}>
+              <Col span={12}>
+                <Form.Item
+                  name="context"
+                  label={<div style={fontStyle}>备注</div>}
+                  rules={[{ required: true, message: "请输入备注" }]}
+                >
+                  <Input placeholder={"请输入备注"} />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row justify={"center"}>
+              <Col>
+                <Form.Item>
+                  <Button loading={loading} type="primary" htmlType="submit">
+                    提交
+                  </Button>
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
+        </Modal>
       </div>
     );
   }

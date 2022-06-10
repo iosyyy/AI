@@ -1,6 +1,6 @@
-import api from '../config/api';
+import api from "../config/api";
 
-const io = require('socket.io-client');
+const io = require("socket.io-client");
 
 const { serverSocketIp } = api;
 
@@ -9,9 +9,9 @@ const openListenByNormal = (reqData, fun) => {
   // 绑定接口
   const socket = io(serverSocketIp);
   // 提交开始训练信号
-  socket.emit('by normal', { reqData });
+  socket.emit("by normal", { reqData });
   // 监听数据
-  socket.on('by normal', info => {
+  socket.on("by normal", (info) => {
     if (info.code === 0) {
       // 这里用得到的数据来绑定数据修改页面
       fun(info);
@@ -26,9 +26,9 @@ const openListenByFederal = (data, fun) => {
   // 绑定接口
   const socket = io(serverSocketIp);
   // 提交开始训练信号
-  socket.emit('by federal', { data });
+  socket.emit("by federal", { data });
   // 监听数据
-  socket.on('by federal', info => {
+  socket.on("by federal", (info) => {
     if (info.code === 0) {
       // 这里用得到的数据来绑定数据修改页面
       fun(info);
@@ -37,5 +37,6 @@ const openListenByFederal = (data, fun) => {
     }
   });
 };
+const fontStyle = { fontSize: "14px", fontWeight: 900, color: "#606266" };
 
-export { openListenByNormal, openListenByFederal };
+export { openListenByNormal, openListenByFederal, fontStyle };

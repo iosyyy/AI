@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
-import { Button, Form, InputNumber, Select, Tooltip ,Table } from 'antd';
-import PubSubJS from 'pubsub-js';
+import React, { Component } from "react";
+import { Button, Form, InputNumber, Select, Tooltip, Table } from "antd";
+import PubSubJS from "pubsub-js";
+import { fontStyle } from "../../../util/util";
 
 class FederalTrainChoiceKeep extends Component {
   constructor(props) {
@@ -8,13 +9,13 @@ class FederalTrainChoiceKeep extends Component {
     this.state = { ...this.props.location.state };
   }
 
-  onFinish = values => {
-    PubSubJS.publish('trainChoice', {
+  onFinish = (values) => {
+    PubSubJS.publish("trainChoice", {
       ...values,
       type: this.state.type,
       status: this.state.status,
     });
-    this.props.history.push('/training');
+    this.props.history.push("/training");
   };
 
   render() {
@@ -26,10 +27,10 @@ class FederalTrainChoiceKeep extends Component {
       wrapperCol: { span: 6 },
     };
     return (
-      <div style={{ height: '80vh' }} className="site-layout-content">
+      <div style={{ height: "85vh" }} className="site-layout-content">
         <h1 className="colorWhite">联邦训练</h1>
         <div
-          style={{ textAlign: 'center', marginBottom: '5vh', marginTop: '3vh' }}
+          style={{ textAlign: "center", marginBottom: "5vh", marginTop: "3vh" }}
         >
           模型参数选择
         </div>
@@ -40,7 +41,11 @@ class FederalTrainChoiceKeep extends Component {
             color="#95DDDA"
             arrowPointAtCenter
           >
-            <Form.Item name="optimizer" label="优化器类型：" initialValue="sgd">
+            <Form.Item
+              name="optimizer"
+              label={<div style={fontStyle}>优化器类型：</div>}
+              initialValue="sgd"
+            >
               <Select>
                 <Select.Option value="sgd">sgd</Select.Option>
                 <Select.Option value="adam">adam</Select.Option>
@@ -50,8 +55,8 @@ class FederalTrainChoiceKeep extends Component {
 
           <Form.Item
             name="local_ep"
-            label="客户端学习："
-            rules={[{ type: 'number', min: 1, max: 1000 }]}
+            label={<div style={fontStyle}>客户端学习：</div>}
+            rules={[{ type: "number", min: 1, max: 1000 }]}
             initialValue={10}
           >
             <InputNumber />
@@ -59,14 +64,18 @@ class FederalTrainChoiceKeep extends Component {
 
           <Form.Item
             name="epochs"
-            label="训练次数："
-            rules={[{ type: 'number', min: 1, max: 10 }]}
+            label={<div style={fontStyle}>训练次数：</div>}
+            rules={[{ type: "number", min: 1, max: 10 }]}
             initialValue={5}
           >
             <InputNumber />
           </Form.Item>
 
-          <Form.Item name="lr" label="学习率：" initialValue={0.01}>
+          <Form.Item
+            name="lr"
+            label={<div style={fontStyle}>学习率：</div>}
+            initialValue={0.01}
+          >
             <InputNumber min={0} max={1} step={0.01} />
           </Form.Item>
 

@@ -1,15 +1,16 @@
-import { Redirect, Route, Switch } from 'react-router-dom';
-import Form from './Form';
-import React, { Component } from 'react';
+import { Redirect, Route, Switch } from "react-router-dom";
+import Form from "./Form";
+import React, { Component } from "react";
 
-import Result from './Result';
-import '../../css/fontColor.css';
-import FederalChoice from './Choice';
-import PubSubJS from 'pubsub-js';
+import Result from "./Result";
+import "../../css/fontColor.css";
+import FederalChoice from "./Choice";
+import PubSubJS from "pubsub-js";
 
 export default class Normal extends Component {
-  componentDidMount() {
-    PubSubJS.publish('isRunning', { page: '3' });
+  constructor(props) {
+    super(props);
+    PubSubJS.publish("isRunning", { page: "3" });
   }
 
   render() {

@@ -54,9 +54,8 @@ class Summary extends Component {
           <div
             key={v[0] + i}
             style={{
-              height: "65vh",
-              marginBottom: "1vh",
-              color: "rgb(127, 125, 142)",
+              fontWeight: "30px",
+              color: "rgb(163,163,163)",
             }}
           >
             {v[0] + ": " + v[1]}
@@ -65,7 +64,7 @@ class Summary extends Component {
       });
     } else {
       dataDetail = (
-        <Row style={{ height: "65vh", marginTop: "2vh" }} justify={"center"}>
+        <Row style={{ height: "62vh", marginTop: "2vh" }} justify={"center"}>
           <Col>
             <h1>There is no data</h1>
           </Col>
@@ -73,7 +72,7 @@ class Summary extends Component {
       );
     }
     return (
-      <div className={"scrollContent"} style={{ height: "65vh" }}>
+      <div className={"scrollContent"} style={{ height: "64vh" }}>
         {dataDetail}
       </div>
     );

@@ -1,7 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
-import api from "../../../config/api";
-import FileSaver from "file-saver";
 import {
   CloudUploadOutlined,
   DownloadOutlined,
@@ -33,30 +30,17 @@ class FederalTrainChoice extends Component {
     });
   };
 
-  downloadTempalte(fileName) {
-    axios
-      .post(api.downloadTemplate, {
-        file_name: fileName,
-      })
-      .then((f) => {
-        let jsonObj = f.data;
-        let jsonStr = JSON.stringify(jsonObj, null, "  ");
-        let file = new Blob([jsonStr], { type: "" });
-        FileSaver.saveAs(file, fileName + ".json");
-      });
-  }
-
   render() {
     const { loading } = this.state;
-
+    let { guest, host } = this.props.history.location.state.data;
     return (
-      <div style={{ height: "80vh" }} className="site-layout-content">
+      <div style={{ height: "83vh" }} className="site-layout-content">
         <StepsTemplate
           steps={[
             { status: "finish", title: "联邦类型", icon: <FileOutlined /> },
             {
               status: "finish",
-              title: "数据集选择",
+              title: "任务参与方选择",
               icon: <CloudUploadOutlined />,
             },
             {
@@ -75,7 +59,10 @@ class FederalTrainChoice extends Component {
           />
         ) : (
           <NormalForm
+            selectValue={this.props.location.state.selectValue}
             setLoading={this.setLoading}
+            host={host}
+            guest={guest}
             changeForm={() => {
               this.changeForm();
             }}

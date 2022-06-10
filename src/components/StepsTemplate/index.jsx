@@ -13,9 +13,9 @@ class StepsTemplate extends Component {
   }
 
   render() {
-    const { steps } = this.props;
+    const { steps, current } = this.props;
     return (
-      <Steps style={{ marginBottom: "1  vh" }}>
+      <Steps current={current} style={{ marginBottom: "1  vh" }}>
         {steps.map((v, i) => {
           return (
             <Step key={i} status={v.status} title={v.title} icon={v.icon} />
