@@ -428,18 +428,23 @@ class JointStatementResult extends Component {
                 .post(api.modelUpdate, e)
                 .then((r) => {
                   const { code, msg, data } = r.data;
-                  if (code !== 1) {
+                  if (data.retcode === 0) {
                     this.setState({
                       showDetail: true,
                       percent: 0,
                       nows: -1,
-                      error: (data?.location ?? 0 / 3.0) * 100,
+                      error: 101,
                       statusNow: "active",
                     });
                   }
-                  if (code === 1) {
-                    message.error(msg);
-                    return;
+                  if (data.retcode !== 0) {
+                    this.setState({
+                      showDetail: true,
+                      percent: 0,
+                      nows: -1,
+                      error: ((data?.location ?? 0) / 3.0) * 100,
+                      statusNow: "active",
+                    });
                   }
                   this.modelUpload();
                 })

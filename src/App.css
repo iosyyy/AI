@@ -185,7 +185,6 @@
 .logo {
     -webkit-background-clip: text;
     color: transparent;
-    width: 150px;
     font-weight: bolder;
     border-radius: 25px;
     font-family: Consolas, FangSong, serif;

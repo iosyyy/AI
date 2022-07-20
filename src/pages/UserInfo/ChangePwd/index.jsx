@@ -17,7 +17,17 @@ class Comp extends Component {
         if (r.data.code) {
           message.error("服务验证失败,请重试");
         } else {
-          message.success("修改成功");
+          this.props.history.push('/home');
+          localStorage.setItem('role', null);
+          localStorage.setItem('username', null);
+          localStorage.setItem('party_name', null);
+          localStorage.setItem('party_id', null);
+          localStorage.setItem('userLogin', null);
+          localStorage.setItem('account', null);
+          localStorage.setItem('nickname', null);
+          localStorage.setItem('id', null);
+          localStorage.setItem('LOGIN_FLAG', null);
+          message.success("修改成功，请重新登录")
         }
       })
       .catch((r) => {

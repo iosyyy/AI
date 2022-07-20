@@ -56,7 +56,7 @@ class MenuButton extends React.Component {
     const { mouseY, isPressed, originalPosOfLastPressed, order } = this.state;
 
     return (
-      <div style={{ width: "100px", height: "100%", display: "inline-block" }}>
+      <div style={{ width: "79px", height: "100%", display: "inline-block" }}>
         {range(itemsCount).map((i) => {
           const style =
             originalPosOfLastPressed === i && isPressed

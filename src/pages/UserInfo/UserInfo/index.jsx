@@ -17,8 +17,17 @@ class Comp extends Component {
         if (r.data.data.retcode || r.data.data.code) {
           message.error("服务验证失败,请重试");
         } else {
-          message.success("修改成功");
-          this.getUser();
+          this.props.history.push('/home');
+          localStorage.setItem('role', null);
+          localStorage.setItem('username', null);
+          localStorage.setItem('party_name', null);
+          localStorage.setItem('party_id', null);
+          localStorage.setItem('userLogin', null);
+          localStorage.setItem('account', null);
+          localStorage.setItem('nickname', null);
+          localStorage.setItem('id', null);
+          localStorage.setItem('LOGIN_FLAG', null);
+          message.success("修改成功，请重新登录")
         }
       })
       .catch((r) => {
@@ -36,7 +45,7 @@ class Comp extends Component {
         } else {
           const { f_account, f_nickname,f_party_id } = r.data.data.data || r.data.data;
           this.formRef.current.setFieldsValue({
-            id : f_party_id,
+            id : localStorage.getItem("id"),
             account: f_account,
             nickname: f_nickname
           })
@@ -67,7 +76,7 @@ class Comp extends Component {
             style={{ width: "30%" }}
             ref={this.formRef}
           >
-            <Form.Item name="id" label="party_id" rules={[{ required: true }]}>
+            <Form.Item name="id" label="id" rules={[{ required: true }]}>
               <Input readOnly={true} disabled />
             </Form.Item>
             <Form.Item

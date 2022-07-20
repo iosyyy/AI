@@ -252,7 +252,11 @@ class TrainingRecord extends Component {
           return (
             <Space>
               <Button
-                disabled={obj.action || obj.partyId == 0 || localStorage.getItem("role") !== "guest" }
+                disabled={
+                  obj.action ||
+                  obj.partyId == 0 ||
+                  localStorage.getItem("role") !== "guest"
+                }
                 onClick={() => {
                   this.setState({
                     id: obj.id,
@@ -264,7 +268,29 @@ class TrainingRecord extends Component {
                 部署
               </Button>
 
-              {obj.action ? <Button>重试</Button> : <></>}
+              {obj.action ? (
+                <Button
+                  onClick={() => {
+                    console.log(obj);
+                    axios
+                      .post(api.jobRun, {
+                        component_name: "pipeline",
+                        job_id: obj.id,
+                      })
+                      .then((r) => {
+                        if (r.data.code === 0) {
+                          message.success("重试成功");
+                        } else {
+                          message.error("重试失败");
+                        }
+                      });
+                  }}
+                >
+                  重试
+                </Button>
+              ) : (
+                <></>
+              )}
             </Space>
           );
         },
